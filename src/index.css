@@ -1,0 +1,45 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply bg-background text-gray-800 antialiased;
+  }
+}
+
+.glass-panel {
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.4s ease-out forwards;
+}
+
+.perspective-1000 { perspective: 1000px; }
+.preserve-3d { transform-style: preserve-3d; }
+.backface-hidden { backface-visibility: hidden; }
+.rotate-y-180 { transform: rotateY(180deg); }
+
+@keyframes cherry-fall {
+  0% { transform: translateY(-30px) rotate3d(1, 1, 0, 0deg) rotate(0deg); opacity: 0; }
+  10% { opacity: 0.9; }
+  90% { opacity: 0.9; }
+  100% { transform: translateY(180px) rotate3d(1, 1, 0, 360deg) rotate(180deg); opacity: 0; }
+}
+.animate-cherry {
+  animation: cherry-fall linear infinite;
+}
+
+body { background: url('/background.jpg') no-repeat center center fixed !important; background-size: cover !important; } .bg-surface { background: rgba(255, 255, 255, 0.8) !important; backdrop-filter: blur(8px); }
