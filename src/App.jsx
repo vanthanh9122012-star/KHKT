@@ -90,10 +90,6 @@ const Sidebar = ({ activeTab, setActiveTab, gamification, currentUser, setShowAu
     { id: 'tasks', icon: <Map size={20} />, label: 'Thị trấn nhỏ' },
     { id: 'review', icon: <Brain size={20} />, label: 'Ôn tập lỗi sai' },
     { id: 'focus', icon: <Clock size={20} />, label: 'Tập trung' },
-    { id: 'stats', icon: <BarChart2 size={20} />, label: 'Thống kê' },
-    { id: 'leaderboard', icon: <Trophy size={20} />, label: 'Bảng xếp hạng' },
-    { id: 'parent', icon: <Users size={20} />, label: 'Góc Phụ huynh' },
-    { id: 'help', icon: <HelpCircle size={20} />, label: 'Trợ giúp' },
   ];
 
   return (
