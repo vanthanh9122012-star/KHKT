@@ -1508,7 +1508,7 @@ const Dashboard = ({ setActiveTab }) => {
         </div>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div className="bg-gradient-to-br from-rose-100 via-rose-200 to-pink-300 rounded-3xl p-6 text-rose-900 shadow-lg shadow-rose-200 flex flex-col justify-between h-40 transform transition hover:-translate-y-1 relative overflow-hidden group">
           <CherryBlossomEffect />
           <div className="flex justify-between items-start relative z-10">
@@ -1532,18 +1532,6 @@ const Dashboard = ({ setActiveTab }) => {
             <div className="w-full bg-rose-900/10 h-2 rounded-full mt-3 overflow-hidden">
               <div className="bg-rose-500 h-full rounded-full" style={{width: '66%'}}></div>
             </div>
-          </div>
-        </div>
-
-        <div className="bg-gradient-to-br from-rose-100 via-rose-200 to-pink-300 rounded-3xl p-6 text-rose-900 shadow-lg shadow-rose-200 flex flex-col justify-between h-40 transform transition hover:-translate-y-1 relative overflow-hidden group">
-          <CherryBlossomEffect />
-          <div className="flex justify-between items-start relative z-10">
-            <h3 className="font-medium text-rose-700">Độ tập trung</h3>
-            <div className="p-2 bg-white/40 rounded-lg text-rose-800"><BarChart2 size={20} /></div>
-          </div>
-          <div className="relative z-10">
-            <div className="text-3xl font-bold">85%</div>
-            <div className="text-sm text-rose-700 mt-1 font-medium">Rất tốt! Tiếp tục phát huy.</div>
           </div>
         </div>
       </div>
@@ -1596,37 +1584,6 @@ const Dashboard = ({ setActiveTab }) => {
         </div>
       </div>
 
-      <div className="bg-surface rounded-3xl p-6 shadow-sm border border-pink-100 mt-6 bg-gradient-to-br from-pink-50 to-white">
-        <h2 className="text-lg font-bold text-gray-800 mb-2 flex items-center gap-2">
-          <BookHeart className="text-pink-400" size={24} /> Nhật ký học tập
-        </h2>
-        <p className="text-sm text-gray-500 mb-4">Ghi lại cảm xúc và hành trình học tập hôm nay của bạn.</p>
-        <textarea
-          value={todayEntry}
-          onChange={(e) => handleJournalChange(e.target.value)}
-          placeholder="Hôm nay bạn học được điều gì mới? Cảm thấy thế nào?"
-          className="w-full h-24 p-4 text-sm text-gray-700 bg-white border border-pink-100 rounded-2xl outline-none resize-none focus:border-pink-300 focus:ring-4 focus:ring-pink-50 transition shadow-sm placeholder:text-gray-300"
-        ></textarea>
-        {isWeekend && (
-          <div className="mt-6 pt-6 border-t border-pink-100 animate-fade-in">
-            <h3 className="font-bold text-gray-800 mb-4 flex items-center gap-2">
-              <Sparkles className="text-yellow-400" size={20} /> Tổng kết tuần này của bạn
-            </h3>
-            {getWeeklyRecap().length === 0 ? (
-              <p className="text-sm text-gray-400 italic">Tuần này bạn chưa có dòng nhật ký nào cả.</p>
-            ) : (
-              <div className="space-y-4">
-                {getWeeklyRecap().map(entry => (
-                  <div key={entry.date} className="bg-white p-4 rounded-2xl shadow-sm border border-gray-50 flex flex-col gap-1">
-                    <p className="text-xs font-bold text-pink-400">{entry.date}</p>
-                    <p className="text-sm text-gray-700 whitespace-pre-wrap">{entry.text}</p>
-                  </div>
-                ))}
-              </div>
-            )}
-          </div>
-        )}
-      </div>
     </div>
   );
 };
@@ -2043,7 +2000,6 @@ export default function App() {
 
   return (
     <>
-      <GlobalBackground />
       <div className="flex h-screen overflow-hidden bg-transparent relative z-0">
         <Sidebar 
           activeTab={activeTab} 
