@@ -90,6 +90,7 @@ const Sidebar = ({ activeTab, setActiveTab, gamification, currentUser, setShowAu
     { id: 'tasks', icon: <Map size={20} />, label: 'Thị trấn nhỏ' },
     { id: 'review', icon: <Brain size={20} />, label: 'Ôn tập lỗi sai' },
     { id: 'focus', icon: <Clock size={20} />, label: 'Tập trung' },
+    { id: 'leaderboard', icon: <Trophy size={20} />, label: 'Bảng xếp hạng' },
   ];
 
   return (
