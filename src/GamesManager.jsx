@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Gamepad2, Brain, FlaskConical, Trophy, Sparkles, Star, Target, CheckCircle2 } from 'lucide-react';
 import HistoryGeoCaro from './HistoryGeoCaro';
+import MathSudoku from './MathSudoku';
 
 const CatchWordGame = ({ addReward }) => {
   const levels = [
@@ -94,136 +95,6 @@ const CatchWordGame = ({ addReward }) => {
       {msg.text && (
         <div className={`mt-6 p-4 rounded-xl font-bold animate-bounce ${msg.type === 'success' ? 'bg-emerald-50 text-emerald-600 border border-emerald-200' : 'bg-red-50 text-red-600 border border-red-200'}`}>
           {msg.text}
-        </div>
-      )}
-    </div>
-  );
-};
-
-const MathSudoku = ({ addReward }) => {
-  // Sudoku 4x4 đơn giản (Shidoku)
-  const [board, setBoard] = useState([
-    [3, '', 1, ''],
-    ['', 1, '', 3],
-    ['', 2, '', 1],
-    [1, '', 2, '']
-  ]);
-  const solution = [
-    [3, 4, 1, 2],
-    [2, 1, 4, 3],
-    [4, 2, 3, 1],
-    [1, 3, 2, 4]
-  ];
-  const [msg, setMsg] = useState('');
-  const [helpsLeft, setHelpsLeft] = useState(3);
-
-  const handleChange = (r, c, val) => {
-    if (val !== '' && !['1','2','3','4'].includes(val)) return;
-    const newBoard = [...board];
-    newBoard[r][c] = val === '' ? '' : parseInt(val);
-    setBoard(newBoard);
-  };
-
-  const useHelp = () => {
-    if (helpsLeft > 0) {
-      setHelpsLeft(prev => prev - 1);
-      const newBoard = [...board];
-      for (let r = 0; r < 4; r++) {
-        for (let c = 0; c < 4; c++) {
-          if (newBoard[r][c] === '' || newBoard[r][c] !== solution[r][c]) {
-            newBoard[r][c] = solution[r][c];
-            setBoard(newBoard);
-            return;
-          }
-        }
-      }
-    }
-  };
-
-  const checkSudoku = () => {
-    let isCorrect = true;
-    let isFull = true;
-    for(let r=0; r<4; r++) {
-      for(let c=0; c<4; c++) {
-        if (board[r][c] === '') isFull = false;
-        if (board[r][c] !== '' && board[r][c] !== solution[r][c]) {
-          isCorrect = false;
-        }
-      }
-    }
-    
-    if (!isFull) {
-      setMsg('Vui lòng điền kín tất cả các ô!');
-    } else if (isCorrect) {
-      setMsg('Hoàn hảo! Bạn đã giải xong Sudoku +20 XP 🏆');
-      addReward(20, 5);
-    } else {
-      setMsg('Có lỗi sai ở đâu đó. Quy tắc: Mỗi hàng, mỗi cột, và mỗi ô 2x2 phải chứa các số từ 1-4 không lặp lại.');
-    }
-  };
-
-  return (
-    <div className="bg-surface rounded-3xl p-8 shadow-sm border border-gray-100 max-w-lg mx-auto animate-fade-in flex flex-col items-center">
-      <h2 className="text-2xl font-bold text-gray-800 mb-2">Sudoku Toán học (4x4)</h2>
-      <p className="text-gray-500 mb-6 text-center text-sm">Điền các số 1-4 sao cho không bị trùng lặp trên mỗi hàng, mỗi cột và mỗi khối 2x2.</p>
-      
-      <div className="flex justify-between items-center w-full mb-6">
-        <span className="text-gray-500 font-medium"></span>
-        <div className="flex gap-1 items-center bg-yellow-50 px-3 py-1.5 rounded-full border border-yellow-200">
-          <Star size={16} className="text-yellow-500" />
-          <span className="text-yellow-700 font-bold text-sm">{helpsLeft} trợ giúp</span>
-        </div>
-      </div>
-
-      <div className="bg-gray-800 p-2 rounded-xl shadow-xl">
-        <div className="grid grid-cols-4 gap-1 bg-gray-400 p-1 rounded-lg">
-          {board.map((row, r) => (
-            row.map((cell, c) => {
-              const isInitial = [
-                [0,0], [0,2], [1,1], [1,3], [2,1], [2,3], [3,0], [3,2]
-              ].some(pos => pos[0] === r && pos[1] === c);
-              
-              const borderRight = c === 1 ? 'border-r-4 border-gray-800' : '';
-              const borderBottom = r === 1 ? 'border-b-4 border-gray-800' : '';
-              
-              return (
-                <input 
-                  key={`${r}-${c}`}
-                  type="text"
-                  maxLength={1}
-                  value={cell}
-                  onChange={(e) => handleChange(r, c, e.target.value)}
-                  readOnly={isInitial}
-                  className={`w-14 h-14 md:w-20 md:h-20 text-center font-bold text-2xl md:text-3xl outline-none transition-colors
-                    ${isInitial ? 'bg-gray-200 text-gray-800 cursor-not-allowed' : 'bg-white text-indigo-600 focus:bg-indigo-50'}
-                    ${borderRight} ${borderBottom}
-                  `}
-                />
-              )
-            })
-          ))}
-        </div>
-      </div>
-      
-      <div className="flex flex-col sm:flex-row justify-center gap-4 mt-10 w-full">
-        <button 
-          onClick={useHelp}
-          disabled={helpsLeft === 0}
-          className="px-6 py-3 bg-yellow-400 text-yellow-900 rounded-xl font-bold hover:bg-yellow-500 transition shadow-lg shadow-yellow-200/50 disabled:opacity-50 flex items-center justify-center gap-2"
-        >
-          <Sparkles size={20} /> Trợ giúp
-        </button>
-        <button 
-          onClick={checkSudoku}
-          className="flex-1 px-8 py-3 bg-sky-600 text-white rounded-xl font-bold hover:bg-sky-700 transition shadow-lg shadow-sky-200"
-        >
-          Kiểm tra Sudoku
-        </button>
-      </div>
-
-      {msg && (
-        <div className={`mt-6 p-4 rounded-xl font-medium text-center ${msg.includes('Hoàn hảo') ? 'bg-emerald-50 text-emerald-600' : 'bg-orange-50 text-orange-600'}`}>
-          {msg}
         </div>
       )}
     </div>
@@ -360,7 +231,7 @@ export default function GamesManager({ addReward }) {
     { 
       id: 'sudoku', 
       title: 'Sudoku Toán học', 
-      desc: 'Rèn luyện tư duy logic và suy luận toán học qua lưới số 4x4.',
+      desc: 'Rèn luyện tư duy logic và suy luận toán học qua lưới số 7x7.',
       icon: <Gamepad2 size={32} className="text-sky-500" />,
       color: 'from-sky-100 to-blue-200',
       border: 'border-sky-200'
