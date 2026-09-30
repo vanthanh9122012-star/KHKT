@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Home, BookOpen, Clock, BarChart2, CheckCircle2, Circle, Play, Pause, RotateCcw, Brain, Check, X, Filter, Book, Hash, Layers, Menu, Award, Trophy, FileText, Edit3, ClipboardList, Gem, Calendar, Plus, Trash2, BookHeart, Sparkles, Quote, Mail, Link, ShieldCheck, Activity, LogOut, Users, Crown, Languages, TrendingUp, Flame, Target, Compass, Bot, Gamepad2, HelpCircle, Map, Loader2, Save } from 'lucide-react';
 import GamesManager from './GamesManager';
+import QuizManager from './QuizManager';
 import AssessmentManager from './AssessmentManager';
 import TownBuilder from './TownBuilder';
 import LoginPage from './LoginPage';
