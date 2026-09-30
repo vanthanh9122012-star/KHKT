@@ -56,30 +56,6 @@ const DUMMY_TASKS = [
   { id: 8, title: 'Nghiên cứu cấu tạo tế bào', subject: 'Sinh học', grade: 'Lớp 7', completed: false, time: '20:00' },
 ];
 
-const QUIZ_DATA = [
-  {
-    id: 1,
-    title: 'Kiểm tra Toán 9 - Chương 1',
-    subject: 'Toán',
-    questions: [
-      { id: 'q1', type: 'mcq', text: 'Nghiệm của phương trình 2x - 4 = 0 là:', options: ['x = 1', 'x = 2', 'x = -2', 'x = 4'], correct: 'x = 2' },
-      { id: 'q2', type: 'mcq', text: 'Căn bậc hai số học của 16 là:', options: ['4', '-4', '±4', '256'], correct: '4' },
-      { id: 'q6', type: 'fill_blank', text: 'Định lý Vi-et: Tổng 2 nghiệm của phương trình ax² + bx + c = 0 là x₁ + x₂ = ...', correct: '-b/a' },
-      { id: 'q3', type: 'essay', text: 'Hãy trình bày cách giải phương trình bậc 2 theo công thức nghiệm.', correct: 'Tính Delta = b² - 4ac. Nếu Delta > 0, phương trình có 2 nghiệm phân biệt. Nếu Delta = 0, phương trình có nghiệm kép. Nếu Delta < 0, phương trình vô nghiệm.' }
-    ]
-  },
-  {
-    id: 2,
-    title: 'Test Từ vựng Tiếng Anh - Unit 1',
-    subject: 'Anh',
-    questions: [
-      { id: 'q4', type: 'mcq', text: 'Từ nào đồng nghĩa với "Happy"?', options: ['Sad', 'Angry', 'Glad', 'Tired'], correct: 'Glad' },
-      { id: 'q7', type: 'fill_blank', text: 'Điền từ còn thiếu vào chỗ trống: I am looking forward to _______ (see) you again.', correct: 'seeing' },
-      { id: 'q5', type: 'essay', text: 'Viết một câu hoàn chỉnh sử dụng thì Hiện tại hoàn thành với từ "already".', correct: 'Gợi ý: I have already finished my homework.' }
-    ]
-  }
-];
-
 const Sidebar = ({ activeTab, setActiveTab, gamification, currentUser, setShowAuthModal, handleLogout }) => {
   const menuItems = [
     { id: 'dashboard', icon: <Home size={20} />, label: 'Tổng quan' },
@@ -688,249 +664,55 @@ ${aiMaterial}`;
   );
 };
 
-const QuizManager = ({ addReward }) => {
-  const [selectedSubject, setSelectedSubject] = useState(null);
-  const [activeQuiz, setActiveQuiz] = useState(null);
-  const [userAnswers, setUserAnswers] = useState({});
-  const [isSubmitted, setIsSubmitted] = useState(false);
-  const [score, setScore] = useState(0);
-    const [showAIModal, setShowAIModal] = useState(false);
-    const [trigger, setTrigger] = useState(0);
+const ReviewManager = () => {
+  const [mistakes, setMistakes] = useState([]);
 
-  
-    const handleAIGenerated = (quizData) => {
-      QUIZ_DATA.unshift(quizData);
-      setShowAIModal(false);
-      handleStart(quizData);
-      setTrigger(t => t+1);
-    };
-
-    const filteredQuizzes = selectedSubject ? QUIZ_DATA.filter(q => q.subject === selectedSubject) : QUIZ_DATA;
-
-  const handleStart = (quiz) => {
-    setActiveQuiz(quiz);
-    setUserAnswers({});
-    setIsSubmitted(false);
-    setScore(0);
-  };
-
-  const handleAnswerChange = (qId, val) => {
-    setUserAnswers(prev => ({ ...prev, [qId]: val }));
-  };
-
-  const handleSubmit = () => {
-    let newScore = 0;
-    activeQuiz.questions.forEach(q => {
-      if (q.type === 'mcq' && userAnswers[q.id] === q.correct) {
-        newScore += 1;
-      } else if (q.type === 'fill_blank' && userAnswers[q.id]?.trim().toLowerCase() === q.correct.toLowerCase()) {
-        newScore += 1;
-      }
-    });
-    setScore(newScore);
-    setIsSubmitted(true);
-    // Tính toán XP và Ruby: 10xp & 10 ruby mỗi câu đúng, 15xp mỗi câu tự luận có làm bài
-    const completedEssays = activeQuiz.questions.filter(q => q.type === 'essay' && userAnswers[q.id]?.length > 5).length;
-    const xpEarned = newScore * 10 + completedEssays * 15;
-    const rubyEarned = newScore * 10;
-    if ((xpEarned > 0 || rubyEarned > 0) && addReward) {
-      addReward(xpEarned, rubyEarned);
+  useEffect(() => {
+    const saved = localStorage.getItem('studyflow_vocab');
+    if (saved) {
+      const parsed = JSON.parse(saved);
+      const withMistakes = parsed.filter(item => item.mistakes > 0 || item.eFactor < 2.5);
+      setMistakes(withMistakes.sort((a, b) => (b.mistakes || 0) - (a.mistakes || 0)));
     }
-  };
-
-  if (activeQuiz) {
-    return (
-      <div className="space-y-6 animate-fade-in pb-10">
-        <header className="mb-8 flex justify-between items-center">
-          <div>
-            <h1 className="text-3xl font-bold text-gray-800 mb-2">{activeQuiz.title}</h1>
-            <div className="flex items-center gap-2 mt-2">
-              <span className={`text-xs font-bold border px-2.5 py-1 rounded-md ${getSubjectStyle(activeQuiz.subject)}`}>{activeQuiz.subject}</span>
-              <span className="text-sm font-bold text-gray-500 bg-gray-100 border border-gray-200 px-2 py-0.5 rounded">{activeQuiz.questions.length} câu hỏi</span>
-            </div>
-          </div>
-          <button onClick={() => setActiveQuiz(null)} className="text-gray-500 hover:text-gray-800 font-medium bg-gray-100 px-4 py-2 rounded-xl transition">
-            Thoát
-          </button>
-        </header>
-
-        <div className="space-y-8">
-          {activeQuiz.questions.map((q, idx) => (
-            <div key={q.id} className="bg-surface rounded-3xl p-6 shadow-sm border border-gray-100">
-              <h3 className="text-lg font-bold text-gray-800 mb-4">Câu {idx + 1}: {q.text}</h3>
-              
-              {q.type === 'mcq' ? (
-                <div className="space-y-3">
-                  {q.options.map(opt => (
-                    <label key={opt} className={`flex items-center gap-3 p-3 rounded-xl border-2 transition-all cursor-pointer ${
-                      userAnswers[q.id] === opt ? 'border-sky-500 bg-sky-50' : 'border-gray-100 hover:border-gray-200 bg-white'
-                    } ${isSubmitted && opt === q.correct ? 'border-green-500 bg-green-50' : ''}`}>
-                      <input 
-                        type="radio" 
-                        name={`q-${q.id}`} 
-                        value={opt} 
-                        checked={userAnswers[q.id] === opt} 
-                        onChange={() => handleAnswerChange(q.id, opt)}
-                        disabled={isSubmitted}
-                        className="w-5 h-5 text-sky-500 border-gray-300 focus:ring-sky-500"
-                      />
-                      <span className={`font-medium ${isSubmitted && opt === q.correct ? 'text-green-700' : 'text-gray-700'}`}>{opt}</span>
-                      {isSubmitted && opt === q.correct && <CheckCircle2 size={20} className="ml-auto text-green-500" />}
-                      {isSubmitted && userAnswers[q.id] === opt && opt !== q.correct && <X size={20} className="ml-auto text-red-500" />}
-                    </label>
-                  ))}
-                </div>
-              ) : q.type === 'fill_blank' ? (
-                <div className="space-y-3">
-                  <div className="relative">
-                    <input 
-                      type="text"
-                      value={userAnswers[q.id] || ''}
-                      onChange={(e) => handleAnswerChange(q.id, e.target.value)}
-                      disabled={isSubmitted}
-                      placeholder="Nhập đáp án của bạn..."
-                      className={`w-full p-4 pr-12 border-2 rounded-xl focus:ring-0 outline-none transition text-gray-700 ${
-                        !isSubmitted ? 'border-gray-100 focus:border-sky-500' :
-                        userAnswers[q.id]?.trim().toLowerCase() === q.correct.toLowerCase() ? 'border-green-500 bg-green-50 text-green-800 font-medium' : 'border-red-500 bg-red-50 text-red-800 font-medium'
-                      }`}
-                    />
-                    {isSubmitted && userAnswers[q.id]?.trim().toLowerCase() === q.correct.toLowerCase() && (
-                      <CheckCircle2 size={24} className="absolute right-4 top-4 text-green-500" />
-                    )}
-                    {isSubmitted && userAnswers[q.id]?.trim().toLowerCase() !== q.correct.toLowerCase() && (
-                      <X size={24} className="absolute right-4 top-4 text-red-500" />
-                    )}
-                  </div>
-                  {isSubmitted && userAnswers[q.id]?.trim().toLowerCase() !== q.correct.toLowerCase() && (
-                    <div className="p-4 bg-sky-50 rounded-xl border border-sky-100 mt-2">
-                      <p className="text-xs font-bold text-sky-600 mb-1 uppercase tracking-wider">Đáp án đúng</p>
-                      <p className="text-gray-800 font-medium">{q.correct}</p>
-                    </div>
-                  )}
-                </div>
-              ) : (
-                <div className="space-y-3">
-                  <textarea 
-                    value={userAnswers[q.id] || ''}
-                    onChange={(e) => handleAnswerChange(q.id, e.target.value)}
-                    disabled={isSubmitted}
-                    placeholder="Nhập câu trả lời tự luận của bạn..."
-                    className="w-full h-32 p-4 border-2 border-gray-100 rounded-xl focus:border-sky-500 focus:ring-0 outline-none transition resize-none text-gray-700"
-                  ></textarea>
-                  {isSubmitted && (
-                    <div className="p-4 bg-sky-50 rounded-xl border border-sky-100 mt-4">
-                      <p className="text-xs font-bold text-sky-600 mb-1 uppercase tracking-wider">Đáp án / Gợi ý chuẩn</p>
-                      <p className="text-gray-800 whitespace-pre-line">{q.correct}</p>
-                    </div>
-                  )}
-                </div>
-              )}
-            </div>
-          ))}
-        </div>
-
-        {!isSubmitted ? (
-          <div className="flex justify-center mt-8">
-            <button 
-              onClick={handleSubmit}
-              disabled={Object.keys(userAnswers).length === 0}
-              className="px-10 py-4 bg-primary text-white font-bold rounded-full text-lg shadow-lg shadow-sky-200 hover:-translate-y-1 hover:bg-sky-600 transition-all disabled:opacity-50 disabled:hover:translate-y-0"
-            >
-              Nộp bài
-            </button>
-          </div>
-        ) : (
-          <div className="bg-gradient-to-br from-green-400 to-emerald-500 rounded-3xl p-8 text-white text-center mt-8 shadow-xl shadow-green-200 animate-fade-in">
-            <Trophy size={48} className="mx-auto mb-4 text-green-100" />
-            <h2 className="text-3xl font-bold mb-2">Đã nộp bài!</h2>
-            <p className="text-green-50 text-lg mb-4">Bạn đã làm đúng {score} / {activeQuiz.questions.filter(q => q.type === 'mcq' || q.type === 'fill_blank').length} câu trắc nghiệm & điền từ.</p>
-            <div className="flex justify-center gap-4 mb-8">
-              <div className="bg-white/20 px-4 py-2 rounded-xl flex items-center gap-2">
-                <span className="font-bold">+{score * 10 + (activeQuiz.questions.filter(q => q.type === 'essay' && userAnswers[q.id]?.length > 5).length * 15)} XP</span>
-              </div>
-              <div className="bg-white/20 px-4 py-2 rounded-xl flex items-center gap-2">
-                <Gem size={18} className="text-red-300" />
-                <span className="font-bold">+{score * 10} Ruby</span>
-              </div>
-            </div>
-            <button 
-              onClick={() => setActiveQuiz(null)}
-              className="px-8 py-3 bg-white text-green-600 font-bold rounded-full hover:bg-green-50 transition shadow-md"
-            >
-              Quay lại danh sách
-            </button>
-          </div>
-        )}
-      </div>
-    );
-  }
+  }, []);
 
   return (
     <div className="space-y-6 animate-fade-in pb-10">
-      <header className="mb-8 flex flex-col md:flex-row justify-between items-start md:items-end gap-4">
-        <div>
-          <h1 className="text-3xl font-bold text-gray-800 mb-2">Luyện Thi & Trắc Nghiệm</h1>
-          <p className="text-gray-500">Làm các bài test kết hợp trắc nghiệm và tự luận để nhận XP.</p>
-        </div>
-        <button 
-          onClick={() => setShowAIModal(true)}
-          className="px-6 py-3 bg-gradient-to-r from-primary to-sky-600 text-white font-bold rounded-xl shadow-lg hover:shadow-xl hover:-translate-y-1 transition transform flex items-center gap-2"
-        >
-          <Sparkles size={20} /> Tạo Đề bằng AI
-        </button>
+      <header className="mb-8">
+        <h1 className="text-3xl font-bold text-gray-800 mb-2">Ôn tập lỗi sai</h1>
+        <p className="text-gray-500">Xem lại các thẻ Flashcard và câu hỏi bạn thường xuyên trả lời sai.</p>
       </header>
 
-      {/* Filters */}
-      <div className="bg-surface rounded-3xl p-6 shadow-sm border border-gray-100 space-y-4">
-        <div className="flex items-center gap-2 text-gray-700 font-semibold mb-2">
-          <Book size={18} className="text-primary" />
-          <span>Lọc theo môn học</span>
+      {mistakes.length === 0 ? (
+        <div className="text-center py-12 text-gray-400 bg-surface rounded-3xl border border-gray-100 shadow-sm flex flex-col items-center">
+          <CheckCircle2 size={64} className="mb-4 text-green-400 opacity-80" />
+          <h2 className="text-xl font-bold text-gray-600 mb-2">Không có lỗi sai nào!</h2>
+          <p>Tuyệt vời! Bạn đang nhớ bài rất tốt.</p>
         </div>
-        <div className="flex flex-wrap gap-2">
-          <button 
-            onClick={() => setSelectedSubject(null)}
-            className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${!selectedSubject ? 'bg-primary text-white shadow-md shadow-sky-200' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'}`}
-          >
-            Tất cả
-          </button>
-          {SUBJECTS.filter(s => s !== 'Tổng hợp').map(sub => (
-            <button 
-              key={sub}
-              onClick={() => setSelectedSubject(sub)}
-              className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${selectedSubject === sub ? 'bg-primary text-white shadow-md shadow-sky-200' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'}`}
-            >
-              {sub}
-            </button>
+      ) : (
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {mistakes.map(card => (
+            <div key={card.id} className="bg-surface rounded-3xl p-6 shadow-sm border border-red-100 relative overflow-hidden group hover:-translate-y-1 transition transform">
+              <div className="absolute top-0 left-0 w-1.5 h-full bg-red-400"></div>
+              <div className="flex justify-between items-start mb-4">
+                <div className="flex gap-2">
+                  <span className={`text-xs font-bold border px-2 py-1 rounded ${getSubjectStyle(card.subject)}`}>{card.subject}</span>
+                  <span className="text-xs font-bold text-gray-600 bg-gray-100 border border-gray-200 px-2 py-1 rounded">{card.grade}</span>
+                </div>
+                <div className="text-xs font-bold text-red-500 bg-red-50 px-2 py-1 rounded flex items-center gap-1">
+                  <X size={12} /> Sai {card.mistakes || 'nhiều'} lần
+                </div>
+              </div>
+              <p className="text-sm text-gray-500 mb-1">Câu hỏi:</p>
+              <h3 className="font-bold text-gray-800 mb-4">{card.question}</h3>
+              <div className="p-3 bg-sky-50 rounded-xl">
+                <p className="text-xs font-semibold text-sky-600 mb-1">ĐÁP ÁN ĐÚNG</p>
+                <p className="font-medium text-sky-900">{card.answer}</p>
+              </div>
+            </div>
           ))}
         </div>
-      </div>
-
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        {filteredQuizzes.length === 0 ? (
-          <div className="col-span-2 text-center py-10 text-gray-400">
-            Không có bài kiểm tra nào cho môn này.
-          </div>
-        ) : (
-          filteredQuizzes.map(quiz => (
-            <div key={quiz.id} className="bg-surface rounded-3xl p-6 shadow-sm border border-gray-100 hover:shadow-md hover:-translate-y-1 transition transform flex flex-col justify-between">
-              <div>
-                <div className="flex items-center gap-2 mb-3">
-                  <span className={`text-xs font-bold border px-2 py-1 rounded ${getSubjectStyle(quiz.subject)}`}>{quiz.subject}</span>
-                  <span className="text-xs font-bold text-gray-500 bg-gray-100 border border-gray-200 px-2 py-1 rounded">{quiz.questions.length} câu</span>
-                </div>
-                <h3 className="text-xl font-bold text-gray-800 mb-2">{quiz.title}</h3>
-                <p className="text-sm text-gray-500 mb-6">Làm bài tập trắc nghiệm và tự luận để nhận XP.</p>
-              </div>
-              <button 
-                onClick={() => handleStart(quiz)}
-                className="w-full py-3 bg-gray-50 text-sky-600 font-bold rounded-xl hover:bg-sky-50 transition border border-gray-100 hover:border-sky-200"
-              >
-                Bắt đầu làm bài
-              </button>
-            </div>
-          ))
-        )}
-      </div>
+      )}
     </div>
   );
 };
