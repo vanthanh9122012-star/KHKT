@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { Map, CheckCircle2, Lock, Play, Check, Book, Brain, Star, Award, Compass, ArrowRight, X } from 'lucide-react';
+import { Map, CheckCircle2, Lock, Play, Check, Book, Brain, Star, Award, Compass, ArrowRight, X, Trophy } from 'lucide-react';
 import { auth, db } from './firebase';
 import { doc, getDoc, setDoc } from 'firebase/firestore';
+import { INITIAL_TOWN } from './data/townData';
 
 const SUBJECT_COLORS = {
   'Toán': 'text-blue-600 bg-blue-50 border-blue-200',
@@ -13,51 +14,6 @@ const SUBJECT_COLORS = {
   'Hóa học': 'text-cyan-600 bg-cyan-50 border-cyan-200',
   'Sinh học': 'text-lime-600 bg-lime-50 border-lime-200',
 };
-
-const INITIAL_TOWN = [
-  {
-    id: 1,
-    title: 'Ngôi nhà 1: Khởi hành',
-    rooms: [
-      { id: '1-math', subject: 'Toán', title: 'Căn bậc hai', completed: false, knowledge: 'Căn bậc hai của số a không âm là x sao cho x² = a.' },
-      { id: '1-lit', subject: 'Văn', title: 'Chuyện người con gái Nam Xương', completed: false, knowledge: 'Phản ánh số phận bi kịch của người phụ nữ dưới chế độ phong kiến.' },
-      { id: '1-eng', subject: 'Anh', title: 'Unit 1: Local Environment', completed: false, knowledge: 'Từ vựng về các làng nghề truyền thống và môi trường địa phương.' },
-      { id: '1-phys', subject: 'Vật lý', title: 'Định luật Ôm', completed: false, knowledge: 'Cường độ dòng điện I tỉ lệ thuận với hiệu điện thế U và tỉ lệ nghịch với điện trở R (I = U/R).' },
-      { id: '1-chem', subject: 'Hóa học', title: 'Tính chất của Oxit', completed: false, knowledge: 'Oxit bazơ tác dụng với axit tạo muối & nước.' },
-      { id: '1-bio', subject: 'Sinh học', title: 'Di truyền học Menđen', completed: false, knowledge: 'Lai một cặp tính trạng: F2 phân li theo tỉ lệ 3 trội : 1 lặn.' },
-      { id: '1-his', subject: 'Sử', title: 'Liên Xô & Đông Âu', completed: false, knowledge: 'Công cuộc khôi phục kinh tế và xây dựng CNXH sau chiến tranh thế giới 2.' },
-      { id: '1-geo', subject: 'Địa', title: 'Dân tộc Việt Nam', completed: false, knowledge: 'Việt Nam có 54 dân tộc, người Kinh chiếm đa số.' }
-    ]
-  },
-  {
-    id: 2,
-    title: 'Ngôi nhà 2: Tăng tốc',
-    rooms: [
-      { id: '2-math', subject: 'Toán', title: 'Hàm số bậc nhất', completed: false, knowledge: 'Hàm số y = ax + b (a ≠ 0). Đồng biến khi a > 0.' },
-      { id: '2-lit', subject: 'Văn', title: 'Hoàng Lê nhất thống chí', completed: false, knowledge: 'Tái hiện chân thực hình ảnh người anh hùng Nguyễn Huệ.' },
-      { id: '2-eng', subject: 'Anh', title: 'Unit 2: City Life', completed: false, knowledge: 'Các tính từ miêu tả cuộc sống thành thị và ngữ pháp so sánh kép.' },
-      { id: '2-phys', subject: 'Vật lý', title: 'Đoạn mạch nối tiếp', completed: false, knowledge: 'I = I1 = I2, U = U1 + U2, R = R1 + R2' },
-      { id: '2-chem', subject: 'Hóa học', title: 'Tính chất của Axit', completed: false, knowledge: 'Làm quỳ tím hóa đỏ, tác dụng với kim loại giải phóng H2.' },
-      { id: '2-bio', subject: 'Sinh học', title: 'Nhiễm sắc thể', completed: false, knowledge: 'Cấu trúc mang gen, có bản chất là ADN kết hợp prôtêin.' },
-      { id: '2-his', subject: 'Sử', title: 'Các nước Á, Phi, Mĩ Latinh', completed: false, knowledge: 'Phong trào giải phóng dân tộc bùng nổ mạnh mẽ.' },
-      { id: '2-geo', subject: 'Địa', title: 'Dân cư và nguồn lao động', completed: false, knowledge: 'Nguồn lao động dồi dào, tăng nhanh, cần nhiều việc làm.' }
-    ]
-  },
-  {
-    id: 3,
-    title: 'Ngôi nhà 3: Vượt sóng',
-    rooms: [
-      { id: '3-math', subject: 'Toán', title: 'Hệ phương trình bậc nhất 2 ẩn', completed: false, knowledge: 'Sử dụng phương pháp thế hoặc cộng đại số để giải.' },
-      { id: '3-lit', subject: 'Văn', title: 'Truyện Kiều', completed: false, knowledge: 'Đỉnh cao của văn học trung đại Việt Nam do Nguyễn Du sáng tác.' },
-      { id: '3-eng', subject: 'Anh', title: 'Unit 3: Teen stress', completed: false, knowledge: 'Các kĩ năng ứng phó với áp lực tuổi vị thành niên.' },
-      { id: '3-phys', subject: 'Vật lý', title: 'Đoạn mạch song song', completed: false, knowledge: 'U = U1 = U2, I = I1 + I2, 1/R = 1/R1 + 1/R2' },
-      { id: '3-chem', subject: 'Hóa học', title: 'Tính chất của Bazơ', completed: false, knowledge: 'Làm quỳ tím hóa xanh, phenolphtalein hóa hồng.' },
-      { id: '3-bio', subject: 'Sinh học', title: 'ADN và bản chất gen', completed: false, knowledge: 'Cấu trúc xoắn kép, nguyên tắc bổ sung A-T, G-X.' },
-      { id: '3-his', subject: 'Sử', title: 'Nước Mĩ sau CTTG 2', completed: false, knowledge: 'Sự vươn lên thành siêu cường kinh tế số 1 thế giới.' },
-      { id: '3-geo', subject: 'Địa', title: 'Nông nghiệp Việt Nam', completed: false, knowledge: 'Chuyển dịch cơ cấu cây trồng, ứng dụng công nghệ cao.' }
-    ]
-  }
-];
 
 // Isometric SVG components
 const IsoTile = ({ colorTop, colorLeft, colorRight, yOffset = 0, height = 0, scale = 1, cx=50, cy=50 }) => (
@@ -71,7 +27,6 @@ const IsoTile = ({ colorTop, colorLeft, colorRight, yOffset = 0, height = 0, sca
 const PhaseWasteland = () => (
   <svg viewBox="0 0 100 100" className="w-full h-full drop-shadow-xl transform transition-transform duration-500 hover:scale-105">
     <IsoTile colorTop="#a3b18a" colorLeft="#588157" colorRight="#3a5a40" height={10} />
-    {/* Dirt patches */}
     <ellipse cx="50" cy="50" rx="15" ry="8" fill="#d4a373" opacity="0.8" />
     <ellipse cx="30" cy="55" rx="8" ry="4" fill="#bc6c25" opacity="0.6" />
     <ellipse cx="70" cy="45" rx="10" ry="5" fill="#bc6c25" opacity="0.6" />
@@ -81,9 +36,7 @@ const PhaseWasteland = () => (
 const PhaseFoundation = () => (
   <svg viewBox="0 0 100 100" className="w-full h-full drop-shadow-xl transform transition-transform duration-500 hover:scale-105">
     <IsoTile colorTop="#a3b18a" colorLeft="#588157" colorRight="#3a5a40" height={10} />
-    {/* Foundation */}
     <IsoTile colorTop="#ced4da" colorLeft="#adb5bd" colorRight="#6c757d" height={8} scale={0.7} yOffset={-4} />
-    {/* Construction materials */}
     <rect x="40" y="45" width="8" height="4" fill="#d4a373" transform="skewY(26)" />
   </svg>
 );
@@ -92,46 +45,74 @@ const PhaseWalls = () => (
   <svg viewBox="0 0 100 100" className="w-full h-full drop-shadow-xl transform transition-transform duration-500 hover:scale-105">
     <IsoTile colorTop="#a3b18a" colorLeft="#588157" colorRight="#3a5a40" height={10} />
     <IsoTile colorTop="#ced4da" colorLeft="#adb5bd" colorRight="#6c757d" height={8} scale={0.7} yOffset={-4} />
-    {/* Partial Walls */}
     <IsoTile colorTop="#fefae0" colorLeft="#faedcd" colorRight="#e9edc9" height={12} scale={0.65} yOffset={-16} />
-    {/* Scaffolding */}
     <line x1="20" y1="35" x2="20" y2="55" stroke="#bc6c25" strokeWidth="1" />
     <line x1="80" y1="35" x2="80" y2="55" stroke="#bc6c25" strokeWidth="1" />
   </svg>
 );
 
-const PhaseHighWalls = () => (
+// Level 1: Căn Nhà Gỗ
+const HouseLevel1 = () => (
   <svg viewBox="0 0 100 100" className="w-full h-full drop-shadow-xl transform transition-transform duration-500 hover:scale-105">
     <IsoTile colorTop="#a3b18a" colorLeft="#588157" colorRight="#3a5a40" height={10} />
-    <IsoTile colorTop="#ced4da" colorLeft="#adb5bd" colorRight="#6c757d" height={8} scale={0.7} yOffset={-4} />
-    {/* Full Walls */}
-    <IsoTile colorTop="#fefae0" colorLeft="#faedcd" colorRight="#e9edc9" height={25} scale={0.65} yOffset={-29} />
-    {/* Left Windows */}
-    <polygon points="25,48 40,55 40,45 25,38" fill="#caf0f8" opacity="0.8" />
-    <polygon points="60,55 75,48 75,38 60,45" fill="#caf0f8" opacity="0.8" />
+    <IsoTile colorTop="#9c6644" colorLeft="#7f4f24" colorRight="#582f0e" height={15} scale={0.7} yOffset={-10} />
+    <IsoTile colorTop="#b08968" colorLeft="#9c6644" colorRight="#7f4f24" height={10} scale={0.5} yOffset={-25} />
+    <polygon points="50,15 80,30 50,45 20,30" fill="#e63946" />
+    <polygon points="20,30 50,45 50,35" fill="#c1121f" />
+    <polygon points="80,30 50,45 50,35" fill="#780000" />
+    <rect x="40" y="55" width="10" height="15" fill="#3e2723" transform="skewY(26)" />
   </svg>
 );
 
-const PhaseComplete = () => (
-  <svg viewBox="0 0 100 100" className="w-full h-full drop-shadow-2xl transform transition-transform duration-500 hover:scale-105">
+// Level 2: Biệt Thự
+const HouseLevel2 = () => (
+  <svg viewBox="0 0 100 100" className="w-full h-full drop-shadow-xl transform transition-transform duration-500 hover:scale-105">
     <IsoTile colorTop="#a3b18a" colorLeft="#588157" colorRight="#3a5a40" height={10} />
-    <IsoTile colorTop="#ced4da" colorLeft="#adb5bd" colorRight="#6c757d" height={8} scale={0.7} yOffset={-4} />
-    <IsoTile colorTop="#fefae0" colorLeft="#faedcd" colorRight="#e9edc9" height={25} scale={0.65} yOffset={-29} />
-    <polygon points="22,46 32,51 32,41 22,36" fill="#caf0f8" />
-    <polygon points="38,54 48,59 48,45 38,40" fill="#d4a373" />
-    <polygon points="60,55 75,48 75,38 60,45" fill="#caf0f8" />
+    {/* Main body */}
+    <IsoTile colorTop="#f8edeb" colorLeft="#fcd5ce" colorRight="#fbc4ab" height={20} scale={0.8} yOffset={-10} />
+    {/* Balcony */}
+    <IsoTile colorTop="#e8e8e4" colorLeft="#d8e2dc" colorRight="#ece4db" height={5} scale={0.4} yOffset={-30} cx={30} cy={50} />
     {/* Roof */}
-    <g transform="translate(0, -32) scale(0.7) translate(21.5, 21.5)">
-      <polygon points="50,15 10,50 50,70 90,50" fill="#e63946" />
-      <polygon points="10,50 50,70 50,85 10,65" fill="#d90429" />
-      <polygon points="90,50 50,70 50,85 90,65" fill="#9f031e" />
-    </g>
+    <polygon points="50,5 90,25 50,45 10,25" fill="#0077b6" />
+    <polygon points="10,25 50,45 50,35" fill="#0096c7" />
+    <polygon points="90,25 50,45 50,35" fill="#03045e" />
+    <circle cx="50" cy="65" r="4" fill="#a8dadc" />
+    <circle cx="30" cy="55" r="4" fill="#a8dadc" />
+    <circle cx="70" cy="75" r="4" fill="#a8dadc" />
   </svg>
 );
+
+// Level 3: Lâu Đài
+const HouseLevel3 = () => (
+  <svg viewBox="0 0 100 100" className="w-full h-full drop-shadow-xl transform transition-transform duration-500 hover:scale-105">
+    <IsoTile colorTop="#a3b18a" colorLeft="#588157" colorRight="#3a5a40" height={10} />
+    {/* Main castle body */}
+    <IsoTile colorTop="#e9ecef" colorLeft="#ced4da" colorRight="#adb5bd" height={25} scale={0.8} yOffset={-10} />
+    {/* Towers */}
+    <IsoTile colorTop="#e9ecef" colorLeft="#ced4da" colorRight="#adb5bd" height={35} scale={0.25} yOffset={-20} cx={15} cy={40} />
+    <IsoTile colorTop="#e9ecef" colorLeft="#ced4da" colorRight="#adb5bd" height={35} scale={0.25} yOffset={-20} cx={85} cy={75} />
+    {/* Roof main */}
+    <polygon points="50,0 80,20 50,40 20,20" fill="#9d0208" />
+    {/* Tower roofs */}
+    <polygon points="15,0 25,10 15,20 5,10" fill="#d00000" />
+    <polygon points="85,35 95,45 85,55 75,45" fill="#d00000" />
+    {/* Door */}
+    <path d="M 45 70 Q 50 60 55 75 L 55 90 L 45 85 Z" fill="#370617" />
+    <circle cx="45" cy="55" r="3" fill="#ffb703" />
+    <circle cx="60" cy="62" r="3" fill="#ffb703" />
+  </svg>
+);
+
 
 export default function TownBuilder({ setActiveTab }) {
   const [houses, setHouses] = useState(INITIAL_TOWN);
   const [activeHouseIndex, setActiveHouseIndex] = useState(0);
+  
+  // Quiz Overlay State
+  const [activeQuizRoom, setActiveQuizRoom] = useState(null);
+  const [userAnswers, setUserAnswers] = useState({});
+  const [isSubmitted, setIsSubmitted] = useState(false);
+  const [score, setScore] = useState(0);
 
   useEffect(() => {
     if (!auth.currentUser) return;
@@ -140,9 +121,19 @@ export default function TownBuilder({ setActiveTab }) {
         const userDoc = await getDoc(doc(db, 'users', auth.currentUser.uid));
         if (userDoc.exists() && userDoc.data().townBuilder) {
           const savedTown = userDoc.data().townBuilder;
-          if (savedTown.length > 0) {
-            setHouses(savedTown);
-          }
+          // Merge with initial data to ensure questions are loaded if missing
+          const merged = INITIAL_TOWN.map((initHouse, hi) => {
+            const savedHouse = savedTown[hi];
+            if (!savedHouse) return initHouse;
+            return {
+              ...initHouse,
+              rooms: initHouse.rooms.map((initRoom, ri) => ({
+                ...initRoom,
+                completed: savedHouse.rooms[ri]?.completed || false
+              }))
+            };
+          });
+          setHouses(merged);
         }
       } catch (err) {
         console.error("Lỗi tải tiến độ thị trấn:", err);
@@ -151,7 +142,6 @@ export default function TownBuilder({ setActiveTab }) {
     loadTown();
   }, []);
 
-  // Unlocked if previous house has all rooms completed
   const isHouseUnlocked = (index) => {
     if (index === 0) return true;
     const prevHouse = houses[index - 1];
@@ -160,15 +150,24 @@ export default function TownBuilder({ setActiveTab }) {
 
   const activeHouse = houses[activeHouseIndex];
   const completedRooms = activeHouse.rooms.filter(r => r.completed).length;
-  const totalRooms = activeHouse.rooms.length; // usually 8
-  
-  const toggleRoom = (roomId) => {
+  const totalRooms = activeHouse.rooms.length;
+
+  const handleRoomClick = (room) => {
+    if (room.completed) return; // Đã xong thì không bắt làm lại
+    setActiveQuizRoom(room);
+    setUserAnswers({});
+    setIsSubmitted(false);
+    setScore(0);
+  };
+
+  const markRoomCompleted = () => {
     const newHouses = [...houses];
     const hIndex = newHouses.findIndex(h => h.id === activeHouse.id);
-    const rIndex = newHouses[hIndex].rooms.findIndex(r => r.id === roomId);
+    const rIndex = newHouses[hIndex].rooms.findIndex(r => r.id === activeQuizRoom.id);
     
-    newHouses[hIndex].rooms[rIndex].completed = !newHouses[hIndex].rooms[rIndex].completed;
+    newHouses[hIndex].rooms[rIndex].completed = true;
     setHouses(newHouses);
+    setActiveQuizRoom(null);
     
     if (auth.currentUser) {
       setDoc(doc(db, 'users', auth.currentUser.uid), {
@@ -177,37 +176,58 @@ export default function TownBuilder({ setActiveTab }) {
     }
   };
 
-  const getBuildingSvg = (completed, total) => {
+  const handleAnswerChange = (qId, val) => {
+    setUserAnswers(prev => ({ ...prev, [qId]: val }));
+  };
+
+  const submitQuiz = () => {
+    let newScore = 0;
+    activeQuizRoom.questions.forEach(q => {
+      const uAns = userAnswers[q.id];
+      if (!uAns) return;
+      if ((q.type === 'mcq' || q.type === 'true_false') && uAns === q.correct) {
+        newScore += 1;
+      } else if (q.type === 'fill_blank' && uAns.trim().toLowerCase() === q.correct.toLowerCase()) {
+        newScore += 1;
+      }
+    });
+    setScore(newScore);
+    setIsSubmitted(true);
+  };
+
+  const getBuildingSvg = (completed, total, houseIndex) => {
     if (completed === 0) return <PhaseWasteland />;
     if (completed <= 2) return <PhaseFoundation />;
-    if (completed <= 5) return <PhaseWalls />;
-    if (completed < total) return <PhaseHighWalls />;
-    return <PhaseComplete />;
+    if (completed < total) return <PhaseWalls />;
+    
+    // Finished phase varies by houseIndex (0 = Wood, 1 = Villa, 2 = Castle)
+    if (houseIndex === 0) return <HouseLevel1 />;
+    if (houseIndex === 1) return <HouseLevel2 />;
+    return <HouseLevel3 />;
   };
 
   const getPhaseName = (completed, total) => {
-    if (completed === 0) return 'Đất hoang';
-    if (completed <= 2) return 'Xây nền móng';
-    if (completed <= 5) return 'Dựng tường';
-    if (completed < total) return 'Hoàn thiện tường';
-    return 'Nhà hoàn chỉnh';
+    if (completed === 0) return 'Bãi đất trống';
+    if (completed <= 2) return 'Đổ móng';
+    if (completed < total) return 'Đang xây dựng';
+    return 'Hoàn thiện';
   };
 
   return (
-    <div className="space-y-8 animate-fade-in pb-20">
-      <header className="mb-4">
-        <h1 className="text-4xl font-extrabold text-gray-800 mb-2 flex items-center gap-3">
-          <Compass className="text-sky-600" size={36} />
-          Thị trấn Mindmap
+    <div className="space-y-6 animate-fade-in pb-10">
+      {/* HEADER */}
+      <header className="mb-8">
+        <h1 className="text-3xl font-black text-gray-800 mb-3 flex items-center gap-3">
+          <Map className="text-sky-500" size={32} />
+          Thị trấn nhỏ
         </h1>
-        <p className="text-gray-500 max-w-2xl text-lg">
-          Mỗi bài học là một <strong>Ngôi nhà</strong>. Bên trong là <strong>8 Căn phòng</strong> tương ứng với 8 môn học. Hoàn thành kiến thức ở mỗi căn phòng để xây dựng hoàn chỉnh một ngôi nhà!
+        <p className="text-gray-500 font-medium text-lg max-w-3xl">
+          Giải các bài tập <span className="font-bold text-sky-600">Nâng Cao</span> theo chuyên đề để xây dựng các công trình. Kiến trúc sẽ ngày càng sang trọng!
         </p>
       </header>
 
       {/* Mindmap Town View */}
       <div className="bg-gradient-to-br from-sky-50 to-indigo-100 rounded-[2.5rem] p-6 shadow-inner border border-sky-100 relative overflow-hidden">
-        {/* Decorative path */}
         <svg className="absolute inset-0 w-full h-full opacity-30 pointer-events-none" preserveAspectRatio="none">
            <path d="M -50 150 Q 150 50, 300 150 T 600 100 T 1000 200" fill="none" stroke="#3b82f6" strokeWidth="20" strokeLinecap="round" strokeDasharray="30 30" />
         </svg>
@@ -225,7 +245,6 @@ export default function TownBuilder({ setActiveTab }) {
                 className="flex flex-col items-center relative group"
                 onClick={() => unlocked && setActiveHouseIndex(index)}
               >
-                {/* Connecting Line */}
                 {index < houses.length - 1 && (
                   <div className="hidden md:block absolute top-1/2 left-[100%] w-20 h-1.5 bg-sky-200/50 -z-10 transform -translate-y-1/2 rounded-full">
                     <div className={`h-full bg-sky-500 rounded-full transition-all duration-1000 ${comp === tot ? 'w-full' : 'w-0'}`}></div>
@@ -237,9 +256,8 @@ export default function TownBuilder({ setActiveTab }) {
                   ${!unlocked ? 'opacity-40 grayscale cursor-not-allowed' : 'hover:-translate-y-2'}
                   ${isActive ? 'scale-110 drop-shadow-2xl z-20' : 'scale-100'}
                 `}>
-                  {getBuildingSvg(comp, tot)}
+                  {getBuildingSvg(comp, tot, index)}
                   
-                  {/* Status Overlay */}
                   {!unlocked && (
                     <div className="absolute inset-0 flex items-center justify-center">
                       <div className="bg-slate-900/70 p-4 rounded-full text-white backdrop-blur-md">
@@ -272,7 +290,7 @@ export default function TownBuilder({ setActiveTab }) {
         </div>
       </div>
 
-      {/* Inside the House: 8 Rooms (Subjects) */}
+      {/* Inside the House: 8 Rooms */}
       <div className="mt-8 bg-white rounded-[2rem] p-8 shadow-sm border border-sky-100 relative overflow-hidden">
         <div className="absolute top-0 right-0 w-80 h-80 bg-sky-50 rounded-full blur-3xl -z-10 opacity-70 translate-x-1/3 -translate-y-1/3"></div>
         
@@ -284,7 +302,7 @@ export default function TownBuilder({ setActiveTab }) {
               </span>
             </div>
             <h2 className="text-3xl font-black text-gray-800">{activeHouse ? activeHouse.title : houses[0].title}</h2>
-            <p className="text-gray-500 mt-2 font-medium">Bên trong ngôi nhà có 8 căn phòng. Mở khóa tri thức ở mỗi phòng để hoàn thiện kiến trúc!</p>
+            <p className="text-gray-500 mt-2 font-medium">Hoàn thành bài tập nâng cao ở mỗi phòng để xây dựng công trình!</p>
           </div>
           <div className="text-left md:text-right bg-sky-50 px-6 py-4 rounded-3xl border border-sky-100">
             <span className="text-4xl font-black text-sky-600">{activeHouse ? completedRooms : 0}<span className="text-2xl text-sky-300">/{activeHouse ? totalRooms : 8}</span></span>
@@ -296,7 +314,7 @@ export default function TownBuilder({ setActiveTab }) {
           {(activeHouse || houses[0]).rooms.map((room) => (
             <div 
               key={room.id}
-              onClick={() => toggleRoom(room.id)}
+              onClick={() => handleRoomClick(room)}
               className={`p-5 rounded-3xl border-2 cursor-pointer transition-all duration-300 transform hover:-translate-y-1 flex flex-col h-full
                 ${room.completed 
                   ? 'border-green-300 bg-gradient-to-b from-green-50 to-white shadow-lg shadow-green-100/50' 
@@ -345,6 +363,124 @@ export default function TownBuilder({ setActiveTab }) {
           ))}
         </div>
       </div>
+
+      {/* QUIZ OVERLAY MODAL */}
+      {activeQuizRoom && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 bg-slate-900/60 backdrop-blur-sm animate-fade-in overflow-y-auto">
+          <div className="bg-white w-full max-w-4xl rounded-3xl shadow-2xl overflow-hidden my-8">
+            <div className="bg-gradient-to-r from-sky-600 to-indigo-700 p-6 sm:p-8 text-white flex justify-between items-center sticky top-0 z-10">
+              <div>
+                <h2 className="text-2xl sm:text-3xl font-black mb-1">Thử thách Nâng cao</h2>
+                <p className="text-sky-100 font-medium">{activeQuizRoom.subject} - {activeQuizRoom.title}</p>
+              </div>
+              <button onClick={() => setActiveQuizRoom(null)} className="p-2 hover:bg-white/20 rounded-full transition text-white">
+                <X size={28} />
+              </button>
+            </div>
+            
+            <div className="p-6 sm:p-8">
+              <div className="space-y-8">
+                {activeQuizRoom.questions?.map((q, idx) => (
+                  <div key={q.id} className="bg-slate-50 rounded-2xl p-6 border border-slate-200">
+                    <h3 className="text-lg font-bold text-slate-800 mb-4">Câu {idx + 1}: {q.text}</h3>
+                    
+                    {(q.type === 'mcq' || q.type === 'true_false') ? (
+                      <div className="space-y-3">
+                        {q.options.map(opt => (
+                          <label key={opt} className={`flex items-center gap-3 p-3 rounded-xl border-2 transition-all cursor-pointer ${
+                            userAnswers[q.id] === opt ? 'border-sky-500 bg-sky-50' : 'border-slate-200 hover:border-slate-300 bg-white'
+                          } ${isSubmitted && opt === q.correct ? 'border-green-500 bg-green-50' : ''}`}>
+                            <input 
+                              type="radio" 
+                              name={`q-${q.id}`} 
+                              value={opt} 
+                              checked={userAnswers[q.id] === opt} 
+                              onChange={() => handleAnswerChange(q.id, opt)}
+                              disabled={isSubmitted}
+                              className="w-5 h-5 text-sky-500 border-slate-300 focus:ring-sky-500"
+                            />
+                            <span className={`font-medium ${isSubmitted && opt === q.correct ? 'text-green-700' : 'text-slate-700'}`}>{opt}</span>
+                            {isSubmitted && opt === q.correct && <CheckCircle2 size={20} className="ml-auto text-green-500" />}
+                            {isSubmitted && userAnswers[q.id] === opt && opt !== q.correct && <X size={20} className="ml-auto text-red-500" />}
+                          </label>
+                        ))}
+                      </div>
+                    ) : q.type === 'fill_blank' ? (
+                      <div className="space-y-3">
+                        <input 
+                          type="text"
+                          value={userAnswers[q.id] || ''}
+                          onChange={(e) => handleAnswerChange(q.id, e.target.value)}
+                          disabled={isSubmitted}
+                          placeholder="Nhập đáp án của bạn..."
+                          className={`w-full p-4 border-2 rounded-xl outline-none transition text-slate-700 ${
+                            !isSubmitted ? 'border-slate-200 focus:border-sky-500' :
+                            userAnswers[q.id]?.trim().toLowerCase() === q.correct.toLowerCase() ? 'border-green-500 bg-green-50 text-green-800' : 'border-red-500 bg-red-50 text-red-800'
+                          }`}
+                        />
+                        {isSubmitted && userAnswers[q.id]?.trim().toLowerCase() !== q.correct.toLowerCase() && (
+                          <div className="p-3 bg-sky-50 rounded-xl border border-sky-100">
+                            <span className="text-xs font-bold text-sky-600 block mb-1">Đáp án đúng:</span>
+                            <span className="font-bold text-slate-800">{q.correct}</span>
+                          </div>
+                        )}
+                      </div>
+                    ) : (
+                      <div className="space-y-3">
+                        <textarea 
+                          value={userAnswers[q.id] || ''}
+                          onChange={(e) => handleAnswerChange(q.id, e.target.value)}
+                          disabled={isSubmitted}
+                          placeholder="Trình bày tự luận..."
+                          className="w-full h-32 p-4 border-2 border-slate-200 rounded-xl focus:border-sky-500 outline-none transition text-slate-700 resize-none"
+                        ></textarea>
+                        {isSubmitted && (
+                          <div className="p-4 bg-sky-50 rounded-xl border border-sky-100">
+                            <span className="text-xs font-bold text-sky-600 block mb-1">Gợi ý / Bareme:</span>
+                            <span className="font-medium text-slate-800">{q.correct}</span>
+                          </div>
+                        )}
+                      </div>
+                    )}
+                    
+                    {isSubmitted && q.explanation && (
+                      <div className="mt-4 text-sm bg-orange-50 text-orange-800 p-3 rounded-xl border border-orange-200 font-medium">
+                        {q.explanation}
+                      </div>
+                    )}
+                  </div>
+                ))}
+              </div>
+              
+              <div className="mt-8 flex justify-center">
+                {!isSubmitted ? (
+                  <button 
+                    onClick={submitQuiz}
+                    disabled={Object.keys(userAnswers).length === 0}
+                    className="px-10 py-4 bg-sky-600 text-white font-bold rounded-xl text-lg hover:bg-sky-700 transition-all shadow-lg disabled:opacity-50"
+                  >
+                    Nộp bài kiểm tra
+                  </button>
+                ) : (
+                  <div className="text-center w-full">
+                    <div className="bg-green-100 p-6 rounded-2xl mb-6">
+                      <Trophy size={48} className="text-green-500 mx-auto mb-3" />
+                      <h3 className="text-2xl font-black text-green-700">Đã hoàn thành!</h3>
+                      <p className="text-green-800 font-medium mt-2">Phòng {activeQuizRoom.subject} đã được xây dựng thành công.</p>
+                    </div>
+                    <button 
+                      onClick={markRoomCompleted}
+                      className="px-8 py-3 bg-slate-800 text-white font-bold rounded-xl hover:bg-slate-900 transition shadow-lg w-full sm:w-auto"
+                    >
+                      Trở lại Thị trấn
+                    </button>
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
