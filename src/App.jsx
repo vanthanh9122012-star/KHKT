@@ -747,8 +747,18 @@ const QuizManager = ({ addReward }) => {
   const [userAnswers, setUserAnswers] = useState({});
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [score, setScore] = useState(0);
+    const [showAIModal, setShowAIModal] = useState(false);
+    const [trigger, setTrigger] = useState(0);
 
-  const filteredQuizzes = selectedSubject ? QUIZ_DATA.filter(q => q.subject === selectedSubject) : QUIZ_DATA;
+  
+    const handleAIGenerated = (quizData) => {
+      QUIZ_DATA.unshift(quizData);
+      setShowAIModal(false);
+      handleStart(quizData);
+      setTrigger(t => t+1);
+    };
+
+    const filteredQuizzes = selectedSubject ? QUIZ_DATA.filter(q => q.subject === selectedSubject) : QUIZ_DATA;
 
   const handleStart = (quiz) => {
     setActiveQuiz(quiz);
@@ -910,9 +920,17 @@ const QuizManager = ({ addReward }) => {
 
   return (
     <div className="space-y-6 animate-fade-in pb-10">
-      <header className="mb-8">
-        <h1 className="text-3xl font-bold text-gray-800 mb-2">Luyện Thi & Trắc Nghiệm</h1>
-        <p className="text-gray-500">Làm các bài test kết hợp trắc nghiệm và tự luận để nhận XP.</p>
+      <header className="mb-8 flex flex-col md:flex-row justify-between items-start md:items-end gap-4">
+        <div>
+          <h1 className="text-3xl font-bold text-gray-800 mb-2">Luyện Thi & Trắc Nghiệm</h1>
+          <p className="text-gray-500">Làm các bài test kết hợp trắc nghiệm và tự luận để nhận XP.</p>
+        </div>
+        <button 
+          onClick={() => setShowAIModal(true)}
+          className="px-6 py-3 bg-gradient-to-r from-primary to-sky-600 text-white font-bold rounded-xl shadow-lg hover:shadow-xl hover:-translate-y-1 transition transform flex items-center gap-2"
+        >
+          <Sparkles size={20} /> Tạo Đề bằng AI
+        </button>
       </header>
 
       {/* Filters */}
