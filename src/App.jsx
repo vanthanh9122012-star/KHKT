@@ -4,6 +4,7 @@ import GamesManager from './GamesManager';
 import QuizManager from './QuizManager';
 import ReviewManager from './ReviewManager';
 import TimetableManager from './TimetableManager';
+import PomodoroFocus from './PomodoroFocus';
 import AssessmentManager from './AssessmentManager';
 import TownBuilder from './TownBuilder';
 import LoginPage from './LoginPage';
@@ -1118,72 +1119,6 @@ const Dashboard = ({ setActiveTab }) => {
         </div>
       </div>
 
-    </div>
-  );
-};
-
-const PomodoroFocus = () => {
-  const [timeLeft, setTimeLeft] = useState(25 * 60);
-  const [isRunning, setIsRunning] = useState(false);
-
-  useEffect(() => {
-    let timer;
-    if (isRunning && timeLeft > 0) {
-      timer = setInterval(() => setTimeLeft(prev => prev - 1), 1000);
-    } else if (timeLeft === 0) {
-      setIsRunning(false);
-    }
-    return () => clearInterval(timer);
-  }, [isRunning, timeLeft]);
-
-  const minutes = Math.floor(timeLeft / 60);
-  const seconds = timeLeft % 60;
-  const progress = ((25 * 60 - timeLeft) / (25 * 60)) * 100;
-
-  return (
-    <div className="h-full flex flex-col items-center justify-center animate-fade-in pb-20">
-      <h2 className="text-2xl font-bold text-gray-800 mb-2">Phiên học tập trung (Pomodoro)</h2>
-      <p className="text-gray-500 mb-12">Loại bỏ xao nhãng, tối đa năng suất</p>
-
-      <div className="relative w-72 h-72 mb-12">
-        <svg className="w-full h-full transform -rotate-90" viewBox="0 0 100 100">
-          <circle cx="50" cy="50" r="45" fill="none" stroke="#e0f2fe" strokeWidth="4" />
-          <circle 
-            cx="50" cy="50" r="45" 
-            fill="none" 
-            stroke="#0ea5e9" 
-            strokeWidth="4" 
-            strokeDasharray="283" 
-            strokeDashoffset={283 - (283 * progress / 100)} 
-            strokeLinecap="round"
-            className="transition-all duration-1000 ease-linear"
-          />
-        </svg>
-        <div className="absolute top-0 left-0 w-full h-full flex flex-col items-center justify-center">
-          <span className="text-5xl font-bold text-gray-800 tracking-tight">
-            {String(minutes).padStart(2, '0')}:{String(seconds).padStart(2, '0')}
-          </span>
-          <span className="text-sm text-gray-400 mt-2">Thời gian còn lại</span>
-        </div>
-      </div>
-
-      <div className="flex items-center gap-6">
-        <button 
-          onClick={() => { setIsRunning(false); setTimeLeft(25 * 60); }}
-          className="w-14 h-14 flex items-center justify-center rounded-full bg-white border border-gray-200 text-gray-600 hover:bg-gray-50 transition shadow-sm"
-        >
-          <RotateCcw size={20} />
-        </button>
-        <button 
-          onClick={() => setIsRunning(!isRunning)}
-          className="w-20 h-20 flex items-center justify-center rounded-full bg-primary text-white hover:bg-sky-700 transition shadow-lg shadow-sky-300 transform hover:scale-105"
-        >
-          {isRunning ? <Pause size={28} /> : <Play size={28} />}
-        </button>
-        <button className="w-14 h-14 flex items-center justify-center rounded-full bg-white border border-gray-200 text-gray-600 hover:bg-gray-50 transition shadow-sm font-medium text-sm">
-          Nghỉ
-        </button>
-      </div>
     </div>
   );
 };
