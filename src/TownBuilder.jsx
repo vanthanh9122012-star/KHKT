@@ -364,32 +364,40 @@ export default function TownBuilder({ setActiveTab }) {
         </div>
       </div>
 
-      {/* QUIZ OVERLAY MODAL */}
+            {/* FULLSCREEN QUIZ OVERLAY MODAL */}
       {activeQuizRoom && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 bg-slate-900/60 backdrop-blur-sm animate-fade-in overflow-y-auto">
-          <div className="bg-white w-full max-w-4xl rounded-3xl shadow-2xl overflow-hidden my-8">
-            <div className="bg-gradient-to-r from-sky-600 to-indigo-700 p-6 sm:p-8 text-white flex justify-between items-center sticky top-0 z-10">
+        <div className="fixed inset-0 z-[100] bg-slate-50 overflow-y-auto animate-fade-in">
+          <div className="max-w-5xl mx-auto min-h-screen flex flex-col bg-white shadow-2xl border-x border-slate-200">
+            <div className="bg-gradient-to-r from-sky-600 to-indigo-700 p-6 sm:px-10 sm:py-8 text-white flex justify-between items-center sticky top-0 z-10 shadow-md">
               <div>
-                <h2 className="text-2xl sm:text-3xl font-black mb-1">Thử thách Nâng cao</h2>
-                <p className="text-sky-100 font-medium">{activeQuizRoom.subject} - {activeQuizRoom.title}</p>
+                <h2 className="text-2xl sm:text-4xl font-black mb-2 flex items-center gap-3">
+                  <Trophy className="text-yellow-300" size={36} />
+                  Thử thách Nâng cao
+                </h2>
+                <p className="text-sky-100 font-medium text-lg">{activeQuizRoom.subject} - {activeQuizRoom.title}</p>
               </div>
-              <button onClick={() => setActiveQuizRoom(null)} className="p-2 hover:bg-white/20 rounded-full transition text-white">
+              <button onClick={() => setActiveQuizRoom(null)} className="p-3 bg-white/10 hover:bg-white/20 rounded-full transition text-white backdrop-blur-sm shadow-sm">
                 <X size={28} />
               </button>
             </div>
             
-            <div className="p-6 sm:p-8">
-              <div className="space-y-8">
+            <div className="flex-1 p-6 sm:p-10">
+              <div className="space-y-10">
                 {activeQuizRoom.questions?.map((q, idx) => (
-                  <div key={q.id} className="bg-slate-50 rounded-2xl p-6 border border-slate-200">
-                    <h3 className="text-lg font-bold text-slate-800 mb-4">Câu {idx + 1}: {q.text}</h3>
+                  <div key={q.id} className="bg-white rounded-3xl p-8 border-2 border-slate-100 shadow-sm hover:shadow-md transition-shadow">
+                    <div className="flex items-start gap-4 mb-6">
+                      <div className="bg-sky-100 text-sky-700 font-black px-4 py-2 rounded-xl text-lg shrink-0">
+                        Câu {idx + 1}
+                      </div>
+                      <h3 className="text-xl font-bold text-slate-800 leading-relaxed pt-1">{q.text}</h3>
+                    </div>
                     
                     {(q.type === 'mcq' || q.type === 'true_false') ? (
-                      <div className="space-y-3">
+                      <div className="space-y-4 pl-0 sm:pl-16">
                         {q.options.map(opt => (
-                          <label key={opt} className={`flex items-center gap-3 p-3 rounded-xl border-2 transition-all cursor-pointer ${
-                            userAnswers[q.id] === opt ? 'border-sky-500 bg-sky-50' : 'border-slate-200 hover:border-slate-300 bg-white'
-                          } ${isSubmitted && opt === q.correct ? 'border-green-500 bg-green-50' : ''}`}>
+                          <label key={opt} className={`flex items-center gap-4 p-4 rounded-2xl border-2 transition-all cursor-pointer ${
+                            userAnswers[q.id] === opt ? 'border-sky-500 bg-sky-50 shadow-sm' : 'border-slate-100 hover:border-slate-300 bg-slate-50/50'
+                          } ${isSubmitted && opt === q.correct ? 'border-green-500 bg-green-50 ring-2 ring-green-200 ring-offset-1' : ''}`}>
                             <input 
                               type="radio" 
                               name={`q-${q.id}`} 
@@ -397,80 +405,88 @@ export default function TownBuilder({ setActiveTab }) {
                               checked={userAnswers[q.id] === opt} 
                               onChange={() => handleAnswerChange(q.id, opt)}
                               disabled={isSubmitted}
-                              className="w-5 h-5 text-sky-500 border-slate-300 focus:ring-sky-500"
+                              className="w-6 h-6 text-sky-500 border-slate-300 focus:ring-sky-500"
                             />
-                            <span className={`font-medium ${isSubmitted && opt === q.correct ? 'text-green-700' : 'text-slate-700'}`}>{opt}</span>
-                            {isSubmitted && opt === q.correct && <CheckCircle2 size={20} className="ml-auto text-green-500" />}
-                            {isSubmitted && userAnswers[q.id] === opt && opt !== q.correct && <X size={20} className="ml-auto text-red-500" />}
+                            <span className={`text-lg font-medium ${isSubmitted && opt === q.correct ? 'text-green-800' : 'text-slate-700'}`}>{opt}</span>
+                            {isSubmitted && opt === q.correct && <CheckCircle2 size={24} className="ml-auto text-green-500" />}
+                            {isSubmitted && userAnswers[q.id] === opt && opt !== q.correct && <X size={24} className="ml-auto text-red-500" />}
                           </label>
                         ))}
                       </div>
                     ) : q.type === 'fill_blank' ? (
-                      <div className="space-y-3">
+                      <div className="space-y-4 pl-0 sm:pl-16">
                         <input 
                           type="text"
                           value={userAnswers[q.id] || ''}
                           onChange={(e) => handleAnswerChange(q.id, e.target.value)}
                           disabled={isSubmitted}
                           placeholder="Nhập đáp án của bạn..."
-                          className={`w-full p-4 border-2 rounded-xl outline-none transition text-slate-700 ${
-                            !isSubmitted ? 'border-slate-200 focus:border-sky-500' :
+                          className={`w-full p-5 text-lg font-medium border-2 rounded-2xl outline-none transition text-slate-700 shadow-inner ${
+                            !isSubmitted ? 'border-slate-200 focus:border-sky-500 bg-slate-50 focus:bg-white' :
                             userAnswers[q.id]?.trim().toLowerCase() === q.correct.toLowerCase() ? 'border-green-500 bg-green-50 text-green-800' : 'border-red-500 bg-red-50 text-red-800'
                           }`}
                         />
                         {isSubmitted && userAnswers[q.id]?.trim().toLowerCase() !== q.correct.toLowerCase() && (
-                          <div className="p-3 bg-sky-50 rounded-xl border border-sky-100">
-                            <span className="text-xs font-bold text-sky-600 block mb-1">Đáp án đúng:</span>
-                            <span className="font-bold text-slate-800">{q.correct}</span>
+                          <div className="p-4 bg-sky-50 rounded-xl border border-sky-200">
+                            <span className="text-sm font-black text-sky-600 block mb-1 uppercase tracking-wider">Đáp án chuẩn:</span>
+                            <span className="text-lg font-bold text-slate-800">{q.correct}</span>
                           </div>
                         )}
                       </div>
                     ) : (
-                      <div className="space-y-3">
+                      <div className="space-y-4 pl-0 sm:pl-16">
                         <textarea 
                           value={userAnswers[q.id] || ''}
                           onChange={(e) => handleAnswerChange(q.id, e.target.value)}
                           disabled={isSubmitted}
-                          placeholder="Trình bày tự luận..."
-                          className="w-full h-32 p-4 border-2 border-slate-200 rounded-xl focus:border-sky-500 outline-none transition text-slate-700 resize-none"
+                          placeholder="Trình bày tự luận chi tiết..."
+                          className="w-full h-40 p-5 text-lg font-medium border-2 border-slate-200 rounded-2xl focus:border-sky-500 focus:bg-white bg-slate-50 outline-none transition text-slate-700 resize-none shadow-inner"
                         ></textarea>
                         {isSubmitted && (
-                          <div className="p-4 bg-sky-50 rounded-xl border border-sky-100">
-                            <span className="text-xs font-bold text-sky-600 block mb-1">Gợi ý / Bareme:</span>
-                            <span className="font-medium text-slate-800">{q.correct}</span>
+                          <div className="p-5 bg-sky-50 rounded-xl border border-sky-200">
+                            <span className="text-sm font-black text-sky-600 block mb-2 uppercase tracking-wider">Gợi ý chấm điểm (Bareme):</span>
+                            <span className="text-base font-medium text-slate-800 leading-relaxed">{q.correct}</span>
                           </div>
                         )}
                       </div>
                     )}
                     
                     {isSubmitted && q.explanation && (
-                      <div className="mt-4 text-sm bg-orange-50 text-orange-800 p-3 rounded-xl border border-orange-200 font-medium">
-                        {q.explanation}
+                      <div className="mt-6 pl-0 sm:pl-16">
+                        <div className="text-base bg-orange-50 text-orange-900 p-5 rounded-2xl border border-orange-200 font-medium flex items-start gap-3 shadow-sm">
+                          <Brain className="text-orange-500 shrink-0 mt-0.5" size={20} />
+                          <div>
+                            <span className="block font-black text-orange-600 mb-1 uppercase text-sm">Giải thích chuyên sâu</span>
+                            {q.explanation}
+                          </div>
+                        </div>
                       </div>
                     )}
                   </div>
                 ))}
               </div>
               
-              <div className="mt-8 flex justify-center">
+              <div className="mt-12 mb-8 pt-8 border-t-2 border-slate-100 flex justify-center">
                 {!isSubmitted ? (
                   <button 
                     onClick={submitQuiz}
                     disabled={Object.keys(userAnswers).length === 0}
-                    className="px-10 py-4 bg-sky-600 text-white font-bold rounded-xl text-lg hover:bg-sky-700 transition-all shadow-lg disabled:opacity-50"
+                    className="px-12 py-5 bg-gradient-to-r from-sky-500 to-indigo-600 text-white font-black rounded-full text-xl hover:shadow-xl hover:shadow-sky-200 hover:-translate-y-1 transition-all disabled:opacity-50 disabled:hover:translate-y-0 disabled:shadow-none"
                   >
-                    Nộp bài kiểm tra
+                    Nộp Bài Kiểm Tra
                   </button>
                 ) : (
-                  <div className="text-center w-full">
-                    <div className="bg-green-100 p-6 rounded-2xl mb-6">
-                      <Trophy size={48} className="text-green-500 mx-auto mb-3" />
-                      <h3 className="text-2xl font-black text-green-700">Đã hoàn thành!</h3>
-                      <p className="text-green-800 font-medium mt-2">Phòng {activeQuizRoom.subject} đã được xây dựng thành công.</p>
+                  <div className="text-center w-full max-w-2xl mx-auto">
+                    <div className="bg-gradient-to-br from-green-50 to-emerald-100 p-8 rounded-3xl mb-8 shadow-sm border border-green-200">
+                      <div className="bg-white w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-4 shadow-md">
+                        <Trophy size={40} className="text-green-500" />
+                      </div>
+                      <h3 className="text-3xl font-black text-green-800 mb-2">Đã hoàn thành xuất sắc!</h3>
+                      <p className="text-green-900 text-lg font-medium">Căn phòng <span className="font-bold">"{activeQuizRoom.title}"</span> đã được giải mã và xây dựng thành công.</p>
                     </div>
                     <button 
                       onClick={markRoomCompleted}
-                      className="px-8 py-3 bg-slate-800 text-white font-bold rounded-xl hover:bg-slate-900 transition shadow-lg w-full sm:w-auto"
+                      className="px-10 py-4 bg-slate-800 text-white font-bold rounded-full text-lg hover:bg-slate-900 hover:shadow-lg transition-all"
                     >
                       Trở lại Thị trấn
                     </button>
