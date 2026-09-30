@@ -366,8 +366,8 @@ export default function TownBuilder({ setActiveTab }) {
 
             {/* FULLSCREEN QUIZ OVERLAY MODAL */}
       {activeQuizRoom && (
-        <div className="fixed inset-0 z-[100] bg-slate-50 overflow-y-auto animate-fade-in">
-          <div className="max-w-5xl mx-auto min-h-screen flex flex-col bg-white shadow-2xl border-x border-slate-200">
+        <div className="fixed inset-0 z-[9999] bg-slate-50 overflow-y-auto animate-fade-in w-full h-full m-0 p-0">
+          <div className="w-full min-h-screen flex flex-col bg-white">
             <div className="bg-gradient-to-r from-sky-600 to-indigo-700 p-6 sm:px-10 sm:py-8 text-white flex justify-between items-center sticky top-0 z-10 shadow-md">
               <div>
                 <h2 className="text-2xl sm:text-4xl font-black mb-2 flex items-center gap-3">

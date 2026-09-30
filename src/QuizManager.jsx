@@ -95,21 +95,22 @@ export default function QuizManager({ addReward }) {
 
   if (activeQuiz) {
     return (
-      <div className="space-y-6 animate-fade-in pb-10">
-        <header className="mb-8 flex justify-between items-center">
-          <div>
-            <h1 className="text-3xl font-bold text-gray-800 mb-2">{activeQuiz.title}</h1>
-            <div className="flex items-center gap-2 mt-2">
-              <span className={`text-xs font-bold border px-2.5 py-1 rounded-md ${getSubjectStyle(activeQuiz.subject)}`}>{activeQuiz.subject}</span>
-              <span className="text-sm font-bold text-gray-500 bg-gray-100 border border-gray-200 px-2 py-0.5 rounded">{activeQuiz.questions.length} câu hỏi</span>
+      <div className="fixed inset-0 z-[9999] bg-slate-50 overflow-y-auto animate-fade-in w-full h-full m-0 p-0">
+        <div className="w-full min-h-screen flex flex-col bg-white">
+          <header className="bg-gradient-to-r from-sky-600 to-indigo-700 p-6 sm:px-10 sm:py-8 text-white flex justify-between items-center sticky top-0 z-10 shadow-md">
+            <div>
+              <h1 className="text-2xl sm:text-4xl font-black mb-2 text-white">{activeQuiz.title}</h1>
+              <div className="flex items-center gap-2 mt-2">
+                <span className="text-sm font-bold bg-white/20 px-3 py-1 rounded-full text-white">{activeQuiz.subject}</span>
+                <span className="text-sm font-bold bg-white/20 px-3 py-1 rounded-full text-white">{activeQuiz.questions.length} câu hỏi</span>
+              </div>
             </div>
-          </div>
-          <button onClick={() => setActiveQuiz(null)} className="text-gray-500 hover:text-gray-800 font-medium bg-gray-100 px-4 py-2 rounded-xl transition">
-            Thoát
-          </button>
-        </header>
+            <button onClick={() => setActiveQuiz(null)} className="p-3 bg-white/10 hover:bg-white/20 rounded-full transition text-white backdrop-blur-sm shadow-sm">
+              <X size={28} />
+            </button>
+          </header>
 
-        <div className="space-y-8">
+          <div className="flex-1 p-6 sm:p-10 max-w-5xl mx-auto w-full space-y-8 pb-32">
           {activeQuiz.questions.map((q, idx) => (
             <div key={q.id} className="bg-surface rounded-3xl p-6 shadow-sm border border-gray-100">
               <h3 className="text-lg font-bold text-gray-800 mb-4">Câu {idx + 1}: {q.text}</h3>
@@ -206,6 +207,7 @@ export default function QuizManager({ addReward }) {
               </div>
             </div>
           )}
+          </div>
         </div>
       </div>
     );
