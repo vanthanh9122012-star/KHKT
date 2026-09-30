@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { Home, BookOpen, Clock, BarChart2, CheckCircle2, Circle, Play, Pause, RotateCcw, Brain, Check, X, Filter, Book, Hash, Layers, Menu, Award, Trophy, FileText, Edit3, ClipboardList, Gem, Calendar, Plus, Trash2, BookHeart, Sparkles, Quote, Mail, Link, ShieldCheck, Activity, LogOut, Users, Crown, Languages, TrendingUp, Flame, Target, Compass, Bot, Gamepad2, HelpCircle, Map, Loader2, Save } from 'lucide-react';
 import GamesManager from './GamesManager';
 import QuizManager from './QuizManager';
+import ReviewManager from './ReviewManager';
 import AssessmentManager from './AssessmentManager';
 import TownBuilder from './TownBuilder';
 import LoginPage from './LoginPage';
@@ -661,59 +662,6 @@ ${aiMaterial}`;
               </div>
           )}
       </div>
-    </div>
-  );
-};
-
-const ReviewManager = () => {
-  const [mistakes, setMistakes] = useState([]);
-
-  useEffect(() => {
-    const saved = localStorage.getItem('studyflow_vocab');
-    if (saved) {
-      const parsed = JSON.parse(saved);
-      const withMistakes = parsed.filter(item => item.mistakes > 0 || item.eFactor < 2.5);
-      setMistakes(withMistakes.sort((a, b) => (b.mistakes || 0) - (a.mistakes || 0)));
-    }
-  }, []);
-
-  return (
-    <div className="space-y-6 animate-fade-in pb-10">
-      <header className="mb-8">
-        <h1 className="text-3xl font-bold text-gray-800 mb-2">Ôn tập lỗi sai</h1>
-        <p className="text-gray-500">Xem lại các thẻ Flashcard và câu hỏi bạn thường xuyên trả lời sai.</p>
-      </header>
-
-      {mistakes.length === 0 ? (
-        <div className="text-center py-12 text-gray-400 bg-surface rounded-3xl border border-gray-100 shadow-sm flex flex-col items-center">
-          <CheckCircle2 size={64} className="mb-4 text-green-400 opacity-80" />
-          <h2 className="text-xl font-bold text-gray-600 mb-2">Không có lỗi sai nào!</h2>
-          <p>Tuyệt vời! Bạn đang nhớ bài rất tốt.</p>
-        </div>
-      ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {mistakes.map(card => (
-            <div key={card.id} className="bg-surface rounded-3xl p-6 shadow-sm border border-red-100 relative overflow-hidden group hover:-translate-y-1 transition transform">
-              <div className="absolute top-0 left-0 w-1.5 h-full bg-red-400"></div>
-              <div className="flex justify-between items-start mb-4">
-                <div className="flex gap-2">
-                  <span className={`text-xs font-bold border px-2 py-1 rounded ${getSubjectStyle(card.subject)}`}>{card.subject}</span>
-                  <span className="text-xs font-bold text-gray-600 bg-gray-100 border border-gray-200 px-2 py-1 rounded">{card.grade}</span>
-                </div>
-                <div className="text-xs font-bold text-red-500 bg-red-50 px-2 py-1 rounded flex items-center gap-1">
-                  <X size={12} /> Sai {card.mistakes || 'nhiều'} lần
-                </div>
-              </div>
-              <p className="text-sm text-gray-500 mb-1">Câu hỏi:</p>
-              <h3 className="font-bold text-gray-800 mb-4">{card.question}</h3>
-              <div className="p-3 bg-sky-50 rounded-xl">
-                <p className="text-xs font-semibold text-sky-600 mb-1">ĐÁP ÁN ĐÚNG</p>
-                <p className="font-medium text-sky-900">{card.answer}</p>
-              </div>
-            </div>
-          ))}
-        </div>
-      )}
     </div>
   );
 };
@@ -1768,7 +1716,7 @@ export default function App() {
           {activeTab === 'assessment' && <AssessmentManager addReward={addReward} />}
           {activeTab === 'games' && <GamesManager addReward={addReward} />}
           {activeTab === 'tasks' && <TownBuilder setActiveTab={setActiveTab} />}
-          {activeTab === 'review' && <ReviewManager />}
+          {activeTab === 'review' && <ReviewManager addReward={addReward} />}
           {activeTab === 'focus' && <PomodoroFocus />}
           {activeTab === 'stats' && <StatsDashboard />}
           {activeTab === 'leaderboard' && <LeaderboardManager gamification={gamification} />}
