@@ -138,7 +138,7 @@ export default function Dashboard({ setActiveTab }) {
           <button 
             onClick={handleCheckIn}
             disabled={isCheckedInToday}
-            className={`px-4 py-2 rounded-xl text-sm font-bold transition-all whitespace-nowrap ${isCheckedInToday ? 'bg-slate-50 text-slate-400 border border-slate-100 cursor-not-allowed' : 'bg-slate-800 text-white hover:bg-slate-700 shadow-md hover:shadow-lg'}`}
+            className={`px-4 py-2 rounded-xl text-sm font-bold transition-all whitespace-nowrap ${isCheckedInToday ? 'bg-slate-50 text-slate-400 border border-slate-100 cursor-not-allowed' : 'bg-gradient-to-r from-orange-500 to-amber-500 text-white hover:from-orange-600 hover:to-amber-600 shadow-md shadow-orange-200 hover:shadow-lg'}`}
           >
             {isCheckedInToday ? 'Đã điểm danh' : 'Điểm danh'}
           </button>
@@ -146,8 +146,8 @@ export default function Dashboard({ setActiveTab }) {
       </header>
 
       {/* Daily Momentum Quote - Academic & Neutral Theme */}
-      <div className="bg-white rounded-3xl p-6 md:p-8 shadow-sm border border-slate-200 relative overflow-hidden group flex items-center gap-6">
-        <div className="hidden md:flex w-16 h-16 bg-slate-50 rounded-2xl items-center justify-center text-slate-300 shrink-0">
+      <div className="bg-gradient-to-r from-orange-50 to-amber-50 rounded-3xl p-6 md:p-8 shadow-sm border border-orange-100 relative overflow-hidden group flex items-center gap-6">
+        <div className="hidden md:flex w-16 h-16 bg-white rounded-2xl items-center justify-center text-orange-400 shrink-0 shadow-sm">
           <Quote size={32} />
         </div>
         <div className="relative z-10 flex flex-col justify-center">
@@ -161,33 +161,33 @@ export default function Dashboard({ setActiveTab }) {
 
       {/* Stats Cards - Academic & Neutral Theme */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <div className="bg-white rounded-3xl p-6 border border-slate-200 shadow-sm flex flex-col justify-between h-40 transform transition hover:-translate-y-1 relative group">
+        <div className="bg-gradient-to-br from-indigo-50 to-blue-50 rounded-3xl p-6 border border-indigo-100 shadow-sm flex flex-col justify-between h-40 transform transition hover:-translate-y-1 relative group">
           <div className="flex justify-between items-start">
-            <h3 className="font-bold text-slate-600 flex items-center gap-2">
-              <BookOpen size={18} className="text-slate-400" />
+            <h3 className="font-bold text-indigo-900 flex items-center gap-2">
+              <BookOpen size={18} className="text-indigo-500" />
               Thời gian học hôm nay
             </h3>
           </div>
           <div>
-            <div className="text-4xl font-black text-slate-800 tracking-tight">2<span className="text-2xl font-bold text-slate-500">h</span> 45<span className="text-2xl font-bold text-slate-500">m</span></div>
+            <div className="text-4xl font-black text-indigo-700 tracking-tight">2<span className="text-2xl font-bold text-indigo-400">h</span> 45<span className="text-2xl font-bold text-indigo-400">m</span></div>
             <div className="text-sm text-teal-600 mt-2 font-semibold flex items-center gap-1">
               <span className="bg-teal-50 text-teal-700 px-2 py-0.5 rounded text-xs">+15%</span> so với hôm qua
             </div>
           </div>
         </div>
 
-        <div className="bg-white rounded-3xl p-6 border border-slate-200 shadow-sm flex flex-col justify-between h-40 transform transition hover:-translate-y-1 relative group">
+        <div className="bg-gradient-to-br from-emerald-50 to-teal-50 rounded-3xl p-6 border border-emerald-100 shadow-sm flex flex-col justify-between h-40 transform transition hover:-translate-y-1 relative group">
           <div className="flex justify-between items-start">
-            <h3 className="font-bold text-slate-600 flex items-center gap-2">
-              <GraduationCap size={18} className="text-slate-400" />
+            <h3 className="font-bold text-emerald-900 flex items-center gap-2">
+              <GraduationCap size={18} className="text-emerald-500" />
               Nhiệm vụ hoàn thành
             </h3>
-            <span className="text-xs font-bold bg-slate-100 text-slate-600 px-2.5 py-1 rounded-full">{progressPercentage}%</span>
+            <span className="text-xs font-bold bg-white text-emerald-700 px-2.5 py-1 rounded-full shadow-sm">{progressPercentage}%</span>
           </div>
           <div>
-            <div className="text-4xl font-black text-slate-800 tracking-tight">{completedCount}<span className="text-2xl font-bold text-slate-400">/{totalCount}</span></div>
-            <div className="w-full bg-slate-100 h-2.5 rounded-full mt-4 overflow-hidden">
-              <div className="bg-slate-700 h-full rounded-full transition-all duration-1000" style={{width: `${progressPercentage}%`}}></div>
+            <div className="text-4xl font-black text-emerald-700 tracking-tight">{completedCount}<span className="text-2xl font-bold text-emerald-400">/{totalCount}</span></div>
+            <div className="w-full bg-white h-2.5 rounded-full mt-4 overflow-hidden shadow-inner">
+              <div className="bg-gradient-to-r from-emerald-400 to-teal-500 h-full rounded-full transition-all duration-1000" style={{width: `${progressPercentage}%`}}></div>
             </div>
           </div>
         </div>
@@ -207,9 +207,9 @@ export default function Dashboard({ setActiveTab }) {
           <div className="flex items-end justify-between h-48 px-2 md:px-6">
             {[40, 70, 45, 90, 65, 30, 80].map((h, i) => (
               <div key={i} className="flex flex-col items-center gap-3 group cursor-pointer w-full">
-                <div className="relative w-8 md:w-12 bg-slate-50 rounded-t-xl h-36 flex items-end justify-center overflow-hidden transition-all border border-slate-100 border-b-0 group-hover:bg-slate-100">
+                <div className="relative w-8 md:w-12 bg-indigo-50/50 rounded-t-xl h-36 flex items-end justify-center overflow-hidden transition-all border border-indigo-50 border-b-0 group-hover:bg-indigo-50">
                   <div 
-                    className="w-full bg-slate-300 rounded-t-xl transition-all duration-1000 group-hover:bg-slate-700" 
+                    className="w-full bg-gradient-to-t from-indigo-400 to-indigo-300 rounded-t-xl transition-all duration-1000 group-hover:from-indigo-600 group-hover:to-indigo-500" 
                     style={{height: `${h}%`}}
                   ></div>
                 </div>
@@ -235,9 +235,9 @@ export default function Dashboard({ setActiveTab }) {
                 <div key={task.id} className="flex items-start gap-3 p-3 rounded-2xl hover:bg-slate-50 transition border border-transparent hover:border-slate-100 group">
                   <button 
                     onClick={() => toggleTask(task.id)}
-                    className={`mt-0.5 transition ${task.completed ? 'text-slate-700' : 'text-slate-300 hover:text-slate-400'}`}
+                    className={`mt-0.5 transition ${task.completed ? 'text-slate-700' : 'text-slate-300 hover:text-indigo-400'}`}
                   >
-                    {task.completed ? <CheckCircle2 size={20} className="fill-slate-100" /> : <Circle size={20} />}
+                    {task.completed ? <CheckCircle2 size={20} className="text-emerald-500 fill-emerald-100" /> : <Circle size={20} className="hover:text-indigo-400 transition-colors" />}
                   </button>
                   <div className="flex-grow">
                     <p className={`font-semibold text-sm transition ${task.completed ? 'text-slate-400 line-through' : 'text-slate-700'}`}>
@@ -267,14 +267,14 @@ export default function Dashboard({ setActiveTab }) {
                   placeholder="Nhập nhiệm vụ..."
                   className="flex-grow p-3 text-sm font-medium border border-slate-200 rounded-xl outline-none focus:border-slate-400 focus:ring-2 focus:ring-slate-100 transition"
                 />
-                <button type="submit" className="bg-slate-800 text-white p-3 rounded-xl hover:bg-slate-700 transition">
+                <button type="submit" className="bg-indigo-600 text-white p-3 rounded-xl hover:bg-indigo-700 shadow-md shadow-indigo-200 transition">
                   <Plus size={18} />
                 </button>
               </form>
             ) : (
               <button 
                 onClick={() => setIsAdding(true)}
-                className="w-full py-3 bg-slate-50 border border-slate-200 rounded-xl text-slate-600 text-sm font-bold hover:bg-slate-100 hover:text-slate-800 transition flex items-center justify-center gap-2"
+                className="w-full py-3 bg-indigo-50 border border-indigo-100 rounded-xl text-indigo-600 text-sm font-bold hover:bg-indigo-100 hover:text-indigo-800 transition flex items-center justify-center gap-2"
               >
                 <Plus size={16} /> Thêm nhiệm vụ mới
               </button>
