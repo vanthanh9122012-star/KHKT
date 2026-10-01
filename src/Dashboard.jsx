@@ -1,14 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Quote, Clock, CheckCircle2, Circle, Trash2, Plus } from 'lucide-react';
- // Or we can copy the quote logic here if we prefer
-
-// Define a simple cherry blossom effect if it's missing, or import it
-const CherryBlossomEffect = () => (
-  <div className="absolute inset-0 pointer-events-none opacity-30 overflow-hidden">
-    <div className="absolute w-2 h-2 bg-pink-200 rounded-full blur-[1px] top-4 left-4 animate-pulse"></div>
-    <div className="absolute w-3 h-3 bg-rose-200 rounded-full blur-[1px] top-10 right-10 animate-bounce"></div>
-  </div>
-);
+import { Quote, Clock, CheckCircle2, Circle, Trash2, Plus, Flame, BookOpen, GraduationCap, ChevronRight } from 'lucide-react';
 
 const MOCK_QUOTES = [
   { text: "Bí mật của việc tiến lên là bắt đầu.", author: "Mark Twain" },
@@ -19,6 +10,7 @@ const MOCK_QUOTES = [
 ];
 
 export default function Dashboard({ setActiveTab }) {
+  // Tasks State
   const [tasks, setTasks] = useState(() => {
     const saved = localStorage.getItem('studyflow_today_tasks');
     if (saved) {
@@ -30,9 +22,15 @@ export default function Dashboard({ setActiveTab }) {
       { id: 3, title: 'Giải đề Toán', time: '20:00', completed: false },
     ];
   });
-
   const [newTaskTitle, setNewTaskTitle] = useState('');
   const [isAdding, setIsAdding] = useState(false);
+
+  // Streak State
+  const [streakData, setStreakData] = useState(() => {
+    const saved = localStorage.getItem('studyflow_streak_data');
+    if (saved) return JSON.parse(saved);
+    return { count: 3, lastCheckIn: null };
+  });
 
   useEffect(() => {
     localStorage.setItem('studyflow_today_tasks', JSON.stringify(tasks));
@@ -60,19 +58,31 @@ export default function Dashboard({ setActiveTab }) {
     setIsAdding(false);
   };
 
+  const handleCheckIn = () => {
+    const todayStr = new Date().toDateString();
+    if (streakData.lastCheckIn === todayStr) return;
+
+    const yesterday = new Date();
+    yesterday.setDate(yesterday.getDate() - 1);
+    
+    let newCount = 1;
+    if (streakData.lastCheckIn === yesterday.toDateString()) {
+      newCount = streakData.count + 1;
+    } else if (streakData.count > 0 && streakData.lastCheckIn === null) {
+      // First time clicking but using initial mock state
+      newCount = streakData.count + 1;
+    }
+
+    const newData = { count: newCount, lastCheckIn: todayStr };
+    setStreakData(newData);
+    localStorage.setItem('studyflow_streak_data', JSON.stringify(newData));
+  };
+
+  const isCheckedInToday = streakData.lastCheckIn === new Date().toDateString();
+
   const completedCount = tasks.filter(t => t.completed).length;
   const totalCount = tasks.length;
   const progressPercentage = totalCount === 0 ? 0 : Math.round((completedCount / totalCount) * 100);
-
-  const getTodayStr = () => {
-    const today = new Date();
-    return `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
-  };
-
-  const [journal, setJournal] = useState(() => {
-    const saved = localStorage.getItem('studyflow_journal');
-    return saved ? JSON.parse(saved) : {};
-  });
 
   const today = new Date();
 
@@ -80,7 +90,6 @@ export default function Dashboard({ setActiveTab }) {
     const seed = today.getFullYear() * 10000 + (today.getMonth() + 1) * 100 + today.getDate();
     return MOCK_QUOTES[seed % MOCK_QUOTES.length];
   };
-
   const dailyQuote = getDailyQuote();
 
   const formatDate = () => {
@@ -89,70 +98,109 @@ export default function Dashboard({ setActiveTab }) {
   };
 
   return (
-    <div className="space-y-6 animate-fade-in pb-10">
-      <header className="flex justify-between items-end mb-8">
+    <div className="space-y-6 animate-fade-in pb-10 font-sans">
+      
+      {/* Header section with compact Streak Widget */}
+      <header className="flex flex-col md:flex-row md:justify-between md:items-end gap-4 mb-8">
         <div>
-          <p className="text-gray-500 font-medium mb-1">{formatDate()}</p>
-          <h1 className="text-3xl font-bold text-gray-800">Chào bạn! 👋</h1>
+          <p className="text-slate-500 font-medium mb-1 tracking-wide">{formatDate()}</p>
+          <h1 className="text-3xl font-bold text-slate-800 tracking-tight">Chào bạn! 👋</h1>
         </div>
-        <div className="glass-panel px-4 py-2 rounded-full text-sm font-medium text-primary shadow-sm">
-          🔥 Chuỗi học: 5 ngày
+        
+        {/* Compact Streak Widget */}
+        <div className="bg-white border border-slate-200 shadow-sm rounded-2xl p-2.5 flex items-center gap-4 max-w-sm">
+          <div className="flex items-center gap-2">
+            <div className={`w-10 h-10 rounded-xl flex items-center justify-center transition-colors ${isCheckedInToday ? 'bg-orange-100 text-orange-500' : 'bg-slate-100 text-slate-400'}`}>
+              <Flame size={20} className={isCheckedInToday ? "animate-pulse" : ""} />
+            </div>
+            <div>
+              <div className="flex items-center gap-2">
+                <span className="text-xl font-bold text-slate-800">{streakData.count} <span className="text-sm font-semibold text-slate-500">ngày</span></span>
+                <span className="text-[10px] uppercase tracking-wider font-bold bg-slate-100 text-slate-600 px-2 py-0.5 rounded-full border border-slate-200">
+                  Giữ streak nha
+                </span>
+              </div>
+            </div>
+          </div>
+          <button 
+            onClick={handleCheckIn}
+            disabled={isCheckedInToday}
+            className={`px-4 py-2 rounded-xl text-sm font-bold transition-all whitespace-nowrap ${isCheckedInToday ? 'bg-slate-50 text-slate-400 border border-slate-100 cursor-not-allowed' : 'bg-slate-800 text-white hover:bg-slate-700 shadow-md hover:shadow-lg'}`}
+          >
+            {isCheckedInToday ? 'Đã điểm danh' : 'Điểm danh'}
+          </button>
         </div>
       </header>
 
-      {/* Daily Momentum Quote */}
-      <div className="bg-gradient-to-r from-sky-50 to-indigo-50 rounded-3xl p-6 shadow-sm border border-sky-100 relative overflow-hidden group">
-        <Quote className="absolute -top-4 -left-4 text-sky-100 opacity-50 rotate-180" size={120} />
-        <div className="relative z-10 flex flex-col items-center text-center max-w-3xl mx-auto">
-          <p className="text-lg md:text-xl font-medium text-gray-800 italic mb-3">"{dailyQuote.text}"</p>
-          <p className="text-sm font-bold text-sky-600">— {dailyQuote.author} —</p>
+      {/* Daily Momentum Quote - Academic & Neutral Theme */}
+      <div className="bg-white rounded-3xl p-6 md:p-8 shadow-sm border border-slate-200 relative overflow-hidden group flex items-center gap-6">
+        <div className="hidden md:flex w-16 h-16 bg-slate-50 rounded-2xl items-center justify-center text-slate-300 shrink-0">
+          <Quote size={32} />
+        </div>
+        <div className="relative z-10 flex flex-col justify-center">
+          <p className="text-lg md:text-xl font-medium text-slate-700 italic mb-2 leading-relaxed">"{dailyQuote.text}"</p>
+          <p className="text-sm font-bold text-slate-500 flex items-center gap-2">
+            <span className="w-4 h-[1px] bg-slate-300"></span>
+            {dailyQuote.author}
+          </p>
         </div>
       </div>
 
+      {/* Stats Cards - Academic & Neutral Theme */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <div className="bg-gradient-to-br from-rose-100 via-rose-200 to-pink-300 rounded-3xl p-6 text-rose-900 shadow-lg shadow-rose-200 flex flex-col justify-between h-40 transform transition hover:-translate-y-1 relative overflow-hidden group">
-          <CherryBlossomEffect />
-          <div className="flex justify-between items-start relative z-10">
-            <h3 className="font-medium text-rose-700">Thời gian học h.nay</h3>
-            <div className="p-2 bg-white/40 rounded-lg text-rose-800"><Clock size={20} /></div>
+        <div className="bg-white rounded-3xl p-6 border border-slate-200 shadow-sm flex flex-col justify-between h-40 transform transition hover:-translate-y-1 relative group">
+          <div className="flex justify-between items-start">
+            <h3 className="font-bold text-slate-600 flex items-center gap-2">
+              <BookOpen size={18} className="text-slate-400" />
+              Thời gian học hôm nay
+            </h3>
           </div>
-          <div className="relative z-10">
-            <div className="text-3xl font-bold">2h 45m</div>
-            <div className="text-sm text-rose-700 mt-1 font-medium">+15% so với hôm qua</div>
+          <div>
+            <div className="text-4xl font-black text-slate-800 tracking-tight">2<span className="text-2xl font-bold text-slate-500">h</span> 45<span className="text-2xl font-bold text-slate-500">m</span></div>
+            <div className="text-sm text-teal-600 mt-2 font-semibold flex items-center gap-1">
+              <span className="bg-teal-50 text-teal-700 px-2 py-0.5 rounded text-xs">+15%</span> so với hôm qua
+            </div>
           </div>
         </div>
 
-        <div className="bg-gradient-to-br from-rose-100 via-rose-200 to-pink-300 rounded-3xl p-6 text-rose-900 shadow-lg shadow-rose-200 flex flex-col justify-between h-40 transform transition hover:-translate-y-1 relative overflow-hidden group">
-          <CherryBlossomEffect />
-          <div className="flex justify-between items-start relative z-10">
-            <h3 className="font-medium text-rose-700">Nhiệm vụ hoàn thành</h3>
-            <div className="p-2 bg-white/40 rounded-lg text-rose-800"><CheckCircle2 size={20} /></div>
+        <div className="bg-white rounded-3xl p-6 border border-slate-200 shadow-sm flex flex-col justify-between h-40 transform transition hover:-translate-y-1 relative group">
+          <div className="flex justify-between items-start">
+            <h3 className="font-bold text-slate-600 flex items-center gap-2">
+              <GraduationCap size={18} className="text-slate-400" />
+              Nhiệm vụ hoàn thành
+            </h3>
+            <span className="text-xs font-bold bg-slate-100 text-slate-600 px-2.5 py-1 rounded-full">{progressPercentage}%</span>
           </div>
-          <div className="relative z-10">
-            <div className="text-3xl font-bold">{completedCount}<span className="text-xl text-rose-700/70">/{totalCount}</span></div>
-            <div className="w-full bg-rose-900/10 h-2 rounded-full mt-3 overflow-hidden">
-              <div className="bg-rose-500 h-full rounded-full transition-all duration-1000" style={{width: `${progressPercentage}%`}}></div>
+          <div>
+            <div className="text-4xl font-black text-slate-800 tracking-tight">{completedCount}<span className="text-2xl font-bold text-slate-400">/{totalCount}</span></div>
+            <div className="w-full bg-slate-100 h-2.5 rounded-full mt-4 overflow-hidden">
+              <div className="bg-slate-700 h-full rounded-full transition-all duration-1000" style={{width: `${progressPercentage}%`}}></div>
             </div>
           </div>
         </div>
       </div>
 
+      {/* Bottom Section */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mt-8">
-        <div className="lg:col-span-2 bg-surface rounded-3xl p-6 shadow-sm border border-gray-100">
-          <div className="flex justify-between items-center mb-6">
-            <h2 className="text-xl font-bold text-gray-800">Tiến độ tuần</h2>
-            <button className="text-sm text-primary font-medium hover:underline">Xem chi tiết</button>
+        
+        {/* Weekly Progress - Neutral Theme */}
+        <div className="lg:col-span-2 bg-white rounded-3xl p-6 shadow-sm border border-slate-200">
+          <div className="flex justify-between items-center mb-8">
+            <h2 className="text-xl font-bold text-slate-800">Tiến độ tuần</h2>
+            <button className="text-sm text-slate-500 font-semibold hover:text-slate-800 flex items-center transition">
+              Xem chi tiết <ChevronRight size={16} />
+            </button>
           </div>
-          <div className="flex items-end justify-between h-48 px-2">
+          <div className="flex items-end justify-between h-48 px-2 md:px-6">
             {[40, 70, 45, 90, 65, 30, 80].map((h, i) => (
-              <div key={i} className="flex flex-col items-center gap-2 group cursor-pointer">
-                <div className="relative w-10 md:w-12 bg-sky-50 rounded-t-lg h-36 flex items-end justify-center overflow-hidden transition-all">
+              <div key={i} className="flex flex-col items-center gap-3 group cursor-pointer w-full">
+                <div className="relative w-8 md:w-12 bg-slate-50 rounded-t-xl h-36 flex items-end justify-center overflow-hidden transition-all border border-slate-100 border-b-0 group-hover:bg-slate-100">
                   <div 
-                    className="w-full bg-primary rounded-t-lg transition-all duration-1000 group-hover:bg-primaryLight" 
+                    className="w-full bg-slate-300 rounded-t-xl transition-all duration-1000 group-hover:bg-slate-700" 
                     style={{height: `${h}%`}}
                   ></div>
                 </div>
-                <span className="text-xs font-medium text-gray-400">
+                <span className="text-xs font-bold text-slate-400 group-hover:text-slate-700 transition">
                   {['T2','T3','T4','T5','T6','T7','CN'][i]}
                 </span>
               </div>
@@ -160,28 +208,29 @@ export default function Dashboard({ setActiveTab }) {
           </div>
         </div>
 
-        <div className="bg-surface rounded-3xl p-6 shadow-sm border border-gray-100 flex flex-col h-[340px]">
+        {/* To-Do List - Neutral Theme */}
+        <div className="bg-white rounded-3xl p-6 shadow-sm border border-slate-200 flex flex-col h-[380px]">
           <div className="flex justify-between items-center mb-6 shrink-0">
-            <h2 className="text-xl font-bold text-gray-800">Cần làm hôm nay</h2>
-            <span className="text-xs font-bold bg-sky-100 text-sky-600 px-2 py-1 rounded-full">{completedCount}/{totalCount}</span>
+            <h2 className="text-xl font-bold text-slate-800">Cần làm hôm nay</h2>
           </div>
-          <div className="space-y-4 overflow-y-auto custom-scrollbar pr-2 flex-grow">
+          
+          <div className="space-y-3 overflow-y-auto custom-scrollbar pr-2 flex-grow">
             {tasks.length === 0 ? (
-              <div className="text-center text-gray-400 text-sm mt-10">Chưa có nhiệm vụ nào. Thêm ngay nhé!</div>
+              <div className="text-center text-slate-400 text-sm mt-10 font-medium">Chưa có nhiệm vụ nào.<br/>Thêm ngay nhé!</div>
             ) : (
               tasks.map(task => (
-                <div key={task.id} className="flex items-start gap-3 p-3 rounded-xl hover:bg-gray-50 transition border border-transparent hover:border-gray-100 group">
+                <div key={task.id} className="flex items-start gap-3 p-3 rounded-2xl hover:bg-slate-50 transition border border-transparent hover:border-slate-100 group">
                   <button 
                     onClick={() => toggleTask(task.id)}
-                    className={`mt-0.5 transition ${task.completed ? 'text-primary' : 'text-gray-300 hover:text-gray-400'}`}
+                    className={`mt-0.5 transition ${task.completed ? 'text-slate-700' : 'text-slate-300 hover:text-slate-400'}`}
                   >
-                    {task.completed ? <CheckCircle2 size={18} /> : <Circle size={18} />}
+                    {task.completed ? <CheckCircle2 size={20} className="fill-slate-100" /> : <Circle size={20} />}
                   </button>
                   <div className="flex-grow">
-                    <p className={`font-medium text-sm transition ${task.completed ? 'text-gray-400 line-through' : 'text-gray-800'}`}>
+                    <p className={`font-semibold text-sm transition ${task.completed ? 'text-slate-400 line-through' : 'text-slate-700'}`}>
                       {task.title}
                     </p>
-                    <p className="text-xs text-gray-500 mt-1">{task.time}</p>
+                    <p className="text-xs text-slate-400 mt-1 font-medium">{task.time}</p>
                   </div>
                   <button 
                     onClick={() => removeTask(task.id)}
@@ -194,7 +243,7 @@ export default function Dashboard({ setActiveTab }) {
             )}
           </div>
           
-          <div className="shrink-0 mt-4 border-t border-gray-100 pt-4">
+          <div className="shrink-0 mt-4 border-t border-slate-100 pt-4">
             {isAdding ? (
               <form onSubmit={addTask} className="flex gap-2">
                 <input 
@@ -203,16 +252,16 @@ export default function Dashboard({ setActiveTab }) {
                   value={newTaskTitle}
                   onChange={(e) => setNewTaskTitle(e.target.value)}
                   placeholder="Nhập nhiệm vụ..."
-                  className="flex-grow p-2 text-sm border border-gray-200 rounded-lg outline-none focus:border-sky-500"
+                  className="flex-grow p-3 text-sm font-medium border border-slate-200 rounded-xl outline-none focus:border-slate-400 focus:ring-2 focus:ring-slate-100 transition"
                 />
-                <button type="submit" className="bg-primary text-white p-2 rounded-lg hover:bg-sky-600 transition">
+                <button type="submit" className="bg-slate-800 text-white p-3 rounded-xl hover:bg-slate-700 transition">
                   <Plus size={18} />
                 </button>
               </form>
             ) : (
               <button 
                 onClick={() => setIsAdding(true)}
-                className="w-full py-3 border-2 border-dashed border-gray-200 rounded-xl text-gray-500 text-sm font-medium hover:border-primary hover:text-primary transition flex items-center justify-center gap-2"
+                className="w-full py-3 bg-slate-50 border border-slate-200 rounded-xl text-slate-600 text-sm font-bold hover:bg-slate-100 hover:text-slate-800 transition flex items-center justify-center gap-2"
               >
                 <Plus size={16} /> Thêm nhiệm vụ mới
               </button>
