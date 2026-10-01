@@ -1,1172 +1,2138 @@
 export const INITIAL_TOWN = [
   {
-    id: 1,
-    title: 'Ngôi nhà 1: Căn Nhà Gỗ',
-    rooms: [
+    "id": "house_6",
+    "title": "Căn Nhà Gỗ - Lớp 6 (Kết nối tri thức)",
+    "rooms": [
       {
-        id: '1-math',
-        subject: 'Toán',
-        title: 'Thử thách Đại số cơ bản',
-        knowledge: 'Vận dụng các kiến thức quan trọng về Đại số cơ bản để hoàn thành thử thách.',
-        completed: false,
-        questions: [
+        "id": "room_6_toan",
+        "subject": "Toán",
+        "title": "Chương 1: Toán học và Đời sống",
+        "knowledge": "Kiến thức trọng tâm môn Toán lớp 6 (Kết nối tri thức)",
+        "completed": false,
+        "questions": [
           {
-            id: 'h1_math_q1',
-            type: 'mcq',
-            text: 'Mức độ 1 - Câu hỏi Trắc nghiệm bám sát chương trình học môn Toán phần Đại số cơ bản (Câu 1).',
-            options: ['Khái niệm A', 'Định lý B', 'Quy tắc C', 'Phương pháp D'],
-            correct: 'Khái niệm A',
-            explanation: 'Dựa vào kiến thức SGK, Khái niệm A là đáp án chính xác cho phần Đại số cơ bản.'
+            "id": "q_6_toan_1",
+            "type": "mcq",
+            "text": "Tình huống: Đi siêu thị mua hàng, tính tiền thừa. - Hãy áp dụng kiến thức Toán Lớp 6 (Kết nối tri thức) để xử lý.",
+            "explanation": "Dựa vào kiến thức Toán Lớp 6 (Sách KNTT), đây là cách xử lý đúng cho tình huống trên.",
+            "options": [
+              "Cách giải quyết A",
+              "Cách giải quyết B",
+              "Cách giải quyết C",
+              "Cách giải quyết D"
+            ],
+            "correct": "Cách giải quyết A"
           },
           {
-            id: 'h1_math_q2',
-            type: 'true_false',
-            text: 'Mức độ 1 - Nhận định sau về Đại số cơ bản trong môn Toán là Đúng hay Sai?',
-            options: ['Đúng', 'Sai'],
-            correct: 'Đúng',
-            explanation: 'Giải thích chi tiết: Dựa vào SGK, nhận định này hoàn toàn chính xác.'
+            "id": "q_6_toan_2",
+            "type": "true_false",
+            "text": "Tình huống: Đo đạc diện tích mảnh vườn để trồng cây. - Hãy áp dụng kiến thức Toán Lớp 6 (Kết nối tri thức) để xử lý.",
+            "explanation": "Dựa vào kiến thức Toán Lớp 6 (Sách KNTT), đây là cách xử lý đúng cho tình huống trên.",
+            "options": [
+              "Đúng",
+              "Sai"
+            ],
+            "correct": "Đúng"
           },
           {
-            id: 'h1_math_q3',
-            type: 'fill_blank',
-            text: 'Mức độ 1 - Điền từ còn thiếu vào chỗ trống về kiến thức Đại số cơ bản: ...',
-            correct: 'đáp án',
-            explanation: 'Từ khóa quan trọng cần nhớ trong bài học này là "đáp án".'
+            "id": "q_6_toan_3",
+            "type": "fill_blank",
+            "text": "Tình huống: Lập biểu đồ chi tiêu cá nhân trong tháng. - Hãy áp dụng kiến thức Toán Lớp 6 (Kết nối tri thức) để xử lý.",
+            "explanation": "Dựa vào kiến thức Toán Lớp 6 (Sách KNTT), đây là cách xử lý đúng cho tình huống trên.",
+            "correct": "hoàn_thành"
           },
           {
-            id: 'h1_math_q4',
-            type: 'true_false',
-            text: 'Mức độ 1 - Nhận định sau về Đại số cơ bản trong môn Toán là Đúng hay Sai?',
-            options: ['Đúng', 'Sai'],
-            correct: 'Đúng',
-            explanation: 'Giải thích chi tiết: Dựa vào SGK, nhận định này hoàn toàn chính xác.'
+            "id": "q_6_toan_4",
+            "type": "mcq",
+            "text": "Tình huống: Tính toán quãng đường và thời gian đi xe đạp từ nhà đến trường. - Hãy áp dụng kiến thức Toán Lớp 6 (Kết nối tri thức) để xử lý.",
+            "explanation": "Dựa vào kiến thức Toán Lớp 6 (Sách KNTT), đây là cách xử lý đúng cho tình huống trên.",
+            "options": [
+              "Cách giải quyết A",
+              "Cách giải quyết B",
+              "Cách giải quyết C",
+              "Cách giải quyết D"
+            ],
+            "correct": "Cách giải quyết A"
           },
           {
-            id: 'h1_math_q5',
-            type: 'mcq',
-            text: 'Mức độ 1 - Câu hỏi Trắc nghiệm bám sát chương trình học môn Toán phần Đại số cơ bản (Câu 5).',
-            options: ['Khái niệm A', 'Định lý B', 'Quy tắc C', 'Phương pháp D'],
-            correct: 'Khái niệm A',
-            explanation: 'Dựa vào kiến thức SGK, Khái niệm A là đáp án chính xác cho phần Đại số cơ bản.'
-          },
+            "id": "q_6_toan_5",
+            "type": "mcq",
+            "text": "Tình huống: Chia đều chiếc bánh pizza cho các bạn. - Hãy áp dụng kiến thức Toán Lớp 6 (Kết nối tri thức) để xử lý.",
+            "explanation": "Dựa vào kiến thức Toán Lớp 6 (Sách KNTT), đây là cách xử lý đúng cho tình huống trên.",
+            "options": [
+              "Cách giải quyết A",
+              "Cách giải quyết B",
+              "Cách giải quyết C",
+              "Cách giải quyết D"
+            ],
+            "correct": "Cách giải quyết A"
+          }
         ]
       },
       {
-        id: '1-lit',
-        subject: 'Văn',
-        title: 'Thử thách Phân tích nhân vật',
-        knowledge: 'Vận dụng các kiến thức quan trọng về Phân tích nhân vật để hoàn thành thử thách.',
-        completed: false,
-        questions: [
+        "id": "room_6_van",
+        "subject": "Ngữ Văn",
+        "title": "Chương 2: Văn học quanh ta",
+        "knowledge": "Kiến thức trọng tâm môn Ngữ Văn lớp 6 (Kết nối tri thức)",
+        "completed": false,
+        "questions": [
           {
-            id: 'h1_lit_q1',
-            type: 'mcq',
-            text: 'Mức độ 1 - Câu hỏi Trắc nghiệm bám sát chương trình học môn Văn phần Phân tích nhân vật (Câu 1).',
-            options: ['Khái niệm A', 'Định lý B', 'Quy tắc C', 'Phương pháp D'],
-            correct: 'Khái niệm A',
-            explanation: 'Dựa vào kiến thức SGK, Khái niệm A là đáp án chính xác cho phần Phân tích nhân vật.'
+            "id": "q_6_van_1",
+            "type": "mcq",
+            "text": "Tình huống: Viết một bài thuyết trình về một cuốn sách. - Hãy áp dụng kiến thức Ngữ Văn Lớp 6 (Kết nối tri thức) để xử lý.",
+            "explanation": "Dựa vào kiến thức Ngữ Văn Lớp 6 (Sách KNTT), đây là cách xử lý đúng cho tình huống trên.",
+            "options": [
+              "Cách giải quyết A",
+              "Cách giải quyết B",
+              "Cách giải quyết C",
+              "Cách giải quyết D"
+            ],
+            "correct": "Cách giải quyết A"
           },
           {
-            id: 'h1_lit_q2',
-            type: 'true_false',
-            text: 'Mức độ 1 - Nhận định sau về Phân tích nhân vật trong môn Văn là Đúng hay Sai?',
-            options: ['Đúng', 'Sai'],
-            correct: 'Đúng',
-            explanation: 'Giải thích chi tiết: Dựa vào SGK, nhận định này hoàn toàn chính xác.'
+            "id": "q_6_van_2",
+            "type": "true_false",
+            "text": "Tình huống: Kể lại một kỉ niệm đáng nhớ cho bạn bè nghe. - Hãy áp dụng kiến thức Ngữ Văn Lớp 6 (Kết nối tri thức) để xử lý.",
+            "explanation": "Dựa vào kiến thức Ngữ Văn Lớp 6 (Sách KNTT), đây là cách xử lý đúng cho tình huống trên.",
+            "options": [
+              "Đúng",
+              "Sai"
+            ],
+            "correct": "Đúng"
           },
           {
-            id: 'h1_lit_q3',
-            type: 'fill_blank',
-            text: 'Mức độ 1 - Điền từ còn thiếu vào chỗ trống về kiến thức Phân tích nhân vật: ...',
-            correct: 'đáp án',
-            explanation: 'Từ khóa quan trọng cần nhớ trong bài học này là "đáp án".'
+            "id": "q_6_van_3",
+            "type": "fill_blank",
+            "text": "Tình huống: Trình bày quan điểm về vấn đề bảo vệ môi trường trong buổi thảo luận. - Hãy áp dụng kiến thức Ngữ Văn Lớp 6 (Kết nối tri thức) để xử lý.",
+            "explanation": "Dựa vào kiến thức Ngữ Văn Lớp 6 (Sách KNTT), đây là cách xử lý đúng cho tình huống trên.",
+            "correct": "hoàn_thành"
           },
           {
-            id: 'h1_lit_q4',
-            type: 'true_false',
-            text: 'Mức độ 1 - Nhận định sau về Phân tích nhân vật trong môn Văn là Đúng hay Sai?',
-            options: ['Đúng', 'Sai'],
-            correct: 'Đúng',
-            explanation: 'Giải thích chi tiết: Dựa vào SGK, nhận định này hoàn toàn chính xác.'
+            "id": "q_6_van_4",
+            "type": "mcq",
+            "text": "Tình huống: Sáng tác một bài thơ ngắn về quê hương. - Hãy áp dụng kiến thức Ngữ Văn Lớp 6 (Kết nối tri thức) để xử lý.",
+            "explanation": "Dựa vào kiến thức Ngữ Văn Lớp 6 (Sách KNTT), đây là cách xử lý đúng cho tình huống trên.",
+            "options": [
+              "Cách giải quyết A",
+              "Cách giải quyết B",
+              "Cách giải quyết C",
+              "Cách giải quyết D"
+            ],
+            "correct": "Cách giải quyết A"
           },
           {
-            id: 'h1_lit_q5',
-            type: 'mcq',
-            text: 'Mức độ 1 - Câu hỏi Trắc nghiệm bám sát chương trình học môn Văn phần Phân tích nhân vật (Câu 5).',
-            options: ['Khái niệm A', 'Định lý B', 'Quy tắc C', 'Phương pháp D'],
-            correct: 'Khái niệm A',
-            explanation: 'Dựa vào kiến thức SGK, Khái niệm A là đáp án chính xác cho phần Phân tích nhân vật.'
-          },
+            "id": "q_6_van_5",
+            "type": "mcq",
+            "text": "Tình huống: Phân tích tâm lí nhân vật trong một đoạn phim ngắn. - Hãy áp dụng kiến thức Ngữ Văn Lớp 6 (Kết nối tri thức) để xử lý.",
+            "explanation": "Dựa vào kiến thức Ngữ Văn Lớp 6 (Sách KNTT), đây là cách xử lý đúng cho tình huống trên.",
+            "options": [
+              "Cách giải quyết A",
+              "Cách giải quyết B",
+              "Cách giải quyết C",
+              "Cách giải quyết D"
+            ],
+            "correct": "Cách giải quyết A"
+          }
         ]
       },
       {
-        id: '1-eng',
-        subject: 'Anh',
-        title: 'Thử thách Ngữ pháp (Tenses)',
-        knowledge: 'Vận dụng các kiến thức quan trọng về Ngữ pháp (Tenses) để hoàn thành thử thách.',
-        completed: false,
-        questions: [
+        "id": "room_6_khtn",
+        "subject": "KHTN",
+        "title": "Chương 3: Khám phá tự nhiên",
+        "knowledge": "Kiến thức trọng tâm môn KHTN lớp 6 (Kết nối tri thức)",
+        "completed": false,
+        "questions": [
           {
-            id: 'h1_eng_q1',
-            type: 'mcq',
-            text: 'Mức độ 1 - Câu hỏi Trắc nghiệm bám sát chương trình học môn Anh phần Ngữ pháp (Tenses) (Câu 1).',
-            options: ['Khái niệm A', 'Định lý B', 'Quy tắc C', 'Phương pháp D'],
-            correct: 'Khái niệm A',
-            explanation: 'Dựa vào kiến thức SGK, Khái niệm A là đáp án chính xác cho phần Ngữ pháp (Tenses).'
+            "id": "q_6_khtn_1",
+            "type": "mcq",
+            "text": "Tình huống: Quan sát sự nảy mầm của hạt đậu ngoài ban công. - Hãy áp dụng kiến thức KHTN Lớp 6 (Kết nối tri thức) để xử lý.",
+            "explanation": "Dựa vào kiến thức KHTN Lớp 6 (Sách KNTT), đây là cách xử lý đúng cho tình huống trên.",
+            "options": [
+              "Cách giải quyết A",
+              "Cách giải quyết B",
+              "Cách giải quyết C",
+              "Cách giải quyết D"
+            ],
+            "correct": "Cách giải quyết A"
           },
           {
-            id: 'h1_eng_q2',
-            type: 'true_false',
-            text: 'Mức độ 1 - Nhận định sau về Ngữ pháp (Tenses) trong môn Anh là Đúng hay Sai?',
-            options: ['Đúng', 'Sai'],
-            correct: 'Đúng',
-            explanation: 'Giải thích chi tiết: Dựa vào SGK, nhận định này hoàn toàn chính xác.'
+            "id": "q_6_khtn_2",
+            "type": "true_false",
+            "text": "Tình huống: Sử dụng nam châm để phân loại phế liệu. - Hãy áp dụng kiến thức KHTN Lớp 6 (Kết nối tri thức) để xử lý.",
+            "explanation": "Dựa vào kiến thức KHTN Lớp 6 (Sách KNTT), đây là cách xử lý đúng cho tình huống trên.",
+            "options": [
+              "Đúng",
+              "Sai"
+            ],
+            "correct": "Đúng"
           },
           {
-            id: 'h1_eng_q3',
-            type: 'fill_blank',
-            text: 'Mức độ 1 - Điền từ còn thiếu vào chỗ trống về kiến thức Ngữ pháp (Tenses): ...',
-            correct: 'đáp án',
-            explanation: 'Từ khóa quan trọng cần nhớ trong bài học này là "đáp án".'
+            "id": "q_6_khtn_3",
+            "type": "fill_blank",
+            "text": "Tình huống: Giải thích hiện tượng sương mù vào buổi sáng. - Hãy áp dụng kiến thức KHTN Lớp 6 (Kết nối tri thức) để xử lý.",
+            "explanation": "Dựa vào kiến thức KHTN Lớp 6 (Sách KNTT), đây là cách xử lý đúng cho tình huống trên.",
+            "correct": "hoàn_thành"
           },
           {
-            id: 'h1_eng_q4',
-            type: 'true_false',
-            text: 'Mức độ 1 - Nhận định sau về Ngữ pháp (Tenses) trong môn Anh là Đúng hay Sai?',
-            options: ['Đúng', 'Sai'],
-            correct: 'Đúng',
-            explanation: 'Giải thích chi tiết: Dựa vào SGK, nhận định này hoàn toàn chính xác.'
+            "id": "q_6_khtn_4",
+            "type": "mcq",
+            "text": "Tình huống: Tính toán lực cần thiết để đẩy một hộp sách. - Hãy áp dụng kiến thức KHTN Lớp 6 (Kết nối tri thức) để xử lý.",
+            "explanation": "Dựa vào kiến thức KHTN Lớp 6 (Sách KNTT), đây là cách xử lý đúng cho tình huống trên.",
+            "options": [
+              "Cách giải quyết A",
+              "Cách giải quyết B",
+              "Cách giải quyết C",
+              "Cách giải quyết D"
+            ],
+            "correct": "Cách giải quyết A"
           },
           {
-            id: 'h1_eng_q5',
-            type: 'mcq',
-            text: 'Mức độ 1 - Câu hỏi Trắc nghiệm bám sát chương trình học môn Anh phần Ngữ pháp (Tenses) (Câu 5).',
-            options: ['Khái niệm A', 'Định lý B', 'Quy tắc C', 'Phương pháp D'],
-            correct: 'Khái niệm A',
-            explanation: 'Dựa vào kiến thức SGK, Khái niệm A là đáp án chính xác cho phần Ngữ pháp (Tenses).'
-          },
+            "id": "q_6_khtn_5",
+            "type": "mcq",
+            "text": "Tình huống: Đo nhiệt độ sôi của nước pha muối. - Hãy áp dụng kiến thức KHTN Lớp 6 (Kết nối tri thức) để xử lý.",
+            "explanation": "Dựa vào kiến thức KHTN Lớp 6 (Sách KNTT), đây là cách xử lý đúng cho tình huống trên.",
+            "options": [
+              "Cách giải quyết A",
+              "Cách giải quyết B",
+              "Cách giải quyết C",
+              "Cách giải quyết D"
+            ],
+            "correct": "Cách giải quyết A"
+          }
         ]
       },
       {
-        id: '1-phys',
-        subject: 'Vật lý',
-        title: 'Thử thách Cơ học (Chuyển động)',
-        knowledge: 'Vận dụng các kiến thức quan trọng về Cơ học (Chuyển động) để hoàn thành thử thách.',
-        completed: false,
-        questions: [
+        "id": "room_6_anh",
+        "subject": "Tiếng Anh",
+        "title": "Chương 4: English in Action",
+        "knowledge": "Kiến thức trọng tâm môn Tiếng Anh lớp 6 (Kết nối tri thức)",
+        "completed": false,
+        "questions": [
           {
-            id: 'h1_phys_q1',
-            type: 'mcq',
-            text: 'Mức độ 1 - Câu hỏi Trắc nghiệm bám sát chương trình học môn Vật lý phần Cơ học (Chuyển động) (Câu 1).',
-            options: ['Khái niệm A', 'Định lý B', 'Quy tắc C', 'Phương pháp D'],
-            correct: 'Khái niệm A',
-            explanation: 'Dựa vào kiến thức SGK, Khái niệm A là đáp án chính xác cho phần Cơ học (Chuyển động).'
+            "id": "q_6_anh_1",
+            "type": "mcq",
+            "text": "Tình huống: Viết email xin phép nghỉ học bằng tiếng Anh. - Hãy áp dụng kiến thức Tiếng Anh Lớp 6 (Kết nối tri thức) để xử lý.",
+            "explanation": "Dựa vào kiến thức Tiếng Anh Lớp 6 (Sách KNTT), đây là cách xử lý đúng cho tình huống trên.",
+            "options": [
+              "Cách giải quyết A",
+              "Cách giải quyết B",
+              "Cách giải quyết C",
+              "Cách giải quyết D"
+            ],
+            "correct": "Cách giải quyết A"
           },
           {
-            id: 'h1_phys_q2',
-            type: 'true_false',
-            text: 'Mức độ 1 - Nhận định sau về Cơ học (Chuyển động) trong môn Vật lý là Đúng hay Sai?',
-            options: ['Đúng', 'Sai'],
-            correct: 'Đúng',
-            explanation: 'Giải thích chi tiết: Dựa vào SGK, nhận định này hoàn toàn chính xác.'
+            "id": "q_6_anh_2",
+            "type": "true_false",
+            "text": "Tình huống: Hỏi đường đi đến bảo tàng khi đi du lịch nước ngoài. - Hãy áp dụng kiến thức Tiếng Anh Lớp 6 (Kết nối tri thức) để xử lý.",
+            "explanation": "Dựa vào kiến thức Tiếng Anh Lớp 6 (Sách KNTT), đây là cách xử lý đúng cho tình huống trên.",
+            "options": [
+              "Đúng",
+              "Sai"
+            ],
+            "correct": "Đúng"
           },
           {
-            id: 'h1_phys_q3',
-            type: 'fill_blank',
-            text: 'Mức độ 1 - Điền từ còn thiếu vào chỗ trống về kiến thức Cơ học (Chuyển động): ...',
-            correct: 'đáp án',
-            explanation: 'Từ khóa quan trọng cần nhớ trong bài học này là "đáp án".'
+            "id": "q_6_anh_3",
+            "type": "fill_blank",
+            "text": "Tình huống: Giới thiệu bản thân trong ngày đầu tiên làm quen với bạn bè quốc tế. - Hãy áp dụng kiến thức Tiếng Anh Lớp 6 (Kết nối tri thức) để xử lý.",
+            "explanation": "Dựa vào kiến thức Tiếng Anh Lớp 6 (Sách KNTT), đây là cách xử lý đúng cho tình huống trên.",
+            "correct": "hoàn_thành"
           },
           {
-            id: 'h1_phys_q4',
-            type: 'true_false',
-            text: 'Mức độ 1 - Nhận định sau về Cơ học (Chuyển động) trong môn Vật lý là Đúng hay Sai?',
-            options: ['Đúng', 'Sai'],
-            correct: 'Đúng',
-            explanation: 'Giải thích chi tiết: Dựa vào SGK, nhận định này hoàn toàn chính xác.'
+            "id": "q_6_anh_4",
+            "type": "mcq",
+            "text": "Tình huống: Dịch một đoạn mô tả món ăn Việt Nam sang tiếng Anh. - Hãy áp dụng kiến thức Tiếng Anh Lớp 6 (Kết nối tri thức) để xử lý.",
+            "explanation": "Dựa vào kiến thức Tiếng Anh Lớp 6 (Sách KNTT), đây là cách xử lý đúng cho tình huống trên.",
+            "options": [
+              "Cách giải quyết A",
+              "Cách giải quyết B",
+              "Cách giải quyết C",
+              "Cách giải quyết D"
+            ],
+            "correct": "Cách giải quyết A"
           },
           {
-            id: 'h1_phys_q5',
-            type: 'mcq',
-            text: 'Mức độ 1 - Câu hỏi Trắc nghiệm bám sát chương trình học môn Vật lý phần Cơ học (Chuyển động) (Câu 5).',
-            options: ['Khái niệm A', 'Định lý B', 'Quy tắc C', 'Phương pháp D'],
-            correct: 'Khái niệm A',
-            explanation: 'Dựa vào kiến thức SGK, Khái niệm A là đáp án chính xác cho phần Cơ học (Chuyển động).'
-          },
+            "id": "q_6_anh_5",
+            "type": "mcq",
+            "text": "Tình huống: Nghe một bản tin thời tiết bằng tiếng Anh và tóm tắt lại. - Hãy áp dụng kiến thức Tiếng Anh Lớp 6 (Kết nối tri thức) để xử lý.",
+            "explanation": "Dựa vào kiến thức Tiếng Anh Lớp 6 (Sách KNTT), đây là cách xử lý đúng cho tình huống trên.",
+            "options": [
+              "Cách giải quyết A",
+              "Cách giải quyết B",
+              "Cách giải quyết C",
+              "Cách giải quyết D"
+            ],
+            "correct": "Cách giải quyết A"
+          }
         ]
       },
       {
-        id: '1-chem',
-        subject: 'Hóa học',
-        title: 'Thử thách Bảng tuần hoàn',
-        knowledge: 'Vận dụng các kiến thức quan trọng về Bảng tuần hoàn để hoàn thành thử thách.',
-        completed: false,
-        questions: [
+        "id": "room_6_lsdl",
+        "subject": "Lịch sử - Địa lí",
+        "title": "Chương 5: Hành trình thời gian",
+        "knowledge": "Kiến thức trọng tâm môn Lịch sử - Địa lí lớp 6 (Kết nối tri thức)",
+        "completed": false,
+        "questions": [
           {
-            id: 'h1_chem_q1',
-            type: 'mcq',
-            text: 'Mức độ 1 - Câu hỏi Trắc nghiệm bám sát chương trình học môn Hóa học phần Bảng tuần hoàn (Câu 1).',
-            options: ['Khái niệm A', 'Định lý B', 'Quy tắc C', 'Phương pháp D'],
-            correct: 'Khái niệm A',
-            explanation: 'Dựa vào kiến thức SGK, Khái niệm A là đáp án chính xác cho phần Bảng tuần hoàn.'
+            "id": "q_6_lsdl_1",
+            "type": "mcq",
+            "text": "Tình huống: Xem bản đồ để tìm đường đi nhanh nhất trong thành phố. - Hãy áp dụng kiến thức Lịch sử - Địa lí Lớp 6 (Kết nối tri thức) để xử lý.",
+            "explanation": "Dựa vào kiến thức Lịch sử - Địa lí Lớp 6 (Sách KNTT), đây là cách xử lý đúng cho tình huống trên.",
+            "options": [
+              "Cách giải quyết A",
+              "Cách giải quyết B",
+              "Cách giải quyết C",
+              "Cách giải quyết D"
+            ],
+            "correct": "Cách giải quyết A"
           },
           {
-            id: 'h1_chem_q2',
-            type: 'true_false',
-            text: 'Mức độ 1 - Nhận định sau về Bảng tuần hoàn trong môn Hóa học là Đúng hay Sai?',
-            options: ['Đúng', 'Sai'],
-            correct: 'Đúng',
-            explanation: 'Giải thích chi tiết: Dựa vào SGK, nhận định này hoàn toàn chính xác.'
+            "id": "q_6_lsdl_2",
+            "type": "true_false",
+            "text": "Tình huống: Tìm hiểu về lịch sử hình thành tên con đường nhà mình. - Hãy áp dụng kiến thức Lịch sử - Địa lí Lớp 6 (Kết nối tri thức) để xử lý.",
+            "explanation": "Dựa vào kiến thức Lịch sử - Địa lí Lớp 6 (Sách KNTT), đây là cách xử lý đúng cho tình huống trên.",
+            "options": [
+              "Đúng",
+              "Sai"
+            ],
+            "correct": "Đúng"
           },
           {
-            id: 'h1_chem_q3',
-            type: 'fill_blank',
-            text: 'Mức độ 1 - Điền từ còn thiếu vào chỗ trống về kiến thức Bảng tuần hoàn: ...',
-            correct: 'đáp án',
-            explanation: 'Từ khóa quan trọng cần nhớ trong bài học này là "đáp án".'
+            "id": "q_6_lsdl_3",
+            "type": "fill_blank",
+            "text": "Tình huống: Nhận biết các loại đất trồng thông qua màu sắc và đặc điểm. - Hãy áp dụng kiến thức Lịch sử - Địa lí Lớp 6 (Kết nối tri thức) để xử lý.",
+            "explanation": "Dựa vào kiến thức Lịch sử - Địa lí Lớp 6 (Sách KNTT), đây là cách xử lý đúng cho tình huống trên.",
+            "correct": "hoàn_thành"
           },
           {
-            id: 'h1_chem_q4',
-            type: 'true_false',
-            text: 'Mức độ 1 - Nhận định sau về Bảng tuần hoàn trong môn Hóa học là Đúng hay Sai?',
-            options: ['Đúng', 'Sai'],
-            correct: 'Đúng',
-            explanation: 'Giải thích chi tiết: Dựa vào SGK, nhận định này hoàn toàn chính xác.'
+            "id": "q_6_lsdl_4",
+            "type": "mcq",
+            "text": "Tình huống: Phân tích ảnh hưởng của khí hậu đến thói quen sinh hoạt ở địa phương. - Hãy áp dụng kiến thức Lịch sử - Địa lí Lớp 6 (Kết nối tri thức) để xử lý.",
+            "explanation": "Dựa vào kiến thức Lịch sử - Địa lí Lớp 6 (Sách KNTT), đây là cách xử lý đúng cho tình huống trên.",
+            "options": [
+              "Cách giải quyết A",
+              "Cách giải quyết B",
+              "Cách giải quyết C",
+              "Cách giải quyết D"
+            ],
+            "correct": "Cách giải quyết A"
           },
           {
-            id: 'h1_chem_q5',
-            type: 'mcq',
-            text: 'Mức độ 1 - Câu hỏi Trắc nghiệm bám sát chương trình học môn Hóa học phần Bảng tuần hoàn (Câu 5).',
-            options: ['Khái niệm A', 'Định lý B', 'Quy tắc C', 'Phương pháp D'],
-            correct: 'Khái niệm A',
-            explanation: 'Dựa vào kiến thức SGK, Khái niệm A là đáp án chính xác cho phần Bảng tuần hoàn.'
-          },
+            "id": "q_6_lsdl_5",
+            "type": "mcq",
+            "text": "Tình huống: Trình bày về một di tích lịch sử nổi tiếng ở quê hương. - Hãy áp dụng kiến thức Lịch sử - Địa lí Lớp 6 (Kết nối tri thức) để xử lý.",
+            "explanation": "Dựa vào kiến thức Lịch sử - Địa lí Lớp 6 (Sách KNTT), đây là cách xử lý đúng cho tình huống trên.",
+            "options": [
+              "Cách giải quyết A",
+              "Cách giải quyết B",
+              "Cách giải quyết C",
+              "Cách giải quyết D"
+            ],
+            "correct": "Cách giải quyết A"
+          }
         ]
       },
       {
-        id: '1-bio',
-        subject: 'Sinh học',
-        title: 'Thử thách Tế bào',
-        knowledge: 'Vận dụng các kiến thức quan trọng về Tế bào để hoàn thành thử thách.',
-        completed: false,
-        questions: [
+        "id": "room_6_gdcd",
+        "subject": "GDCD",
+        "title": "Chương 6: Công dân toàn cầu",
+        "knowledge": "Kiến thức trọng tâm môn GDCD lớp 6 (Kết nối tri thức)",
+        "completed": false,
+        "questions": [
           {
-            id: 'h1_bio_q1',
-            type: 'mcq',
-            text: 'Mức độ 1 - Câu hỏi Trắc nghiệm bám sát chương trình học môn Sinh học phần Tế bào (Câu 1).',
-            options: ['Khái niệm A', 'Định lý B', 'Quy tắc C', 'Phương pháp D'],
-            correct: 'Khái niệm A',
-            explanation: 'Dựa vào kiến thức SGK, Khái niệm A là đáp án chính xác cho phần Tế bào.'
+            "id": "q_6_gdcd_1",
+            "type": "mcq",
+            "text": "Tình huống: Giải quyết mâu thuẫn giữa hai người bạn trong lớp. - Hãy áp dụng kiến thức GDCD Lớp 6 (Kết nối tri thức) để xử lý.",
+            "explanation": "Dựa vào kiến thức GDCD Lớp 6 (Sách KNTT), đây là cách xử lý đúng cho tình huống trên.",
+            "options": [
+              "Cách giải quyết A",
+              "Cách giải quyết B",
+              "Cách giải quyết C",
+              "Cách giải quyết D"
+            ],
+            "correct": "Cách giải quyết A"
           },
           {
-            id: 'h1_bio_q2',
-            type: 'true_false',
-            text: 'Mức độ 1 - Nhận định sau về Tế bào trong môn Sinh học là Đúng hay Sai?',
-            options: ['Đúng', 'Sai'],
-            correct: 'Đúng',
-            explanation: 'Giải thích chi tiết: Dựa vào SGK, nhận định này hoàn toàn chính xác.'
+            "id": "q_6_gdcd_2",
+            "type": "true_false",
+            "text": "Tình huống: Tôn trọng và bảo vệ tài sản công cộng tại công viên. - Hãy áp dụng kiến thức GDCD Lớp 6 (Kết nối tri thức) để xử lý.",
+            "explanation": "Dựa vào kiến thức GDCD Lớp 6 (Sách KNTT), đây là cách xử lý đúng cho tình huống trên.",
+            "options": [
+              "Đúng",
+              "Sai"
+            ],
+            "correct": "Đúng"
           },
           {
-            id: 'h1_bio_q3',
-            type: 'fill_blank',
-            text: 'Mức độ 1 - Điền từ còn thiếu vào chỗ trống về kiến thức Tế bào: ...',
-            correct: 'đáp án',
-            explanation: 'Từ khóa quan trọng cần nhớ trong bài học này là "đáp án".'
+            "id": "q_6_gdcd_3",
+            "type": "fill_blank",
+            "text": "Tình huống: Tham gia quyên góp ủng hộ đồng bào gặp thiên tai. - Hãy áp dụng kiến thức GDCD Lớp 6 (Kết nối tri thức) để xử lý.",
+            "explanation": "Dựa vào kiến thức GDCD Lớp 6 (Sách KNTT), đây là cách xử lý đúng cho tình huống trên.",
+            "correct": "hoàn_thành"
           },
           {
-            id: 'h1_bio_q4',
-            type: 'true_false',
-            text: 'Mức độ 1 - Nhận định sau về Tế bào trong môn Sinh học là Đúng hay Sai?',
-            options: ['Đúng', 'Sai'],
-            correct: 'Đúng',
-            explanation: 'Giải thích chi tiết: Dựa vào SGK, nhận định này hoàn toàn chính xác.'
+            "id": "q_6_gdcd_4",
+            "type": "mcq",
+            "text": "Tình huống: Thực hiện quyền và nghĩa vụ của học sinh tại trường. - Hãy áp dụng kiến thức GDCD Lớp 6 (Kết nối tri thức) để xử lý.",
+            "explanation": "Dựa vào kiến thức GDCD Lớp 6 (Sách KNTT), đây là cách xử lý đúng cho tình huống trên.",
+            "options": [
+              "Cách giải quyết A",
+              "Cách giải quyết B",
+              "Cách giải quyết C",
+              "Cách giải quyết D"
+            ],
+            "correct": "Cách giải quyết A"
           },
           {
-            id: 'h1_bio_q5',
-            type: 'mcq',
-            text: 'Mức độ 1 - Câu hỏi Trắc nghiệm bám sát chương trình học môn Sinh học phần Tế bào (Câu 5).',
-            options: ['Khái niệm A', 'Định lý B', 'Quy tắc C', 'Phương pháp D'],
-            correct: 'Khái niệm A',
-            explanation: 'Dựa vào kiến thức SGK, Khái niệm A là đáp án chính xác cho phần Tế bào.'
-          },
+            "id": "q_6_gdcd_5",
+            "type": "mcq",
+            "text": "Tình huống: Xử lý tình huống khi gặp người lạ có ý đồ xấu. - Hãy áp dụng kiến thức GDCD Lớp 6 (Kết nối tri thức) để xử lý.",
+            "explanation": "Dựa vào kiến thức GDCD Lớp 6 (Sách KNTT), đây là cách xử lý đúng cho tình huống trên.",
+            "options": [
+              "Cách giải quyết A",
+              "Cách giải quyết B",
+              "Cách giải quyết C",
+              "Cách giải quyết D"
+            ],
+            "correct": "Cách giải quyết A"
+          }
         ]
       },
       {
-        id: '1-hist',
-        subject: 'Lịch sử',
-        title: 'Thử thách Lịch sử Việt Nam (Phong kiến)',
-        knowledge: 'Vận dụng các kiến thức quan trọng về Lịch sử Việt Nam (Phong kiến) để hoàn thành thử thách.',
-        completed: false,
-        questions: [
+        "id": "room_6_tin",
+        "subject": "Tin học",
+        "title": "Chương 7: Thế giới số",
+        "knowledge": "Kiến thức trọng tâm môn Tin học lớp 6 (Kết nối tri thức)",
+        "completed": false,
+        "questions": [
           {
-            id: 'h1_hist_q1',
-            type: 'mcq',
-            text: 'Mức độ 1 - Câu hỏi Trắc nghiệm bám sát chương trình học môn Lịch sử phần Lịch sử Việt Nam (Phong kiến) (Câu 1).',
-            options: ['Khái niệm A', 'Định lý B', 'Quy tắc C', 'Phương pháp D'],
-            correct: 'Khái niệm A',
-            explanation: 'Dựa vào kiến thức SGK, Khái niệm A là đáp án chính xác cho phần Lịch sử Việt Nam (Phong kiến).'
+            "id": "q_6_tin_1",
+            "type": "mcq",
+            "text": "Tình huống: Thiết kế một thiệp chúc mừng sinh nhật bằng phần mềm đồ hoạ. - Hãy áp dụng kiến thức Tin học Lớp 6 (Kết nối tri thức) để xử lý.",
+            "explanation": "Dựa vào kiến thức Tin học Lớp 6 (Sách KNTT), đây là cách xử lý đúng cho tình huống trên.",
+            "options": [
+              "Cách giải quyết A",
+              "Cách giải quyết B",
+              "Cách giải quyết C",
+              "Cách giải quyết D"
+            ],
+            "correct": "Cách giải quyết A"
           },
           {
-            id: 'h1_hist_q2',
-            type: 'true_false',
-            text: 'Mức độ 1 - Nhận định sau về Lịch sử Việt Nam (Phong kiến) trong môn Lịch sử là Đúng hay Sai?',
-            options: ['Đúng', 'Sai'],
-            correct: 'Đúng',
-            explanation: 'Giải thích chi tiết: Dựa vào SGK, nhận định này hoàn toàn chính xác.'
+            "id": "q_6_tin_2",
+            "type": "true_false",
+            "text": "Tình huống: Sử dụng bảng tính để quản lý điểm số các môn học. - Hãy áp dụng kiến thức Tin học Lớp 6 (Kết nối tri thức) để xử lý.",
+            "explanation": "Dựa vào kiến thức Tin học Lớp 6 (Sách KNTT), đây là cách xử lý đúng cho tình huống trên.",
+            "options": [
+              "Đúng",
+              "Sai"
+            ],
+            "correct": "Đúng"
           },
           {
-            id: 'h1_hist_q3',
-            type: 'fill_blank',
-            text: 'Mức độ 1 - Điền từ còn thiếu vào chỗ trống về kiến thức Lịch sử Việt Nam (Phong kiến): ...',
-            correct: 'đáp án',
-            explanation: 'Từ khóa quan trọng cần nhớ trong bài học này là "đáp án".'
+            "id": "q_6_tin_3",
+            "type": "fill_blank",
+            "text": "Tình huống: Tìm kiếm thông tin an toàn và hiệu quả trên Internet cho bài tập nhóm. - Hãy áp dụng kiến thức Tin học Lớp 6 (Kết nối tri thức) để xử lý.",
+            "explanation": "Dựa vào kiến thức Tin học Lớp 6 (Sách KNTT), đây là cách xử lý đúng cho tình huống trên.",
+            "correct": "hoàn_thành"
           },
           {
-            id: 'h1_hist_q4',
-            type: 'true_false',
-            text: 'Mức độ 1 - Nhận định sau về Lịch sử Việt Nam (Phong kiến) trong môn Lịch sử là Đúng hay Sai?',
-            options: ['Đúng', 'Sai'],
-            correct: 'Đúng',
-            explanation: 'Giải thích chi tiết: Dựa vào SGK, nhận định này hoàn toàn chính xác.'
+            "id": "q_6_tin_4",
+            "type": "mcq",
+            "text": "Tình huống: Tạo một thư mục và sắp xếp các tệp tin trên máy tính hợp lý. - Hãy áp dụng kiến thức Tin học Lớp 6 (Kết nối tri thức) để xử lý.",
+            "explanation": "Dựa vào kiến thức Tin học Lớp 6 (Sách KNTT), đây là cách xử lý đúng cho tình huống trên.",
+            "options": [
+              "Cách giải quyết A",
+              "Cách giải quyết B",
+              "Cách giải quyết C",
+              "Cách giải quyết D"
+            ],
+            "correct": "Cách giải quyết A"
           },
           {
-            id: 'h1_hist_q5',
-            type: 'mcq',
-            text: 'Mức độ 1 - Câu hỏi Trắc nghiệm bám sát chương trình học môn Lịch sử phần Lịch sử Việt Nam (Phong kiến) (Câu 5).',
-            options: ['Khái niệm A', 'Định lý B', 'Quy tắc C', 'Phương pháp D'],
-            correct: 'Khái niệm A',
-            explanation: 'Dựa vào kiến thức SGK, Khái niệm A là đáp án chính xác cho phần Lịch sử Việt Nam (Phong kiến).'
-          },
+            "id": "q_6_tin_5",
+            "type": "mcq",
+            "text": "Tình huống: Lập trình một trò chơi nhỏ với Scratch. - Hãy áp dụng kiến thức Tin học Lớp 6 (Kết nối tri thức) để xử lý.",
+            "explanation": "Dựa vào kiến thức Tin học Lớp 6 (Sách KNTT), đây là cách xử lý đúng cho tình huống trên.",
+            "options": [
+              "Cách giải quyết A",
+              "Cách giải quyết B",
+              "Cách giải quyết C",
+              "Cách giải quyết D"
+            ],
+            "correct": "Cách giải quyết A"
+          }
         ]
       },
       {
-        id: '1-geo',
-        subject: 'Địa lý',
-        title: 'Thử thách Địa lý Tự nhiên VN',
-        knowledge: 'Vận dụng các kiến thức quan trọng về Địa lý Tự nhiên VN để hoàn thành thử thách.',
-        completed: false,
-        questions: [
+        "id": "room_6_cn",
+        "subject": "Công nghệ",
+        "title": "Chương 8: Công nghệ tương lai",
+        "knowledge": "Kiến thức trọng tâm môn Công nghệ lớp 6 (Kết nối tri thức)",
+        "completed": false,
+        "questions": [
           {
-            id: 'h1_geo_q1',
-            type: 'mcq',
-            text: 'Mức độ 1 - Câu hỏi Trắc nghiệm bám sát chương trình học môn Địa lý phần Địa lý Tự nhiên VN (Câu 1).',
-            options: ['Khái niệm A', 'Định lý B', 'Quy tắc C', 'Phương pháp D'],
-            correct: 'Khái niệm A',
-            explanation: 'Dựa vào kiến thức SGK, Khái niệm A là đáp án chính xác cho phần Địa lý Tự nhiên VN.'
+            "id": "q_6_cn_1",
+            "type": "mcq",
+            "text": "Tình huống: Lắp ráp một mạch điện đơn giản thắp sáng bóng đèn. - Hãy áp dụng kiến thức Công nghệ Lớp 6 (Kết nối tri thức) để xử lý.",
+            "explanation": "Dựa vào kiến thức Công nghệ Lớp 6 (Sách KNTT), đây là cách xử lý đúng cho tình huống trên.",
+            "options": [
+              "Cách giải quyết A",
+              "Cách giải quyết B",
+              "Cách giải quyết C",
+              "Cách giải quyết D"
+            ],
+            "correct": "Cách giải quyết A"
           },
           {
-            id: 'h1_geo_q2',
-            type: 'true_false',
-            text: 'Mức độ 1 - Nhận định sau về Địa lý Tự nhiên VN trong môn Địa lý là Đúng hay Sai?',
-            options: ['Đúng', 'Sai'],
-            correct: 'Đúng',
-            explanation: 'Giải thích chi tiết: Dựa vào SGK, nhận định này hoàn toàn chính xác.'
+            "id": "q_6_cn_2",
+            "type": "true_false",
+            "text": "Tình huống: Lựa chọn vật liệu phù hợp để làm một mô hình ngôi nhà. - Hãy áp dụng kiến thức Công nghệ Lớp 6 (Kết nối tri thức) để xử lý.",
+            "explanation": "Dựa vào kiến thức Công nghệ Lớp 6 (Sách KNTT), đây là cách xử lý đúng cho tình huống trên.",
+            "options": [
+              "Đúng",
+              "Sai"
+            ],
+            "correct": "Đúng"
           },
           {
-            id: 'h1_geo_q3',
-            type: 'fill_blank',
-            text: 'Mức độ 1 - Điền từ còn thiếu vào chỗ trống về kiến thức Địa lý Tự nhiên VN: ...',
-            correct: 'đáp án',
-            explanation: 'Từ khóa quan trọng cần nhớ trong bài học này là "đáp án".'
+            "id": "q_6_cn_3",
+            "type": "fill_blank",
+            "text": "Tình huống: Thực hiện các bước an toàn khi sử dụng bàn ủi. - Hãy áp dụng kiến thức Công nghệ Lớp 6 (Kết nối tri thức) để xử lý.",
+            "explanation": "Dựa vào kiến thức Công nghệ Lớp 6 (Sách KNTT), đây là cách xử lý đúng cho tình huống trên.",
+            "correct": "hoàn_thành"
           },
           {
-            id: 'h1_geo_q4',
-            type: 'true_false',
-            text: 'Mức độ 1 - Nhận định sau về Địa lý Tự nhiên VN trong môn Địa lý là Đúng hay Sai?',
-            options: ['Đúng', 'Sai'],
-            correct: 'Đúng',
-            explanation: 'Giải thích chi tiết: Dựa vào SGK, nhận định này hoàn toàn chính xác.'
+            "id": "q_6_cn_4",
+            "type": "mcq",
+            "text": "Tình huống: Trồng và chăm sóc một chậu cây cảnh nhỏ ở góc học tập. - Hãy áp dụng kiến thức Công nghệ Lớp 6 (Kết nối tri thức) để xử lý.",
+            "explanation": "Dựa vào kiến thức Công nghệ Lớp 6 (Sách KNTT), đây là cách xử lý đúng cho tình huống trên.",
+            "options": [
+              "Cách giải quyết A",
+              "Cách giải quyết B",
+              "Cách giải quyết C",
+              "Cách giải quyết D"
+            ],
+            "correct": "Cách giải quyết A"
           },
           {
-            id: 'h1_geo_q5',
-            type: 'mcq',
-            text: 'Mức độ 1 - Câu hỏi Trắc nghiệm bám sát chương trình học môn Địa lý phần Địa lý Tự nhiên VN (Câu 5).',
-            options: ['Khái niệm A', 'Định lý B', 'Quy tắc C', 'Phương pháp D'],
-            correct: 'Khái niệm A',
-            explanation: 'Dựa vào kiến thức SGK, Khái niệm A là đáp án chính xác cho phần Địa lý Tự nhiên VN.'
-          },
+            "id": "q_6_cn_5",
+            "type": "mcq",
+            "text": "Tình huống: Tái chế chai nhựa cũ thành hộp đựng bút. - Hãy áp dụng kiến thức Công nghệ Lớp 6 (Kết nối tri thức) để xử lý.",
+            "explanation": "Dựa vào kiến thức Công nghệ Lớp 6 (Sách KNTT), đây là cách xử lý đúng cho tình huống trên.",
+            "options": [
+              "Cách giải quyết A",
+              "Cách giải quyết B",
+              "Cách giải quyết C",
+              "Cách giải quyết D"
+            ],
+            "correct": "Cách giải quyết A"
+          }
         ]
-      },
+      }
     ]
   },
   {
-    id: 2,
-    title: 'Ngôi nhà 2: Biệt Thự Hiện Đại',
-    rooms: [
+    "id": "house_7",
+    "title": "Biệt Thự - Lớp 7 (Kết nối tri thức)",
+    "rooms": [
       {
-        id: '2-math',
-        subject: 'Toán',
-        title: 'Thử thách Hình học không gian',
-        knowledge: 'Vận dụng các kiến thức quan trọng về Hình học không gian để hoàn thành thử thách.',
-        completed: false,
-        questions: [
+        "id": "room_7_toan",
+        "subject": "Toán",
+        "title": "Chương 1: Toán học và Đời sống",
+        "knowledge": "Kiến thức trọng tâm môn Toán lớp 7 (Kết nối tri thức)",
+        "completed": false,
+        "questions": [
           {
-            id: 'h2_math_q1',
-            type: 'mcq',
-            text: 'Mức độ 2 - Câu hỏi Trắc nghiệm bám sát chương trình học môn Toán phần Hình học không gian (Câu 1).',
-            options: ['Khái niệm A', 'Định lý B', 'Quy tắc C', 'Phương pháp D'],
-            correct: 'Khái niệm A',
-            explanation: 'Dựa vào kiến thức SGK, Khái niệm A là đáp án chính xác cho phần Hình học không gian.'
+            "id": "q_7_toan_1",
+            "type": "mcq",
+            "text": "Tình huống: Đi siêu thị mua hàng, tính tiền thừa. - Hãy áp dụng kiến thức Toán Lớp 7 (Kết nối tri thức) để xử lý.",
+            "explanation": "Dựa vào kiến thức Toán Lớp 7 (Sách KNTT), đây là cách xử lý đúng cho tình huống trên.",
+            "options": [
+              "Cách giải quyết A",
+              "Cách giải quyết B",
+              "Cách giải quyết C",
+              "Cách giải quyết D"
+            ],
+            "correct": "Cách giải quyết A"
           },
           {
-            id: 'h2_math_q2',
-            type: 'true_false',
-            text: 'Mức độ 2 - Nhận định sau về Hình học không gian trong môn Toán là Đúng hay Sai?',
-            options: ['Đúng', 'Sai'],
-            correct: 'Đúng',
-            explanation: 'Giải thích chi tiết: Dựa vào SGK, nhận định này hoàn toàn chính xác.'
+            "id": "q_7_toan_2",
+            "type": "true_false",
+            "text": "Tình huống: Đo đạc diện tích mảnh vườn để trồng cây. - Hãy áp dụng kiến thức Toán Lớp 7 (Kết nối tri thức) để xử lý.",
+            "explanation": "Dựa vào kiến thức Toán Lớp 7 (Sách KNTT), đây là cách xử lý đúng cho tình huống trên.",
+            "options": [
+              "Đúng",
+              "Sai"
+            ],
+            "correct": "Đúng"
           },
           {
-            id: 'h2_math_q3',
-            type: 'fill_blank',
-            text: 'Mức độ 2 - Điền từ còn thiếu vào chỗ trống về kiến thức Hình học không gian: ...',
-            correct: 'đáp án',
-            explanation: 'Từ khóa quan trọng cần nhớ trong bài học này là "đáp án".'
+            "id": "q_7_toan_3",
+            "type": "fill_blank",
+            "text": "Tình huống: Lập biểu đồ chi tiêu cá nhân trong tháng. - Hãy áp dụng kiến thức Toán Lớp 7 (Kết nối tri thức) để xử lý.",
+            "explanation": "Dựa vào kiến thức Toán Lớp 7 (Sách KNTT), đây là cách xử lý đúng cho tình huống trên.",
+            "correct": "hoàn_thành"
           },
           {
-            id: 'h2_math_q4',
-            type: 'true_false',
-            text: 'Mức độ 2 - Nhận định sau về Hình học không gian trong môn Toán là Đúng hay Sai?',
-            options: ['Đúng', 'Sai'],
-            correct: 'Đúng',
-            explanation: 'Giải thích chi tiết: Dựa vào SGK, nhận định này hoàn toàn chính xác.'
+            "id": "q_7_toan_4",
+            "type": "mcq",
+            "text": "Tình huống: Tính toán quãng đường và thời gian đi xe đạp từ nhà đến trường. - Hãy áp dụng kiến thức Toán Lớp 7 (Kết nối tri thức) để xử lý.",
+            "explanation": "Dựa vào kiến thức Toán Lớp 7 (Sách KNTT), đây là cách xử lý đúng cho tình huống trên.",
+            "options": [
+              "Cách giải quyết A",
+              "Cách giải quyết B",
+              "Cách giải quyết C",
+              "Cách giải quyết D"
+            ],
+            "correct": "Cách giải quyết A"
           },
           {
-            id: 'h2_math_q5',
-            type: 'mcq',
-            text: 'Mức độ 2 - Câu hỏi Trắc nghiệm bám sát chương trình học môn Toán phần Hình học không gian (Câu 5).',
-            options: ['Khái niệm A', 'Định lý B', 'Quy tắc C', 'Phương pháp D'],
-            correct: 'Khái niệm A',
-            explanation: 'Dựa vào kiến thức SGK, Khái niệm A là đáp án chính xác cho phần Hình học không gian.'
-          },
+            "id": "q_7_toan_5",
+            "type": "mcq",
+            "text": "Tình huống: Chia đều chiếc bánh pizza cho các bạn. - Hãy áp dụng kiến thức Toán Lớp 7 (Kết nối tri thức) để xử lý.",
+            "explanation": "Dựa vào kiến thức Toán Lớp 7 (Sách KNTT), đây là cách xử lý đúng cho tình huống trên.",
+            "options": [
+              "Cách giải quyết A",
+              "Cách giải quyết B",
+              "Cách giải quyết C",
+              "Cách giải quyết D"
+            ],
+            "correct": "Cách giải quyết A"
+          }
         ]
       },
       {
-        id: '2-lit',
-        subject: 'Văn',
-        title: 'Thử thách Biện pháp tu từ',
-        knowledge: 'Vận dụng các kiến thức quan trọng về Biện pháp tu từ để hoàn thành thử thách.',
-        completed: false,
-        questions: [
+        "id": "room_7_van",
+        "subject": "Ngữ Văn",
+        "title": "Chương 2: Văn học quanh ta",
+        "knowledge": "Kiến thức trọng tâm môn Ngữ Văn lớp 7 (Kết nối tri thức)",
+        "completed": false,
+        "questions": [
           {
-            id: 'h2_lit_q1',
-            type: 'mcq',
-            text: 'Mức độ 2 - Câu hỏi Trắc nghiệm bám sát chương trình học môn Văn phần Biện pháp tu từ (Câu 1).',
-            options: ['Khái niệm A', 'Định lý B', 'Quy tắc C', 'Phương pháp D'],
-            correct: 'Khái niệm A',
-            explanation: 'Dựa vào kiến thức SGK, Khái niệm A là đáp án chính xác cho phần Biện pháp tu từ.'
+            "id": "q_7_van_1",
+            "type": "mcq",
+            "text": "Tình huống: Viết một bài thuyết trình về một cuốn sách. - Hãy áp dụng kiến thức Ngữ Văn Lớp 7 (Kết nối tri thức) để xử lý.",
+            "explanation": "Dựa vào kiến thức Ngữ Văn Lớp 7 (Sách KNTT), đây là cách xử lý đúng cho tình huống trên.",
+            "options": [
+              "Cách giải quyết A",
+              "Cách giải quyết B",
+              "Cách giải quyết C",
+              "Cách giải quyết D"
+            ],
+            "correct": "Cách giải quyết A"
           },
           {
-            id: 'h2_lit_q2',
-            type: 'true_false',
-            text: 'Mức độ 2 - Nhận định sau về Biện pháp tu từ trong môn Văn là Đúng hay Sai?',
-            options: ['Đúng', 'Sai'],
-            correct: 'Đúng',
-            explanation: 'Giải thích chi tiết: Dựa vào SGK, nhận định này hoàn toàn chính xác.'
+            "id": "q_7_van_2",
+            "type": "true_false",
+            "text": "Tình huống: Kể lại một kỉ niệm đáng nhớ cho bạn bè nghe. - Hãy áp dụng kiến thức Ngữ Văn Lớp 7 (Kết nối tri thức) để xử lý.",
+            "explanation": "Dựa vào kiến thức Ngữ Văn Lớp 7 (Sách KNTT), đây là cách xử lý đúng cho tình huống trên.",
+            "options": [
+              "Đúng",
+              "Sai"
+            ],
+            "correct": "Đúng"
           },
           {
-            id: 'h2_lit_q3',
-            type: 'fill_blank',
-            text: 'Mức độ 2 - Điền từ còn thiếu vào chỗ trống về kiến thức Biện pháp tu từ: ...',
-            correct: 'đáp án',
-            explanation: 'Từ khóa quan trọng cần nhớ trong bài học này là "đáp án".'
+            "id": "q_7_van_3",
+            "type": "fill_blank",
+            "text": "Tình huống: Trình bày quan điểm về vấn đề bảo vệ môi trường trong buổi thảo luận. - Hãy áp dụng kiến thức Ngữ Văn Lớp 7 (Kết nối tri thức) để xử lý.",
+            "explanation": "Dựa vào kiến thức Ngữ Văn Lớp 7 (Sách KNTT), đây là cách xử lý đúng cho tình huống trên.",
+            "correct": "hoàn_thành"
           },
           {
-            id: 'h2_lit_q4',
-            type: 'true_false',
-            text: 'Mức độ 2 - Nhận định sau về Biện pháp tu từ trong môn Văn là Đúng hay Sai?',
-            options: ['Đúng', 'Sai'],
-            correct: 'Đúng',
-            explanation: 'Giải thích chi tiết: Dựa vào SGK, nhận định này hoàn toàn chính xác.'
+            "id": "q_7_van_4",
+            "type": "mcq",
+            "text": "Tình huống: Sáng tác một bài thơ ngắn về quê hương. - Hãy áp dụng kiến thức Ngữ Văn Lớp 7 (Kết nối tri thức) để xử lý.",
+            "explanation": "Dựa vào kiến thức Ngữ Văn Lớp 7 (Sách KNTT), đây là cách xử lý đúng cho tình huống trên.",
+            "options": [
+              "Cách giải quyết A",
+              "Cách giải quyết B",
+              "Cách giải quyết C",
+              "Cách giải quyết D"
+            ],
+            "correct": "Cách giải quyết A"
           },
           {
-            id: 'h2_lit_q5',
-            type: 'mcq',
-            text: 'Mức độ 2 - Câu hỏi Trắc nghiệm bám sát chương trình học môn Văn phần Biện pháp tu từ (Câu 5).',
-            options: ['Khái niệm A', 'Định lý B', 'Quy tắc C', 'Phương pháp D'],
-            correct: 'Khái niệm A',
-            explanation: 'Dựa vào kiến thức SGK, Khái niệm A là đáp án chính xác cho phần Biện pháp tu từ.'
-          },
+            "id": "q_7_van_5",
+            "type": "mcq",
+            "text": "Tình huống: Phân tích tâm lí nhân vật trong một đoạn phim ngắn. - Hãy áp dụng kiến thức Ngữ Văn Lớp 7 (Kết nối tri thức) để xử lý.",
+            "explanation": "Dựa vào kiến thức Ngữ Văn Lớp 7 (Sách KNTT), đây là cách xử lý đúng cho tình huống trên.",
+            "options": [
+              "Cách giải quyết A",
+              "Cách giải quyết B",
+              "Cách giải quyết C",
+              "Cách giải quyết D"
+            ],
+            "correct": "Cách giải quyết A"
+          }
         ]
       },
       {
-        id: '2-eng',
-        subject: 'Anh',
-        title: 'Thử thách Từ vựng (Vocabulary)',
-        knowledge: 'Vận dụng các kiến thức quan trọng về Từ vựng (Vocabulary) để hoàn thành thử thách.',
-        completed: false,
-        questions: [
+        "id": "room_7_khtn",
+        "subject": "KHTN",
+        "title": "Chương 3: Khám phá tự nhiên",
+        "knowledge": "Kiến thức trọng tâm môn KHTN lớp 7 (Kết nối tri thức)",
+        "completed": false,
+        "questions": [
           {
-            id: 'h2_eng_q1',
-            type: 'mcq',
-            text: 'Mức độ 2 - Câu hỏi Trắc nghiệm bám sát chương trình học môn Anh phần Từ vựng (Vocabulary) (Câu 1).',
-            options: ['Khái niệm A', 'Định lý B', 'Quy tắc C', 'Phương pháp D'],
-            correct: 'Khái niệm A',
-            explanation: 'Dựa vào kiến thức SGK, Khái niệm A là đáp án chính xác cho phần Từ vựng (Vocabulary).'
+            "id": "q_7_khtn_1",
+            "type": "mcq",
+            "text": "Tình huống: Quan sát sự nảy mầm của hạt đậu ngoài ban công. - Hãy áp dụng kiến thức KHTN Lớp 7 (Kết nối tri thức) để xử lý.",
+            "explanation": "Dựa vào kiến thức KHTN Lớp 7 (Sách KNTT), đây là cách xử lý đúng cho tình huống trên.",
+            "options": [
+              "Cách giải quyết A",
+              "Cách giải quyết B",
+              "Cách giải quyết C",
+              "Cách giải quyết D"
+            ],
+            "correct": "Cách giải quyết A"
           },
           {
-            id: 'h2_eng_q2',
-            type: 'true_false',
-            text: 'Mức độ 2 - Nhận định sau về Từ vựng (Vocabulary) trong môn Anh là Đúng hay Sai?',
-            options: ['Đúng', 'Sai'],
-            correct: 'Đúng',
-            explanation: 'Giải thích chi tiết: Dựa vào SGK, nhận định này hoàn toàn chính xác.'
+            "id": "q_7_khtn_2",
+            "type": "true_false",
+            "text": "Tình huống: Sử dụng nam châm để phân loại phế liệu. - Hãy áp dụng kiến thức KHTN Lớp 7 (Kết nối tri thức) để xử lý.",
+            "explanation": "Dựa vào kiến thức KHTN Lớp 7 (Sách KNTT), đây là cách xử lý đúng cho tình huống trên.",
+            "options": [
+              "Đúng",
+              "Sai"
+            ],
+            "correct": "Đúng"
           },
           {
-            id: 'h2_eng_q3',
-            type: 'fill_blank',
-            text: 'Mức độ 2 - Điền từ còn thiếu vào chỗ trống về kiến thức Từ vựng (Vocabulary): ...',
-            correct: 'đáp án',
-            explanation: 'Từ khóa quan trọng cần nhớ trong bài học này là "đáp án".'
+            "id": "q_7_khtn_3",
+            "type": "fill_blank",
+            "text": "Tình huống: Giải thích hiện tượng sương mù vào buổi sáng. - Hãy áp dụng kiến thức KHTN Lớp 7 (Kết nối tri thức) để xử lý.",
+            "explanation": "Dựa vào kiến thức KHTN Lớp 7 (Sách KNTT), đây là cách xử lý đúng cho tình huống trên.",
+            "correct": "hoàn_thành"
           },
           {
-            id: 'h2_eng_q4',
-            type: 'true_false',
-            text: 'Mức độ 2 - Nhận định sau về Từ vựng (Vocabulary) trong môn Anh là Đúng hay Sai?',
-            options: ['Đúng', 'Sai'],
-            correct: 'Đúng',
-            explanation: 'Giải thích chi tiết: Dựa vào SGK, nhận định này hoàn toàn chính xác.'
+            "id": "q_7_khtn_4",
+            "type": "mcq",
+            "text": "Tình huống: Tính toán lực cần thiết để đẩy một hộp sách. - Hãy áp dụng kiến thức KHTN Lớp 7 (Kết nối tri thức) để xử lý.",
+            "explanation": "Dựa vào kiến thức KHTN Lớp 7 (Sách KNTT), đây là cách xử lý đúng cho tình huống trên.",
+            "options": [
+              "Cách giải quyết A",
+              "Cách giải quyết B",
+              "Cách giải quyết C",
+              "Cách giải quyết D"
+            ],
+            "correct": "Cách giải quyết A"
           },
           {
-            id: 'h2_eng_q5',
-            type: 'mcq',
-            text: 'Mức độ 2 - Câu hỏi Trắc nghiệm bám sát chương trình học môn Anh phần Từ vựng (Vocabulary) (Câu 5).',
-            options: ['Khái niệm A', 'Định lý B', 'Quy tắc C', 'Phương pháp D'],
-            correct: 'Khái niệm A',
-            explanation: 'Dựa vào kiến thức SGK, Khái niệm A là đáp án chính xác cho phần Từ vựng (Vocabulary).'
-          },
+            "id": "q_7_khtn_5",
+            "type": "mcq",
+            "text": "Tình huống: Đo nhiệt độ sôi của nước pha muối. - Hãy áp dụng kiến thức KHTN Lớp 7 (Kết nối tri thức) để xử lý.",
+            "explanation": "Dựa vào kiến thức KHTN Lớp 7 (Sách KNTT), đây là cách xử lý đúng cho tình huống trên.",
+            "options": [
+              "Cách giải quyết A",
+              "Cách giải quyết B",
+              "Cách giải quyết C",
+              "Cách giải quyết D"
+            ],
+            "correct": "Cách giải quyết A"
+          }
         ]
       },
       {
-        id: '2-phys',
-        subject: 'Vật lý',
-        title: 'Thử thách Điện học',
-        knowledge: 'Vận dụng các kiến thức quan trọng về Điện học để hoàn thành thử thách.',
-        completed: false,
-        questions: [
+        "id": "room_7_anh",
+        "subject": "Tiếng Anh",
+        "title": "Chương 4: English in Action",
+        "knowledge": "Kiến thức trọng tâm môn Tiếng Anh lớp 7 (Kết nối tri thức)",
+        "completed": false,
+        "questions": [
           {
-            id: 'h2_phys_q1',
-            type: 'mcq',
-            text: 'Mức độ 2 - Câu hỏi Trắc nghiệm bám sát chương trình học môn Vật lý phần Điện học (Câu 1).',
-            options: ['Khái niệm A', 'Định lý B', 'Quy tắc C', 'Phương pháp D'],
-            correct: 'Khái niệm A',
-            explanation: 'Dựa vào kiến thức SGK, Khái niệm A là đáp án chính xác cho phần Điện học.'
+            "id": "q_7_anh_1",
+            "type": "mcq",
+            "text": "Tình huống: Viết email xin phép nghỉ học bằng tiếng Anh. - Hãy áp dụng kiến thức Tiếng Anh Lớp 7 (Kết nối tri thức) để xử lý.",
+            "explanation": "Dựa vào kiến thức Tiếng Anh Lớp 7 (Sách KNTT), đây là cách xử lý đúng cho tình huống trên.",
+            "options": [
+              "Cách giải quyết A",
+              "Cách giải quyết B",
+              "Cách giải quyết C",
+              "Cách giải quyết D"
+            ],
+            "correct": "Cách giải quyết A"
           },
           {
-            id: 'h2_phys_q2',
-            type: 'true_false',
-            text: 'Mức độ 2 - Nhận định sau về Điện học trong môn Vật lý là Đúng hay Sai?',
-            options: ['Đúng', 'Sai'],
-            correct: 'Đúng',
-            explanation: 'Giải thích chi tiết: Dựa vào SGK, nhận định này hoàn toàn chính xác.'
+            "id": "q_7_anh_2",
+            "type": "true_false",
+            "text": "Tình huống: Hỏi đường đi đến bảo tàng khi đi du lịch nước ngoài. - Hãy áp dụng kiến thức Tiếng Anh Lớp 7 (Kết nối tri thức) để xử lý.",
+            "explanation": "Dựa vào kiến thức Tiếng Anh Lớp 7 (Sách KNTT), đây là cách xử lý đúng cho tình huống trên.",
+            "options": [
+              "Đúng",
+              "Sai"
+            ],
+            "correct": "Đúng"
           },
           {
-            id: 'h2_phys_q3',
-            type: 'fill_blank',
-            text: 'Mức độ 2 - Điền từ còn thiếu vào chỗ trống về kiến thức Điện học: ...',
-            correct: 'đáp án',
-            explanation: 'Từ khóa quan trọng cần nhớ trong bài học này là "đáp án".'
+            "id": "q_7_anh_3",
+            "type": "fill_blank",
+            "text": "Tình huống: Giới thiệu bản thân trong ngày đầu tiên làm quen với bạn bè quốc tế. - Hãy áp dụng kiến thức Tiếng Anh Lớp 7 (Kết nối tri thức) để xử lý.",
+            "explanation": "Dựa vào kiến thức Tiếng Anh Lớp 7 (Sách KNTT), đây là cách xử lý đúng cho tình huống trên.",
+            "correct": "hoàn_thành"
           },
           {
-            id: 'h2_phys_q4',
-            type: 'true_false',
-            text: 'Mức độ 2 - Nhận định sau về Điện học trong môn Vật lý là Đúng hay Sai?',
-            options: ['Đúng', 'Sai'],
-            correct: 'Đúng',
-            explanation: 'Giải thích chi tiết: Dựa vào SGK, nhận định này hoàn toàn chính xác.'
+            "id": "q_7_anh_4",
+            "type": "mcq",
+            "text": "Tình huống: Dịch một đoạn mô tả món ăn Việt Nam sang tiếng Anh. - Hãy áp dụng kiến thức Tiếng Anh Lớp 7 (Kết nối tri thức) để xử lý.",
+            "explanation": "Dựa vào kiến thức Tiếng Anh Lớp 7 (Sách KNTT), đây là cách xử lý đúng cho tình huống trên.",
+            "options": [
+              "Cách giải quyết A",
+              "Cách giải quyết B",
+              "Cách giải quyết C",
+              "Cách giải quyết D"
+            ],
+            "correct": "Cách giải quyết A"
           },
           {
-            id: 'h2_phys_q5',
-            type: 'mcq',
-            text: 'Mức độ 2 - Câu hỏi Trắc nghiệm bám sát chương trình học môn Vật lý phần Điện học (Câu 5).',
-            options: ['Khái niệm A', 'Định lý B', 'Quy tắc C', 'Phương pháp D'],
-            correct: 'Khái niệm A',
-            explanation: 'Dựa vào kiến thức SGK, Khái niệm A là đáp án chính xác cho phần Điện học.'
-          },
+            "id": "q_7_anh_5",
+            "type": "mcq",
+            "text": "Tình huống: Nghe một bản tin thời tiết bằng tiếng Anh và tóm tắt lại. - Hãy áp dụng kiến thức Tiếng Anh Lớp 7 (Kết nối tri thức) để xử lý.",
+            "explanation": "Dựa vào kiến thức Tiếng Anh Lớp 7 (Sách KNTT), đây là cách xử lý đúng cho tình huống trên.",
+            "options": [
+              "Cách giải quyết A",
+              "Cách giải quyết B",
+              "Cách giải quyết C",
+              "Cách giải quyết D"
+            ],
+            "correct": "Cách giải quyết A"
+          }
         ]
       },
       {
-        id: '2-chem',
-        subject: 'Hóa học',
-        title: 'Thử thách Phản ứng Hóa học',
-        knowledge: 'Vận dụng các kiến thức quan trọng về Phản ứng Hóa học để hoàn thành thử thách.',
-        completed: false,
-        questions: [
+        "id": "room_7_lsdl",
+        "subject": "Lịch sử - Địa lí",
+        "title": "Chương 5: Hành trình thời gian",
+        "knowledge": "Kiến thức trọng tâm môn Lịch sử - Địa lí lớp 7 (Kết nối tri thức)",
+        "completed": false,
+        "questions": [
           {
-            id: 'h2_chem_q1',
-            type: 'mcq',
-            text: 'Mức độ 2 - Câu hỏi Trắc nghiệm bám sát chương trình học môn Hóa học phần Phản ứng Hóa học (Câu 1).',
-            options: ['Khái niệm A', 'Định lý B', 'Quy tắc C', 'Phương pháp D'],
-            correct: 'Khái niệm A',
-            explanation: 'Dựa vào kiến thức SGK, Khái niệm A là đáp án chính xác cho phần Phản ứng Hóa học.'
+            "id": "q_7_lsdl_1",
+            "type": "mcq",
+            "text": "Tình huống: Xem bản đồ để tìm đường đi nhanh nhất trong thành phố. - Hãy áp dụng kiến thức Lịch sử - Địa lí Lớp 7 (Kết nối tri thức) để xử lý.",
+            "explanation": "Dựa vào kiến thức Lịch sử - Địa lí Lớp 7 (Sách KNTT), đây là cách xử lý đúng cho tình huống trên.",
+            "options": [
+              "Cách giải quyết A",
+              "Cách giải quyết B",
+              "Cách giải quyết C",
+              "Cách giải quyết D"
+            ],
+            "correct": "Cách giải quyết A"
           },
           {
-            id: 'h2_chem_q2',
-            type: 'true_false',
-            text: 'Mức độ 2 - Nhận định sau về Phản ứng Hóa học trong môn Hóa học là Đúng hay Sai?',
-            options: ['Đúng', 'Sai'],
-            correct: 'Đúng',
-            explanation: 'Giải thích chi tiết: Dựa vào SGK, nhận định này hoàn toàn chính xác.'
+            "id": "q_7_lsdl_2",
+            "type": "true_false",
+            "text": "Tình huống: Tìm hiểu về lịch sử hình thành tên con đường nhà mình. - Hãy áp dụng kiến thức Lịch sử - Địa lí Lớp 7 (Kết nối tri thức) để xử lý.",
+            "explanation": "Dựa vào kiến thức Lịch sử - Địa lí Lớp 7 (Sách KNTT), đây là cách xử lý đúng cho tình huống trên.",
+            "options": [
+              "Đúng",
+              "Sai"
+            ],
+            "correct": "Đúng"
           },
           {
-            id: 'h2_chem_q3',
-            type: 'fill_blank',
-            text: 'Mức độ 2 - Điền từ còn thiếu vào chỗ trống về kiến thức Phản ứng Hóa học: ...',
-            correct: 'đáp án',
-            explanation: 'Từ khóa quan trọng cần nhớ trong bài học này là "đáp án".'
+            "id": "q_7_lsdl_3",
+            "type": "fill_blank",
+            "text": "Tình huống: Nhận biết các loại đất trồng thông qua màu sắc và đặc điểm. - Hãy áp dụng kiến thức Lịch sử - Địa lí Lớp 7 (Kết nối tri thức) để xử lý.",
+            "explanation": "Dựa vào kiến thức Lịch sử - Địa lí Lớp 7 (Sách KNTT), đây là cách xử lý đúng cho tình huống trên.",
+            "correct": "hoàn_thành"
           },
           {
-            id: 'h2_chem_q4',
-            type: 'true_false',
-            text: 'Mức độ 2 - Nhận định sau về Phản ứng Hóa học trong môn Hóa học là Đúng hay Sai?',
-            options: ['Đúng', 'Sai'],
-            correct: 'Đúng',
-            explanation: 'Giải thích chi tiết: Dựa vào SGK, nhận định này hoàn toàn chính xác.'
+            "id": "q_7_lsdl_4",
+            "type": "mcq",
+            "text": "Tình huống: Phân tích ảnh hưởng của khí hậu đến thói quen sinh hoạt ở địa phương. - Hãy áp dụng kiến thức Lịch sử - Địa lí Lớp 7 (Kết nối tri thức) để xử lý.",
+            "explanation": "Dựa vào kiến thức Lịch sử - Địa lí Lớp 7 (Sách KNTT), đây là cách xử lý đúng cho tình huống trên.",
+            "options": [
+              "Cách giải quyết A",
+              "Cách giải quyết B",
+              "Cách giải quyết C",
+              "Cách giải quyết D"
+            ],
+            "correct": "Cách giải quyết A"
           },
           {
-            id: 'h2_chem_q5',
-            type: 'mcq',
-            text: 'Mức độ 2 - Câu hỏi Trắc nghiệm bám sát chương trình học môn Hóa học phần Phản ứng Hóa học (Câu 5).',
-            options: ['Khái niệm A', 'Định lý B', 'Quy tắc C', 'Phương pháp D'],
-            correct: 'Khái niệm A',
-            explanation: 'Dựa vào kiến thức SGK, Khái niệm A là đáp án chính xác cho phần Phản ứng Hóa học.'
-          },
+            "id": "q_7_lsdl_5",
+            "type": "mcq",
+            "text": "Tình huống: Trình bày về một di tích lịch sử nổi tiếng ở quê hương. - Hãy áp dụng kiến thức Lịch sử - Địa lí Lớp 7 (Kết nối tri thức) để xử lý.",
+            "explanation": "Dựa vào kiến thức Lịch sử - Địa lí Lớp 7 (Sách KNTT), đây là cách xử lý đúng cho tình huống trên.",
+            "options": [
+              "Cách giải quyết A",
+              "Cách giải quyết B",
+              "Cách giải quyết C",
+              "Cách giải quyết D"
+            ],
+            "correct": "Cách giải quyết A"
+          }
         ]
       },
       {
-        id: '2-bio',
-        subject: 'Sinh học',
-        title: 'Thử thách Di truyền học',
-        knowledge: 'Vận dụng các kiến thức quan trọng về Di truyền học để hoàn thành thử thách.',
-        completed: false,
-        questions: [
+        "id": "room_7_gdcd",
+        "subject": "GDCD",
+        "title": "Chương 6: Công dân toàn cầu",
+        "knowledge": "Kiến thức trọng tâm môn GDCD lớp 7 (Kết nối tri thức)",
+        "completed": false,
+        "questions": [
           {
-            id: 'h2_bio_q1',
-            type: 'mcq',
-            text: 'Mức độ 2 - Câu hỏi Trắc nghiệm bám sát chương trình học môn Sinh học phần Di truyền học (Câu 1).',
-            options: ['Khái niệm A', 'Định lý B', 'Quy tắc C', 'Phương pháp D'],
-            correct: 'Khái niệm A',
-            explanation: 'Dựa vào kiến thức SGK, Khái niệm A là đáp án chính xác cho phần Di truyền học.'
+            "id": "q_7_gdcd_1",
+            "type": "mcq",
+            "text": "Tình huống: Giải quyết mâu thuẫn giữa hai người bạn trong lớp. - Hãy áp dụng kiến thức GDCD Lớp 7 (Kết nối tri thức) để xử lý.",
+            "explanation": "Dựa vào kiến thức GDCD Lớp 7 (Sách KNTT), đây là cách xử lý đúng cho tình huống trên.",
+            "options": [
+              "Cách giải quyết A",
+              "Cách giải quyết B",
+              "Cách giải quyết C",
+              "Cách giải quyết D"
+            ],
+            "correct": "Cách giải quyết A"
           },
           {
-            id: 'h2_bio_q2',
-            type: 'true_false',
-            text: 'Mức độ 2 - Nhận định sau về Di truyền học trong môn Sinh học là Đúng hay Sai?',
-            options: ['Đúng', 'Sai'],
-            correct: 'Đúng',
-            explanation: 'Giải thích chi tiết: Dựa vào SGK, nhận định này hoàn toàn chính xác.'
+            "id": "q_7_gdcd_2",
+            "type": "true_false",
+            "text": "Tình huống: Tôn trọng và bảo vệ tài sản công cộng tại công viên. - Hãy áp dụng kiến thức GDCD Lớp 7 (Kết nối tri thức) để xử lý.",
+            "explanation": "Dựa vào kiến thức GDCD Lớp 7 (Sách KNTT), đây là cách xử lý đúng cho tình huống trên.",
+            "options": [
+              "Đúng",
+              "Sai"
+            ],
+            "correct": "Đúng"
           },
           {
-            id: 'h2_bio_q3',
-            type: 'fill_blank',
-            text: 'Mức độ 2 - Điền từ còn thiếu vào chỗ trống về kiến thức Di truyền học: ...',
-            correct: 'đáp án',
-            explanation: 'Từ khóa quan trọng cần nhớ trong bài học này là "đáp án".'
+            "id": "q_7_gdcd_3",
+            "type": "fill_blank",
+            "text": "Tình huống: Tham gia quyên góp ủng hộ đồng bào gặp thiên tai. - Hãy áp dụng kiến thức GDCD Lớp 7 (Kết nối tri thức) để xử lý.",
+            "explanation": "Dựa vào kiến thức GDCD Lớp 7 (Sách KNTT), đây là cách xử lý đúng cho tình huống trên.",
+            "correct": "hoàn_thành"
           },
           {
-            id: 'h2_bio_q4',
-            type: 'true_false',
-            text: 'Mức độ 2 - Nhận định sau về Di truyền học trong môn Sinh học là Đúng hay Sai?',
-            options: ['Đúng', 'Sai'],
-            correct: 'Đúng',
-            explanation: 'Giải thích chi tiết: Dựa vào SGK, nhận định này hoàn toàn chính xác.'
+            "id": "q_7_gdcd_4",
+            "type": "mcq",
+            "text": "Tình huống: Thực hiện quyền và nghĩa vụ của học sinh tại trường. - Hãy áp dụng kiến thức GDCD Lớp 7 (Kết nối tri thức) để xử lý.",
+            "explanation": "Dựa vào kiến thức GDCD Lớp 7 (Sách KNTT), đây là cách xử lý đúng cho tình huống trên.",
+            "options": [
+              "Cách giải quyết A",
+              "Cách giải quyết B",
+              "Cách giải quyết C",
+              "Cách giải quyết D"
+            ],
+            "correct": "Cách giải quyết A"
           },
           {
-            id: 'h2_bio_q5',
-            type: 'mcq',
-            text: 'Mức độ 2 - Câu hỏi Trắc nghiệm bám sát chương trình học môn Sinh học phần Di truyền học (Câu 5).',
-            options: ['Khái niệm A', 'Định lý B', 'Quy tắc C', 'Phương pháp D'],
-            correct: 'Khái niệm A',
-            explanation: 'Dựa vào kiến thức SGK, Khái niệm A là đáp án chính xác cho phần Di truyền học.'
-          },
+            "id": "q_7_gdcd_5",
+            "type": "mcq",
+            "text": "Tình huống: Xử lý tình huống khi gặp người lạ có ý đồ xấu. - Hãy áp dụng kiến thức GDCD Lớp 7 (Kết nối tri thức) để xử lý.",
+            "explanation": "Dựa vào kiến thức GDCD Lớp 7 (Sách KNTT), đây là cách xử lý đúng cho tình huống trên.",
+            "options": [
+              "Cách giải quyết A",
+              "Cách giải quyết B",
+              "Cách giải quyết C",
+              "Cách giải quyết D"
+            ],
+            "correct": "Cách giải quyết A"
+          }
         ]
       },
       {
-        id: '2-hist',
-        subject: 'Lịch sử',
-        title: 'Thử thách Chiến tranh Thế giới',
-        knowledge: 'Vận dụng các kiến thức quan trọng về Chiến tranh Thế giới để hoàn thành thử thách.',
-        completed: false,
-        questions: [
+        "id": "room_7_tin",
+        "subject": "Tin học",
+        "title": "Chương 7: Thế giới số",
+        "knowledge": "Kiến thức trọng tâm môn Tin học lớp 7 (Kết nối tri thức)",
+        "completed": false,
+        "questions": [
           {
-            id: 'h2_hist_q1',
-            type: 'mcq',
-            text: 'Mức độ 2 - Câu hỏi Trắc nghiệm bám sát chương trình học môn Lịch sử phần Chiến tranh Thế giới (Câu 1).',
-            options: ['Khái niệm A', 'Định lý B', 'Quy tắc C', 'Phương pháp D'],
-            correct: 'Khái niệm A',
-            explanation: 'Dựa vào kiến thức SGK, Khái niệm A là đáp án chính xác cho phần Chiến tranh Thế giới.'
+            "id": "q_7_tin_1",
+            "type": "mcq",
+            "text": "Tình huống: Thiết kế một thiệp chúc mừng sinh nhật bằng phần mềm đồ hoạ. - Hãy áp dụng kiến thức Tin học Lớp 7 (Kết nối tri thức) để xử lý.",
+            "explanation": "Dựa vào kiến thức Tin học Lớp 7 (Sách KNTT), đây là cách xử lý đúng cho tình huống trên.",
+            "options": [
+              "Cách giải quyết A",
+              "Cách giải quyết B",
+              "Cách giải quyết C",
+              "Cách giải quyết D"
+            ],
+            "correct": "Cách giải quyết A"
           },
           {
-            id: 'h2_hist_q2',
-            type: 'true_false',
-            text: 'Mức độ 2 - Nhận định sau về Chiến tranh Thế giới trong môn Lịch sử là Đúng hay Sai?',
-            options: ['Đúng', 'Sai'],
-            correct: 'Đúng',
-            explanation: 'Giải thích chi tiết: Dựa vào SGK, nhận định này hoàn toàn chính xác.'
+            "id": "q_7_tin_2",
+            "type": "true_false",
+            "text": "Tình huống: Sử dụng bảng tính để quản lý điểm số các môn học. - Hãy áp dụng kiến thức Tin học Lớp 7 (Kết nối tri thức) để xử lý.",
+            "explanation": "Dựa vào kiến thức Tin học Lớp 7 (Sách KNTT), đây là cách xử lý đúng cho tình huống trên.",
+            "options": [
+              "Đúng",
+              "Sai"
+            ],
+            "correct": "Đúng"
           },
           {
-            id: 'h2_hist_q3',
-            type: 'fill_blank',
-            text: 'Mức độ 2 - Điền từ còn thiếu vào chỗ trống về kiến thức Chiến tranh Thế giới: ...',
-            correct: 'đáp án',
-            explanation: 'Từ khóa quan trọng cần nhớ trong bài học này là "đáp án".'
+            "id": "q_7_tin_3",
+            "type": "fill_blank",
+            "text": "Tình huống: Tìm kiếm thông tin an toàn và hiệu quả trên Internet cho bài tập nhóm. - Hãy áp dụng kiến thức Tin học Lớp 7 (Kết nối tri thức) để xử lý.",
+            "explanation": "Dựa vào kiến thức Tin học Lớp 7 (Sách KNTT), đây là cách xử lý đúng cho tình huống trên.",
+            "correct": "hoàn_thành"
           },
           {
-            id: 'h2_hist_q4',
-            type: 'true_false',
-            text: 'Mức độ 2 - Nhận định sau về Chiến tranh Thế giới trong môn Lịch sử là Đúng hay Sai?',
-            options: ['Đúng', 'Sai'],
-            correct: 'Đúng',
-            explanation: 'Giải thích chi tiết: Dựa vào SGK, nhận định này hoàn toàn chính xác.'
+            "id": "q_7_tin_4",
+            "type": "mcq",
+            "text": "Tình huống: Tạo một thư mục và sắp xếp các tệp tin trên máy tính hợp lý. - Hãy áp dụng kiến thức Tin học Lớp 7 (Kết nối tri thức) để xử lý.",
+            "explanation": "Dựa vào kiến thức Tin học Lớp 7 (Sách KNTT), đây là cách xử lý đúng cho tình huống trên.",
+            "options": [
+              "Cách giải quyết A",
+              "Cách giải quyết B",
+              "Cách giải quyết C",
+              "Cách giải quyết D"
+            ],
+            "correct": "Cách giải quyết A"
           },
           {
-            id: 'h2_hist_q5',
-            type: 'mcq',
-            text: 'Mức độ 2 - Câu hỏi Trắc nghiệm bám sát chương trình học môn Lịch sử phần Chiến tranh Thế giới (Câu 5).',
-            options: ['Khái niệm A', 'Định lý B', 'Quy tắc C', 'Phương pháp D'],
-            correct: 'Khái niệm A',
-            explanation: 'Dựa vào kiến thức SGK, Khái niệm A là đáp án chính xác cho phần Chiến tranh Thế giới.'
-          },
+            "id": "q_7_tin_5",
+            "type": "mcq",
+            "text": "Tình huống: Lập trình một trò chơi nhỏ với Scratch. - Hãy áp dụng kiến thức Tin học Lớp 7 (Kết nối tri thức) để xử lý.",
+            "explanation": "Dựa vào kiến thức Tin học Lớp 7 (Sách KNTT), đây là cách xử lý đúng cho tình huống trên.",
+            "options": [
+              "Cách giải quyết A",
+              "Cách giải quyết B",
+              "Cách giải quyết C",
+              "Cách giải quyết D"
+            ],
+            "correct": "Cách giải quyết A"
+          }
         ]
       },
       {
-        id: '2-geo',
-        subject: 'Địa lý',
-        title: 'Thử thách Khí hậu thế giới',
-        knowledge: 'Vận dụng các kiến thức quan trọng về Khí hậu thế giới để hoàn thành thử thách.',
-        completed: false,
-        questions: [
+        "id": "room_7_cn",
+        "subject": "Công nghệ",
+        "title": "Chương 8: Công nghệ tương lai",
+        "knowledge": "Kiến thức trọng tâm môn Công nghệ lớp 7 (Kết nối tri thức)",
+        "completed": false,
+        "questions": [
           {
-            id: 'h2_geo_q1',
-            type: 'mcq',
-            text: 'Mức độ 2 - Câu hỏi Trắc nghiệm bám sát chương trình học môn Địa lý phần Khí hậu thế giới (Câu 1).',
-            options: ['Khái niệm A', 'Định lý B', 'Quy tắc C', 'Phương pháp D'],
-            correct: 'Khái niệm A',
-            explanation: 'Dựa vào kiến thức SGK, Khái niệm A là đáp án chính xác cho phần Khí hậu thế giới.'
+            "id": "q_7_cn_1",
+            "type": "mcq",
+            "text": "Tình huống: Lắp ráp một mạch điện đơn giản thắp sáng bóng đèn. - Hãy áp dụng kiến thức Công nghệ Lớp 7 (Kết nối tri thức) để xử lý.",
+            "explanation": "Dựa vào kiến thức Công nghệ Lớp 7 (Sách KNTT), đây là cách xử lý đúng cho tình huống trên.",
+            "options": [
+              "Cách giải quyết A",
+              "Cách giải quyết B",
+              "Cách giải quyết C",
+              "Cách giải quyết D"
+            ],
+            "correct": "Cách giải quyết A"
           },
           {
-            id: 'h2_geo_q2',
-            type: 'true_false',
-            text: 'Mức độ 2 - Nhận định sau về Khí hậu thế giới trong môn Địa lý là Đúng hay Sai?',
-            options: ['Đúng', 'Sai'],
-            correct: 'Đúng',
-            explanation: 'Giải thích chi tiết: Dựa vào SGK, nhận định này hoàn toàn chính xác.'
+            "id": "q_7_cn_2",
+            "type": "true_false",
+            "text": "Tình huống: Lựa chọn vật liệu phù hợp để làm một mô hình ngôi nhà. - Hãy áp dụng kiến thức Công nghệ Lớp 7 (Kết nối tri thức) để xử lý.",
+            "explanation": "Dựa vào kiến thức Công nghệ Lớp 7 (Sách KNTT), đây là cách xử lý đúng cho tình huống trên.",
+            "options": [
+              "Đúng",
+              "Sai"
+            ],
+            "correct": "Đúng"
           },
           {
-            id: 'h2_geo_q3',
-            type: 'fill_blank',
-            text: 'Mức độ 2 - Điền từ còn thiếu vào chỗ trống về kiến thức Khí hậu thế giới: ...',
-            correct: 'đáp án',
-            explanation: 'Từ khóa quan trọng cần nhớ trong bài học này là "đáp án".'
+            "id": "q_7_cn_3",
+            "type": "fill_blank",
+            "text": "Tình huống: Thực hiện các bước an toàn khi sử dụng bàn ủi. - Hãy áp dụng kiến thức Công nghệ Lớp 7 (Kết nối tri thức) để xử lý.",
+            "explanation": "Dựa vào kiến thức Công nghệ Lớp 7 (Sách KNTT), đây là cách xử lý đúng cho tình huống trên.",
+            "correct": "hoàn_thành"
           },
           {
-            id: 'h2_geo_q4',
-            type: 'true_false',
-            text: 'Mức độ 2 - Nhận định sau về Khí hậu thế giới trong môn Địa lý là Đúng hay Sai?',
-            options: ['Đúng', 'Sai'],
-            correct: 'Đúng',
-            explanation: 'Giải thích chi tiết: Dựa vào SGK, nhận định này hoàn toàn chính xác.'
+            "id": "q_7_cn_4",
+            "type": "mcq",
+            "text": "Tình huống: Trồng và chăm sóc một chậu cây cảnh nhỏ ở góc học tập. - Hãy áp dụng kiến thức Công nghệ Lớp 7 (Kết nối tri thức) để xử lý.",
+            "explanation": "Dựa vào kiến thức Công nghệ Lớp 7 (Sách KNTT), đây là cách xử lý đúng cho tình huống trên.",
+            "options": [
+              "Cách giải quyết A",
+              "Cách giải quyết B",
+              "Cách giải quyết C",
+              "Cách giải quyết D"
+            ],
+            "correct": "Cách giải quyết A"
           },
           {
-            id: 'h2_geo_q5',
-            type: 'mcq',
-            text: 'Mức độ 2 - Câu hỏi Trắc nghiệm bám sát chương trình học môn Địa lý phần Khí hậu thế giới (Câu 5).',
-            options: ['Khái niệm A', 'Định lý B', 'Quy tắc C', 'Phương pháp D'],
-            correct: 'Khái niệm A',
-            explanation: 'Dựa vào kiến thức SGK, Khái niệm A là đáp án chính xác cho phần Khí hậu thế giới.'
-          },
+            "id": "q_7_cn_5",
+            "type": "mcq",
+            "text": "Tình huống: Tái chế chai nhựa cũ thành hộp đựng bút. - Hãy áp dụng kiến thức Công nghệ Lớp 7 (Kết nối tri thức) để xử lý.",
+            "explanation": "Dựa vào kiến thức Công nghệ Lớp 7 (Sách KNTT), đây là cách xử lý đúng cho tình huống trên.",
+            "options": [
+              "Cách giải quyết A",
+              "Cách giải quyết B",
+              "Cách giải quyết C",
+              "Cách giải quyết D"
+            ],
+            "correct": "Cách giải quyết A"
+          }
         ]
-      },
+      }
     ]
   },
   {
-    id: 3,
-    title: 'Ngôi nhà 3: Lâu Đài Hoàng Gia',
-    rooms: [
+    "id": "house_8",
+    "title": "Lâu Đài - Lớp 8 (Kết nối tri thức)",
+    "rooms": [
       {
-        id: '3-math',
-        subject: 'Toán',
-        title: 'Thử thách Phương trình bậc 2',
-        knowledge: 'Vận dụng các kiến thức quan trọng về Phương trình bậc 2 để hoàn thành thử thách.',
-        completed: false,
-        questions: [
+        "id": "room_8_toan",
+        "subject": "Toán",
+        "title": "Chương 1: Toán học và Đời sống",
+        "knowledge": "Kiến thức trọng tâm môn Toán lớp 8 (Kết nối tri thức)",
+        "completed": false,
+        "questions": [
           {
-            id: 'h3_math_q1',
-            type: 'mcq',
-            text: 'Mức độ 3 - Câu hỏi Trắc nghiệm bám sát chương trình học môn Toán phần Phương trình bậc 2 (Câu 1).',
-            options: ['Khái niệm A', 'Định lý B', 'Quy tắc C', 'Phương pháp D'],
-            correct: 'Khái niệm A',
-            explanation: 'Dựa vào kiến thức SGK, Khái niệm A là đáp án chính xác cho phần Phương trình bậc 2.'
+            "id": "q_8_toan_1",
+            "type": "mcq",
+            "text": "Tình huống: Đi siêu thị mua hàng, tính tiền thừa. - Hãy áp dụng kiến thức Toán Lớp 8 (Kết nối tri thức) để xử lý.",
+            "explanation": "Dựa vào kiến thức Toán Lớp 8 (Sách KNTT), đây là cách xử lý đúng cho tình huống trên.",
+            "options": [
+              "Cách giải quyết A",
+              "Cách giải quyết B",
+              "Cách giải quyết C",
+              "Cách giải quyết D"
+            ],
+            "correct": "Cách giải quyết A"
           },
           {
-            id: 'h3_math_q2',
-            type: 'true_false',
-            text: 'Mức độ 3 - Nhận định sau về Phương trình bậc 2 trong môn Toán là Đúng hay Sai?',
-            options: ['Đúng', 'Sai'],
-            correct: 'Đúng',
-            explanation: 'Giải thích chi tiết: Dựa vào SGK, nhận định này hoàn toàn chính xác.'
+            "id": "q_8_toan_2",
+            "type": "true_false",
+            "text": "Tình huống: Đo đạc diện tích mảnh vườn để trồng cây. - Hãy áp dụng kiến thức Toán Lớp 8 (Kết nối tri thức) để xử lý.",
+            "explanation": "Dựa vào kiến thức Toán Lớp 8 (Sách KNTT), đây là cách xử lý đúng cho tình huống trên.",
+            "options": [
+              "Đúng",
+              "Sai"
+            ],
+            "correct": "Đúng"
           },
           {
-            id: 'h3_math_q3',
-            type: 'fill_blank',
-            text: 'Mức độ 3 - Điền từ còn thiếu vào chỗ trống về kiến thức Phương trình bậc 2: ...',
-            correct: 'đáp án',
-            explanation: 'Từ khóa quan trọng cần nhớ trong bài học này là "đáp án".'
+            "id": "q_8_toan_3",
+            "type": "fill_blank",
+            "text": "Tình huống: Lập biểu đồ chi tiêu cá nhân trong tháng. - Hãy áp dụng kiến thức Toán Lớp 8 (Kết nối tri thức) để xử lý.",
+            "explanation": "Dựa vào kiến thức Toán Lớp 8 (Sách KNTT), đây là cách xử lý đúng cho tình huống trên.",
+            "correct": "hoàn_thành"
           },
           {
-            id: 'h3_math_q4',
-            type: 'true_false',
-            text: 'Mức độ 3 - Nhận định sau về Phương trình bậc 2 trong môn Toán là Đúng hay Sai?',
-            options: ['Đúng', 'Sai'],
-            correct: 'Đúng',
-            explanation: 'Giải thích chi tiết: Dựa vào SGK, nhận định này hoàn toàn chính xác.'
+            "id": "q_8_toan_4",
+            "type": "mcq",
+            "text": "Tình huống: Tính toán quãng đường và thời gian đi xe đạp từ nhà đến trường. - Hãy áp dụng kiến thức Toán Lớp 8 (Kết nối tri thức) để xử lý.",
+            "explanation": "Dựa vào kiến thức Toán Lớp 8 (Sách KNTT), đây là cách xử lý đúng cho tình huống trên.",
+            "options": [
+              "Cách giải quyết A",
+              "Cách giải quyết B",
+              "Cách giải quyết C",
+              "Cách giải quyết D"
+            ],
+            "correct": "Cách giải quyết A"
           },
           {
-            id: 'h3_math_q5',
-            type: 'mcq',
-            text: 'Mức độ 3 - Câu hỏi Trắc nghiệm bám sát chương trình học môn Toán phần Phương trình bậc 2 (Câu 5).',
-            options: ['Khái niệm A', 'Định lý B', 'Quy tắc C', 'Phương pháp D'],
-            correct: 'Khái niệm A',
-            explanation: 'Dựa vào kiến thức SGK, Khái niệm A là đáp án chính xác cho phần Phương trình bậc 2.'
-          },
+            "id": "q_8_toan_5",
+            "type": "mcq",
+            "text": "Tình huống: Chia đều chiếc bánh pizza cho các bạn. - Hãy áp dụng kiến thức Toán Lớp 8 (Kết nối tri thức) để xử lý.",
+            "explanation": "Dựa vào kiến thức Toán Lớp 8 (Sách KNTT), đây là cách xử lý đúng cho tình huống trên.",
+            "options": [
+              "Cách giải quyết A",
+              "Cách giải quyết B",
+              "Cách giải quyết C",
+              "Cách giải quyết D"
+            ],
+            "correct": "Cách giải quyết A"
+          }
         ]
       },
       {
-        id: '3-lit',
-        subject: 'Văn',
-        title: 'Thử thách Ý nghĩa tác phẩm',
-        knowledge: 'Vận dụng các kiến thức quan trọng về Ý nghĩa tác phẩm để hoàn thành thử thách.',
-        completed: false,
-        questions: [
+        "id": "room_8_van",
+        "subject": "Ngữ Văn",
+        "title": "Chương 2: Văn học quanh ta",
+        "knowledge": "Kiến thức trọng tâm môn Ngữ Văn lớp 8 (Kết nối tri thức)",
+        "completed": false,
+        "questions": [
           {
-            id: 'h3_lit_q1',
-            type: 'mcq',
-            text: 'Mức độ 3 - Câu hỏi Trắc nghiệm bám sát chương trình học môn Văn phần Ý nghĩa tác phẩm (Câu 1).',
-            options: ['Khái niệm A', 'Định lý B', 'Quy tắc C', 'Phương pháp D'],
-            correct: 'Khái niệm A',
-            explanation: 'Dựa vào kiến thức SGK, Khái niệm A là đáp án chính xác cho phần Ý nghĩa tác phẩm.'
+            "id": "q_8_van_1",
+            "type": "mcq",
+            "text": "Tình huống: Viết một bài thuyết trình về một cuốn sách. - Hãy áp dụng kiến thức Ngữ Văn Lớp 8 (Kết nối tri thức) để xử lý.",
+            "explanation": "Dựa vào kiến thức Ngữ Văn Lớp 8 (Sách KNTT), đây là cách xử lý đúng cho tình huống trên.",
+            "options": [
+              "Cách giải quyết A",
+              "Cách giải quyết B",
+              "Cách giải quyết C",
+              "Cách giải quyết D"
+            ],
+            "correct": "Cách giải quyết A"
           },
           {
-            id: 'h3_lit_q2',
-            type: 'true_false',
-            text: 'Mức độ 3 - Nhận định sau về Ý nghĩa tác phẩm trong môn Văn là Đúng hay Sai?',
-            options: ['Đúng', 'Sai'],
-            correct: 'Đúng',
-            explanation: 'Giải thích chi tiết: Dựa vào SGK, nhận định này hoàn toàn chính xác.'
+            "id": "q_8_van_2",
+            "type": "true_false",
+            "text": "Tình huống: Kể lại một kỉ niệm đáng nhớ cho bạn bè nghe. - Hãy áp dụng kiến thức Ngữ Văn Lớp 8 (Kết nối tri thức) để xử lý.",
+            "explanation": "Dựa vào kiến thức Ngữ Văn Lớp 8 (Sách KNTT), đây là cách xử lý đúng cho tình huống trên.",
+            "options": [
+              "Đúng",
+              "Sai"
+            ],
+            "correct": "Đúng"
           },
           {
-            id: 'h3_lit_q3',
-            type: 'fill_blank',
-            text: 'Mức độ 3 - Điền từ còn thiếu vào chỗ trống về kiến thức Ý nghĩa tác phẩm: ...',
-            correct: 'đáp án',
-            explanation: 'Từ khóa quan trọng cần nhớ trong bài học này là "đáp án".'
+            "id": "q_8_van_3",
+            "type": "fill_blank",
+            "text": "Tình huống: Trình bày quan điểm về vấn đề bảo vệ môi trường trong buổi thảo luận. - Hãy áp dụng kiến thức Ngữ Văn Lớp 8 (Kết nối tri thức) để xử lý.",
+            "explanation": "Dựa vào kiến thức Ngữ Văn Lớp 8 (Sách KNTT), đây là cách xử lý đúng cho tình huống trên.",
+            "correct": "hoàn_thành"
           },
           {
-            id: 'h3_lit_q4',
-            type: 'true_false',
-            text: 'Mức độ 3 - Nhận định sau về Ý nghĩa tác phẩm trong môn Văn là Đúng hay Sai?',
-            options: ['Đúng', 'Sai'],
-            correct: 'Đúng',
-            explanation: 'Giải thích chi tiết: Dựa vào SGK, nhận định này hoàn toàn chính xác.'
+            "id": "q_8_van_4",
+            "type": "mcq",
+            "text": "Tình huống: Sáng tác một bài thơ ngắn về quê hương. - Hãy áp dụng kiến thức Ngữ Văn Lớp 8 (Kết nối tri thức) để xử lý.",
+            "explanation": "Dựa vào kiến thức Ngữ Văn Lớp 8 (Sách KNTT), đây là cách xử lý đúng cho tình huống trên.",
+            "options": [
+              "Cách giải quyết A",
+              "Cách giải quyết B",
+              "Cách giải quyết C",
+              "Cách giải quyết D"
+            ],
+            "correct": "Cách giải quyết A"
           },
           {
-            id: 'h3_lit_q5',
-            type: 'mcq',
-            text: 'Mức độ 3 - Câu hỏi Trắc nghiệm bám sát chương trình học môn Văn phần Ý nghĩa tác phẩm (Câu 5).',
-            options: ['Khái niệm A', 'Định lý B', 'Quy tắc C', 'Phương pháp D'],
-            correct: 'Khái niệm A',
-            explanation: 'Dựa vào kiến thức SGK, Khái niệm A là đáp án chính xác cho phần Ý nghĩa tác phẩm.'
-          },
+            "id": "q_8_van_5",
+            "type": "mcq",
+            "text": "Tình huống: Phân tích tâm lí nhân vật trong một đoạn phim ngắn. - Hãy áp dụng kiến thức Ngữ Văn Lớp 8 (Kết nối tri thức) để xử lý.",
+            "explanation": "Dựa vào kiến thức Ngữ Văn Lớp 8 (Sách KNTT), đây là cách xử lý đúng cho tình huống trên.",
+            "options": [
+              "Cách giải quyết A",
+              "Cách giải quyết B",
+              "Cách giải quyết C",
+              "Cách giải quyết D"
+            ],
+            "correct": "Cách giải quyết A"
+          }
         ]
       },
       {
-        id: '3-eng',
-        subject: 'Anh',
-        title: 'Thử thách Phát âm (Pronunciation)',
-        knowledge: 'Vận dụng các kiến thức quan trọng về Phát âm (Pronunciation) để hoàn thành thử thách.',
-        completed: false,
-        questions: [
+        "id": "room_8_khtn",
+        "subject": "KHTN",
+        "title": "Chương 3: Khám phá tự nhiên",
+        "knowledge": "Kiến thức trọng tâm môn KHTN lớp 8 (Kết nối tri thức)",
+        "completed": false,
+        "questions": [
           {
-            id: 'h3_eng_q1',
-            type: 'mcq',
-            text: 'Mức độ 3 - Câu hỏi Trắc nghiệm bám sát chương trình học môn Anh phần Phát âm (Pronunciation) (Câu 1).',
-            options: ['Khái niệm A', 'Định lý B', 'Quy tắc C', 'Phương pháp D'],
-            correct: 'Khái niệm A',
-            explanation: 'Dựa vào kiến thức SGK, Khái niệm A là đáp án chính xác cho phần Phát âm (Pronunciation).'
+            "id": "q_8_khtn_1",
+            "type": "mcq",
+            "text": "Tình huống: Quan sát sự nảy mầm của hạt đậu ngoài ban công. - Hãy áp dụng kiến thức KHTN Lớp 8 (Kết nối tri thức) để xử lý.",
+            "explanation": "Dựa vào kiến thức KHTN Lớp 8 (Sách KNTT), đây là cách xử lý đúng cho tình huống trên.",
+            "options": [
+              "Cách giải quyết A",
+              "Cách giải quyết B",
+              "Cách giải quyết C",
+              "Cách giải quyết D"
+            ],
+            "correct": "Cách giải quyết A"
           },
           {
-            id: 'h3_eng_q2',
-            type: 'true_false',
-            text: 'Mức độ 3 - Nhận định sau về Phát âm (Pronunciation) trong môn Anh là Đúng hay Sai?',
-            options: ['Đúng', 'Sai'],
-            correct: 'Đúng',
-            explanation: 'Giải thích chi tiết: Dựa vào SGK, nhận định này hoàn toàn chính xác.'
+            "id": "q_8_khtn_2",
+            "type": "true_false",
+            "text": "Tình huống: Sử dụng nam châm để phân loại phế liệu. - Hãy áp dụng kiến thức KHTN Lớp 8 (Kết nối tri thức) để xử lý.",
+            "explanation": "Dựa vào kiến thức KHTN Lớp 8 (Sách KNTT), đây là cách xử lý đúng cho tình huống trên.",
+            "options": [
+              "Đúng",
+              "Sai"
+            ],
+            "correct": "Đúng"
           },
           {
-            id: 'h3_eng_q3',
-            type: 'fill_blank',
-            text: 'Mức độ 3 - Điền từ còn thiếu vào chỗ trống về kiến thức Phát âm (Pronunciation): ...',
-            correct: 'đáp án',
-            explanation: 'Từ khóa quan trọng cần nhớ trong bài học này là "đáp án".'
+            "id": "q_8_khtn_3",
+            "type": "fill_blank",
+            "text": "Tình huống: Giải thích hiện tượng sương mù vào buổi sáng. - Hãy áp dụng kiến thức KHTN Lớp 8 (Kết nối tri thức) để xử lý.",
+            "explanation": "Dựa vào kiến thức KHTN Lớp 8 (Sách KNTT), đây là cách xử lý đúng cho tình huống trên.",
+            "correct": "hoàn_thành"
           },
           {
-            id: 'h3_eng_q4',
-            type: 'true_false',
-            text: 'Mức độ 3 - Nhận định sau về Phát âm (Pronunciation) trong môn Anh là Đúng hay Sai?',
-            options: ['Đúng', 'Sai'],
-            correct: 'Đúng',
-            explanation: 'Giải thích chi tiết: Dựa vào SGK, nhận định này hoàn toàn chính xác.'
+            "id": "q_8_khtn_4",
+            "type": "mcq",
+            "text": "Tình huống: Tính toán lực cần thiết để đẩy một hộp sách. - Hãy áp dụng kiến thức KHTN Lớp 8 (Kết nối tri thức) để xử lý.",
+            "explanation": "Dựa vào kiến thức KHTN Lớp 8 (Sách KNTT), đây là cách xử lý đúng cho tình huống trên.",
+            "options": [
+              "Cách giải quyết A",
+              "Cách giải quyết B",
+              "Cách giải quyết C",
+              "Cách giải quyết D"
+            ],
+            "correct": "Cách giải quyết A"
           },
           {
-            id: 'h3_eng_q5',
-            type: 'mcq',
-            text: 'Mức độ 3 - Câu hỏi Trắc nghiệm bám sát chương trình học môn Anh phần Phát âm (Pronunciation) (Câu 5).',
-            options: ['Khái niệm A', 'Định lý B', 'Quy tắc C', 'Phương pháp D'],
-            correct: 'Khái niệm A',
-            explanation: 'Dựa vào kiến thức SGK, Khái niệm A là đáp án chính xác cho phần Phát âm (Pronunciation).'
-          },
+            "id": "q_8_khtn_5",
+            "type": "mcq",
+            "text": "Tình huống: Đo nhiệt độ sôi của nước pha muối. - Hãy áp dụng kiến thức KHTN Lớp 8 (Kết nối tri thức) để xử lý.",
+            "explanation": "Dựa vào kiến thức KHTN Lớp 8 (Sách KNTT), đây là cách xử lý đúng cho tình huống trên.",
+            "options": [
+              "Cách giải quyết A",
+              "Cách giải quyết B",
+              "Cách giải quyết C",
+              "Cách giải quyết D"
+            ],
+            "correct": "Cách giải quyết A"
+          }
         ]
       },
       {
-        id: '3-phys',
-        subject: 'Vật lý',
-        title: 'Thử thách Quang học',
-        knowledge: 'Vận dụng các kiến thức quan trọng về Quang học để hoàn thành thử thách.',
-        completed: false,
-        questions: [
+        "id": "room_8_anh",
+        "subject": "Tiếng Anh",
+        "title": "Chương 4: English in Action",
+        "knowledge": "Kiến thức trọng tâm môn Tiếng Anh lớp 8 (Kết nối tri thức)",
+        "completed": false,
+        "questions": [
           {
-            id: 'h3_phys_q1',
-            type: 'mcq',
-            text: 'Mức độ 3 - Câu hỏi Trắc nghiệm bám sát chương trình học môn Vật lý phần Quang học (Câu 1).',
-            options: ['Khái niệm A', 'Định lý B', 'Quy tắc C', 'Phương pháp D'],
-            correct: 'Khái niệm A',
-            explanation: 'Dựa vào kiến thức SGK, Khái niệm A là đáp án chính xác cho phần Quang học.'
+            "id": "q_8_anh_1",
+            "type": "mcq",
+            "text": "Tình huống: Viết email xin phép nghỉ học bằng tiếng Anh. - Hãy áp dụng kiến thức Tiếng Anh Lớp 8 (Kết nối tri thức) để xử lý.",
+            "explanation": "Dựa vào kiến thức Tiếng Anh Lớp 8 (Sách KNTT), đây là cách xử lý đúng cho tình huống trên.",
+            "options": [
+              "Cách giải quyết A",
+              "Cách giải quyết B",
+              "Cách giải quyết C",
+              "Cách giải quyết D"
+            ],
+            "correct": "Cách giải quyết A"
           },
           {
-            id: 'h3_phys_q2',
-            type: 'true_false',
-            text: 'Mức độ 3 - Nhận định sau về Quang học trong môn Vật lý là Đúng hay Sai?',
-            options: ['Đúng', 'Sai'],
-            correct: 'Đúng',
-            explanation: 'Giải thích chi tiết: Dựa vào SGK, nhận định này hoàn toàn chính xác.'
+            "id": "q_8_anh_2",
+            "type": "true_false",
+            "text": "Tình huống: Hỏi đường đi đến bảo tàng khi đi du lịch nước ngoài. - Hãy áp dụng kiến thức Tiếng Anh Lớp 8 (Kết nối tri thức) để xử lý.",
+            "explanation": "Dựa vào kiến thức Tiếng Anh Lớp 8 (Sách KNTT), đây là cách xử lý đúng cho tình huống trên.",
+            "options": [
+              "Đúng",
+              "Sai"
+            ],
+            "correct": "Đúng"
           },
           {
-            id: 'h3_phys_q3',
-            type: 'fill_blank',
-            text: 'Mức độ 3 - Điền từ còn thiếu vào chỗ trống về kiến thức Quang học: ...',
-            correct: 'đáp án',
-            explanation: 'Từ khóa quan trọng cần nhớ trong bài học này là "đáp án".'
+            "id": "q_8_anh_3",
+            "type": "fill_blank",
+            "text": "Tình huống: Giới thiệu bản thân trong ngày đầu tiên làm quen với bạn bè quốc tế. - Hãy áp dụng kiến thức Tiếng Anh Lớp 8 (Kết nối tri thức) để xử lý.",
+            "explanation": "Dựa vào kiến thức Tiếng Anh Lớp 8 (Sách KNTT), đây là cách xử lý đúng cho tình huống trên.",
+            "correct": "hoàn_thành"
           },
           {
-            id: 'h3_phys_q4',
-            type: 'true_false',
-            text: 'Mức độ 3 - Nhận định sau về Quang học trong môn Vật lý là Đúng hay Sai?',
-            options: ['Đúng', 'Sai'],
-            correct: 'Đúng',
-            explanation: 'Giải thích chi tiết: Dựa vào SGK, nhận định này hoàn toàn chính xác.'
+            "id": "q_8_anh_4",
+            "type": "mcq",
+            "text": "Tình huống: Dịch một đoạn mô tả món ăn Việt Nam sang tiếng Anh. - Hãy áp dụng kiến thức Tiếng Anh Lớp 8 (Kết nối tri thức) để xử lý.",
+            "explanation": "Dựa vào kiến thức Tiếng Anh Lớp 8 (Sách KNTT), đây là cách xử lý đúng cho tình huống trên.",
+            "options": [
+              "Cách giải quyết A",
+              "Cách giải quyết B",
+              "Cách giải quyết C",
+              "Cách giải quyết D"
+            ],
+            "correct": "Cách giải quyết A"
           },
           {
-            id: 'h3_phys_q5',
-            type: 'mcq',
-            text: 'Mức độ 3 - Câu hỏi Trắc nghiệm bám sát chương trình học môn Vật lý phần Quang học (Câu 5).',
-            options: ['Khái niệm A', 'Định lý B', 'Quy tắc C', 'Phương pháp D'],
-            correct: 'Khái niệm A',
-            explanation: 'Dựa vào kiến thức SGK, Khái niệm A là đáp án chính xác cho phần Quang học.'
-          },
+            "id": "q_8_anh_5",
+            "type": "mcq",
+            "text": "Tình huống: Nghe một bản tin thời tiết bằng tiếng Anh và tóm tắt lại. - Hãy áp dụng kiến thức Tiếng Anh Lớp 8 (Kết nối tri thức) để xử lý.",
+            "explanation": "Dựa vào kiến thức Tiếng Anh Lớp 8 (Sách KNTT), đây là cách xử lý đúng cho tình huống trên.",
+            "options": [
+              "Cách giải quyết A",
+              "Cách giải quyết B",
+              "Cách giải quyết C",
+              "Cách giải quyết D"
+            ],
+            "correct": "Cách giải quyết A"
+          }
         ]
       },
       {
-        id: '3-chem',
-        subject: 'Hóa học',
-        title: 'Thử thách Axit - Bazơ',
-        knowledge: 'Vận dụng các kiến thức quan trọng về Axit - Bazơ để hoàn thành thử thách.',
-        completed: false,
-        questions: [
+        "id": "room_8_lsdl",
+        "subject": "Lịch sử - Địa lí",
+        "title": "Chương 5: Hành trình thời gian",
+        "knowledge": "Kiến thức trọng tâm môn Lịch sử - Địa lí lớp 8 (Kết nối tri thức)",
+        "completed": false,
+        "questions": [
           {
-            id: 'h3_chem_q1',
-            type: 'mcq',
-            text: 'Mức độ 3 - Câu hỏi Trắc nghiệm bám sát chương trình học môn Hóa học phần Axit - Bazơ (Câu 1).',
-            options: ['Khái niệm A', 'Định lý B', 'Quy tắc C', 'Phương pháp D'],
-            correct: 'Khái niệm A',
-            explanation: 'Dựa vào kiến thức SGK, Khái niệm A là đáp án chính xác cho phần Axit - Bazơ.'
+            "id": "q_8_lsdl_1",
+            "type": "mcq",
+            "text": "Tình huống: Xem bản đồ để tìm đường đi nhanh nhất trong thành phố. - Hãy áp dụng kiến thức Lịch sử - Địa lí Lớp 8 (Kết nối tri thức) để xử lý.",
+            "explanation": "Dựa vào kiến thức Lịch sử - Địa lí Lớp 8 (Sách KNTT), đây là cách xử lý đúng cho tình huống trên.",
+            "options": [
+              "Cách giải quyết A",
+              "Cách giải quyết B",
+              "Cách giải quyết C",
+              "Cách giải quyết D"
+            ],
+            "correct": "Cách giải quyết A"
           },
           {
-            id: 'h3_chem_q2',
-            type: 'true_false',
-            text: 'Mức độ 3 - Nhận định sau về Axit - Bazơ trong môn Hóa học là Đúng hay Sai?',
-            options: ['Đúng', 'Sai'],
-            correct: 'Đúng',
-            explanation: 'Giải thích chi tiết: Dựa vào SGK, nhận định này hoàn toàn chính xác.'
+            "id": "q_8_lsdl_2",
+            "type": "true_false",
+            "text": "Tình huống: Tìm hiểu về lịch sử hình thành tên con đường nhà mình. - Hãy áp dụng kiến thức Lịch sử - Địa lí Lớp 8 (Kết nối tri thức) để xử lý.",
+            "explanation": "Dựa vào kiến thức Lịch sử - Địa lí Lớp 8 (Sách KNTT), đây là cách xử lý đúng cho tình huống trên.",
+            "options": [
+              "Đúng",
+              "Sai"
+            ],
+            "correct": "Đúng"
           },
           {
-            id: 'h3_chem_q3',
-            type: 'fill_blank',
-            text: 'Mức độ 3 - Điền từ còn thiếu vào chỗ trống về kiến thức Axit - Bazơ: ...',
-            correct: 'đáp án',
-            explanation: 'Từ khóa quan trọng cần nhớ trong bài học này là "đáp án".'
+            "id": "q_8_lsdl_3",
+            "type": "fill_blank",
+            "text": "Tình huống: Nhận biết các loại đất trồng thông qua màu sắc và đặc điểm. - Hãy áp dụng kiến thức Lịch sử - Địa lí Lớp 8 (Kết nối tri thức) để xử lý.",
+            "explanation": "Dựa vào kiến thức Lịch sử - Địa lí Lớp 8 (Sách KNTT), đây là cách xử lý đúng cho tình huống trên.",
+            "correct": "hoàn_thành"
           },
           {
-            id: 'h3_chem_q4',
-            type: 'true_false',
-            text: 'Mức độ 3 - Nhận định sau về Axit - Bazơ trong môn Hóa học là Đúng hay Sai?',
-            options: ['Đúng', 'Sai'],
-            correct: 'Đúng',
-            explanation: 'Giải thích chi tiết: Dựa vào SGK, nhận định này hoàn toàn chính xác.'
+            "id": "q_8_lsdl_4",
+            "type": "mcq",
+            "text": "Tình huống: Phân tích ảnh hưởng của khí hậu đến thói quen sinh hoạt ở địa phương. - Hãy áp dụng kiến thức Lịch sử - Địa lí Lớp 8 (Kết nối tri thức) để xử lý.",
+            "explanation": "Dựa vào kiến thức Lịch sử - Địa lí Lớp 8 (Sách KNTT), đây là cách xử lý đúng cho tình huống trên.",
+            "options": [
+              "Cách giải quyết A",
+              "Cách giải quyết B",
+              "Cách giải quyết C",
+              "Cách giải quyết D"
+            ],
+            "correct": "Cách giải quyết A"
           },
           {
-            id: 'h3_chem_q5',
-            type: 'mcq',
-            text: 'Mức độ 3 - Câu hỏi Trắc nghiệm bám sát chương trình học môn Hóa học phần Axit - Bazơ (Câu 5).',
-            options: ['Khái niệm A', 'Định lý B', 'Quy tắc C', 'Phương pháp D'],
-            correct: 'Khái niệm A',
-            explanation: 'Dựa vào kiến thức SGK, Khái niệm A là đáp án chính xác cho phần Axit - Bazơ.'
-          },
+            "id": "q_8_lsdl_5",
+            "type": "mcq",
+            "text": "Tình huống: Trình bày về một di tích lịch sử nổi tiếng ở quê hương. - Hãy áp dụng kiến thức Lịch sử - Địa lí Lớp 8 (Kết nối tri thức) để xử lý.",
+            "explanation": "Dựa vào kiến thức Lịch sử - Địa lí Lớp 8 (Sách KNTT), đây là cách xử lý đúng cho tình huống trên.",
+            "options": [
+              "Cách giải quyết A",
+              "Cách giải quyết B",
+              "Cách giải quyết C",
+              "Cách giải quyết D"
+            ],
+            "correct": "Cách giải quyết A"
+          }
         ]
       },
       {
-        id: '3-bio',
-        subject: 'Sinh học',
-        title: 'Thử thách Cơ thể người',
-        knowledge: 'Vận dụng các kiến thức quan trọng về Cơ thể người để hoàn thành thử thách.',
-        completed: false,
-        questions: [
+        "id": "room_8_gdcd",
+        "subject": "GDCD",
+        "title": "Chương 6: Công dân toàn cầu",
+        "knowledge": "Kiến thức trọng tâm môn GDCD lớp 8 (Kết nối tri thức)",
+        "completed": false,
+        "questions": [
           {
-            id: 'h3_bio_q1',
-            type: 'mcq',
-            text: 'Mức độ 3 - Câu hỏi Trắc nghiệm bám sát chương trình học môn Sinh học phần Cơ thể người (Câu 1).',
-            options: ['Khái niệm A', 'Định lý B', 'Quy tắc C', 'Phương pháp D'],
-            correct: 'Khái niệm A',
-            explanation: 'Dựa vào kiến thức SGK, Khái niệm A là đáp án chính xác cho phần Cơ thể người.'
+            "id": "q_8_gdcd_1",
+            "type": "mcq",
+            "text": "Tình huống: Giải quyết mâu thuẫn giữa hai người bạn trong lớp. - Hãy áp dụng kiến thức GDCD Lớp 8 (Kết nối tri thức) để xử lý.",
+            "explanation": "Dựa vào kiến thức GDCD Lớp 8 (Sách KNTT), đây là cách xử lý đúng cho tình huống trên.",
+            "options": [
+              "Cách giải quyết A",
+              "Cách giải quyết B",
+              "Cách giải quyết C",
+              "Cách giải quyết D"
+            ],
+            "correct": "Cách giải quyết A"
           },
           {
-            id: 'h3_bio_q2',
-            type: 'true_false',
-            text: 'Mức độ 3 - Nhận định sau về Cơ thể người trong môn Sinh học là Đúng hay Sai?',
-            options: ['Đúng', 'Sai'],
-            correct: 'Đúng',
-            explanation: 'Giải thích chi tiết: Dựa vào SGK, nhận định này hoàn toàn chính xác.'
+            "id": "q_8_gdcd_2",
+            "type": "true_false",
+            "text": "Tình huống: Tôn trọng và bảo vệ tài sản công cộng tại công viên. - Hãy áp dụng kiến thức GDCD Lớp 8 (Kết nối tri thức) để xử lý.",
+            "explanation": "Dựa vào kiến thức GDCD Lớp 8 (Sách KNTT), đây là cách xử lý đúng cho tình huống trên.",
+            "options": [
+              "Đúng",
+              "Sai"
+            ],
+            "correct": "Đúng"
           },
           {
-            id: 'h3_bio_q3',
-            type: 'fill_blank',
-            text: 'Mức độ 3 - Điền từ còn thiếu vào chỗ trống về kiến thức Cơ thể người: ...',
-            correct: 'đáp án',
-            explanation: 'Từ khóa quan trọng cần nhớ trong bài học này là "đáp án".'
+            "id": "q_8_gdcd_3",
+            "type": "fill_blank",
+            "text": "Tình huống: Tham gia quyên góp ủng hộ đồng bào gặp thiên tai. - Hãy áp dụng kiến thức GDCD Lớp 8 (Kết nối tri thức) để xử lý.",
+            "explanation": "Dựa vào kiến thức GDCD Lớp 8 (Sách KNTT), đây là cách xử lý đúng cho tình huống trên.",
+            "correct": "hoàn_thành"
           },
           {
-            id: 'h3_bio_q4',
-            type: 'true_false',
-            text: 'Mức độ 3 - Nhận định sau về Cơ thể người trong môn Sinh học là Đúng hay Sai?',
-            options: ['Đúng', 'Sai'],
-            correct: 'Đúng',
-            explanation: 'Giải thích chi tiết: Dựa vào SGK, nhận định này hoàn toàn chính xác.'
+            "id": "q_8_gdcd_4",
+            "type": "mcq",
+            "text": "Tình huống: Thực hiện quyền và nghĩa vụ của học sinh tại trường. - Hãy áp dụng kiến thức GDCD Lớp 8 (Kết nối tri thức) để xử lý.",
+            "explanation": "Dựa vào kiến thức GDCD Lớp 8 (Sách KNTT), đây là cách xử lý đúng cho tình huống trên.",
+            "options": [
+              "Cách giải quyết A",
+              "Cách giải quyết B",
+              "Cách giải quyết C",
+              "Cách giải quyết D"
+            ],
+            "correct": "Cách giải quyết A"
           },
           {
-            id: 'h3_bio_q5',
-            type: 'mcq',
-            text: 'Mức độ 3 - Câu hỏi Trắc nghiệm bám sát chương trình học môn Sinh học phần Cơ thể người (Câu 5).',
-            options: ['Khái niệm A', 'Định lý B', 'Quy tắc C', 'Phương pháp D'],
-            correct: 'Khái niệm A',
-            explanation: 'Dựa vào kiến thức SGK, Khái niệm A là đáp án chính xác cho phần Cơ thể người.'
-          },
+            "id": "q_8_gdcd_5",
+            "type": "mcq",
+            "text": "Tình huống: Xử lý tình huống khi gặp người lạ có ý đồ xấu. - Hãy áp dụng kiến thức GDCD Lớp 8 (Kết nối tri thức) để xử lý.",
+            "explanation": "Dựa vào kiến thức GDCD Lớp 8 (Sách KNTT), đây là cách xử lý đúng cho tình huống trên.",
+            "options": [
+              "Cách giải quyết A",
+              "Cách giải quyết B",
+              "Cách giải quyết C",
+              "Cách giải quyết D"
+            ],
+            "correct": "Cách giải quyết A"
+          }
         ]
       },
       {
-        id: '3-hist',
-        subject: 'Lịch sử',
-        title: 'Thử thách Kháng chiến chống Pháp/Mỹ',
-        knowledge: 'Vận dụng các kiến thức quan trọng về Kháng chiến chống Pháp/Mỹ để hoàn thành thử thách.',
-        completed: false,
-        questions: [
+        "id": "room_8_tin",
+        "subject": "Tin học",
+        "title": "Chương 7: Thế giới số",
+        "knowledge": "Kiến thức trọng tâm môn Tin học lớp 8 (Kết nối tri thức)",
+        "completed": false,
+        "questions": [
           {
-            id: 'h3_hist_q1',
-            type: 'mcq',
-            text: 'Mức độ 3 - Câu hỏi Trắc nghiệm bám sát chương trình học môn Lịch sử phần Kháng chiến chống Pháp/Mỹ (Câu 1).',
-            options: ['Khái niệm A', 'Định lý B', 'Quy tắc C', 'Phương pháp D'],
-            correct: 'Khái niệm A',
-            explanation: 'Dựa vào kiến thức SGK, Khái niệm A là đáp án chính xác cho phần Kháng chiến chống Pháp/Mỹ.'
+            "id": "q_8_tin_1",
+            "type": "mcq",
+            "text": "Tình huống: Thiết kế một thiệp chúc mừng sinh nhật bằng phần mềm đồ hoạ. - Hãy áp dụng kiến thức Tin học Lớp 8 (Kết nối tri thức) để xử lý.",
+            "explanation": "Dựa vào kiến thức Tin học Lớp 8 (Sách KNTT), đây là cách xử lý đúng cho tình huống trên.",
+            "options": [
+              "Cách giải quyết A",
+              "Cách giải quyết B",
+              "Cách giải quyết C",
+              "Cách giải quyết D"
+            ],
+            "correct": "Cách giải quyết A"
           },
           {
-            id: 'h3_hist_q2',
-            type: 'true_false',
-            text: 'Mức độ 3 - Nhận định sau về Kháng chiến chống Pháp/Mỹ trong môn Lịch sử là Đúng hay Sai?',
-            options: ['Đúng', 'Sai'],
-            correct: 'Đúng',
-            explanation: 'Giải thích chi tiết: Dựa vào SGK, nhận định này hoàn toàn chính xác.'
+            "id": "q_8_tin_2",
+            "type": "true_false",
+            "text": "Tình huống: Sử dụng bảng tính để quản lý điểm số các môn học. - Hãy áp dụng kiến thức Tin học Lớp 8 (Kết nối tri thức) để xử lý.",
+            "explanation": "Dựa vào kiến thức Tin học Lớp 8 (Sách KNTT), đây là cách xử lý đúng cho tình huống trên.",
+            "options": [
+              "Đúng",
+              "Sai"
+            ],
+            "correct": "Đúng"
           },
           {
-            id: 'h3_hist_q3',
-            type: 'fill_blank',
-            text: 'Mức độ 3 - Điền từ còn thiếu vào chỗ trống về kiến thức Kháng chiến chống Pháp/Mỹ: ...',
-            correct: 'đáp án',
-            explanation: 'Từ khóa quan trọng cần nhớ trong bài học này là "đáp án".'
+            "id": "q_8_tin_3",
+            "type": "fill_blank",
+            "text": "Tình huống: Tìm kiếm thông tin an toàn và hiệu quả trên Internet cho bài tập nhóm. - Hãy áp dụng kiến thức Tin học Lớp 8 (Kết nối tri thức) để xử lý.",
+            "explanation": "Dựa vào kiến thức Tin học Lớp 8 (Sách KNTT), đây là cách xử lý đúng cho tình huống trên.",
+            "correct": "hoàn_thành"
           },
           {
-            id: 'h3_hist_q4',
-            type: 'true_false',
-            text: 'Mức độ 3 - Nhận định sau về Kháng chiến chống Pháp/Mỹ trong môn Lịch sử là Đúng hay Sai?',
-            options: ['Đúng', 'Sai'],
-            correct: 'Đúng',
-            explanation: 'Giải thích chi tiết: Dựa vào SGK, nhận định này hoàn toàn chính xác.'
+            "id": "q_8_tin_4",
+            "type": "mcq",
+            "text": "Tình huống: Tạo một thư mục và sắp xếp các tệp tin trên máy tính hợp lý. - Hãy áp dụng kiến thức Tin học Lớp 8 (Kết nối tri thức) để xử lý.",
+            "explanation": "Dựa vào kiến thức Tin học Lớp 8 (Sách KNTT), đây là cách xử lý đúng cho tình huống trên.",
+            "options": [
+              "Cách giải quyết A",
+              "Cách giải quyết B",
+              "Cách giải quyết C",
+              "Cách giải quyết D"
+            ],
+            "correct": "Cách giải quyết A"
           },
           {
-            id: 'h3_hist_q5',
-            type: 'mcq',
-            text: 'Mức độ 3 - Câu hỏi Trắc nghiệm bám sát chương trình học môn Lịch sử phần Kháng chiến chống Pháp/Mỹ (Câu 5).',
-            options: ['Khái niệm A', 'Định lý B', 'Quy tắc C', 'Phương pháp D'],
-            correct: 'Khái niệm A',
-            explanation: 'Dựa vào kiến thức SGK, Khái niệm A là đáp án chính xác cho phần Kháng chiến chống Pháp/Mỹ.'
-          },
+            "id": "q_8_tin_5",
+            "type": "mcq",
+            "text": "Tình huống: Lập trình một trò chơi nhỏ với Scratch. - Hãy áp dụng kiến thức Tin học Lớp 8 (Kết nối tri thức) để xử lý.",
+            "explanation": "Dựa vào kiến thức Tin học Lớp 8 (Sách KNTT), đây là cách xử lý đúng cho tình huống trên.",
+            "options": [
+              "Cách giải quyết A",
+              "Cách giải quyết B",
+              "Cách giải quyết C",
+              "Cách giải quyết D"
+            ],
+            "correct": "Cách giải quyết A"
+          }
         ]
       },
       {
-        id: '3-geo',
-        subject: 'Địa lý',
-        title: 'Thử thách Dân số',
-        knowledge: 'Vận dụng các kiến thức quan trọng về Dân số để hoàn thành thử thách.',
-        completed: false,
-        questions: [
+        "id": "room_8_cn",
+        "subject": "Công nghệ",
+        "title": "Chương 8: Công nghệ tương lai",
+        "knowledge": "Kiến thức trọng tâm môn Công nghệ lớp 8 (Kết nối tri thức)",
+        "completed": false,
+        "questions": [
           {
-            id: 'h3_geo_q1',
-            type: 'mcq',
-            text: 'Mức độ 3 - Câu hỏi Trắc nghiệm bám sát chương trình học môn Địa lý phần Dân số (Câu 1).',
-            options: ['Khái niệm A', 'Định lý B', 'Quy tắc C', 'Phương pháp D'],
-            correct: 'Khái niệm A',
-            explanation: 'Dựa vào kiến thức SGK, Khái niệm A là đáp án chính xác cho phần Dân số.'
+            "id": "q_8_cn_1",
+            "type": "mcq",
+            "text": "Tình huống: Lắp ráp một mạch điện đơn giản thắp sáng bóng đèn. - Hãy áp dụng kiến thức Công nghệ Lớp 8 (Kết nối tri thức) để xử lý.",
+            "explanation": "Dựa vào kiến thức Công nghệ Lớp 8 (Sách KNTT), đây là cách xử lý đúng cho tình huống trên.",
+            "options": [
+              "Cách giải quyết A",
+              "Cách giải quyết B",
+              "Cách giải quyết C",
+              "Cách giải quyết D"
+            ],
+            "correct": "Cách giải quyết A"
           },
           {
-            id: 'h3_geo_q2',
-            type: 'true_false',
-            text: 'Mức độ 3 - Nhận định sau về Dân số trong môn Địa lý là Đúng hay Sai?',
-            options: ['Đúng', 'Sai'],
-            correct: 'Đúng',
-            explanation: 'Giải thích chi tiết: Dựa vào SGK, nhận định này hoàn toàn chính xác.'
+            "id": "q_8_cn_2",
+            "type": "true_false",
+            "text": "Tình huống: Lựa chọn vật liệu phù hợp để làm một mô hình ngôi nhà. - Hãy áp dụng kiến thức Công nghệ Lớp 8 (Kết nối tri thức) để xử lý.",
+            "explanation": "Dựa vào kiến thức Công nghệ Lớp 8 (Sách KNTT), đây là cách xử lý đúng cho tình huống trên.",
+            "options": [
+              "Đúng",
+              "Sai"
+            ],
+            "correct": "Đúng"
           },
           {
-            id: 'h3_geo_q3',
-            type: 'fill_blank',
-            text: 'Mức độ 3 - Điền từ còn thiếu vào chỗ trống về kiến thức Dân số: ...',
-            correct: 'đáp án',
-            explanation: 'Từ khóa quan trọng cần nhớ trong bài học này là "đáp án".'
+            "id": "q_8_cn_3",
+            "type": "fill_blank",
+            "text": "Tình huống: Thực hiện các bước an toàn khi sử dụng bàn ủi. - Hãy áp dụng kiến thức Công nghệ Lớp 8 (Kết nối tri thức) để xử lý.",
+            "explanation": "Dựa vào kiến thức Công nghệ Lớp 8 (Sách KNTT), đây là cách xử lý đúng cho tình huống trên.",
+            "correct": "hoàn_thành"
           },
           {
-            id: 'h3_geo_q4',
-            type: 'true_false',
-            text: 'Mức độ 3 - Nhận định sau về Dân số trong môn Địa lý là Đúng hay Sai?',
-            options: ['Đúng', 'Sai'],
-            correct: 'Đúng',
-            explanation: 'Giải thích chi tiết: Dựa vào SGK, nhận định này hoàn toàn chính xác.'
+            "id": "q_8_cn_4",
+            "type": "mcq",
+            "text": "Tình huống: Trồng và chăm sóc một chậu cây cảnh nhỏ ở góc học tập. - Hãy áp dụng kiến thức Công nghệ Lớp 8 (Kết nối tri thức) để xử lý.",
+            "explanation": "Dựa vào kiến thức Công nghệ Lớp 8 (Sách KNTT), đây là cách xử lý đúng cho tình huống trên.",
+            "options": [
+              "Cách giải quyết A",
+              "Cách giải quyết B",
+              "Cách giải quyết C",
+              "Cách giải quyết D"
+            ],
+            "correct": "Cách giải quyết A"
           },
           {
-            id: 'h3_geo_q5',
-            type: 'mcq',
-            text: 'Mức độ 3 - Câu hỏi Trắc nghiệm bám sát chương trình học môn Địa lý phần Dân số (Câu 5).',
-            options: ['Khái niệm A', 'Định lý B', 'Quy tắc C', 'Phương pháp D'],
-            correct: 'Khái niệm A',
-            explanation: 'Dựa vào kiến thức SGK, Khái niệm A là đáp án chính xác cho phần Dân số.'
-          },
+            "id": "q_8_cn_5",
+            "type": "mcq",
+            "text": "Tình huống: Tái chế chai nhựa cũ thành hộp đựng bút. - Hãy áp dụng kiến thức Công nghệ Lớp 8 (Kết nối tri thức) để xử lý.",
+            "explanation": "Dựa vào kiến thức Công nghệ Lớp 8 (Sách KNTT), đây là cách xử lý đúng cho tình huống trên.",
+            "options": [
+              "Cách giải quyết A",
+              "Cách giải quyết B",
+              "Cách giải quyết C",
+              "Cách giải quyết D"
+            ],
+            "correct": "Cách giải quyết A"
+          }
         ]
-      },
+      }
     ]
   },
+  {
+    "id": "house_9",
+    "title": "Cung Điện - Lớp 9 (Kết nối tri thức)",
+    "rooms": [
+      {
+        "id": "room_9_toan",
+        "subject": "Toán",
+        "title": "Chương 1: Toán học và Đời sống",
+        "knowledge": "Kiến thức trọng tâm môn Toán lớp 9 (Kết nối tri thức)",
+        "completed": false,
+        "questions": [
+          {
+            "id": "q_9_toan_1",
+            "type": "mcq",
+            "text": "Tình huống: Đi siêu thị mua hàng, tính tiền thừa. - Hãy áp dụng kiến thức Toán Lớp 9 (Kết nối tri thức) để xử lý.",
+            "explanation": "Dựa vào kiến thức Toán Lớp 9 (Sách KNTT), đây là cách xử lý đúng cho tình huống trên.",
+            "options": [
+              "Cách giải quyết A",
+              "Cách giải quyết B",
+              "Cách giải quyết C",
+              "Cách giải quyết D"
+            ],
+            "correct": "Cách giải quyết A"
+          },
+          {
+            "id": "q_9_toan_2",
+            "type": "true_false",
+            "text": "Tình huống: Đo đạc diện tích mảnh vườn để trồng cây. - Hãy áp dụng kiến thức Toán Lớp 9 (Kết nối tri thức) để xử lý.",
+            "explanation": "Dựa vào kiến thức Toán Lớp 9 (Sách KNTT), đây là cách xử lý đúng cho tình huống trên.",
+            "options": [
+              "Đúng",
+              "Sai"
+            ],
+            "correct": "Đúng"
+          },
+          {
+            "id": "q_9_toan_3",
+            "type": "fill_blank",
+            "text": "Tình huống: Lập biểu đồ chi tiêu cá nhân trong tháng. - Hãy áp dụng kiến thức Toán Lớp 9 (Kết nối tri thức) để xử lý.",
+            "explanation": "Dựa vào kiến thức Toán Lớp 9 (Sách KNTT), đây là cách xử lý đúng cho tình huống trên.",
+            "correct": "hoàn_thành"
+          },
+          {
+            "id": "q_9_toan_4",
+            "type": "mcq",
+            "text": "Tình huống: Tính toán quãng đường và thời gian đi xe đạp từ nhà đến trường. - Hãy áp dụng kiến thức Toán Lớp 9 (Kết nối tri thức) để xử lý.",
+            "explanation": "Dựa vào kiến thức Toán Lớp 9 (Sách KNTT), đây là cách xử lý đúng cho tình huống trên.",
+            "options": [
+              "Cách giải quyết A",
+              "Cách giải quyết B",
+              "Cách giải quyết C",
+              "Cách giải quyết D"
+            ],
+            "correct": "Cách giải quyết A"
+          },
+          {
+            "id": "q_9_toan_5",
+            "type": "mcq",
+            "text": "Tình huống: Chia đều chiếc bánh pizza cho các bạn. - Hãy áp dụng kiến thức Toán Lớp 9 (Kết nối tri thức) để xử lý.",
+            "explanation": "Dựa vào kiến thức Toán Lớp 9 (Sách KNTT), đây là cách xử lý đúng cho tình huống trên.",
+            "options": [
+              "Cách giải quyết A",
+              "Cách giải quyết B",
+              "Cách giải quyết C",
+              "Cách giải quyết D"
+            ],
+            "correct": "Cách giải quyết A"
+          }
+        ]
+      },
+      {
+        "id": "room_9_van",
+        "subject": "Ngữ Văn",
+        "title": "Chương 2: Văn học quanh ta",
+        "knowledge": "Kiến thức trọng tâm môn Ngữ Văn lớp 9 (Kết nối tri thức)",
+        "completed": false,
+        "questions": [
+          {
+            "id": "q_9_van_1",
+            "type": "mcq",
+            "text": "Tình huống: Viết một bài thuyết trình về một cuốn sách. - Hãy áp dụng kiến thức Ngữ Văn Lớp 9 (Kết nối tri thức) để xử lý.",
+            "explanation": "Dựa vào kiến thức Ngữ Văn Lớp 9 (Sách KNTT), đây là cách xử lý đúng cho tình huống trên.",
+            "options": [
+              "Cách giải quyết A",
+              "Cách giải quyết B",
+              "Cách giải quyết C",
+              "Cách giải quyết D"
+            ],
+            "correct": "Cách giải quyết A"
+          },
+          {
+            "id": "q_9_van_2",
+            "type": "true_false",
+            "text": "Tình huống: Kể lại một kỉ niệm đáng nhớ cho bạn bè nghe. - Hãy áp dụng kiến thức Ngữ Văn Lớp 9 (Kết nối tri thức) để xử lý.",
+            "explanation": "Dựa vào kiến thức Ngữ Văn Lớp 9 (Sách KNTT), đây là cách xử lý đúng cho tình huống trên.",
+            "options": [
+              "Đúng",
+              "Sai"
+            ],
+            "correct": "Đúng"
+          },
+          {
+            "id": "q_9_van_3",
+            "type": "fill_blank",
+            "text": "Tình huống: Trình bày quan điểm về vấn đề bảo vệ môi trường trong buổi thảo luận. - Hãy áp dụng kiến thức Ngữ Văn Lớp 9 (Kết nối tri thức) để xử lý.",
+            "explanation": "Dựa vào kiến thức Ngữ Văn Lớp 9 (Sách KNTT), đây là cách xử lý đúng cho tình huống trên.",
+            "correct": "hoàn_thành"
+          },
+          {
+            "id": "q_9_van_4",
+            "type": "mcq",
+            "text": "Tình huống: Sáng tác một bài thơ ngắn về quê hương. - Hãy áp dụng kiến thức Ngữ Văn Lớp 9 (Kết nối tri thức) để xử lý.",
+            "explanation": "Dựa vào kiến thức Ngữ Văn Lớp 9 (Sách KNTT), đây là cách xử lý đúng cho tình huống trên.",
+            "options": [
+              "Cách giải quyết A",
+              "Cách giải quyết B",
+              "Cách giải quyết C",
+              "Cách giải quyết D"
+            ],
+            "correct": "Cách giải quyết A"
+          },
+          {
+            "id": "q_9_van_5",
+            "type": "mcq",
+            "text": "Tình huống: Phân tích tâm lí nhân vật trong một đoạn phim ngắn. - Hãy áp dụng kiến thức Ngữ Văn Lớp 9 (Kết nối tri thức) để xử lý.",
+            "explanation": "Dựa vào kiến thức Ngữ Văn Lớp 9 (Sách KNTT), đây là cách xử lý đúng cho tình huống trên.",
+            "options": [
+              "Cách giải quyết A",
+              "Cách giải quyết B",
+              "Cách giải quyết C",
+              "Cách giải quyết D"
+            ],
+            "correct": "Cách giải quyết A"
+          }
+        ]
+      },
+      {
+        "id": "room_9_khtn",
+        "subject": "KHTN",
+        "title": "Chương 3: Khám phá tự nhiên",
+        "knowledge": "Kiến thức trọng tâm môn KHTN lớp 9 (Kết nối tri thức)",
+        "completed": false,
+        "questions": [
+          {
+            "id": "q_9_khtn_1",
+            "type": "mcq",
+            "text": "Tình huống: Quan sát sự nảy mầm của hạt đậu ngoài ban công. - Hãy áp dụng kiến thức KHTN Lớp 9 (Kết nối tri thức) để xử lý.",
+            "explanation": "Dựa vào kiến thức KHTN Lớp 9 (Sách KNTT), đây là cách xử lý đúng cho tình huống trên.",
+            "options": [
+              "Cách giải quyết A",
+              "Cách giải quyết B",
+              "Cách giải quyết C",
+              "Cách giải quyết D"
+            ],
+            "correct": "Cách giải quyết A"
+          },
+          {
+            "id": "q_9_khtn_2",
+            "type": "true_false",
+            "text": "Tình huống: Sử dụng nam châm để phân loại phế liệu. - Hãy áp dụng kiến thức KHTN Lớp 9 (Kết nối tri thức) để xử lý.",
+            "explanation": "Dựa vào kiến thức KHTN Lớp 9 (Sách KNTT), đây là cách xử lý đúng cho tình huống trên.",
+            "options": [
+              "Đúng",
+              "Sai"
+            ],
+            "correct": "Đúng"
+          },
+          {
+            "id": "q_9_khtn_3",
+            "type": "fill_blank",
+            "text": "Tình huống: Giải thích hiện tượng sương mù vào buổi sáng. - Hãy áp dụng kiến thức KHTN Lớp 9 (Kết nối tri thức) để xử lý.",
+            "explanation": "Dựa vào kiến thức KHTN Lớp 9 (Sách KNTT), đây là cách xử lý đúng cho tình huống trên.",
+            "correct": "hoàn_thành"
+          },
+          {
+            "id": "q_9_khtn_4",
+            "type": "mcq",
+            "text": "Tình huống: Tính toán lực cần thiết để đẩy một hộp sách. - Hãy áp dụng kiến thức KHTN Lớp 9 (Kết nối tri thức) để xử lý.",
+            "explanation": "Dựa vào kiến thức KHTN Lớp 9 (Sách KNTT), đây là cách xử lý đúng cho tình huống trên.",
+            "options": [
+              "Cách giải quyết A",
+              "Cách giải quyết B",
+              "Cách giải quyết C",
+              "Cách giải quyết D"
+            ],
+            "correct": "Cách giải quyết A"
+          },
+          {
+            "id": "q_9_khtn_5",
+            "type": "mcq",
+            "text": "Tình huống: Đo nhiệt độ sôi của nước pha muối. - Hãy áp dụng kiến thức KHTN Lớp 9 (Kết nối tri thức) để xử lý.",
+            "explanation": "Dựa vào kiến thức KHTN Lớp 9 (Sách KNTT), đây là cách xử lý đúng cho tình huống trên.",
+            "options": [
+              "Cách giải quyết A",
+              "Cách giải quyết B",
+              "Cách giải quyết C",
+              "Cách giải quyết D"
+            ],
+            "correct": "Cách giải quyết A"
+          }
+        ]
+      },
+      {
+        "id": "room_9_anh",
+        "subject": "Tiếng Anh",
+        "title": "Chương 4: English in Action",
+        "knowledge": "Kiến thức trọng tâm môn Tiếng Anh lớp 9 (Kết nối tri thức)",
+        "completed": false,
+        "questions": [
+          {
+            "id": "q_9_anh_1",
+            "type": "mcq",
+            "text": "Tình huống: Viết email xin phép nghỉ học bằng tiếng Anh. - Hãy áp dụng kiến thức Tiếng Anh Lớp 9 (Kết nối tri thức) để xử lý.",
+            "explanation": "Dựa vào kiến thức Tiếng Anh Lớp 9 (Sách KNTT), đây là cách xử lý đúng cho tình huống trên.",
+            "options": [
+              "Cách giải quyết A",
+              "Cách giải quyết B",
+              "Cách giải quyết C",
+              "Cách giải quyết D"
+            ],
+            "correct": "Cách giải quyết A"
+          },
+          {
+            "id": "q_9_anh_2",
+            "type": "true_false",
+            "text": "Tình huống: Hỏi đường đi đến bảo tàng khi đi du lịch nước ngoài. - Hãy áp dụng kiến thức Tiếng Anh Lớp 9 (Kết nối tri thức) để xử lý.",
+            "explanation": "Dựa vào kiến thức Tiếng Anh Lớp 9 (Sách KNTT), đây là cách xử lý đúng cho tình huống trên.",
+            "options": [
+              "Đúng",
+              "Sai"
+            ],
+            "correct": "Đúng"
+          },
+          {
+            "id": "q_9_anh_3",
+            "type": "fill_blank",
+            "text": "Tình huống: Giới thiệu bản thân trong ngày đầu tiên làm quen với bạn bè quốc tế. - Hãy áp dụng kiến thức Tiếng Anh Lớp 9 (Kết nối tri thức) để xử lý.",
+            "explanation": "Dựa vào kiến thức Tiếng Anh Lớp 9 (Sách KNTT), đây là cách xử lý đúng cho tình huống trên.",
+            "correct": "hoàn_thành"
+          },
+          {
+            "id": "q_9_anh_4",
+            "type": "mcq",
+            "text": "Tình huống: Dịch một đoạn mô tả món ăn Việt Nam sang tiếng Anh. - Hãy áp dụng kiến thức Tiếng Anh Lớp 9 (Kết nối tri thức) để xử lý.",
+            "explanation": "Dựa vào kiến thức Tiếng Anh Lớp 9 (Sách KNTT), đây là cách xử lý đúng cho tình huống trên.",
+            "options": [
+              "Cách giải quyết A",
+              "Cách giải quyết B",
+              "Cách giải quyết C",
+              "Cách giải quyết D"
+            ],
+            "correct": "Cách giải quyết A"
+          },
+          {
+            "id": "q_9_anh_5",
+            "type": "mcq",
+            "text": "Tình huống: Nghe một bản tin thời tiết bằng tiếng Anh và tóm tắt lại. - Hãy áp dụng kiến thức Tiếng Anh Lớp 9 (Kết nối tri thức) để xử lý.",
+            "explanation": "Dựa vào kiến thức Tiếng Anh Lớp 9 (Sách KNTT), đây là cách xử lý đúng cho tình huống trên.",
+            "options": [
+              "Cách giải quyết A",
+              "Cách giải quyết B",
+              "Cách giải quyết C",
+              "Cách giải quyết D"
+            ],
+            "correct": "Cách giải quyết A"
+          }
+        ]
+      },
+      {
+        "id": "room_9_lsdl",
+        "subject": "Lịch sử - Địa lí",
+        "title": "Chương 5: Hành trình thời gian",
+        "knowledge": "Kiến thức trọng tâm môn Lịch sử - Địa lí lớp 9 (Kết nối tri thức)",
+        "completed": false,
+        "questions": [
+          {
+            "id": "q_9_lsdl_1",
+            "type": "mcq",
+            "text": "Tình huống: Xem bản đồ để tìm đường đi nhanh nhất trong thành phố. - Hãy áp dụng kiến thức Lịch sử - Địa lí Lớp 9 (Kết nối tri thức) để xử lý.",
+            "explanation": "Dựa vào kiến thức Lịch sử - Địa lí Lớp 9 (Sách KNTT), đây là cách xử lý đúng cho tình huống trên.",
+            "options": [
+              "Cách giải quyết A",
+              "Cách giải quyết B",
+              "Cách giải quyết C",
+              "Cách giải quyết D"
+            ],
+            "correct": "Cách giải quyết A"
+          },
+          {
+            "id": "q_9_lsdl_2",
+            "type": "true_false",
+            "text": "Tình huống: Tìm hiểu về lịch sử hình thành tên con đường nhà mình. - Hãy áp dụng kiến thức Lịch sử - Địa lí Lớp 9 (Kết nối tri thức) để xử lý.",
+            "explanation": "Dựa vào kiến thức Lịch sử - Địa lí Lớp 9 (Sách KNTT), đây là cách xử lý đúng cho tình huống trên.",
+            "options": [
+              "Đúng",
+              "Sai"
+            ],
+            "correct": "Đúng"
+          },
+          {
+            "id": "q_9_lsdl_3",
+            "type": "fill_blank",
+            "text": "Tình huống: Nhận biết các loại đất trồng thông qua màu sắc và đặc điểm. - Hãy áp dụng kiến thức Lịch sử - Địa lí Lớp 9 (Kết nối tri thức) để xử lý.",
+            "explanation": "Dựa vào kiến thức Lịch sử - Địa lí Lớp 9 (Sách KNTT), đây là cách xử lý đúng cho tình huống trên.",
+            "correct": "hoàn_thành"
+          },
+          {
+            "id": "q_9_lsdl_4",
+            "type": "mcq",
+            "text": "Tình huống: Phân tích ảnh hưởng của khí hậu đến thói quen sinh hoạt ở địa phương. - Hãy áp dụng kiến thức Lịch sử - Địa lí Lớp 9 (Kết nối tri thức) để xử lý.",
+            "explanation": "Dựa vào kiến thức Lịch sử - Địa lí Lớp 9 (Sách KNTT), đây là cách xử lý đúng cho tình huống trên.",
+            "options": [
+              "Cách giải quyết A",
+              "Cách giải quyết B",
+              "Cách giải quyết C",
+              "Cách giải quyết D"
+            ],
+            "correct": "Cách giải quyết A"
+          },
+          {
+            "id": "q_9_lsdl_5",
+            "type": "mcq",
+            "text": "Tình huống: Trình bày về một di tích lịch sử nổi tiếng ở quê hương. - Hãy áp dụng kiến thức Lịch sử - Địa lí Lớp 9 (Kết nối tri thức) để xử lý.",
+            "explanation": "Dựa vào kiến thức Lịch sử - Địa lí Lớp 9 (Sách KNTT), đây là cách xử lý đúng cho tình huống trên.",
+            "options": [
+              "Cách giải quyết A",
+              "Cách giải quyết B",
+              "Cách giải quyết C",
+              "Cách giải quyết D"
+            ],
+            "correct": "Cách giải quyết A"
+          }
+        ]
+      },
+      {
+        "id": "room_9_gdcd",
+        "subject": "GDCD",
+        "title": "Chương 6: Công dân toàn cầu",
+        "knowledge": "Kiến thức trọng tâm môn GDCD lớp 9 (Kết nối tri thức)",
+        "completed": false,
+        "questions": [
+          {
+            "id": "q_9_gdcd_1",
+            "type": "mcq",
+            "text": "Tình huống: Giải quyết mâu thuẫn giữa hai người bạn trong lớp. - Hãy áp dụng kiến thức GDCD Lớp 9 (Kết nối tri thức) để xử lý.",
+            "explanation": "Dựa vào kiến thức GDCD Lớp 9 (Sách KNTT), đây là cách xử lý đúng cho tình huống trên.",
+            "options": [
+              "Cách giải quyết A",
+              "Cách giải quyết B",
+              "Cách giải quyết C",
+              "Cách giải quyết D"
+            ],
+            "correct": "Cách giải quyết A"
+          },
+          {
+            "id": "q_9_gdcd_2",
+            "type": "true_false",
+            "text": "Tình huống: Tôn trọng và bảo vệ tài sản công cộng tại công viên. - Hãy áp dụng kiến thức GDCD Lớp 9 (Kết nối tri thức) để xử lý.",
+            "explanation": "Dựa vào kiến thức GDCD Lớp 9 (Sách KNTT), đây là cách xử lý đúng cho tình huống trên.",
+            "options": [
+              "Đúng",
+              "Sai"
+            ],
+            "correct": "Đúng"
+          },
+          {
+            "id": "q_9_gdcd_3",
+            "type": "fill_blank",
+            "text": "Tình huống: Tham gia quyên góp ủng hộ đồng bào gặp thiên tai. - Hãy áp dụng kiến thức GDCD Lớp 9 (Kết nối tri thức) để xử lý.",
+            "explanation": "Dựa vào kiến thức GDCD Lớp 9 (Sách KNTT), đây là cách xử lý đúng cho tình huống trên.",
+            "correct": "hoàn_thành"
+          },
+          {
+            "id": "q_9_gdcd_4",
+            "type": "mcq",
+            "text": "Tình huống: Thực hiện quyền và nghĩa vụ của học sinh tại trường. - Hãy áp dụng kiến thức GDCD Lớp 9 (Kết nối tri thức) để xử lý.",
+            "explanation": "Dựa vào kiến thức GDCD Lớp 9 (Sách KNTT), đây là cách xử lý đúng cho tình huống trên.",
+            "options": [
+              "Cách giải quyết A",
+              "Cách giải quyết B",
+              "Cách giải quyết C",
+              "Cách giải quyết D"
+            ],
+            "correct": "Cách giải quyết A"
+          },
+          {
+            "id": "q_9_gdcd_5",
+            "type": "mcq",
+            "text": "Tình huống: Xử lý tình huống khi gặp người lạ có ý đồ xấu. - Hãy áp dụng kiến thức GDCD Lớp 9 (Kết nối tri thức) để xử lý.",
+            "explanation": "Dựa vào kiến thức GDCD Lớp 9 (Sách KNTT), đây là cách xử lý đúng cho tình huống trên.",
+            "options": [
+              "Cách giải quyết A",
+              "Cách giải quyết B",
+              "Cách giải quyết C",
+              "Cách giải quyết D"
+            ],
+            "correct": "Cách giải quyết A"
+          }
+        ]
+      },
+      {
+        "id": "room_9_tin",
+        "subject": "Tin học",
+        "title": "Chương 7: Thế giới số",
+        "knowledge": "Kiến thức trọng tâm môn Tin học lớp 9 (Kết nối tri thức)",
+        "completed": false,
+        "questions": [
+          {
+            "id": "q_9_tin_1",
+            "type": "mcq",
+            "text": "Tình huống: Thiết kế một thiệp chúc mừng sinh nhật bằng phần mềm đồ hoạ. - Hãy áp dụng kiến thức Tin học Lớp 9 (Kết nối tri thức) để xử lý.",
+            "explanation": "Dựa vào kiến thức Tin học Lớp 9 (Sách KNTT), đây là cách xử lý đúng cho tình huống trên.",
+            "options": [
+              "Cách giải quyết A",
+              "Cách giải quyết B",
+              "Cách giải quyết C",
+              "Cách giải quyết D"
+            ],
+            "correct": "Cách giải quyết A"
+          },
+          {
+            "id": "q_9_tin_2",
+            "type": "true_false",
+            "text": "Tình huống: Sử dụng bảng tính để quản lý điểm số các môn học. - Hãy áp dụng kiến thức Tin học Lớp 9 (Kết nối tri thức) để xử lý.",
+            "explanation": "Dựa vào kiến thức Tin học Lớp 9 (Sách KNTT), đây là cách xử lý đúng cho tình huống trên.",
+            "options": [
+              "Đúng",
+              "Sai"
+            ],
+            "correct": "Đúng"
+          },
+          {
+            "id": "q_9_tin_3",
+            "type": "fill_blank",
+            "text": "Tình huống: Tìm kiếm thông tin an toàn và hiệu quả trên Internet cho bài tập nhóm. - Hãy áp dụng kiến thức Tin học Lớp 9 (Kết nối tri thức) để xử lý.",
+            "explanation": "Dựa vào kiến thức Tin học Lớp 9 (Sách KNTT), đây là cách xử lý đúng cho tình huống trên.",
+            "correct": "hoàn_thành"
+          },
+          {
+            "id": "q_9_tin_4",
+            "type": "mcq",
+            "text": "Tình huống: Tạo một thư mục và sắp xếp các tệp tin trên máy tính hợp lý. - Hãy áp dụng kiến thức Tin học Lớp 9 (Kết nối tri thức) để xử lý.",
+            "explanation": "Dựa vào kiến thức Tin học Lớp 9 (Sách KNTT), đây là cách xử lý đúng cho tình huống trên.",
+            "options": [
+              "Cách giải quyết A",
+              "Cách giải quyết B",
+              "Cách giải quyết C",
+              "Cách giải quyết D"
+            ],
+            "correct": "Cách giải quyết A"
+          },
+          {
+            "id": "q_9_tin_5",
+            "type": "mcq",
+            "text": "Tình huống: Lập trình một trò chơi nhỏ với Scratch. - Hãy áp dụng kiến thức Tin học Lớp 9 (Kết nối tri thức) để xử lý.",
+            "explanation": "Dựa vào kiến thức Tin học Lớp 9 (Sách KNTT), đây là cách xử lý đúng cho tình huống trên.",
+            "options": [
+              "Cách giải quyết A",
+              "Cách giải quyết B",
+              "Cách giải quyết C",
+              "Cách giải quyết D"
+            ],
+            "correct": "Cách giải quyết A"
+          }
+        ]
+      },
+      {
+        "id": "room_9_cn",
+        "subject": "Công nghệ",
+        "title": "Chương 8: Công nghệ tương lai",
+        "knowledge": "Kiến thức trọng tâm môn Công nghệ lớp 9 (Kết nối tri thức)",
+        "completed": false,
+        "questions": [
+          {
+            "id": "q_9_cn_1",
+            "type": "mcq",
+            "text": "Tình huống: Lắp ráp một mạch điện đơn giản thắp sáng bóng đèn. - Hãy áp dụng kiến thức Công nghệ Lớp 9 (Kết nối tri thức) để xử lý.",
+            "explanation": "Dựa vào kiến thức Công nghệ Lớp 9 (Sách KNTT), đây là cách xử lý đúng cho tình huống trên.",
+            "options": [
+              "Cách giải quyết A",
+              "Cách giải quyết B",
+              "Cách giải quyết C",
+              "Cách giải quyết D"
+            ],
+            "correct": "Cách giải quyết A"
+          },
+          {
+            "id": "q_9_cn_2",
+            "type": "true_false",
+            "text": "Tình huống: Lựa chọn vật liệu phù hợp để làm một mô hình ngôi nhà. - Hãy áp dụng kiến thức Công nghệ Lớp 9 (Kết nối tri thức) để xử lý.",
+            "explanation": "Dựa vào kiến thức Công nghệ Lớp 9 (Sách KNTT), đây là cách xử lý đúng cho tình huống trên.",
+            "options": [
+              "Đúng",
+              "Sai"
+            ],
+            "correct": "Đúng"
+          },
+          {
+            "id": "q_9_cn_3",
+            "type": "fill_blank",
+            "text": "Tình huống: Thực hiện các bước an toàn khi sử dụng bàn ủi. - Hãy áp dụng kiến thức Công nghệ Lớp 9 (Kết nối tri thức) để xử lý.",
+            "explanation": "Dựa vào kiến thức Công nghệ Lớp 9 (Sách KNTT), đây là cách xử lý đúng cho tình huống trên.",
+            "correct": "hoàn_thành"
+          },
+          {
+            "id": "q_9_cn_4",
+            "type": "mcq",
+            "text": "Tình huống: Trồng và chăm sóc một chậu cây cảnh nhỏ ở góc học tập. - Hãy áp dụng kiến thức Công nghệ Lớp 9 (Kết nối tri thức) để xử lý.",
+            "explanation": "Dựa vào kiến thức Công nghệ Lớp 9 (Sách KNTT), đây là cách xử lý đúng cho tình huống trên.",
+            "options": [
+              "Cách giải quyết A",
+              "Cách giải quyết B",
+              "Cách giải quyết C",
+              "Cách giải quyết D"
+            ],
+            "correct": "Cách giải quyết A"
+          },
+          {
+            "id": "q_9_cn_5",
+            "type": "mcq",
+            "text": "Tình huống: Tái chế chai nhựa cũ thành hộp đựng bút. - Hãy áp dụng kiến thức Công nghệ Lớp 9 (Kết nối tri thức) để xử lý.",
+            "explanation": "Dựa vào kiến thức Công nghệ Lớp 9 (Sách KNTT), đây là cách xử lý đúng cho tình huống trên.",
+            "options": [
+              "Cách giải quyết A",
+              "Cách giải quyết B",
+              "Cách giải quyết C",
+              "Cách giải quyết D"
+            ],
+            "correct": "Cách giải quyết A"
+          }
+        ]
+      }
+    ]
+  }
 ];
