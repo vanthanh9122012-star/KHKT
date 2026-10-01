@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Gamepad2, Brain, FlaskConical, Trophy, Sparkles, Star, Target, CheckCircle2 } from 'lucide-react';
 import HistoryGeoCaro from './HistoryGeoCaro';
-import MathSudoku from './MathSudoku';
+import FruitBox from './FruitBox';
 import CatchWordGame from './CatchWordGame';
 import ScienceLab from './ScienceLab';
 
@@ -84,7 +84,7 @@ export default function GamesManager({ addReward }) {
       )}
 
       {activeGame === 'word' && <CatchWordGame addReward={addReward} />}
-      {activeGame === 'sudoku' && <MathSudoku addReward={addReward} />}
+      {activeGame === 'sudoku' && <FruitBox addReward={addReward} />}
       {activeGame === 'science' && <ScienceLab addReward={addReward} />}
       {activeGame === 'caro' && <HistoryGeoCaro addReward={addReward} />}
     </div>
