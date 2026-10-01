@@ -24,6 +24,7 @@ export default function QuizManager({ addReward }) {
   const [activeQuiz, setActiveQuiz] = useState(null);
   const [userAnswers, setUserAnswers] = useState({});
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [submittedQuestions, setSubmittedQuestions] = useState({});
   const [score, setScore] = useState(0);
   
   const [showAIModal, setShowAIModal] = useState(false);
@@ -41,11 +42,33 @@ export default function QuizManager({ addReward }) {
     setActiveQuiz(quiz);
     setUserAnswers({});
     setIsSubmitted(false);
+    setSubmittedQuestions({});
     setScore(0);
   };
 
-  const handleAnswerChange = (qId, val) => {
-    setUserAnswers(prev => ({ ...prev, [qId]: val }));
+  const handleAnswerChange = (q, val) => {
+    if (submittedQuestions[q.id]) return;
+    setUserAnswers(prev => ({ ...prev, [q.id]: val }));
+    
+    if (q.type === 'mcq' || q.type === 'true_false') {
+      submitSingleQuestion(q, val);
+    }
+  };
+
+  const submitSingleQuestion = (q, val) => {
+    setSubmittedQuestions(prev => ({ ...prev, [q.id]: true }));
+    let isCorrect = false;
+    if (val.trim().toLowerCase() === q.correct.toLowerCase()) {
+      isCorrect = true;
+    }
+    
+    if (isCorrect) {
+      setScore(s => s + 1);
+    } else {
+      const newMistake = { ...q, subject: q.subject || (activeQuizRoom ? activeQuizRoom.subject : (typeof currentQuiz !== 'undefined' ? currentQuiz.subject : 'Tổng hợp')), userAnswer: val, timestamp: new Date().toISOString() };
+      const existing = JSON.parse(localStorage.getItem('study_app_mistakes') || '[]');
+      localStorage.setItem('study_app_mistakes', JSON.stringify([...existing, newMistake]));
+    }
   };
 
   const submitQuiz = () => {
@@ -120,22 +143,22 @@ export default function QuizManager({ addReward }) {
                   {q.options.map(opt => (
                     <label key={opt} className={`flex items-center gap-3 p-3 rounded-xl border-2 transition-all cursor-pointer ${
                       userAnswers[q.id] === opt ? 'border-sky-500 bg-sky-50' : 'border-gray-100 hover:border-gray-200 bg-white'
-                    } ${isSubmitted && opt === q.correct ? 'border-green-500 bg-green-50' : ''}`}>
+                    } ${(isSubmitted || submittedQuestions[q.id]) && opt === q.correct ? 'border-green-500 bg-green-50' : ''}`}>
                       <input 
                         type="radio" 
                         name={`q-${q.id}`} 
                         value={opt} 
                         checked={userAnswers[q.id] === opt} 
-                        onChange={() => handleAnswerChange(q.id, opt)}
-                        disabled={isSubmitted}
+                        onChange={() => handleAnswerChange(q, opt)}
+                        disabled={isSubmitted || submittedQuestions[q.id]}
                         className="w-5 h-5 text-sky-500 border-gray-300 focus:ring-sky-500"
                       />
-                      <span className={`font-medium ${isSubmitted && opt === q.correct ? 'text-green-700' : 'text-gray-700'}`}>{opt}</span>
-                      {isSubmitted && opt === q.correct && <CheckCircle2 size={20} className="ml-auto text-green-500" />}
-                      {isSubmitted && userAnswers[q.id] === opt && opt !== q.correct && <X size={20} className="ml-auto text-red-500" />}
+                      <span className={`font-medium ${(isSubmitted || submittedQuestions[q.id]) && opt === q.correct ? 'text-green-700' : 'text-gray-700'}`}>{opt}</span>
+                      {(isSubmitted || submittedQuestions[q.id]) && opt === q.correct && <CheckCircle2 size={20} className="ml-auto text-green-500" />}
+                      {(isSubmitted || submittedQuestions[q.id]) && userAnswers[q.id] === opt && opt !== q.correct && <X size={20} className="ml-auto text-red-500" />}
                     </label>
                   ))}
-                  {isSubmitted && userAnswers[q.id] !== q.correct && q.explanation && (
+                  {(isSubmitted || submittedQuestions[q.id]) && userAnswers[q.id] !== q.correct && q.explanation && (
                     <div className="mt-4 text-sm bg-orange-50 text-orange-800 p-3 rounded-xl border border-orange-200 font-medium">
                       {q.explanation}
                     </div>
@@ -146,15 +169,15 @@ export default function QuizManager({ addReward }) {
                   <input 
                     type="text"
                     value={userAnswers[q.id] || ''}
-                    onChange={(e) => handleAnswerChange(q.id, e.target.value)}
-                    disabled={isSubmitted}
+                    onChange={(e) => handleAnswerChange(q, e.target.value)}
+                    disabled={isSubmitted || submittedQuestions[q.id]}
                     placeholder="Nhập đáp án của bạn..."
                     className={`w-full p-4 border-2 rounded-xl outline-none transition ${
-                      !isSubmitted ? 'border-gray-100 focus:border-sky-500' :
+                      !(isSubmitted || submittedQuestions[q.id]) ? 'border-gray-100 focus:border-sky-500' :
                       userAnswers[q.id]?.trim().toLowerCase() === q.correct.toLowerCase() ? 'border-green-500 bg-green-50 text-green-800' : 'border-red-500 bg-red-50 text-red-800'
                     }`}
                   />
-                  {isSubmitted && userAnswers[q.id]?.trim().toLowerCase() !== q.correct.toLowerCase() && (
+                  {(isSubmitted || submittedQuestions[q.id]) && userAnswers[q.id]?.trim().toLowerCase() !== q.correct.toLowerCase() && (
                     <div className="p-3 bg-sky-50 rounded-xl border border-sky-100 mt-3">
                       <span className="text-xs font-bold text-sky-600 block mb-1">Đáp án đúng:</span>
                       <span className="font-bold text-gray-800">{q.correct}</span>
@@ -166,12 +189,12 @@ export default function QuizManager({ addReward }) {
                 <div className="space-y-3">
                   <textarea 
                     value={userAnswers[q.id] || ''}
-                    onChange={(e) => handleAnswerChange(q.id, e.target.value)}
-                    disabled={isSubmitted}
+                    onChange={(e) => handleAnswerChange(q, e.target.value)}
+                    disabled={isSubmitted || submittedQuestions[q.id]}
                     placeholder="Trình bày tự luận..."
                     className="w-full h-32 p-4 border-2 border-gray-100 rounded-xl focus:border-sky-500 outline-none transition resize-none"
                   ></textarea>
-                  {isSubmitted && (
+                  {(isSubmitted || submittedQuestions[q.id]) && (
                     <div className="p-4 bg-sky-50 rounded-xl border border-sky-100 mt-3">
                       <span className="text-xs font-bold text-sky-600 block mb-1">Gợi ý / Bareme:</span>
                       <span className="font-medium text-gray-800">{q.correct}</span>
@@ -185,7 +208,7 @@ export default function QuizManager({ addReward }) {
         </div>
         
         <div className="mt-8 flex justify-center pb-12">
-          {!isSubmitted ? (
+          {!(isSubmitted || submittedQuestions[q.id]) ? (
             <button 
               onClick={submitQuiz}
               className="px-10 py-4 bg-primary text-white font-bold rounded-xl text-lg hover:bg-sky-600 transition shadow-lg"

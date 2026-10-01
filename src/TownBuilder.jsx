@@ -112,6 +112,7 @@ export default function TownBuilder({ setActiveTab }) {
   const [activeQuizRoom, setActiveQuizRoom] = useState(null);
   const [userAnswers, setUserAnswers] = useState({});
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [submittedQuestions, setSubmittedQuestions] = useState({});
   const [score, setScore] = useState(0);
 
   useEffect(() => {
@@ -157,6 +158,7 @@ export default function TownBuilder({ setActiveTab }) {
     setActiveQuizRoom(room);
     setUserAnswers({});
     setIsSubmitted(false);
+    setSubmittedQuestions({});
     setScore(0);
   };
 
@@ -176,21 +178,61 @@ export default function TownBuilder({ setActiveTab }) {
     }
   };
 
-  const handleAnswerChange = (qId, val) => {
-    setUserAnswers(prev => ({ ...prev, [qId]: val }));
+  const handleAnswerChange = (q, val) => {
+    if (submittedQuestions[q.id]) return;
+    setUserAnswers(prev => ({ ...prev, [q.id]: val }));
+    
+    if (q.type === 'mcq' || q.type === 'true_false') {
+      submitSingleQuestion(q, val);
+    }
+  };
+
+  const submitSingleQuestion = (q, val) => {
+    setSubmittedQuestions(prev => ({ ...prev, [q.id]: true }));
+    let isCorrect = false;
+    if (val.trim().toLowerCase() === q.correct.toLowerCase()) {
+      isCorrect = true;
+    }
+    
+    if (isCorrect) {
+      setScore(s => s + 1);
+    } else {
+      const newMistake = { ...q, subject: q.subject || (activeQuizRoom ? activeQuizRoom.subject : (typeof currentQuiz !== 'undefined' ? currentQuiz.subject : 'Tổng hợp')), userAnswer: val, timestamp: new Date().toISOString() };
+      const existing = JSON.parse(localStorage.getItem('study_app_mistakes') || '[]');
+      localStorage.setItem('study_app_mistakes', JSON.stringify([...existing, newMistake]));
+    }
   };
 
   const submitQuiz = () => {
     let newScore = 0;
+    let newMistakes = [];
     activeQuizRoom.questions.forEach(q => {
       const uAns = userAnswers[q.id];
-      if (!uAns) return;
+      if (!uAns) {
+        newMistakes.push({ ...q, subject: q.subject || activeQuizRoom.subject || 'Tổng hợp', userAnswer: 'Không trả lời', timestamp: new Date().toISOString() });
+        return;
+      }
+      
+      let isCorrect = false;
       if ((q.type === 'mcq' || q.type === 'true_false') && uAns === q.correct) {
-        newScore += 1;
+        isCorrect = true;
       } else if (q.type === 'fill_blank' && uAns.trim().toLowerCase() === q.correct.toLowerCase()) {
+        isCorrect = true;
+      }
+      
+      if (isCorrect) {
         newScore += 1;
+      } else {
+        newMistakes.push({ ...q, subject: q.subject || activeQuizRoom.subject || 'Tổng hợp', userAnswer: uAns, timestamp: new Date().toISOString() });
       }
     });
+    
+    // Lưu lỗi sai
+    if (newMistakes.length > 0) {
+      const existing = JSON.parse(localStorage.getItem('study_app_mistakes') || '[]');
+      localStorage.setItem('study_app_mistakes', JSON.stringify([...existing, ...newMistakes]));
+    }
+    
     setScore(newScore);
     setIsSubmitted(true);
   };
@@ -397,19 +439,19 @@ export default function TownBuilder({ setActiveTab }) {
                         {q.options.map(opt => (
                           <label key={opt} className={`flex items-center gap-4 p-4 rounded-2xl border-2 transition-all cursor-pointer ${
                             userAnswers[q.id] === opt ? 'border-sky-500 bg-sky-50 shadow-sm' : 'border-slate-100 hover:border-slate-300 bg-slate-50/50'
-                          } ${isSubmitted && opt === q.correct ? 'border-green-500 bg-green-50 ring-2 ring-green-200 ring-offset-1' : ''}`}>
+                          } ${(isSubmitted || submittedQuestions[q.id]) && opt === q.correct ? 'border-green-500 bg-green-50 ring-2 ring-green-200 ring-offset-1' : ''}`}>
                             <input 
                               type="radio" 
                               name={`q-${q.id}`} 
                               value={opt} 
                               checked={userAnswers[q.id] === opt} 
-                              onChange={() => handleAnswerChange(q.id, opt)}
-                              disabled={isSubmitted}
+                              onChange={() => handleAnswerChange(q, opt)}
+                              disabled={isSubmitted || submittedQuestions[q.id]}
                               className="w-6 h-6 text-sky-500 border-slate-300 focus:ring-sky-500"
                             />
-                            <span className={`text-lg font-medium ${isSubmitted && opt === q.correct ? 'text-green-800' : 'text-slate-700'}`}>{opt}</span>
-                            {isSubmitted && opt === q.correct && <CheckCircle2 size={24} className="ml-auto text-green-500" />}
-                            {isSubmitted && userAnswers[q.id] === opt && opt !== q.correct && <X size={24} className="ml-auto text-red-500" />}
+                            <span className={`text-lg font-medium ${(isSubmitted || submittedQuestions[q.id]) && opt === q.correct ? 'text-green-800' : 'text-slate-700'}`}>{opt}</span>
+                            {(isSubmitted || submittedQuestions[q.id]) && opt === q.correct && <CheckCircle2 size={24} className="ml-auto text-green-500" />}
+                            {(isSubmitted || submittedQuestions[q.id]) && userAnswers[q.id] === opt && opt !== q.correct && <X size={24} className="ml-auto text-red-500" />}
                           </label>
                         ))}
                       </div>
@@ -418,15 +460,15 @@ export default function TownBuilder({ setActiveTab }) {
                         <input 
                           type="text"
                           value={userAnswers[q.id] || ''}
-                          onChange={(e) => handleAnswerChange(q.id, e.target.value)}
-                          disabled={isSubmitted}
+                          onChange={(e) => handleAnswerChange(q, e.target.value)}
+                          disabled={isSubmitted || submittedQuestions[q.id]}
                           placeholder="Nhập đáp án của bạn..."
                           className={`w-full p-5 text-lg font-medium border-2 rounded-2xl outline-none transition text-slate-700 shadow-inner ${
-                            !isSubmitted ? 'border-slate-200 focus:border-sky-500 bg-slate-50 focus:bg-white' :
+                            !(isSubmitted || submittedQuestions[q.id]) ? 'border-slate-200 focus:border-sky-500 bg-slate-50 focus:bg-white' :
                             userAnswers[q.id]?.trim().toLowerCase() === q.correct.toLowerCase() ? 'border-green-500 bg-green-50 text-green-800' : 'border-red-500 bg-red-50 text-red-800'
                           }`}
                         />
-                        {isSubmitted && userAnswers[q.id]?.trim().toLowerCase() !== q.correct.toLowerCase() && (
+                        {(isSubmitted || submittedQuestions[q.id]) && userAnswers[q.id]?.trim().toLowerCase() !== q.correct.toLowerCase() && (
                           <div className="p-4 bg-sky-50 rounded-xl border border-sky-200">
                             <span className="text-sm font-black text-sky-600 block mb-1 uppercase tracking-wider">Đáp án chuẩn:</span>
                             <span className="text-lg font-bold text-slate-800">{q.correct}</span>
@@ -437,12 +479,12 @@ export default function TownBuilder({ setActiveTab }) {
                       <div className="space-y-4 pl-0 sm:pl-16">
                         <textarea 
                           value={userAnswers[q.id] || ''}
-                          onChange={(e) => handleAnswerChange(q.id, e.target.value)}
-                          disabled={isSubmitted}
+                          onChange={(e) => handleAnswerChange(q, e.target.value)}
+                          disabled={isSubmitted || submittedQuestions[q.id]}
                           placeholder="Trình bày tự luận chi tiết..."
                           className="w-full h-40 p-5 text-lg font-medium border-2 border-slate-200 rounded-2xl focus:border-sky-500 focus:bg-white bg-slate-50 outline-none transition text-slate-700 resize-none shadow-inner"
                         ></textarea>
-                        {isSubmitted && (
+                        {(isSubmitted || submittedQuestions[q.id]) && (
                           <div className="p-5 bg-sky-50 rounded-xl border border-sky-200">
                             <span className="text-sm font-black text-sky-600 block mb-2 uppercase tracking-wider">Gợi ý chấm điểm (Bareme):</span>
                             <span className="text-base font-medium text-slate-800 leading-relaxed">{q.correct}</span>
@@ -451,7 +493,7 @@ export default function TownBuilder({ setActiveTab }) {
                       </div>
                     )}
                     
-                    {isSubmitted && q.explanation && (
+                    {(isSubmitted || submittedQuestions[q.id]) && q.explanation && (
                       <div className="mt-6 pl-0 sm:pl-16">
                         <div className="text-base bg-orange-50 text-orange-900 p-5 rounded-2xl border border-orange-200 font-medium flex items-start gap-3 shadow-sm">
                           <Brain className="text-orange-500 shrink-0 mt-0.5" size={20} />
@@ -467,7 +509,7 @@ export default function TownBuilder({ setActiveTab }) {
               </div>
               
               <div className="mt-12 mb-8 pt-8 border-t-2 border-slate-100 flex justify-center">
-                {!isSubmitted ? (
+                {!(isSubmitted || submittedQuestions[q.id]) ? (
                   <button 
                     onClick={submitQuiz}
                     disabled={Object.keys(userAnswers).length === 0}
