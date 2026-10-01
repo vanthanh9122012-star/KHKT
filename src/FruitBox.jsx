@@ -2,13 +2,14 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { Apple, Timer, RefreshCcw, CheckCircle2 } from 'lucide-react';
 
 const QUESTIONS = [
-  { q: "Mẹ mua 2kg táo, mỗi kg 15k. Mẹ phải trả bao nhiêu k?", a: "30" },
-  { q: "Lớp có 40 học sinh, chia đều thành 8 tổ. Mỗi tổ có mấy học sinh?", a: "5" },
-  { q: "Hôm nay là thứ 3 ngày 10. Thứ 3 tuần sau là ngày mấy?", a: "17" },
-  { q: "Một quả dưa hấu bổ làm 4 miếng. 3 quả dưa hấu bổ được bao nhiêu miếng?", a: "12" },
-  { q: "Có 5 chậu hoa, mỗi chậu nở 4 bông. Tổng cộng có bao nhiêu bông hoa?", a: "20" },
-  { q: "Mua 3 quyển vở giá 10k/quyển và 1 cây bút 5k. Tổng tiền là bao nhiêu?", a: "35" },
-  { q: "Ông năm nay 70 tuổi, cháu 10 tuổi. Hỏi ông hơn cháu bao nhiêu tuổi?", a: "60" }
+  { q: "Một cửa hàng giảm giá 20% cho áo 500k. Mua 3 cái phải trả bao nhiêu? (k)", a: "1200" },
+  { q: "Bể có 500 lít nước, mỗi phút bơm được 25 lít. Cần bao nhiêu phút để bơm đầy 1500 lít?", a: "40" },
+  { q: "Dân số một thị trấn là 50000. Mỗi năm tăng 2%. Sau 1 năm dân số là bao nhiêu?", a: "51000" },
+  { q: "Tìm x biết: 3x - 15 = 2x + 45. x bằng bao nhiêu?", a: "60" },
+  { q: "Diện tích một hình chữ nhật có chu vi 100m, chiều dài gấp 4 lần chiều rộng? (m2)", a: "400" },
+  { q: "Một xe lửa dài 150m chạy qua cây cầu 850m mất 50 giây. Vận tốc xe (m/s)?", a: "20" },
+  { q: "Tính: (125 x 4) + 1500 / 3 - 500 = ?", a: "500" },
+  { q: "Từ 1 đến 100 có bao nhiêu số chia hết cho 5?", a: "20" }
 ];
 
 const GRID_SIZE = 6;
@@ -156,7 +157,7 @@ export default function FruitBox({ addReward }) {
       <div className="relative">
         {gameState === 'lost' && (
           <div className="absolute inset-0 z-10 bg-black/60 rounded-2xl flex flex-col items-center justify-center backdrop-blur-sm animate-fade-in">
-            <h3 className="text-5xl font-black text-white mb-2 tracking-widest text-red-400 drop-shadow-lg uppercase">You Loser</h3>
+            <h3 className="text-5xl font-black text-white mb-2 tracking-widest text-red-400 drop-shadow-lg uppercase">You ' re Loser</h3>
             <p className="text-white font-medium mb-6">Hết giờ! Đáp án là {currentQ.a}</p>
             <button onClick={initGame} className="flex items-center gap-2 bg-amber-500 hover:bg-amber-600 text-white px-6 py-3 rounded-full font-bold transition transform hover:scale-105">
               <RefreshCcw size={20} /> Chơi lại
