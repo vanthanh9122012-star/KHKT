@@ -92,6 +92,16 @@ export default function Dashboard({ setActiveTab }) {
   };
   const dailyQuote = getDailyQuote();
 
+
+  const getStreakColor = (count) => {
+    if (count >= 100) return '#593E67';
+    if (count >= 70) return '#84495F';
+    if (count >= 30) return '#B85B56';
+    if (count >= 10) return '#DE741C';
+    return '#FEA837';
+  };
+  const streakColor = getStreakColor(streakData.count);
+
   const formatDate = () => {
     const days = ['Chủ nhật', 'Thứ hai', 'Thứ ba', 'Thứ tư', 'Thứ năm', 'Thứ sáu', 'Thứ bảy'];
     return `${days[today.getDay()]}, ${today.getDate()} Tháng ${today.getMonth() + 1}`;
@@ -110,12 +120,15 @@ export default function Dashboard({ setActiveTab }) {
         {/* Compact Streak Widget */}
         <div className="bg-white border border-slate-200 shadow-sm rounded-2xl p-2.5 flex items-center gap-4 max-w-sm">
           <div className="flex items-center gap-2">
-            <div className={`w-10 h-10 rounded-xl flex items-center justify-center transition-colors ${isCheckedInToday ? 'bg-orange-100 text-orange-500' : 'bg-slate-100 text-slate-400'}`}>
+            <div 
+              className={`w-10 h-10 rounded-xl flex items-center justify-center transition-colors`}
+              style={{ backgroundColor: `${streakColor}33`, color: streakColor }}
+            >
               <Flame size={20} className={isCheckedInToday ? "animate-pulse" : ""} />
             </div>
             <div>
               <div className="flex items-center gap-2">
-                <span className="text-xl font-bold text-slate-800">{streakData.count} <span className="text-sm font-semibold text-slate-500">ngày</span></span>
+                <span className="text-xl font-bold" style={{ color: streakColor }}>{streakData.count} <span className="text-sm font-semibold text-slate-500">ngày</span></span>
                 <span className="text-[10px] uppercase tracking-wider font-bold bg-slate-100 text-slate-600 px-2 py-0.5 rounded-full border border-slate-200">
                   Giữ streak nha
                 </span>
