@@ -509,9 +509,9 @@ export default function TownBuilder({ setActiveTab }) {
               </div>
               
               <div className="mt-12 mb-8 pt-8 border-t-2 border-slate-100 flex justify-center">
-                {!(isSubmitted || submittedQuestions[q.id]) ? (
-                  <button 
-                    onClick={submitQuiz}
+                {!isSubmitted ? (
+                    <button 
+                      onClick={submitQuiz}
                     disabled={Object.keys(userAnswers).length === 0}
                     className="px-12 py-5 bg-gradient-to-r from-sky-500 to-indigo-600 text-white font-black rounded-full text-xl hover:shadow-xl hover:shadow-sky-200 hover:-translate-y-1 transition-all disabled:opacity-50 disabled:hover:translate-y-0 disabled:shadow-none"
                   >

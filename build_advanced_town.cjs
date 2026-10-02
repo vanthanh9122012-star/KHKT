@@ -1,4 +1,6 @@
-export const INITIAL_TOWN = [
+const fs = require('fs');
+
+const townData = `export const INITIAL_TOWN = [
   {
     id: "house_6",
     title: "Căn Nhà Gỗ - Lớp 6 KNTT",
@@ -147,4 +149,7 @@ export const INITIAL_TOWN = [
       }
     ]
   }
-];
+];`;
+
+fs.writeFileSync('src/data/townData.js', townData, 'utf8');
+console.log('Town Data rewritten successfully with advanced content!');

@@ -208,9 +208,9 @@ export default function QuizManager({ addReward }) {
         </div>
         
         <div className="mt-8 flex justify-center pb-12">
-          {!(isSubmitted || submittedQuestions[q.id]) ? (
-            <button 
-              onClick={submitQuiz}
+          {!isSubmitted ? (
+                    <button 
+                      onClick={submitQuiz}
               className="px-10 py-4 bg-primary text-white font-bold rounded-xl text-lg hover:bg-sky-600 transition shadow-lg"
             >
               Nộp bài
