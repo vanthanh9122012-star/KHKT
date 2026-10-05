@@ -17,13 +17,35 @@ const SUBJECT_COLORS = {
 
 // Isometric SVG components
 const PlanetPhaseAsteroid = () => (
-  <svg viewBox="0 0 100 100" className="w-full h-full drop-shadow-[0_0_15px_rgba(100,116,139,0.5)] animate-pulse">
-    <circle cx="50" cy="50" r="30" fill="#475569" />
-    <circle cx="40" cy="40" r="5" fill="#334155" />
-    <circle cx="60" cy="55" r="7" fill="#334155" />
-    <circle cx="45" cy="65" r="4" fill="#334155" />
+  <svg viewBox="0 0 100 100" className="w-full h-full drop-shadow-[0_0_15px_rgba(139,92,246,0.6)] animate-[bounce_4s_infinite]">
+    <defs>
+      <radialGradient id="asteroid-grad" cx="30%" cy="30%" r="70%">
+        <stop offset="0%" stopColor="#8b5cf6" />
+        <stop offset="50%" stopColor="#4c1d95" />
+        <stop offset="100%" stopColor="#1e1b4b" />
+      </radialGradient>
+      <filter id="glow-ast">
+        <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+        <feMerge>
+          <feMergeNode in="coloredBlur"/>
+          <feMergeNode in="SourceGraphic"/>
+        </feMerge>
+      </filter>
+    </defs>
+    <circle cx="50" cy="50" r="35" fill="url(#asteroid-grad)" />
+    {/* Craters with 3D depth */}
+    <circle cx="35" cy="35" r="6" fill="#2e1065" opacity="0.8" />
+    <circle cx="34" cy="34" r="5" fill="#4c1d95" />
+    <circle cx="65" cy="45" r="8" fill="#2e1065" opacity="0.8" />
+    <circle cx="63" cy="43" r="7" fill="#4c1d95" />
+    <circle cx="45" cy="70" r="5" fill="#2e1065" opacity="0.8" />
+    <circle cx="44" cy="69" r="4" fill="#4c1d95" />
+    {/* Glowing energy cracks */}
+    <path d="M 25 50 Q 40 60 45 40 T 70 55" fill="none" stroke="#c4b5fd" strokeWidth="1.5" filter="url(#glow-ast)" opacity="0.7" className="animate-pulse" />
   </svg>
 );
+
+
 
 const PlanetPhaseCore = () => (
   <svg viewBox="0 0 100 100" className="w-full h-full drop-shadow-[0_0_20px_rgba(245,158,11,0.5)] transform transition-transform hover:scale-105">
