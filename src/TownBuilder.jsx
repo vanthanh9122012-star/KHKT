@@ -16,90 +16,86 @@ const SUBJECT_COLORS = {
 };
 
 // Isometric SVG components
-const IsoTile = ({ colorTop, colorLeft, colorRight, yOffset = 0, height = 0, scale = 1, cx=50, cy=50 }) => (
-  <g transform={`translate(${cx - cx*scale}, ${cy - cy*scale + yOffset}) scale(${scale})`}>
-    <polygon points="50,30 90,50 50,70 10,50" fill={colorTop} />
-    {height > 0 && <polygon points={`10,50 50,70 50,${70 + height} 10,${50 + height}`} fill={colorLeft} />}
-    {height > 0 && <polygon points={`90,50 50,70 50,${70 + height} 90,${50 + height}`} fill={colorRight} />}
-  </g>
-);
-
-const PhaseWasteland = () => (
-  <svg viewBox="0 0 100 100" className="w-full h-full drop-shadow-xl transform transition-transform duration-500 hover:scale-105">
-    <IsoTile colorTop="#a3b18a" colorLeft="#588157" colorRight="#3a5a40" height={10} />
-    <ellipse cx="50" cy="50" rx="15" ry="8" fill="#d4a373" opacity="0.8" />
-    <ellipse cx="30" cy="55" rx="8" ry="4" fill="#bc6c25" opacity="0.6" />
-    <ellipse cx="70" cy="45" rx="10" ry="5" fill="#bc6c25" opacity="0.6" />
+const PlanetPhaseAsteroid = () => (
+  <svg viewBox="0 0 100 100" className="w-full h-full drop-shadow-[0_0_15px_rgba(100,116,139,0.5)] animate-pulse">
+    <circle cx="50" cy="50" r="30" fill="#475569" />
+    <circle cx="40" cy="40" r="5" fill="#334155" />
+    <circle cx="60" cy="55" r="7" fill="#334155" />
+    <circle cx="45" cy="65" r="4" fill="#334155" />
   </svg>
 );
 
-const PhaseFoundation = () => (
-  <svg viewBox="0 0 100 100" className="w-full h-full drop-shadow-xl transform transition-transform duration-500 hover:scale-105">
-    <IsoTile colorTop="#a3b18a" colorLeft="#588157" colorRight="#3a5a40" height={10} />
-    <IsoTile colorTop="#ced4da" colorLeft="#adb5bd" colorRight="#6c757d" height={8} scale={0.7} yOffset={-4} />
-    <rect x="40" y="45" width="8" height="4" fill="#d4a373" transform="skewY(26)" />
+const PlanetPhaseCore = () => (
+  <svg viewBox="0 0 100 100" className="w-full h-full drop-shadow-[0_0_20px_rgba(245,158,11,0.5)] transform transition-transform hover:scale-105">
+    <circle cx="50" cy="50" r="35" fill="#B45309" />
+    <circle cx="50" cy="50" r="28" fill="#D97706" />
+    <circle cx="50" cy="50" r="20" fill="#F59E0B" />
+    <circle cx="40" cy="40" r="4" fill="#78350F" />
+    <circle cx="60" cy="60" r="6" fill="#78350F" />
   </svg>
 );
 
-const PhaseWalls = () => (
-  <svg viewBox="0 0 100 100" className="w-full h-full drop-shadow-xl transform transition-transform duration-500 hover:scale-105">
-    <IsoTile colorTop="#a3b18a" colorLeft="#588157" colorRight="#3a5a40" height={10} />
-    <IsoTile colorTop="#ced4da" colorLeft="#adb5bd" colorRight="#6c757d" height={8} scale={0.7} yOffset={-4} />
-    <IsoTile colorTop="#fefae0" colorLeft="#faedcd" colorRight="#e9edc9" height={12} scale={0.65} yOffset={-16} />
-    <line x1="20" y1="35" x2="20" y2="55" stroke="#bc6c25" strokeWidth="1" />
-    <line x1="80" y1="35" x2="80" y2="55" stroke="#bc6c25" strokeWidth="1" />
+const PlanetPhaseAtmosphere = () => (
+  <svg viewBox="0 0 100 100" className="w-full h-full drop-shadow-[0_0_25px_rgba(56,189,248,0.5)] transform transition-transform hover:scale-105">
+    <circle cx="50" cy="50" r="40" fill="#0EA5E9" />
+    <path d="M 20 40 Q 50 20 80 40" fill="none" stroke="#BAE6FD" strokeWidth="4" strokeLinecap="round" />
+    <path d="M 15 60 Q 50 80 85 60" fill="none" stroke="#BAE6FD" strokeWidth="4" strokeLinecap="round" />
+    <path d="M 30 50 Q 50 40 70 50" fill="none" stroke="#7DD3FC" strokeWidth="3" strokeLinecap="round" />
   </svg>
 );
 
-// Level 1: Căn Nhà Gỗ
-const HouseLevel1 = () => (
-  <svg viewBox="0 0 100 100" className="w-full h-full drop-shadow-xl transform transition-transform duration-500 hover:scale-105">
-    <IsoTile colorTop="#a3b18a" colorLeft="#588157" colorRight="#3a5a40" height={10} />
-    <IsoTile colorTop="#9c6644" colorLeft="#7f4f24" colorRight="#582f0e" height={15} scale={0.7} yOffset={-10} />
-    <IsoTile colorTop="#b08968" colorLeft="#9c6644" colorRight="#7f4f24" height={10} scale={0.5} yOffset={-25} />
-    <polygon points="50,15 80,30 50,45 20,30" fill="#e63946" />
-    <polygon points="20,30 50,45 50,35" fill="#c1121f" />
-    <polygon points="80,30 50,45 50,35" fill="#780000" />
-    <rect x="40" y="55" width="10" height="15" fill="#3e2723" transform="skewY(26)" />
+const PlanetLevel1 = () => (
+  <svg viewBox="0 0 100 100" className="w-full h-full drop-shadow-[0_0_30px_rgba(34,197,94,0.6)] transform transition-transform hover:rotate-12">
+    <circle cx="50" cy="50" r="42" fill="#3B82F6" />
+    <path d="M 20 40 Q 30 20 50 30 T 70 20 Q 80 40 60 50 T 20 40" fill="#22C55E" />
+    <path d="M 40 70 Q 50 90 70 80 T 90 60 Q 80 50 60 60 T 40 70" fill="#16A34A" />
+    <circle cx="30" cy="65" r="8" fill="#22C55E" />
+    <circle cx="75" cy="35" r="6" fill="#22C55E" />
+    <path d="M 15 25 Q 50 0 85 25" fill="none" stroke="#EFF6FF" strokeWidth="2" strokeDasharray="4 4" opacity="0.5"/>
   </svg>
 );
 
-// Level 2: Biệt Thự
-const HouseLevel2 = () => (
-  <svg viewBox="0 0 100 100" className="w-full h-full drop-shadow-xl transform transition-transform duration-500 hover:scale-105">
-    <IsoTile colorTop="#a3b18a" colorLeft="#588157" colorRight="#3a5a40" height={10} />
-    {/* Main body */}
-    <IsoTile colorTop="#f8edeb" colorLeft="#fcd5ce" colorRight="#fbc4ab" height={20} scale={0.8} yOffset={-10} />
-    {/* Balcony */}
-    <IsoTile colorTop="#e8e8e4" colorLeft="#d8e2dc" colorRight="#ece4db" height={5} scale={0.4} yOffset={-30} cx={30} cy={50} />
-    {/* Roof */}
-    <polygon points="50,5 90,25 50,45 10,25" fill="#0077b6" />
-    <polygon points="10,25 50,45 50,35" fill="#0096c7" />
-    <polygon points="90,25 50,45 50,35" fill="#03045e" />
-    <circle cx="50" cy="65" r="4" fill="#a8dadc" />
-    <circle cx="30" cy="55" r="4" fill="#a8dadc" />
-    <circle cx="70" cy="75" r="4" fill="#a8dadc" />
+const PlanetLevel2 = () => (
+  <svg viewBox="0 0 100 100" className="w-full h-full drop-shadow-[0_0_35px_rgba(168,85,247,0.6)] transform transition-transform hover:rotate-12">
+    <ellipse cx="50" cy="50" rx="45" ry="15" fill="none" stroke="#D8B4FE" strokeWidth="6" transform="rotate(-20 50 50)" />
+    <ellipse cx="50" cy="50" rx="52" ry="20" fill="none" stroke="#C084FC" strokeWidth="2" transform="rotate(-20 50 50)" opacity="0.6"/>
+    <circle cx="50" cy="50" r="35" fill="#A855F7" />
+    <path d="M 18 40 Q 50 30 82 40" fill="none" stroke="#9333EA" strokeWidth="5" />
+    <path d="M 16 55 Q 50 65 84 55" fill="none" stroke="#7E22CE" strokeWidth="7" />
+    <path d="M 22 70 Q 50 75 78 70" fill="none" stroke="#6B21A8" strokeWidth="3" />
   </svg>
 );
 
-// Level 3: Lâu Đài
-const HouseLevel3 = () => (
-  <svg viewBox="0 0 100 100" className="w-full h-full drop-shadow-xl transform transition-transform duration-500 hover:scale-105">
-    <IsoTile colorTop="#a3b18a" colorLeft="#588157" colorRight="#3a5a40" height={10} />
-    {/* Main castle body */}
-    <IsoTile colorTop="#e9ecef" colorLeft="#ced4da" colorRight="#adb5bd" height={25} scale={0.8} yOffset={-10} />
-    {/* Towers */}
-    <IsoTile colorTop="#e9ecef" colorLeft="#ced4da" colorRight="#adb5bd" height={35} scale={0.25} yOffset={-20} cx={15} cy={40} />
-    <IsoTile colorTop="#e9ecef" colorLeft="#ced4da" colorRight="#adb5bd" height={35} scale={0.25} yOffset={-20} cx={85} cy={75} />
-    {/* Roof main */}
-    <polygon points="50,0 80,20 50,40 20,20" fill="#9d0208" />
-    {/* Tower roofs */}
-    <polygon points="15,0 25,10 15,20 5,10" fill="#d00000" />
-    <polygon points="85,35 95,45 85,55 75,45" fill="#d00000" />
-    {/* Door */}
-    <path d="M 45 70 Q 50 60 55 75 L 55 90 L 45 85 Z" fill="#370617" />
-    <circle cx="45" cy="55" r="3" fill="#ffb703" />
-    <circle cx="60" cy="62" r="3" fill="#ffb703" />
+const PlanetLevel3 = () => (
+  <svg viewBox="0 0 100 100" className="w-full h-full drop-shadow-[0_0_40px_rgba(6,182,212,0.7)] transform transition-transform hover:scale-110">
+    <circle cx="50" cy="50" r="42" fill="#06B6D4" />
+    <circle cx="50" cy="50" r="42" fill="url(#ice-grad)" opacity="0.5" />
+    <path d="M 10 50 A 40 40 0 0 1 90 50 A 40 40 0 0 1 10 50" fill="none" stroke="#67E8F9" strokeWidth="2" strokeDasharray="5 5" />
+    <path d="M 30 20 L 40 35 L 25 45 Z" fill="#CFFAFE" opacity="0.8" />
+    <path d="M 60 70 L 75 60 L 80 80 Z" fill="#CFFAFE" opacity="0.8" />
+    <path d="M 70 30 L 85 20 L 90 40 Z" fill="#A5F3FC" opacity="0.7" />
+    <defs>
+      <radialGradient id="ice-grad" cx="30%" cy="30%" r="70%">
+        <stop offset="0%" stopColor="#FFFFFF" stopOpacity="0.8" />
+        <stop offset="100%" stopColor="#0891B2" stopOpacity="0" />
+      </radialGradient>
+    </defs>
+  </svg>
+);
+
+const PlanetLevel4 = () => (
+  <svg viewBox="0 0 100 100" className="w-full h-full drop-shadow-[0_0_50px_rgba(244,63,94,0.8)] transform transition-transform hover:rotate-90 hover:scale-110 duration-700">
+    <defs>
+      <radialGradient id="star-glow" cx="50%" cy="50%" r="50%">
+        <stop offset="0%" stopColor="#FFE4E6" />
+        <stop offset="40%" stopColor="#FDA4AF" />
+        <stop offset="70%" stopColor="#F43F5E" />
+        <stop offset="100%" stopColor="#9F1239" />
+      </radialGradient>
+    </defs>
+    <circle cx="50" cy="50" r="45" fill="url(#star-glow)" />
+    <circle cx="50" cy="50" r="45" fill="none" stroke="#FECDD3" strokeWidth="1" strokeDasharray="2 4" className="animate-spin-slow" />
+    <path d="M 50 5 L 55 45 L 95 50 L 55 55 L 50 95 L 45 55 L 5 50 L 45 45 Z" fill="#FFF1F2" opacity="0.6" className="animate-pulse" />
   </svg>
 );
 
@@ -237,22 +233,22 @@ export default function TownBuilder({ setActiveTab }) {
     setIsSubmitted(true);
   };
 
-  const getBuildingSvg = (completed, total, houseIndex) => {
-    if (completed === 0) return <PhaseWasteland />;
-    if (completed <= 2) return <PhaseFoundation />;
-    if (completed < total) return <PhaseWalls />;
+  const getPlanetSvg = (completed, total, index) => {
+    if (completed === 0) return <PlanetPhaseAsteroid />;
+    if (completed <= 2) return <PlanetPhaseCore />;
+    if (completed < total) return <PlanetPhaseAtmosphere />;
     
-    // Finished phase varies by houseIndex (0 = Wood, 1 = Villa, 2 = Castle)
-    if (houseIndex === 0) return <HouseLevel1 />;
-    if (houseIndex === 1) return <HouseLevel2 />;
-    return <HouseLevel3 />;
+    if (index === 0) return <PlanetLevel1 />;
+    if (index === 1) return <PlanetLevel2 />;
+    if (index === 2) return <PlanetLevel3 />;
+    return <PlanetLevel4 />;
   };
 
   const getPhaseName = (completed, total) => {
-    if (completed === 0) return 'Bãi đất trống';
-    if (completed <= 2) return 'Đổ móng';
-    if (completed < total) return 'Đang xây dựng';
-    return 'Hoàn thiện';
+    if (completed === 0) return 'Tiểu hành tinh';
+    if (completed <= 2) return 'Hình thành lõi';
+    if (completed < total) return 'Tạo khí quyển';
+    return 'Tiến hóa hoàn tất';
   };
 
   return (
@@ -260,16 +256,14 @@ export default function TownBuilder({ setActiveTab }) {
       {/* HEADER */}
       <header className="mb-8">
         <h1 className="text-3xl font-black text-gray-800 mb-3 flex items-center gap-3">
-          <Map className="text-sky-500" size={32} />
-          Thị trấn nhỏ
-        </h1>
+          <Map className="text-sky-500" size={32} /> My Universe</h1>
         <p className="text-gray-500 font-medium text-lg max-w-3xl">
           Giải các bài tập <span className="font-bold text-sky-600">Nâng Cao</span> theo chuyên đề để xây dựng các công trình. Kiến trúc sẽ ngày càng sang trọng!
         </p>
       </header>
 
       {/* Mindmap Town View */}
-      <div className="bg-gradient-to-br from-sky-50 to-indigo-100 rounded-[2.5rem] p-6 shadow-inner border border-sky-100 relative overflow-hidden">
+      <div className="bg-gradient-to-br from-slate-900 via-indigo-950 to-slate-900 rounded-[2.5rem] p-6 shadow-inner border border-sky-100 relative overflow-hidden">
         <svg className="absolute inset-0 w-full h-full opacity-30 pointer-events-none" preserveAspectRatio="none">
            <path d="M -50 150 Q 150 50, 300 150 T 600 100 T 1000 200" fill="none" stroke="#3b82f6" strokeWidth="20" strokeLinecap="round" strokeDasharray="30 30" />
         </svg>
@@ -298,7 +292,7 @@ export default function TownBuilder({ setActiveTab }) {
                   ${!unlocked ? 'opacity-40 grayscale cursor-not-allowed' : 'hover:-translate-y-2'}
                   ${isActive ? 'scale-110 drop-shadow-2xl z-20' : 'scale-100'}
                 `}>
-                  {getBuildingSvg(comp, tot, index)}
+                  {getPlanetSvg(comp, tot, index)}
                   
                   {!unlocked && (
                     <div className="absolute inset-0 flex items-center justify-center">

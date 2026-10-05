@@ -1,7 +1,7 @@
 export const INITIAL_TOWN = [
   {
     id: "house_6",
-    title: "Căn Nhà Gỗ - Lớp 6 KNTT",
+    title: "Hành tinh Khởi Nguyên - Lớp 6 KNTT",
     rooms: [
       {
         id: "room_6_toan",
@@ -111,7 +111,7 @@ export const INITIAL_TOWN = [
   },
   {
     id: "house_7",
-    title: "Biệt Thự Cao Cấp - Lớp 7 KNTT",
+    title: "Hành tinh Sương Mù - Lớp 7 KNTT",
     rooms: [
       {
         id: "room_7_toan",
@@ -221,7 +221,7 @@ export const INITIAL_TOWN = [
   },
   {
     id: "house_8",
-    title: "Lâu Đài Hoàng Gia - Lớp 8 KNTT",
+    title: "Hành tinh Băng Giá - Lớp 8 KNTT",
     rooms: [
       {
         id: "room_8_toan",
@@ -331,7 +331,7 @@ export const INITIAL_TOWN = [
   },
   {
     id: "house_9",
-    title: "Cung Điện Thời Gian - Lớp 9 KNTT",
+    title: "Hành tinh Rực Lửa - Lớp 9 KNTT",
     rooms: [
       {
         id: "room_9_toan",
