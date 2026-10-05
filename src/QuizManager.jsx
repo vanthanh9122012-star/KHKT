@@ -264,7 +264,7 @@ export default function QuizManager({ addReward }) {
           >
             Tất cả
           </button>
-          {['Toán', 'Văn', 'Anh', 'Sử', 'Địa', 'Vật lý', 'Hóa học', 'Sinh học'].map(sub => (
+          {['Toán', 'Ngữ Văn', 'Tiếng Anh', 'KHTN', 'Lịch sử - Địa lí', 'GDCD', 'Tin học', 'Công nghệ'].map(sub => (
             <button 
               key={sub}
               onClick={() => setSelectedSubject(sub)}
