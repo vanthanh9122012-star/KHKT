@@ -140,9 +140,7 @@ export default function TownBuilder({ setActiveTab }) {
   }, []);
 
   const isHouseUnlocked = (index) => {
-    if (index === 0) return true;
-    const prevHouse = houses[index - 1];
-    return prevHouse.rooms.every(r => r.completed);
+    return true;
   };
 
   const activeHouse = houses[activeHouseIndex];
