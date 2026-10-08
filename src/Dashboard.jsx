@@ -179,18 +179,25 @@ export default function Dashboard({ setActiveTab }) {
       </header>
 
       {/* Daily Momentum Quote - Academic & Neutral Theme */}
-      <div className="bg-gradient-to-r from-orange-50 to-amber-50 rounded-3xl p-6 md:p-8 shadow-sm border border-orange-100 relative overflow-hidden group flex items-center gap-6">
-        <div className="hidden md:flex w-16 h-16 bg-white rounded-2xl items-center justify-center text-orange-400 shrink-0 shadow-sm">
-          <Quote size={32} />
+        <div className="bg-gradient-to-br from-stone-50 via-slate-50 to-zinc-100 rounded-3xl p-8 md:p-10 shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-stone-200/60 relative overflow-hidden group flex items-center gap-6">
+          {/* Decorative Background Icon */}
+          <Quote size={180} className="absolute -top-10 -right-10 text-stone-200/40 -rotate-12 group-hover:rotate-6 transition-transform duration-700 ease-out" />
+          
+          <div className="hidden md:flex w-16 h-16 bg-white/80 backdrop-blur-sm rounded-2xl items-center justify-center text-stone-500 shrink-0 shadow-sm border border-stone-100 relative z-10">
+            <Quote size={32} />
+          </div>
+          <div className="relative z-10 flex flex-col justify-center">
+            <p className="text-xl md:text-2xl font-medium text-slate-800 leading-relaxed tracking-wide mb-4">
+              <span className="text-3xl font-black text-stone-400 mr-2">"</span>
+              {dailyQuote.text}
+              <span className="text-3xl font-black text-stone-400 ml-2">"</span>
+            </p>
+            <p className="text-sm md:text-base font-bold text-slate-500 flex items-center gap-3 uppercase tracking-widest">
+              <span className="w-8 h-[2px] bg-stone-300 rounded-full"></span>
+              {dailyQuote.author}
+            </p>
+          </div>
         </div>
-        <div className="relative z-10 flex flex-col justify-center">
-          <p className="text-lg md:text-xl font-medium text-slate-700 italic mb-2 leading-relaxed">"{dailyQuote.text}"</p>
-          <p className="text-sm font-bold text-slate-500 flex items-center gap-2">
-            <span className="w-4 h-[1px] bg-slate-300"></span>
-            {dailyQuote.author}
-          </p>
-        </div>
-      </div>
 
       {/* Stats Cards - Academic & Neutral Theme */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
