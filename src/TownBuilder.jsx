@@ -37,6 +37,8 @@ const SUBJECT_COLORS = {
 export default function TownBuilder({ setActiveTab }) {
   const [houses, setHouses] = useState(INITIAL_TOWN);
   const [activeHouseIndex, setActiveHouseIndex] = useState(0);
+  const [isPlanetDetailView, setIsPlanetDetailView] = useState(false);
+
   
   // Quiz Overlay State
   const [activeQuizRoom, setActiveQuizRoom] = useState(null);
@@ -175,8 +177,10 @@ export default function TownBuilder({ setActiveTab }) {
   };
 
   return (
-    <div className="space-y-6 animate-fade-in pb-10">
-      {/* HEADER */}
+    <div className="space-y-6 animate-fade-in pb-10 h-full min-h-screen">
+      {!isPlanetDetailView ? (
+        <>
+          {/* HEADER */}
       <header className="mb-8">
         <h1 className="text-3xl font-black text-gray-800 mb-3 flex items-center gap-3">
           <Map className="text-sky-500" size={32} /> My Universe</h1>
@@ -185,7 +189,8 @@ export default function TownBuilder({ setActiveTab }) {
         </p>
       </header>
 
-      {/* Mindmap Town View */}
+      
+          {/* Mindmap Town View */}
       <div className="bg-gradient-to-br from-slate-900 via-indigo-950 to-slate-900 rounded-[2.5rem] p-6 shadow-inner border border-sky-100 relative overflow-hidden">
         <svg className="absolute inset-0 w-full h-full opacity-30 pointer-events-none" preserveAspectRatio="none">
            <path d="M -50 150 Q 150 50, 300 150 T 600 100 T 1000 200" fill="none" stroke="#3b82f6" strokeWidth="20" strokeLinecap="round" strokeDasharray="30 30" />
@@ -202,7 +207,7 @@ export default function TownBuilder({ setActiveTab }) {
               <div 
                 key={house.id} 
                 className="flex flex-col items-center relative group"
-                onClick={() => unlocked && setActiveHouseIndex(index)}
+                onClick={() => { if (unlocked) { setActiveHouseIndex(index); setIsPlanetDetailView(true); } }}
               >
                 {index < houses.length - 1 && (
                   <div className="hidden md:block absolute top-1/2 left-[100%] w-20 h-1.5 bg-sky-200/50 -z-10 transform -translate-y-1/2 rounded-full">
@@ -249,8 +254,35 @@ export default function TownBuilder({ setActiveTab }) {
         </div>
       </div>
 
-      {/* Inside the House: 8 Rooms */}
-      <div className="mt-8 bg-white rounded-[2rem] p-8 shadow-sm border border-sky-100 relative overflow-hidden">
+      
+        </>
+      ) : (
+        <div className="flex flex-col xl:flex-row gap-8 mt-6 relative min-h-screen">
+          <button 
+            onClick={() => setIsPlanetDetailView(false)}
+            className="absolute -top-4 left-0 z-50 flex items-center gap-2 px-6 py-3 bg-white rounded-full shadow-lg font-black text-slate-700 hover:text-sky-600 hover:shadow-xl transition-all border-2 border-slate-100"
+          >
+            <Compass size={24} /> Trở về Hệ Mặt Trời
+          </button>
+          
+          {/* Big 3D Planet Display */}
+          <div className="w-full xl:w-5/12 flex flex-col items-center justify-center bg-slate-900 rounded-[3rem] p-10 relative overflow-hidden shadow-2xl border-4 border-slate-800 min-h-[500px] mt-16 xl:mt-0 xl:sticky xl:top-10 h-[calc(100vh-80px)]">
+            <div className="absolute inset-0 z-10 w-[180%] h-[180%] -top-[40%] -left-[40%]">
+               <InteractivePlanet3D completed={completedRooms} total={totalRooms} index={activeHouseIndex} />
+            </div>
+            
+            <div className="absolute bottom-10 z-20 text-center bg-slate-900/80 backdrop-blur-md p-8 rounded-[2rem] border-2 border-slate-700 shadow-2xl w-[90%]">
+              <h2 className="text-4xl font-black text-white mb-3">{activeHouse ? activeHouse.title : houses[0].title}</h2>
+              <div className="text-lg font-bold text-sky-400 bg-sky-950/80 inline-block px-6 py-2 rounded-full border-2 border-sky-800 uppercase tracking-widest">
+                {getPhaseName(completedRooms, totalRooms)}
+              </div>
+            </div>
+          </div>
+          
+          {/* Rooms List */}
+          <div className="w-full xl:w-7/12 mt-8 xl:mt-0">
+            {/* Inside the House: 8 Rooms */}
+      <div className="mt-0 bg-white rounded-[2rem] p-8 shadow-sm border border-sky-100 relative overflow-hidden">
         <div className="absolute top-0 right-0 w-80 h-80 bg-sky-50 rounded-full blur-3xl -z-10 opacity-70 translate-x-1/3 -translate-y-1/3"></div>
         
         <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-8 border-b border-sky-100 pb-5 gap-4">
@@ -324,6 +356,11 @@ export default function TownBuilder({ setActiveTab }) {
       </div>
 
             {/* FULLSCREEN QUIZ OVERLAY MODAL */}
+      
+          </div>
+        </div>
+      )}
+      
       {activeQuizRoom && (
         <div className="fixed inset-0 z-[9999] bg-slate-50 overflow-y-auto animate-fade-in w-full h-full m-0 p-0">
           <div className="w-full min-h-screen flex flex-col bg-white">
