@@ -1,6 +1,6 @@
 import InteractivePlanet3D from './InteractivePlanet3D';
 import React, { useState, useEffect } from 'react';
-import { Map, CheckCircle2, Loader2, Lock, Play, Check, Book, Brain, Star, Award, Compass, ArrowRight, X, Trophy } from 'lucide-react';
+import { Map, CheckCircle2, Sparkles, Loader2, Lock, Play, Check, Book, Brain, Star, Award, Compass, ArrowRight, X, Trophy } from 'lucide-react';
 import { auth, db } from './firebase';
 import { doc, getDoc, setDoc } from 'firebase/firestore';
 import { INITIAL_TOWN } from './data/townData';
