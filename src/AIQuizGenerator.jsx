@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Upload, X, Loader2, FileText, CheckCircle2 } from 'lucide-react';
+import { Upload, X, Loader2, FileText, CheckCircle2, Sparkles } from 'lucide-react';
 import { GoogleGenAI } from '@google/genai';
 
 export default function AIQuizGenerator({ onQuizGenerated, onClose, addReward }) {
