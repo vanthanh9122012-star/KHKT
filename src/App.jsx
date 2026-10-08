@@ -30,25 +30,7 @@ const SUBJECT_COLORS = {
 
 const getSubjectStyle = (subject) => SUBJECT_COLORS[subject] || 'text-gray-600 bg-gray-50 border-gray-200';
 
-const INITIAL_FLASHCARDS = [
-  // Toán
-  { id: 1, grade: 'Lớp 9', subject: 'Toán', question: 'Công thức tính Delta (Δ) của phương trình bậc 2?', answer: 'Δ = b² - 4ac' },
-  { id: 2, grade: 'Lớp 8', subject: 'Toán', question: 'Hằng đẳng thức: (a + b)² = ?', answer: 'a² + 2ab + b²' },
-  // Anh
-  { id: 3, grade: 'Lớp 9', subject: 'Anh', question: 'Serendipity (n)', answer: 'Sự tình cờ may mắn' },
-  { id: 4, grade: 'Lớp 8', subject: 'Anh', question: 'Resilience (n)', answer: 'Sự kiên cường, khả năng phục hồi' },
-  // Vật lý
-  { id: 5, grade: 'Lớp 8', subject: 'Vật lý', question: 'Áp suất là gì?', answer: 'Là độ lớn của áp lực trên một đơn vị diện tích bị ép.' },
-  { id: 6, grade: 'Lớp 9', subject: 'Vật lý', question: 'Định luật Ôm (Ohm)?', answer: 'Cường độ dòng điện chạy qua dây dẫn tỉ lệ thuận với hiệu điện thế, tỉ lệ nghịch với điện trở (I = U/R).' },
-  // Địa lý
-  { id: 7, grade: 'Lớp 9', subject: 'Địa', question: 'Đặc điểm khí hậu nước ta?', answer: 'Nhiệt đới gió mùa ẩm' },
-  // Lịch sử
-  { id: 8, grade: 'Lớp 9', subject: 'Sử', question: 'Chiến dịch Điện Biên Phủ kết thúc vào ngày nào?', answer: '7/5/1954' },
-  // Hóa học
-  { id: 9, grade: 'Lớp 8', subject: 'Hóa học', question: 'Công thức hóa học của Axit Sunfuric?', answer: 'H₂SO₄' },
-  // Sinh học
-  { id: 10, grade: 'Lớp 9', subject: 'Sinh học', question: 'ADN là viết tắt của từ gì?', answer: 'Axit Deoxyribonucleic' },
-];
+
 
 const DUMMY_TASKS = [
   { id: 1, title: 'Giải phương trình bậc 2', subject: 'Toán', grade: 'Lớp 9', completed: false, time: '08:00' },
