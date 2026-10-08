@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { CheckCircle2, X, Lightbulb, Sparkles } from 'lucide-react';
+import {  CheckCircle2, X, Lightbulb, Sparkles , RotateCcw } from 'lucide-react';
 import { GoogleGenAI } from '@google/genai';
 
 const getSubjectStyle = (subject) => {
