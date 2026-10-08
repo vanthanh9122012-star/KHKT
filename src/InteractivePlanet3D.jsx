@@ -9,7 +9,7 @@ const EvolvingPlanet = ({ completed, total }) => {
   const progress = total > 0 ? Math.min(completed / total, 1) : 0;
   
   // We use jupiter map to get those beautiful gas swirls
-  const texture = useLoader(THREE.TextureLoader, '/textures/blue_gas.png');
+  const texture = useLoader(THREE.TextureLoader, '/textures/moon_map.jpg');
   
   // Create colors based on progress
   const currentColor = useMemo(() => {
@@ -41,7 +41,7 @@ const EvolvingPlanet = ({ completed, total }) => {
           map={progress > 0.1 ? texture : null} // Show swirls early on
           color={currentColor}
           emissive={currentEmissive}
-          emissiveIntensity={progress * 0.85} // Glows more as it progresses
+          emissiveIntensity={progress * 0.5} // Glows more as it progresses
           roughness={1 - progress * 0.4} // Becomes smoother
           metalness={progress * 0.2}
         />
@@ -53,7 +53,7 @@ const EvolvingPlanet = ({ completed, total }) => {
           <meshStandardMaterial 
             color="#38bdf8" 
             transparent 
-            opacity={progress * 0.3} 
+            opacity={progress * 0.5} 
             side={THREE.BackSide} 
             blending={THREE.AdditiveBlending} 
           />
