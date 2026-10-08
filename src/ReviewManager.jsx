@@ -52,14 +52,40 @@ export default function ReviewManager({ addReward }) {
   
 
   
+  const generateDistractors = (correctAnswer) => {
+    let allFlashcards = [];
+    try {
+      allFlashcards = JSON.parse(localStorage.getItem('studyflow_vocab') || '[]');
+    } catch(e) {}
+    let pool = allFlashcards.map(c => c.answer).filter(a => a && a.trim() !== '' && a !== correctAnswer);
+    let options = [correctAnswer];
+    for (let i = 0; i < 3; i++) {
+      if (pool.length > 0) {
+        const randIdx = Math.floor(Math.random() * pool.length);
+        options.push(pool[randIdx]);
+        pool.splice(randIdx, 1);
+      } else {
+        options.push('Phương án nhiễu ' + (i + 1));
+      }
+    }
+    return options.sort(() => Math.random() - 0.5);
+  };
+
   const retryOriginalQuestion = (mistake) => {
+    let options = mistake.options || [];
+    if (options.length < 2) {
+      options = generateDistractors(mistake.correctAnswer || mistake.correct);
+    }
     setReviewQuestion({
-      text: mistake.question,
-      type: mistake.type || 'mcq',
-      options: mistake.options || [],
-      correct: mistake.correctAnswer,
+      ...mistake,
+      text: mistake.question || mistake.text,
+      type: 'mcq',
+      options: options,
+      correct: mistake.correctAnswer || mistake.correct,
       explanation: mistake.explanation || 'Hãy đọc kĩ lại bài nhé.',
-      isAi: false
+      isAi: false,
+      originalMistake: mistake,
+      isFlashcard: false
     });
     setReviewAnswer('');
     setReviewFeedback(null);
@@ -67,12 +93,15 @@ export default function ReviewManager({ addReward }) {
 
   const retryFlashcard = (card) => {
     setReviewQuestion({
+      ...card,
       text: card.question,
-      type: 'fill_blank',
-      options: [],
+      type: 'mcq',
+      options: generateDistractors(card.answer),
       correct: card.answer,
       explanation: 'Đây là nội dung ghi nhớ.',
-      isAi: false
+      isAi: false,
+      originalMistake: card,
+      isFlashcard: true
     });
     setReviewAnswer('');
     setReviewFeedback(null);
@@ -81,18 +110,40 @@ export default function ReviewManager({ addReward }) {
   const handleReviewSubmit = () => {
     if (!reviewQuestion || !reviewAnswer) return;
     
-    let isCorrect = false;
-    if ((reviewQuestion.type === 'mcq' || reviewQuestion.type === 'true_false') && reviewAnswer === reviewQuestion.correct) {
-      isCorrect = true;
-    } else if (reviewQuestion.type === 'fill_blank' && reviewAnswer.trim().toLowerCase() === reviewQuestion.correct.toLowerCase()) {
-      isCorrect = true;
-    }
+    let isCorrect = (reviewQuestion.type === 'mcq' || reviewQuestion.type === 'true_false') 
+      ? reviewAnswer === reviewQuestion.correct 
+      : reviewAnswer.trim().toLowerCase() === reviewQuestion.correct.toLowerCase();
 
     if (isCorrect) {
-      setReviewFeedback({ type: 'success', text: 'Chính xác! Bạn đã hiểu bài rồi đó! +5 XP' });
+      setReviewFeedback({ type: 'success', text: 'Chính xác! Lỗi sai này đã được xóa khỏi danh sách. +5 XP' });
       if (addReward) addReward(5, 0);
+
+      // Remove from lists
+      if (reviewQuestion.isFlashcard) {
+        const allVocab = JSON.parse(localStorage.getItem('studyflow_vocab') || '[]');
+        const updatedVocab = allVocab.map(v => v.id === reviewQuestion.originalMistake.id ? { ...v, mistakes: 0, eFactor: 2.5 } : v);
+        localStorage.setItem('studyflow_vocab', JSON.stringify(updatedVocab));
+        setFlashcardMistakes(prev => prev.filter(c => c.id !== reviewQuestion.originalMistake.id));
+      } else {
+        const updated = quizMistakes.filter(m => m.id !== reviewQuestion.originalMistake.id);
+        setQuizMistakes(updated);
+        localStorage.setItem('study_app_mistakes', JSON.stringify(updated));
+      }
     } else {
-      setReviewFeedback({ type: 'error', text: 'Sai rồi. Hãy xem lại phần giải thích nhé!' });
+      setReviewFeedback({ type: 'error', text: 'Sai rồi. Xem lại phần giải thích. Câu này sẽ bị bỏ qua và chuyển xuống cuối danh sách!' });
+      
+      // Move to end of list
+      if (reviewQuestion.isFlashcard) {
+        setFlashcardMistakes(prev => {
+          const remaining = prev.filter(c => c.id !== reviewQuestion.originalMistake.id);
+          return [...remaining, reviewQuestion.originalMistake];
+        });
+      } else {
+        const remaining = quizMistakes.filter(m => m.id !== reviewQuestion.originalMistake.id);
+        const updated = [...remaining, reviewQuestion.originalMistake];
+        setQuizMistakes(updated);
+        localStorage.setItem('study_app_mistakes', JSON.stringify(updated));
+      }
     }
   };
 
