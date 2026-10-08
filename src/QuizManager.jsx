@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Book, CheckCircle2, X, AlertCircle, Award, Target, Sparkles, Lightbulb } from 'lucide-react';
+import { Book, CheckCircle2, X, AlertCircle, Award, Target, Sparkles, Lightbulb, Lock, Unlock } from 'lucide-react';
 import { QUIZ_DATA } from './data/quizData';
 import AIQuizGenerator from './AIQuizGenerator';
 import { GoogleGenAI } from '@google/genai';
@@ -28,6 +28,20 @@ export default function QuizManager({ addReward }) {
   const [score, setScore] = useState(0);
   
   const [showAIModal, setShowAIModal] = useState(false);
+    const [completedQuizzes, setCompletedQuizzes] = useState(() => {
+    return JSON.parse(localStorage.getItem('study_app_quiz_progress') || '[]');
+  });
+
+  const markQuizCompleted = (quizId) => {
+    setCompletedQuizzes(prev => {
+      if (!prev.includes(quizId)) {
+        const updated = [...prev, quizId];
+        localStorage.setItem('study_app_quiz_progress', JSON.stringify(updated));
+        return updated;
+      }
+      return prev;
+    });
+  };
   const [customQuizzes, setCustomQuizzes] = useState([]);
 
   useEffect(() => {
@@ -99,6 +113,7 @@ export default function QuizManager({ addReward }) {
 
     setScore(newScore);
     setIsSubmitted(true);
+    if (activeQuiz && activeQuiz.id) markQuizCompleted(activeQuiz.id);
     addReward(newScore * 2, 0); 
     
     if (newMistakes.length > 0) {
@@ -114,6 +129,14 @@ export default function QuizManager({ addReward }) {
     setCustomQuizzes(updated);
     localStorage.setItem('study_app_custom_quizzes', JSON.stringify(updated));
     setShowAIModal(false);
+  };
+
+  
+  const isQuizLocked = (quiz) => {
+    if (!quiz.chapter || quiz.chapter === 1) return false;
+    const prevQuiz = allQuizzes.find(q => q.subject === quiz.subject && q.grade === quiz.grade && q.chapter === quiz.chapter - 1);
+    if (!prevQuiz) return false;
+    return !completedQuizzes.includes(prevQuiz.id);
   };
 
   if (activeQuiz) {
@@ -278,19 +301,30 @@ export default function QuizManager({ addReward }) {
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {filteredQuizzes.map((quiz) => (
-          <div key={quiz.id} className="bg-surface p-6 rounded-3xl border border-gray-100 shadow-sm hover:shadow-md transition group">
-            <div className="flex items-center gap-2 mb-4">
-              <span className={`text-xs font-bold border px-2 py-1 rounded-md ${getSubjectStyle(quiz.subject)}`}>{quiz.subject}</span>
-              <span className="text-xs font-bold text-gray-500 bg-gray-100 border border-gray-200 px-2 py-1 rounded">{quiz.questions.length} câu</span>
+          <div key={quiz.id} className={`bg-surface p-6 rounded-3xl border border-gray-100 shadow-sm transition group relative overflow-hidden ${isQuizLocked(quiz) ? 'opacity-70 grayscale cursor-not-allowed' : 'hover:shadow-md'}`}>
+            {completedQuizzes.includes(quiz.id) && (
+              <div className="absolute -top-6 -right-6 w-16 h-16 bg-green-500 rounded-full flex items-end justify-start p-3 z-10 shadow-lg">
+                <CheckCircle2 size={16} className="text-white" />
+              </div>
+            )}
+            <div className="flex items-center justify-between mb-4">
+              <div className="flex items-center gap-2">
+                <span className={`text-xs font-bold border px-2 py-1 rounded-md ${getSubjectStyle(quiz.subject)}`}>{quiz.subject}</span>
+                {quiz.grade && <span className="text-xs font-bold text-gray-600 bg-gray-100 border border-gray-200 px-2 py-1 rounded">Lớp {quiz.grade}</span>}
+                {quiz.chapter && <span className="text-xs font-bold text-indigo-600 bg-indigo-50 border border-indigo-200 px-2 py-1 rounded">Chương {quiz.chapter}</span>}
+                <span className="text-xs font-bold text-gray-500 bg-gray-100 border border-gray-200 px-2 py-1 rounded">{quiz.questions.length} câu</span>
+              </div>
+              {isQuizLocked(quiz) && <Lock size={18} className="text-gray-400" />}
             </div>
             <h3 className="text-xl font-bold text-gray-800 mb-2 group-hover:text-primary transition">{quiz.title}</h3>
             <p className="text-gray-500 text-sm mb-6 line-clamp-2">Làm bài tập đa dạng (Trắc nghiệm, Tự luận, Đúng/Sai...) để nhận XP.</p>
             
             <button 
-              onClick={() => handleStart(quiz)}
-              className="w-full py-3 bg-gray-50 hover:bg-sky-50 text-primary font-bold rounded-xl transition"
+              onClick={() => { if(!isQuizLocked(quiz)) handleStart(quiz); }}
+              disabled={isQuizLocked(quiz)}
+              className={`w-full py-3 font-bold rounded-xl transition flex items-center justify-center gap-2 ${isQuizLocked(quiz) ? 'bg-gray-100 text-gray-400 cursor-not-allowed' : 'bg-gray-50 hover:bg-sky-50 text-primary'}`}
             >
-              Bắt đầu làm bài
+              {isQuizLocked(quiz) ? <><Lock size={18}/> Bị khóa (Cần hoàn thành Chương trước)</> : 'Bắt đầu làm bài'}
             </button>
           </div>
         ))}
