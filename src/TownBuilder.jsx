@@ -181,18 +181,11 @@ export default function TownBuilder({ setActiveTab }) {
       {activeQuizRoom ? (
         <div className="bg-slate-50 animate-fade-in w-full min-h-screen m-0 p-0">
           <div className="w-full min-h-screen flex flex-col bg-white">
-            <div className="bg-gradient-to-r from-sky-600 to-indigo-700 p-6 sm:px-10 sm:py-8 text-white flex justify-between items-center sticky top-0 z-10 shadow-md">
-              <div>
-                <h2 className="text-2xl sm:text-4xl font-black mb-2 flex items-center gap-3">
-                  <Trophy className="text-yellow-300" size={36} />
-                  Thử thách Nâng cao
-                </h2>
-                <p className="text-sky-100 font-medium text-lg">{activeQuizRoom.subject} - {activeQuizRoom.title}</p>
+            <div className="flex justify-end p-4 sm:px-8 sm:py-6 sticky top-0 z-10 bg-white/90 backdrop-blur-md">
+                <button onClick={() => setActiveQuizRoom(null)} className="p-3 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-full transition shadow-sm font-bold flex items-center gap-2">
+                  <X size={24} /> Đóng
+                </button>
               </div>
-              <button onClick={() => setActiveQuizRoom(null)} className="p-3 bg-white/10 hover:bg-white/20 rounded-full transition text-white backdrop-blur-sm shadow-sm">
-                <X size={28} />
-              </button>
-            </div>
             
             <div className="flex-1 p-6 sm:p-10">
               <div className="space-y-10">
