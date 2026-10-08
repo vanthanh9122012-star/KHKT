@@ -1,36 +1,39 @@
 import React, { useRef, useMemo } from 'react';
 import { Canvas, useFrame, useLoader } from '@react-three/fiber';
-import { OrbitControls, Stars, Sphere } from '@react-three/drei';
+import { OrbitControls, Stars, Sphere, Ring } from '@react-three/drei';
 import * as THREE from 'three';
 
-const EvolvingPlanet = ({ completed, total }) => {
+const PLANET_PROFILES = [
+  { name: 'Mars', endColor: '#dc2626', endEmissive: '#b91c1c', atmos: '#f87171', textureMap: 'moon_map.jpg', hasRing: false }, // Lớp 6
+  { name: 'Earth', endColor: '#ffffff', endEmissive: '#3b82f6', atmos: '#60a5fa', textureMap: 'earth_map.jpg', hasRing: false }, // Lớp 7
+  { name: 'Jupiter', endColor: '#d97706', endEmissive: '#b45309', atmos: '#fcd34d', textureMap: 'moon_map.jpg', hasRing: false }, // Lớp 8
+  { name: 'Saturn', endColor: '#ca8a04', endEmissive: '#a16207', atmos: '#fde047', textureMap: 'moon_map.jpg', hasRing: true }  // Lớp 9
+];
+
+const EvolvingPlanet = ({ completed, total, index }) => {
   const meshRef = useRef();
   const atmosRef = useRef();
+  const ringRef = useRef();
   const progress = total > 0 ? Math.min(completed / total, 1) : 0;
   
-  // We use jupiter map to get those beautiful gas swirls
-  const texture = useLoader(THREE.TextureLoader, '/textures/moon_map.jpg');
+  const profile = PLANET_PROFILES[index % PLANET_PROFILES.length];
   
-  // Create colors based on progress
+  const moonTex = useLoader(THREE.TextureLoader, '/textures/moon_map.jpg');
+  const earthTex = useLoader(THREE.TextureLoader, '/textures/earth_map.jpg');
+  const texture = profile.textureMap === 'earth_map.jpg' ? earthTex : moonTex;
+  
   const currentColor = useMemo(() => {
-    // Start: Dull dark rock #334155
-    // End: Deep vibrant blue #1e40af
-    return new THREE.Color().lerpColors(new THREE.Color('#334155'), new THREE.Color('#1e40af'), progress);
-  }, [progress]);
+    return new THREE.Color().lerpColors(new THREE.Color('#334155'), new THREE.Color(profile.endColor), progress);
+  }, [progress, profile]);
 
   const currentEmissive = useMemo(() => {
-    // Start: No emission
-    // End: Glowing cyan/blue #0ea5e9
-    return new THREE.Color().lerpColors(new THREE.Color('#000000'), new THREE.Color('#0ea5e9'), progress);
-  }, [progress]);
+    return new THREE.Color().lerpColors(new THREE.Color('#000000'), new THREE.Color(profile.endEmissive), progress);
+  }, [progress, profile]);
   
   useFrame(() => {
-    if (meshRef.current) {
-      meshRef.current.rotation.y += 0.005; // Base rotation
-    }
-    if (atmosRef.current) {
-      atmosRef.current.rotation.y += 0.007; // Atmosphere rotates slightly faster
-    }
+    if (meshRef.current) meshRef.current.rotation.y += 0.005;
+    if (atmosRef.current) atmosRef.current.rotation.y += 0.007;
+    if (ringRef.current) ringRef.current.rotation.z -= 0.002;
   });
 
   return (
@@ -38,20 +41,34 @@ const EvolvingPlanet = ({ completed, total }) => {
       {/* Main Body */}
       <Sphere ref={meshRef} args={[1.4, 64, 64]}>
         <meshStandardMaterial 
-          map={progress > 0.1 ? texture : null} // Show swirls early on
+          map={progress > 0.1 ? texture : null} 
           color={currentColor}
           emissive={currentEmissive}
-          emissiveIntensity={progress * 0.5} // Glows more as it progresses
-          roughness={1 - progress * 0.4} // Becomes smoother
+          emissiveIntensity={progress * 0.4} 
+          roughness={1 - progress * 0.4} 
           metalness={progress * 0.2}
         />
       </Sphere>
       
+      {/* Saturn Ring */}
+      {profile.hasRing && progress > 0.2 && (
+        <mesh ref={ringRef} rotation={[-Math.PI / 2 + 0.3, 0, 0]}>
+          <ringGeometry args={[1.7, 2.5, 64]} />
+          <meshStandardMaterial 
+            color={profile.atmos} 
+            transparent 
+            opacity={progress * 0.7} 
+            side={THREE.DoubleSide} 
+            blending={THREE.AdditiveBlending}
+          />
+        </mesh>
+      )}
+
       {/* Atmosphere Glow */}
       {progress > 0 && (
         <Sphere ref={atmosRef} args={[1.52, 32, 32]}>
           <meshStandardMaterial 
-            color="#38bdf8" 
+            color={profile.atmos} 
             transparent 
             opacity={progress * 0.5} 
             side={THREE.BackSide} 
@@ -64,24 +81,16 @@ const EvolvingPlanet = ({ completed, total }) => {
 };
 
 export default function InteractivePlanet3D({ completed, total, index }) {
-  // We apply the single evolving planet logic for all grades now, 
-  // as the user requested the specific blue gas giant look for completed lessons.
-  
   return (
     <div className="w-full h-full min-h-[250px] relative cursor-grab active:cursor-grabbing">
       <Canvas camera={{ position: [0, 0, 4.5], fov: 45 }}>
         <ambientLight intensity={1.2} />
         <directionalLight position={[5, 3, 5]} intensity={2.5} />
         <pointLight position={[-5, -3, -5]} intensity={1} color="#ffffff" />
-        
-        {/* Subtle space background effect */}
         <Stars radius={100} depth={50} count={2000} factor={4} saturation={0} fade speed={1} />
-        
         <React.Suspense fallback={null}>
-          <EvolvingPlanet completed={completed} total={total} />
+          <EvolvingPlanet completed={completed} total={total} index={index || 0} />
         </React.Suspense>
-        
-        {/* Allows 360 rotation by user */}
         <OrbitControls enableZoom={false} enablePan={false} autoRotate={false} />
       </Canvas>
     </div>
