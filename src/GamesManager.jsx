@@ -19,8 +19,8 @@ export default function GamesManager({ addReward }) {
     },
     { 
       id: 'sudoku', 
-      title: 'Sudoku Toán học', 
-      desc: 'Rèn luyện tư duy logic và suy luận toán học qua lưới số 7x7.',
+      title: 'Fruit Box', 
+      desc: 'Nối hai chữ số liền nhau để trả lời cho câu hỏi toán học.',
       icon: <Gamepad2 size={32} className="text-sky-500" />,
       color: 'from-sky-100 to-blue-200',
       border: 'border-sky-200'

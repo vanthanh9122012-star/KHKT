@@ -159,9 +159,20 @@ export default function FruitBox({ addReward }) {
           <div className="absolute inset-0 z-10 bg-black/60 rounded-2xl flex flex-col items-center justify-center backdrop-blur-sm animate-fade-in">
             <h3 className="text-5xl font-black text-white mb-2 tracking-widest text-red-400 drop-shadow-lg uppercase">You ' re Loser</h3>
             <p className="text-white font-medium mb-6">Hết giờ! Đáp án là {currentQ.a}</p>
-            <button onClick={initGame} className="flex items-center gap-2 bg-amber-500 hover:bg-amber-600 text-white px-6 py-3 rounded-full font-bold transition transform hover:scale-105">
-              <RefreshCcw size={20} /> Chơi lại
-            </button>
+            <button
+  key={`${r}-${c}`}
+  disabled={gameState !== 'playing'}
+  onClick={() => handleCellClick(r, c)}
+  className={`w-14 h-14 md:w-20 md:h-20 transition-all flex items-center justify-center relative overflow-visible
+    ${isSelected(r, c) ? 'transform scale-110 drop-shadow-xl z-10' : 'hover:scale-105 drop-shadow-md hover:drop-shadow-lg'}
+  `}
+>
+  <Apple 
+    className={`absolute w-[130%] h-[130%] transition-colors ${isSelected(r, c) ? 'text-red-600 fill-red-500' : 'text-red-500 fill-red-400'}`}
+    strokeWidth={1.5}
+  />
+  <span className="relative z-10 text-2xl md:text-3xl font-black text-white drop-shadow-md">{cell}</span>
+</button>
           </div>
         )}
 
@@ -176,7 +187,7 @@ export default function FruitBox({ addReward }) {
           </div>
         )}
 
-        <div className="grid grid-cols-6 gap-2 bg-amber-700 p-3 rounded-2xl shadow-inner">
+        <div className="grid grid-cols-6 gap-3 md:gap-5 p-6 rounded-3xl bg-amber-100/50 border border-amber-200">
           {grid.map((row, r) => (
             row.map((cell, c) => (
               <button
