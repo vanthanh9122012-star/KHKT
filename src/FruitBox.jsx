@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { Apple, Timer, RefreshCcw, CheckCircle2 } from 'lucide-react';
+import { Apple, Timer, CheckCircle2, RefreshCcw, Trophy } from 'lucide-react';
 
 const QUESTIONS = [
   { q: "Một cửa hàng giảm giá 20% cho áo 500k. Mua 3 cái phải trả bao nhiêu? (k)", a: "1200" },
@@ -16,10 +16,9 @@ const GRID_SIZE = 6;
 
 const generateGrid = (answerStr) => {
   const grid = Array(GRID_SIZE).fill(null).map(() => Array(GRID_SIZE).fill(''));
-  
-  // Place the answer randomly (horizontal or vertical)
   const isHorizontal = Math.random() > 0.5;
   let r, c;
+
   if (isHorizontal) {
     r = Math.floor(Math.random() * GRID_SIZE);
     c = Math.floor(Math.random() * (GRID_SIZE - answerStr.length + 1));
@@ -34,7 +33,6 @@ const generateGrid = (answerStr) => {
     }
   }
 
-  // Fill the rest with random digits
   for (let i = 0; i < GRID_SIZE; i++) {
     for (let j = 0; j < GRID_SIZE; j++) {
       if (grid[i][j] === '') {
@@ -46,15 +44,18 @@ const generateGrid = (answerStr) => {
 };
 
 export default function FruitBox({ addReward }) {
-  const [qIndex, setQIndex] = useState(0);
+  const [pendingQuestions, setPendingQuestions] = useState([...QUESTIONS]);
+  const [failedQuestions, setFailedQuestions] = useState([]);
+  
   const [grid, setGrid] = useState([]);
   const [selectedCells, setSelectedCells] = useState([]);
   const [timeLeft, setTimeLeft] = useState(30);
-  const [gameState, setGameState] = useState('playing'); // playing, won, lost
+  const [gameState, setGameState] = useState('playing'); // playing, won, complete_victory
 
-  const currentQ = QUESTIONS[qIndex];
+  const currentQ = pendingQuestions[0];
 
   const initGame = useCallback(() => {
+    if (!currentQ) return;
     setGrid(generateGrid(currentQ.a));
     setSelectedCells([]);
     setTimeLeft(30);
@@ -65,20 +66,43 @@ export default function FruitBox({ addReward }) {
     initGame();
   }, [initGame]);
 
+  // Timer logic
   useEffect(() => {
     let timer;
     if (gameState === 'playing' && timeLeft > 0) {
       timer = setInterval(() => setTimeLeft(prev => prev - 1), 1000);
     } else if (timeLeft === 0 && gameState === 'playing') {
-      setGameState('lost');
+      // Timeout: Skip and add to failed queue
+      handleNextQuestion(true);
     }
     return () => clearInterval(timer);
   }, [timeLeft, gameState]);
 
+  const handleNextQuestion = (isFailed) => {
+    let nextFailed = [...failedQuestions];
+    if (isFailed) {
+      nextFailed.push(currentQ);
+      setFailedQuestions(nextFailed);
+    }
+
+    if (pendingQuestions.length > 1) {
+      setPendingQuestions(prev => prev.slice(1));
+    } else {
+      // Queue empty
+      if (nextFailed.length > 0) {
+        // Restart with failed questions
+        setPendingQuestions(nextFailed);
+        setFailedQuestions([]);
+      } else {
+        // Complete victory!
+        setGameState('complete_victory');
+      }
+    }
+  };
+
   const handleCellClick = (r, c) => {
     if (gameState !== 'playing') return;
 
-    // Check if cell is already the last selected cell (to deselect)
     if (selectedCells.length > 0) {
       const last = selectedCells[selectedCells.length - 1];
       if (last.r === r && last.c === c) {
@@ -87,7 +111,6 @@ export default function FruitBox({ addReward }) {
       }
     }
 
-    // If empty, just add
     if (selectedCells.length === 0) {
       const newSel = [{r, c}];
       setSelectedCells(newSel);
@@ -95,11 +118,8 @@ export default function FruitBox({ addReward }) {
       return;
     }
 
-    // Otherwise, check adjacency (including diagonals)
     const last = selectedCells[selectedCells.length - 1];
     const isAdjacent = Math.abs(last.r - r) <= 1 && Math.abs(last.c - c) <= 1;
-    
-    // Prevent selecting already selected cells (unless it's the last one for undo, handled above)
     const isAlreadySelected = selectedCells.some(cell => cell.r === r && cell.c === c);
 
     if (isAdjacent && !isAlreadySelected) {
@@ -113,22 +133,32 @@ export default function FruitBox({ addReward }) {
     const formedString = cells.map(cell => grid[cell.r][cell.c]).join('');
     if (formedString === currentQ.a) {
       setGameState('won');
-      addReward(20, 2); // XP, Coins
+      if (addReward) addReward(20, 2);
     } else if (formedString.length >= currentQ.a.length) {
-      // If length exceeds or matches but is wrong, auto clear to try again
       setTimeout(() => setSelectedCells([]), 300);
     }
   };
 
-  const nextQuestion = () => {
-    if (qIndex < QUESTIONS.length - 1) {
-      setQIndex(prev => prev + 1);
-    } else {
-      setQIndex(0); // loop back or end
-    }
-  };
-
   const isSelected = (r, c) => selectedCells.some(cell => cell.r === r && cell.c === c);
+
+  if (gameState === 'complete_victory') {
+    return (
+      <div className="bg-amber-50 rounded-3xl p-8 shadow-sm border border-amber-200 max-w-2xl mx-auto animate-fade-in flex flex-col items-center justify-center min-h-[400px]">
+        <Trophy size={80} className="text-yellow-500 mb-6 drop-shadow-xl" />
+        <h2 className="text-4xl font-black text-amber-600 mb-4 text-center">Hoàn Thành Xuất Sắc!</h2>
+        <p className="text-amber-800 text-lg font-medium text-center mb-8">Bạn đã giải mã thành công tất cả các câu hỏi Fruit Box!</p>
+        <button 
+          onClick={() => {
+            setPendingQuestions([...QUESTIONS]);
+            setFailedQuestions([]);
+          }} 
+          className="bg-amber-500 hover:bg-amber-600 text-white px-8 py-4 rounded-full font-bold transition shadow-lg transform hover:scale-105 text-xl flex items-center gap-3"
+        >
+          <RefreshCcw size={24} /> Chơi Lại Từ Đầu
+        </button>
+      </div>
+    );
+  }
 
   return (
     <div className="bg-amber-50 rounded-3xl p-8 shadow-sm border border-amber-200 max-w-2xl mx-auto animate-fade-in flex flex-col items-center">
@@ -141,47 +171,29 @@ export default function FruitBox({ addReward }) {
       {/* Status Bar */}
       <div className="w-full bg-white rounded-2xl p-4 mb-6 shadow-sm border border-amber-100 flex justify-between items-center">
         <div className="flex items-center gap-2 font-bold text-slate-700">
-          <span className="bg-amber-100 text-amber-700 px-3 py-1 rounded-lg">Câu {qIndex + 1}/{QUESTIONS.length}</span>
+          <span className="bg-amber-100 text-amber-700 px-3 py-1 rounded-lg">Còn lại: {pendingQuestions.length} câu</span>
+          {failedQuestions.length > 0 && <span className="bg-red-100 text-red-700 px-3 py-1 rounded-lg">Cần làm lại: {failedQuestions.length}</span>}
         </div>
-        <div className={`flex items-center gap-2 font-black text-xl px-4 py-1 rounded-xl ${timeLeft <= 10 ? 'bg-red-100 text-red-600 animate-pulse' : 'bg-slate-100 text-slate-700'}`}>
+        <div className={`flex items-center gap-2 font-black text-xl px-4 py-1 rounded-xl transition-colors ${timeLeft <= 10 ? 'bg-red-100 text-red-600 animate-pulse' : 'bg-slate-100 text-slate-700'}`}>
           <Timer size={24} /> 00:{timeLeft.toString().padStart(2, '0')}
         </div>
       </div>
 
       {/* Question */}
-      <div className="text-xl font-bold text-slate-800 text-center mb-8 bg-white p-6 rounded-2xl border-2 border-dashed border-amber-300 w-full">
-        {currentQ.q}
-      </div>
+      {currentQ && (
+        <div className="text-xl font-bold text-slate-800 text-center mb-8 bg-white p-6 rounded-2xl border-2 border-dashed border-amber-300 w-full min-h-[100px] flex items-center justify-center">
+          {currentQ.q}
+        </div>
+      )}
 
       {/* Grid */}
       <div className="relative">
-        {gameState === 'lost' && (
-          <div className="absolute inset-0 z-10 bg-black/60 rounded-2xl flex flex-col items-center justify-center backdrop-blur-sm animate-fade-in">
-            <h3 className="text-5xl font-black text-white mb-2 tracking-widest text-red-400 drop-shadow-lg uppercase">You ' re Loser</h3>
-            <p className="text-white font-medium mb-6">Hết giờ! Đáp án là {currentQ.a}</p>
-            <button
-  key={`${r}-${c}`}
-  disabled={gameState !== 'playing'}
-  onClick={() => handleCellClick(r, c)}
-  className={`w-14 h-14 md:w-20 md:h-20 transition-all flex items-center justify-center relative overflow-visible
-    ${isSelected(r, c) ? 'transform scale-110 drop-shadow-xl z-10' : 'hover:scale-105 drop-shadow-md hover:drop-shadow-lg'}
-  `}
->
-  <Apple 
-    className={`absolute w-[130%] h-[130%] transition-colors ${isSelected(r, c) ? 'text-red-600 fill-red-500' : 'text-red-500 fill-red-400'}`}
-    strokeWidth={1.5}
-  />
-  <span className="relative z-10 text-2xl md:text-3xl font-black text-white drop-shadow-md">{cell}</span>
-</button>
-          </div>
-        )}
-
         {gameState === 'won' && (
-          <div className="absolute inset-0 z-10 bg-white/80 rounded-2xl flex flex-col items-center justify-center backdrop-blur-sm animate-fade-in">
+          <div className="absolute inset-0 z-20 bg-white/80 rounded-2xl flex flex-col items-center justify-center backdrop-blur-sm animate-fade-in">
             <CheckCircle2 size={64} className="text-green-500 mb-4" />
             <h3 className="text-3xl font-black text-green-600 mb-2">Chính xác!</h3>
             <p className="text-slate-600 font-bold mb-6">+20 XP, +2 🪙</p>
-            <button onClick={nextQuestion} className="bg-green-500 hover:bg-green-600 text-white px-8 py-3 rounded-full font-bold transition shadow-lg transform hover:scale-105">
+            <button onClick={() => handleNextQuestion(false)} className="bg-green-500 hover:bg-green-600 text-white px-8 py-3 rounded-full font-bold transition shadow-lg transform hover:scale-105">
               Câu tiếp theo
             </button>
           </div>
@@ -194,25 +206,19 @@ export default function FruitBox({ addReward }) {
                 key={`${r}-${c}`}
                 disabled={gameState !== 'playing'}
                 onClick={() => handleCellClick(r, c)}
-                className={`w-12 h-12 md:w-16 md:h-16 rounded-xl text-2xl font-black transition-all flex items-center justify-center relative overflow-hidden shadow-sm
-                  ${isSelected(r, c) 
-                    ? 'bg-amber-400 text-amber-900 border-b-4 border-amber-600 transform translate-y-1' 
-                    : 'bg-amber-50 text-amber-800 border-b-4 border-amber-200 hover:bg-white hover:-translate-y-1'}
+                className={`w-14 h-14 md:w-20 md:h-20 transition-all flex items-center justify-center relative overflow-visible focus:outline-none
+                  ${isSelected(r, c) ? 'transform scale-110 drop-shadow-xl z-10' : 'hover:scale-105 drop-shadow-md hover:drop-shadow-lg'}
                 `}
               >
-                {/* Add a subtle apple shape behind the number */}
-                {isSelected(r, c) && <Apple className="absolute text-amber-300 opacity-30 w-full h-full p-2" />}
-                <span className="relative z-10">{cell}</span>
+                <Apple 
+                  className={`absolute w-[130%] h-[130%] transition-colors ${isSelected(r, c) ? 'text-red-600 fill-red-500' : 'text-red-500 fill-red-400'}`}
+                  strokeWidth={1.5}
+                />
+                <span className="relative z-10 text-2xl md:text-3xl font-black text-white drop-shadow-md">{cell}</span>
               </button>
             ))
           ))}
         </div>
-      </div>
-
-      <div className="mt-8 flex gap-4 w-full">
-        <button onClick={initGame} className="flex-1 py-3 bg-white border-2 border-amber-200 text-amber-700 rounded-xl font-bold hover:bg-amber-50 transition">
-          Chơi lại (Reset)
-        </button>
       </div>
 
     </div>
