@@ -9,7 +9,7 @@ const EvolvingPlanet = ({ completed, total }) => {
   const progress = total > 0 ? Math.min(completed / total, 1) : 0;
   
   // We use jupiter map to get those beautiful gas swirls
-  const texture = useLoader(THREE.TextureLoader, '/textures/jupiter_map.jpg');
+  const texture = useLoader(THREE.TextureLoader, '/textures/blue_gas.png');
   
   // Create colors based on progress
   const currentColor = useMemo(() => {
