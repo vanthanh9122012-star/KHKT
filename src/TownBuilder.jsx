@@ -1,3 +1,4 @@
+import InteractivePlanet3D from './InteractivePlanet3D';
 import React, { useState, useEffect } from 'react';
 import { Map, CheckCircle2, Lock, Play, Check, Book, Brain, Star, Award, Compass, ArrowRight, X, Trophy } from 'lucide-react';
 import { auth, db } from './firebase';
