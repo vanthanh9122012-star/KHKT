@@ -25,7 +25,7 @@ export default function ReviewManager({ addReward }) {
   const [reviewQuestion, setReviewQuestion] = useState(null);
   const [reviewAnswer, setReviewAnswer] = useState('');
   const [reviewFeedback, setReviewFeedback] = useState(null);
-  const [isGenerating, setIsGenerating] = useState(false);
+  
 
   useEffect(() => {
     // Load flashcard mistakes
@@ -49,46 +49,7 @@ export default function ReviewManager({ addReward }) {
     localStorage.setItem('study_app_mistakes', JSON.stringify(updated));
   };
 
-  const generateSimilarQuestion = async (mistake) => {
-    const apiKey = document.getElementById('gemini_api_key_input')?.value;
-    if (!apiKey) {
-      alert("Vui lòng nhập API Key của Gemini trong Cài đặt chung (ở góc trái Flashcard) để sử dụng AI.");
-      return;
-    }
-    setIsGenerating(true);
-    setReviewQuestion(null);
-    setReviewAnswer('');
-    setReviewFeedback(null);
-
-    try {
-      const ai = new GoogleGenAI({ apiKey });
-      const prompt = `Bạn là một giáo viên dạy môn ${mistake.subject} cấp THCS.
-Học sinh vừa làm sai câu hỏi sau: "${mistake.question}"
-Đáp án học sinh chọn: "${mistake.userAnswer}"
-Đáp án đúng: "${mistake.correctAnswer}"
-
-Hãy tạo ra MỘT câu hỏi MỚI hoàn toàn nhưng có cùng form (cùng loại ${mistake.type}) và kiểm tra cùng một mảng kiến thức để học sinh làm lại.
-Trả về định dạng JSON thuần túy (không bọc trong markdown) với cấu trúc sau:
-{
-  "text": "Câu hỏi mới...",
-  "type": "${mistake.type}",
-  "options": ["A", "B", "C", "D"] (nếu là trắc nghiệm hoặc true_false),
-  "correct": "Đáp án đúng",
-  "explanation": "Giải thích tại sao"
-}`;
-
-      const response = await ai.models.generateContent({
-        model: 'gemini-2.5-flash',
-        contents: prompt
-      });
-
-      const jsonStr = response.text.replace(/```json/g, '').replace(/```/g, '').trim();
-      setReviewQuestion({...JSON.parse(jsonStr), isAi: true});
-    } catch (err) {
-      alert("Lỗi tạo câu hỏi: " + err.message);
-    }
-    setIsGenerating(false);
-  };
+  
 
   
   const retryOriginalQuestion = (mistake) => {
@@ -206,13 +167,7 @@ Trả về định dạng JSON thuần túy (không bọc trong markdown) với 
                     >
                       <RotateCcw size={18} /> Làm lại câu này
                     </button>
-                    <button 
-                      onClick={() => generateSimilarQuestion(m)}
-                      disabled={isGenerating}
-                      className="flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-indigo-50 to-purple-50 text-indigo-600 font-bold rounded-xl hover:from-indigo-100 hover:to-purple-100 transition shadow-sm border border-indigo-100"
-                    >
-                      <Sparkles size={18} className="text-indigo-500" /> Làm 1 câu tương tự bằng AI
-                    </button>
+                    
                   </div>
               </div>
             ))
