@@ -32,6 +32,39 @@ export default function Dashboard({ setActiveTab }) {
     return { count: 3, lastCheckIn: null };
   });
 
+  // Study Stats Tracking
+  const [studyStats, setStudyStats] = useState({});
+  useEffect(() => {
+    const loadStats = () => {
+      setStudyStats(JSON.parse(localStorage.getItem('study_time_stats') || '{}'));
+    };
+    loadStats();
+    const interval = setInterval(loadStats, 10000);
+    return () => clearInterval(interval);
+  }, []);
+
+  const todayDate = new Date();
+  const todayKey = `${todayDate.getFullYear()}-${String(todayDate.getMonth()+1).padStart(2, '0')}-${String(todayDate.getDate()).padStart(2, '0')}`;
+  const todaySeconds = studyStats[todayKey] || 0;
+  const todayHours = Math.floor(todaySeconds / 3600);
+  const todayMinutes = Math.floor((todaySeconds % 3600) / 60);
+
+  const getDayStat = (dayOffset) => {
+    const d = new Date();
+    const day = d.getDay(); 
+    const diff = d.getDate() - day + (day === 0 ? -6 : 1) + dayOffset;
+    const targetDate = new Date(d.setDate(diff));
+    const key = `${targetDate.getFullYear()}-${String(targetDate.getMonth()+1).padStart(2, '0')}-${String(targetDate.getDate()).padStart(2, '0')}`;
+    return studyStats[key] || 0;
+  };
+
+  const chartHeights = [0, 1, 2, 3, 4, 5, 6].map(i => {
+    const seconds = getDayStat(i);
+    const maxTime = 7200; // 2 hours
+    return Math.min(100, (seconds / maxTime) * 100);
+  });
+
+
   useEffect(() => {
     localStorage.setItem('studyflow_today_tasks', JSON.stringify(tasks));
   }, [tasks]);
@@ -169,9 +202,9 @@ export default function Dashboard({ setActiveTab }) {
             </h3>
           </div>
           <div>
-            <div className="text-4xl font-black text-indigo-700 tracking-tight">2<span className="text-2xl font-bold text-indigo-400">h</span> 45<span className="text-2xl font-bold text-indigo-400">m</span></div>
+            <div className="text-4xl font-black text-indigo-700 tracking-tight">{todayHours}<span className="text-2xl font-bold text-indigo-400">h</span> {todayMinutes}<span className="text-2xl font-bold text-indigo-400">m</span></div>
             <div className="text-sm text-teal-600 mt-2 font-semibold flex items-center gap-1">
-              <span className="bg-teal-50 text-teal-700 px-2 py-0.5 rounded text-xs">+15%</span> so với hôm qua
+              <span className="bg-teal-50 text-teal-700 px-2 py-0.5 rounded text-xs">Trực tiếp</span> Đang ghi nhận
             </div>
           </div>
         </div>
@@ -205,7 +238,7 @@ export default function Dashboard({ setActiveTab }) {
             </button>
           </div>
           <div className="flex items-end justify-between h-48 px-2 md:px-6">
-            {[40, 70, 45, 90, 65, 30, 80].map((h, i) => (
+            {chartHeights.map((h, i) => (
               <div key={i} className="flex flex-col items-center gap-3 group cursor-pointer w-full">
                 <div className="relative w-8 md:w-12 bg-indigo-50/50 rounded-t-xl h-36 flex items-end justify-center overflow-hidden transition-all border border-indigo-50 border-b-0 group-hover:bg-indigo-50">
                   <div 

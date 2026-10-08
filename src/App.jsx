@@ -1216,6 +1216,19 @@ export default function App() {
   
   // Auth states
   const [currentUser, setCurrentUser] = useState(null);
+
+  useEffect(() => {
+    if (!currentUser) return;
+    const interval = setInterval(() => {
+      const today = new Date();
+      const dateKey = `${today.getFullYear()}-${String(today.getMonth()+1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
+      const stats = JSON.parse(localStorage.getItem('study_time_stats') || '{}');
+      stats[dateKey] = (stats[dateKey] || 0) + 10;
+      localStorage.setItem('study_time_stats', JSON.stringify(stats));
+    }, 10000);
+    return () => clearInterval(interval);
+  }, [currentUser]);
+
   const [authLoading, setAuthLoading] = useState(true);
 
   useEffect(() => {
