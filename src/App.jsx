@@ -1217,17 +1217,37 @@ export default function App() {
   // Auth states
   const [currentUser, setCurrentUser] = useState(null);
 
-  useEffect(() => {
+    useEffect(() => {
     if (!currentUser) return;
+
+    let lastInteractionTime = Date.now();
+    const resetIdle = () => { lastInteractionTime = Date.now(); };
+
+    window.addEventListener('mousemove', resetIdle);
+    window.addEventListener('keydown', resetIdle);
+    window.addEventListener('click', resetIdle);
+    window.addEventListener('scroll', resetIdle);
+
     const interval = setInterval(() => {
       if (document.hidden || !document.hasFocus()) return;
+      
+      // Idle detection: if no interaction for 60 seconds (60,000ms), do not track time
+      if (Date.now() - lastInteractionTime > 60000) return;
+
       const today = new Date();
       const dateKey = `${today.getFullYear()}-${String(today.getMonth()+1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
       const stats = JSON.parse(localStorage.getItem('study_time_stats') || '{}');
       stats[dateKey] = (stats[dateKey] || 0) + 10;
       localStorage.setItem('study_time_stats', JSON.stringify(stats));
     }, 10000);
-    return () => clearInterval(interval);
+
+    return () => {
+      clearInterval(interval);
+      window.removeEventListener('mousemove', resetIdle);
+      window.removeEventListener('keydown', resetIdle);
+      window.removeEventListener('click', resetIdle);
+      window.removeEventListener('scroll', resetIdle);
+    };
   }, [currentUser]);
 
   const [authLoading, setAuthLoading] = useState(true);
