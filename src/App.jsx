@@ -1220,6 +1220,7 @@ export default function App() {
   useEffect(() => {
     if (!currentUser) return;
     const interval = setInterval(() => {
+      if (document.hidden || !document.hasFocus()) return;
       const today = new Date();
       const dateKey = `${today.getFullYear()}-${String(today.getMonth()+1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
       const stats = JSON.parse(localStorage.getItem('study_time_stats') || '{}');
