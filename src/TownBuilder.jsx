@@ -346,7 +346,7 @@ export default function TownBuilder({ setActiveTab }) {
                   ${!unlocked ? 'opacity-40 grayscale cursor-not-allowed' : 'hover:-translate-y-2'}
                   ${isActive ? 'scale-110 drop-shadow-2xl z-20' : 'scale-100'}
                 `}>
-                  <div className="absolute inset-0 z-10 w-[110%] h-[110%] -top-[5%] -left-[5%]"><InteractivePlanet3D completed={comp} total={tot} index={index} /></div>
+                  <div className="absolute inset-0 z-10 w-[150%] h-[150%] -top-[25%] -left-[25%]"><InteractivePlanet3D completed={comp} total={tot} index={index} /></div>
                   
                   {!unlocked && (
                     <div className="absolute inset-0 flex items-center justify-center">
@@ -362,7 +362,7 @@ export default function TownBuilder({ setActiveTab }) {
                   )}
                 </div>
 
-                <div className={`mt-2 text-center p-3 rounded-2xl w-48 transition-all duration-300 ${isActive ? 'bg-white shadow-xl border-2 border-sky-400' : 'bg-white/50 backdrop-blur-sm shadow-sm border border-transparent'}`}>
+                <div className={`relative z-30 mt-2 text-center p-3 rounded-2xl w-48 transition-all duration-300 ${isActive ? 'bg-white shadow-xl border-2 border-sky-400' : 'bg-white/50 backdrop-blur-sm shadow-sm border border-transparent'}`}>
                   <h3 className={`font-bold text-sm ${isActive ? 'text-sky-900' : 'text-gray-700'}`}>{house.title}</h3>
                   <div className="text-[11px] font-bold text-sky-600 mt-1 bg-sky-50 inline-block px-2 py-0.5 rounded-full">
                     {getPhaseName(comp, tot)}
@@ -393,7 +393,7 @@ export default function TownBuilder({ setActiveTab }) {
           
           {/* Big 3D Planet Display */}
           <div className="w-full flex flex-col items-center justify-center bg-slate-900 rounded-[3rem] p-6 sm:p-10 relative overflow-hidden shadow-2xl border-4 border-slate-800 h-[350px] md:h-[450px] mt-12 xl:mt-0">
-            <div className="absolute inset-0 z-10 w-[110%] h-[110%] -top-[5%] -left-[5%]">
+            <div className="absolute inset-0 z-10 w-[150%] h-[150%] -top-[25%] -left-[25%]">
                <InteractivePlanet3D completed={completedRooms} total={totalRooms} index={activeHouseIndex} />
             </div>
             
