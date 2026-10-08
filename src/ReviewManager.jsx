@@ -83,11 +83,38 @@ Trả về định dạng JSON thuần túy (không bọc trong markdown) với 
       });
 
       const jsonStr = response.text.replace(/```json/g, '').replace(/```/g, '').trim();
-      setReviewQuestion(JSON.parse(jsonStr));
+      setReviewQuestion({...JSON.parse(jsonStr), isAi: true});
     } catch (err) {
       alert("Lỗi tạo câu hỏi: " + err.message);
     }
     setIsGenerating(false);
+  };
+
+  
+  const retryOriginalQuestion = (mistake) => {
+    setReviewQuestion({
+      text: mistake.question,
+      type: mistake.type || 'mcq',
+      options: mistake.options || [],
+      correct: mistake.correctAnswer,
+      explanation: mistake.explanation || 'Hãy đọc kĩ lại bài nhé.',
+      isAi: false
+    });
+    setReviewAnswer('');
+    setReviewFeedback(null);
+  };
+
+  const retryFlashcard = (card) => {
+    setReviewQuestion({
+      text: card.question,
+      type: 'fill_blank',
+      options: [],
+      correct: card.answer,
+      explanation: 'Đây là nội dung ghi nhớ.',
+      isAi: false
+    });
+    setReviewAnswer('');
+    setReviewFeedback(null);
   };
 
   const handleReviewSubmit = () => {
@@ -172,15 +199,21 @@ Trả về định dạng JSON thuần túy (không bọc trong markdown) với 
                   <p className="text-orange-900 font-medium text-sm">{m.explanation}</p>
                 </div>
 
-                <div className="flex justify-end mt-4 pt-4 border-t border-gray-100">
-                  <button 
-                    onClick={() => generateSimilarQuestion(m)}
-                    disabled={isGenerating}
-                    className="flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-indigo-50 to-purple-50 text-indigo-600 font-bold rounded-xl hover:from-indigo-100 hover:to-purple-100 transition shadow-sm border border-indigo-100"
-                  >
-                    <Sparkles size={18} className="text-indigo-500" /> Làm 1 câu tương tự bằng AI
-                  </button>
-                </div>
+                <div className="flex flex-wrap justify-end gap-3 mt-4 pt-4 border-t border-gray-100">
+                    <button 
+                      onClick={() => retryOriginalQuestion(m)}
+                      className="flex items-center gap-2 px-5 py-2.5 bg-gray-100 text-gray-700 font-bold rounded-xl hover:bg-gray-200 transition shadow-sm"
+                    >
+                      <RotateCcw size={18} /> Làm lại câu này
+                    </button>
+                    <button 
+                      onClick={() => generateSimilarQuestion(m)}
+                      disabled={isGenerating}
+                      className="flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-indigo-50 to-purple-50 text-indigo-600 font-bold rounded-xl hover:from-indigo-100 hover:to-purple-100 transition shadow-sm border border-indigo-100"
+                    >
+                      <Sparkles size={18} className="text-indigo-500" /> Làm 1 câu tương tự bằng AI
+                    </button>
+                  </div>
               </div>
             ))
           )}
@@ -213,8 +246,16 @@ Trả về định dạng JSON thuần túy (không bọc trong markdown) với 
                   <div className="p-3 bg-sky-50 rounded-xl border border-sky-100">
                     <p className="text-xs font-bold text-sky-600 mb-1">ĐÁP ÁN ĐÚNG</p>
                     <p className="font-medium text-sky-900">{card.answer}</p>
+                    </div>
+                    <div className="mt-4 pt-4 border-t border-red-100/50 flex justify-end">
+                      <button 
+                        onClick={() => retryFlashcard(card)}
+                        className="flex items-center gap-2 px-4 py-2 bg-sky-50 text-sky-700 font-bold rounded-xl hover:bg-sky-100 transition"
+                      >
+                        <RotateCcw size={16} /> Ôn lại thẻ này
+                      </button>
+                    </div>
                   </div>
-                </div>
               ))}
             </div>
           )}
@@ -226,7 +267,7 @@ Trả về định dạng JSON thuần túy (không bọc trong markdown) với 
         <div className="fixed inset-0 bg-slate-900/60 z-[100] flex items-center justify-center p-4 backdrop-blur-sm animate-fade-in">
           <div className="bg-white rounded-3xl w-full max-w-2xl overflow-hidden shadow-2xl">
             <div className="bg-gradient-to-r from-indigo-500 to-purple-600 p-6 text-white flex justify-between items-center">
-              <h2 className="text-2xl font-bold flex items-center gap-2"><Sparkles /> Câu hỏi luyện tập AI</h2>
+              <h2 className="text-2xl font-bold flex items-center gap-2">{reviewQuestion.isAi ? <><Sparkles /> Câu hỏi luyện tập AI</> : <><RotateCcw /> Làm lại câu hỏi</>}</h2>
               <button onClick={() => setReviewQuestion(null)} className="hover:bg-white/20 p-2 rounded-full transition"><X /></button>
             </div>
             <div className="p-8">
