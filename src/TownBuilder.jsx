@@ -1,9 +1,10 @@
 import InteractivePlanet3D from './InteractivePlanet3D';
 import React, { useState, useEffect } from 'react';
-import { Map, CheckCircle2, Lock, Play, Check, Book, Brain, Star, Award, Compass, ArrowRight, X, Trophy } from 'lucide-react';
+import { Map, CheckCircle2, Loader2, Lock, Play, Check, Book, Brain, Star, Award, Compass, ArrowRight, X, Trophy } from 'lucide-react';
 import { auth, db } from './firebase';
 import { doc, getDoc, setDoc } from 'firebase/firestore';
 import { INITIAL_TOWN } from './data/townData';
+import { GoogleGenAI } from '@google/genai';
 
 const SUBJECT_COLORS = {
   'Toán': 'text-blue-600 bg-blue-50 border-blue-200',
@@ -46,6 +47,7 @@ export default function TownBuilder({ setActiveTab }) {
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [submittedQuestions, setSubmittedQuestions] = useState({});
   const [score, setScore] = useState(0);
+  const [isGenerating, setIsGenerating] = useState(false);
 
   useEffect(() => {
     if (!auth.currentUser) return;
@@ -83,8 +85,50 @@ export default function TownBuilder({ setActiveTab }) {
   const completedRooms = activeHouse.rooms.filter(r => r.completed).length;
   const totalRooms = activeHouse.rooms.length;
 
-  const handleRoomClick = (room) => {
-    if (room.completed) return; // Đã xong thì không bắt làm lại
+    const handleRoomClick = async (room) => {
+    if (room.completed) {
+      const confirm = window.confirm("Chương này đã hoàn thành. Bạn có muốn AI tạo thêm các câu hỏi nâng cao để cày thêm XP không?");
+      if (!confirm) return;
+      const apiKey = document.getElementById('gemini_api_key_input')?.value;
+      if (!apiKey) {
+        alert("Vui lòng nhập API Key của Gemini trong Cài đặt chung (ở góc trái Flashcard) để sử dụng tính năng tạo câu hỏi nâng cao.");
+        return;
+      }
+      setIsGenerating(true);
+      try {
+        const ai = new GoogleGenAI({ apiKey });
+        const prompt = `Tạo 5 câu hỏi bài tập NÂNG CAO cho môn ${room.subject} thuộc chủ đề "${room.title}".
+Dành cho học sinh cấp THCS. Yêu cầu mức độ khó cao, đòi hỏi tư duy logic.
+Định dạng JSON thuần túy (không bọc trong markdown):
+[
+  {
+    "id": "q1",
+    "type": "mcq",
+    "text": "Nội dung câu hỏi",
+    "options": ["A", "B", "C", "D"],
+    "correct": "Đáp án đúng",
+    "explanation": "Giải thích chi tiết"
+  }
+]`;
+        const response = await ai.models.generateContent({
+          model: 'gemini-2.5-flash',
+          contents: prompt
+        });
+        const jsonStr = response.text.replace(/```json/g, '').replace(/```/g, '').trim();
+        const newQuestions = JSON.parse(jsonStr).map((q, idx) => ({ ...q, id: `ai_adv_${Date.now()}_${idx}` }));
+        
+        setActiveQuizRoom({ ...room, title: room.title + " (Nâng cao)", questions: newQuestions });
+        setUserAnswers({});
+        setIsSubmitted(false);
+        setSubmittedQuestions({});
+        setScore(0);
+      } catch (e) {
+        alert("Lỗi tạo câu hỏi: " + e.message);
+      }
+      setIsGenerating(false);
+      return;
+    }
+
     setActiveQuizRoom(room);
     setUserAnswers({});
     setIsSubmitted(false);
