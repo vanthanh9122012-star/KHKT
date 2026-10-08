@@ -185,7 +185,7 @@ export default function FruitBox({ addReward }) {
           {failedQuestions.length > 0 && <span className="bg-red-100 text-red-700 px-3 py-1 rounded-lg">Cần làm lại: {failedQuestions.length}</span>}
         </div>
         <div className={`flex items-center gap-2 font-black text-xl px-4 py-1 rounded-xl transition-colors ${timeLeft <= 10 ? 'bg-red-100 text-red-600 animate-pulse' : 'bg-slate-100 text-slate-700'}`}>
-          <Timer size={24} /> 00:{timeLeft.toString().padStart(2, '0')}
+          <Timer size={24} /> {Math.floor(timeLeft / 60)}:{(timeLeft % 60).toString().padStart(2, '0')}
         </div>
       </div>
 
