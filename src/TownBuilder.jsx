@@ -346,7 +346,7 @@ export default function TownBuilder({ setActiveTab }) {
                   ${!unlocked ? 'opacity-40 grayscale cursor-not-allowed' : 'hover:-translate-y-2'}
                   ${isActive ? 'scale-110 drop-shadow-2xl z-20' : 'scale-100'}
                 `}>
-                  <div className="absolute inset-0 z-10 w-[150%] h-[150%] -top-[25%] -left-[25%]"><InteractivePlanet3D completed={comp} total={tot} index={index} /></div>
+                  <div className="absolute inset-0 z-10 w-[110%] h-[110%] -top-[5%] -left-[5%]"><InteractivePlanet3D completed={comp} total={tot} index={index} /></div>
                   
                   {!unlocked && (
                     <div className="absolute inset-0 flex items-center justify-center">
@@ -393,7 +393,7 @@ export default function TownBuilder({ setActiveTab }) {
           
           {/* Big 3D Planet Display */}
           <div className="w-full flex flex-col items-center justify-center bg-slate-900 rounded-[3rem] p-6 sm:p-10 relative overflow-hidden shadow-2xl border-4 border-slate-800 h-[350px] md:h-[450px] mt-12 xl:mt-0">
-            <div className="absolute inset-0 z-10 w-[150%] h-[150%] -top-[25%] -left-[25%]">
+            <div className="absolute inset-0 z-10 w-[110%] h-[110%] -top-[5%] -left-[5%]">
                <InteractivePlanet3D completed={completedRooms} total={totalRooms} index={activeHouseIndex} />
             </div>
             
