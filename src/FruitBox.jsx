@@ -12,7 +12,17 @@ const QUESTIONS = [
   { q: "Từ 1 đến 100 có bao nhiêu số chia hết cho 5?", a: "20" }
 ];
 
-const GRID_SIZE = 6;
+const GRID_SIZE = 10;
+
+const shuffleArray = (array) => {
+  const newArr = [...array];
+  for (let i = newArr.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [newArr[i], newArr[j]] = [newArr[j], newArr[i]];
+  }
+  return newArr;
+};
+
 
 const generateGrid = (answerStr) => {
   const grid = Array(GRID_SIZE).fill(null).map(() => Array(GRID_SIZE).fill(''));
@@ -44,7 +54,7 @@ const generateGrid = (answerStr) => {
 };
 
 export default function FruitBox({ addReward }) {
-  const [pendingQuestions, setPendingQuestions] = useState([...QUESTIONS]);
+  const [pendingQuestions, setPendingQuestions] = useState(() => shuffleArray(QUESTIONS));
   const [failedQuestions, setFailedQuestions] = useState([]);
   
   const [grid, setGrid] = useState([]);
@@ -149,7 +159,7 @@ export default function FruitBox({ addReward }) {
         <p className="text-amber-800 text-lg font-medium text-center mb-8">Bạn đã giải mã thành công tất cả các câu hỏi Fruit Box!</p>
         <button 
           onClick={() => {
-            setPendingQuestions([...QUESTIONS]);
+            setPendingQuestions(shuffleArray(QUESTIONS));
             setFailedQuestions([]);
           }} 
           className="bg-amber-500 hover:bg-amber-600 text-white px-8 py-4 rounded-full font-bold transition shadow-lg transform hover:scale-105 text-xl flex items-center gap-3"
@@ -199,14 +209,14 @@ export default function FruitBox({ addReward }) {
           </div>
         )}
 
-        <div className="grid grid-cols-6 gap-3 md:gap-5 p-6 rounded-3xl bg-amber-100/50 border border-amber-200">
+        <div className="grid grid-cols-10 gap-1 sm:gap-2 p-3 sm:p-5 rounded-3xl bg-amber-100/50 border border-amber-200 w-full max-w-full overflow-hidden">
           {grid.map((row, r) => (
             row.map((cell, c) => (
               <button
                 key={`${r}-${c}`}
                 disabled={gameState !== 'playing'}
                 onClick={() => handleCellClick(r, c)}
-                className={`w-14 h-14 md:w-20 md:h-20 transition-all flex items-center justify-center relative overflow-visible focus:outline-none
+                className={`w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 transition-all flex items-center justify-center relative overflow-visible focus:outline-none
                   ${isSelected(r, c) ? 'transform scale-110 drop-shadow-xl z-10' : 'hover:scale-105 drop-shadow-md hover:drop-shadow-lg'}
                 `}
               >
@@ -214,7 +224,7 @@ export default function FruitBox({ addReward }) {
                   className={`absolute w-[130%] h-[130%] transition-colors ${isSelected(r, c) ? 'text-red-600 fill-red-500' : 'text-red-500 fill-red-400'}`}
                   strokeWidth={1.5}
                 />
-                <span className="relative z-10 text-2xl md:text-3xl font-black text-white drop-shadow-md">{cell}</span>
+                <span className="relative z-10 text-sm sm:text-base md:text-xl font-black text-white drop-shadow-md">{cell}</span>
               </button>
             ))
           ))}
