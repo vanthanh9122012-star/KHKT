@@ -50,6 +50,20 @@ export default function ScienceLab({ addReward }) {
       explain: 'Trong dãy hoạt động hóa học, các kim loại đứng trước Hydro (như Zn, Fe, Mg...) có tính khử mạnh hơn sẽ đẩy ion H+ ra khỏi dung dịch axit. Ion H+ nhận electron biến thnh kh H2 thoát ra ngoài.'
     },
     // New Combinations
+
+      'water+light': {
+        icon: '🌤️', name: 'Sự bay hơi (Vật lý)',
+        reaction: 'H2O (lỏng) + Ánh sáng → H2O (khí)',
+        desc: 'Ánh sáng mặt trời cung cấp nhiệt lượng làm nước bay hơi từ từ.',
+        explain: 'Năng lượng từ bức xạ mặt trời truyền vào các phân tử nước ở lớp bề mặt, làm chúng dao động mạnh và thoát khỏi liên kết lỏng để trở thành hơi nước. Đây là hiện tượng vật lý vì chỉ thay đổi trạng thái chất (lỏng sang khí), không tạo ra chất hóa học mới.'
+      },
+      'vinegar+light': {
+        icon: '📉', name: 'Bay hơi dung dịch (Vật lý)',
+        reaction: 'Dung dịch + Ánh sáng → Thể tích giảm',
+        desc: 'Ánh sáng làm dung môi (nước) bay hơi, thay đổi thể tích nhưng không thay đổi cấu trúc.',
+        explain: 'Khi dung dịch như Giấm (CH3COOH pha loãng) tiếp xúc với ánh sáng, phần nước sẽ bay hơi dần. Điều này làm giảm thể tích và tăng nồng độ dung dịch, nhưng hoàn toàn không làm thay đổi cấu trúc phân tử hay thành phần hóa học của lượng axit axetic bên trong.'
+      },
+
     'oxygen+metal': {
       icon: '🟤', name: 'Sự Oxi hóa (Rỉ sét)',
       reaction: '4Fe + 3O2 + xH2O → 2Fe2O3·xH2O',
