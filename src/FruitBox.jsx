@@ -59,7 +59,7 @@ export default function FruitBox({ addReward }) {
   
   const [grid, setGrid] = useState([]);
   const [selectedCells, setSelectedCells] = useState([]);
-  const [timeLeft, setTimeLeft] = useState(30);
+  const [timeLeft, setTimeLeft] = useState(60);
   const [gameState, setGameState] = useState('playing'); // playing, won, complete_victory
 
   const currentQ = pendingQuestions[0];
@@ -68,7 +68,7 @@ export default function FruitBox({ addReward }) {
     if (!currentQ) return;
     setGrid(generateGrid(currentQ.a));
     setSelectedCells([]);
-    setTimeLeft(30);
+    setTimeLeft(60);
     setGameState('playing');
   }, [currentQ]);
 
