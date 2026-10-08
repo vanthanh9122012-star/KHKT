@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Home, BookOpen, Clock, BarChart2, CheckCircle2, Circle, Play, Pause, RotateCcw, Brain, Check, X, Filter, Book, Hash, Layers, Menu, Award, Trophy, FileText, Edit3, ClipboardList, Gem, Calendar, Plus, Trash2, BookHeart, Sparkles, Quote, Mail, Link, ShieldCheck, Activity, LogOut, Users, Crown, Languages, TrendingUp, Flame, Target, Compass, Bot, Gamepad2, HelpCircle, Map, Loader2, Save } from 'lucide-react';
 import GamesManager from './GamesManager';
+import TournamentManager from './TournamentManager';
 import QuizManager from './QuizManager';
 import ReviewManager from './ReviewManager';
 import TimetableManager from './TimetableManager';
@@ -50,6 +51,7 @@ const Sidebar = ({ activeTab, setActiveTab, gamification, currentUser, setShowAu
     { id: 'flashcard', icon: <Layers size={20} />, label: 'Flashcard' },
     { id: 'quiz', icon: <ClipboardList size={20} />, label: 'Luyện thi' },
     { id: 'games', icon: <Gamepad2 size={20} />, label: 'Trò chơi' },
+      { id: 'competition', icon: <Trophy size={20} />, label: 'Cuộc thi' },
     { id: 'tasks', icon: <Map size={20} />, label: 'My Universe' },
     { id: 'review', icon: <Brain size={20} />, label: 'Ôn tập lỗi sai' },
     { id: 'focus', icon: <Clock size={20} />, label: 'Tập trung' },
@@ -1275,7 +1277,7 @@ export default function App() {
     signOut(auth);
   };
 
-  const addReward = (xpPoints, rubyPoints = 0) => {
+  const addReward = (xpPoints, rubyPoints = 0, newBadge = null) => {
     setGamification(prev => {
       let newXp = prev.xp + xpPoints;
       let newRubies = (prev.rubies || 0) + rubyPoints;
@@ -1353,6 +1355,7 @@ export default function App() {
           {activeTab === 'quiz' && <QuizManager addReward={addReward} />}
           {activeTab === 'assessment' && <AssessmentManager addReward={addReward} />}
           {activeTab === 'games' && <GamesManager addReward={addReward} />}
+            {activeTab === 'competition' && <TournamentManager addReward={addReward} currentUser={currentUser} />}
           {activeTab === 'tasks' && <TownBuilder setActiveTab={setActiveTab} />}
           {activeTab === 'review' && <ReviewManager addReward={addReward} />}
           {activeTab === 'focus' && <PomodoroFocus />}
