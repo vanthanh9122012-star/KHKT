@@ -261,7 +261,7 @@ export default function QuizManager({ addReward }) {
 
   return (
     <div className="space-y-6 animate-fade-in pb-10">
-      <header className="mb-8 flex flex-col md:flex-row justify-between items-start md:items-end gap-4">
+      <header className="mb-8 flex flex-col md:flex-row justify-between items-start sm:items-center gap-4">
         <div>
           <h1 className="text-3xl font-bold text-gray-800 mb-2">Luyện Thi & Trắc Nghiệm</h1>
           <p className="text-gray-500">Làm các bài test đa dạng để nhận XP.</p>

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
+import { createPortal } from 'react-dom';
 import { Upload, X, Loader2, FileText, CheckCircle2, Sparkles } from 'lucide-react';
-import { GoogleGenAI } from '@google/genai';
+import { QUIZ_DATA } from './data/quizData';
 
 export default function AIQuizGenerator({ onQuizGenerated, onClose, addReward }) {
   const [file, setFile] = useState(null);
@@ -100,7 +101,7 @@ export default function AIQuizGenerator({ onQuizGenerated, onClose, addReward })
     }
   };
 
-  return (
+  return createPortal(
     <div className="fixed inset-0 bg-black/60 z-50 flex items-center justify-center p-4">
       <div className="bg-white rounded-3xl w-full max-w-2xl overflow-hidden shadow-2xl animate-fade-in flex flex-col max-h-[90vh]">
         <div className="p-6 border-b border-gray-100 flex justify-between items-center bg-gray-50/50">
@@ -194,5 +195,7 @@ export default function AIQuizGenerator({ onQuizGenerated, onClose, addReward })
         </div>
       </div>
     </div>
+  ,
+    document.body
   );
 }
