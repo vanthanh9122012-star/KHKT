@@ -3,7 +3,7 @@ import { createPortal } from 'react-dom';
 import { Upload, X, Loader2, FileText, CheckCircle2, Sparkles } from 'lucide-react';
 import { QUIZ_DATA } from './data/quizData';
 
-export default function AIQuizGenerator({ onQuizGenerated, onClose, addReward }) {
+export default function AIQuizGenerator({ onGenerated, onClose, addReward }) {
   const [file, setFile] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
@@ -91,7 +91,7 @@ export default function AIQuizGenerator({ onQuizGenerated, onClose, addReward })
         questions: selectedQs
       };
       
-      onQuizGenerated(quizData);
+      if (onGenerated) onGenerated(quizData);
       
     } catch (err) {
       console.error(err);
