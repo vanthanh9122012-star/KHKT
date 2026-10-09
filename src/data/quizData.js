@@ -350,4 +350,1550 @@ export const QUIZ_DATA = [
       { id: 'v9_c3_q5', type: 'mcq', text: 'Tâm nguyện của nhà thơ trong "Mùa xuân nho nhỏ" là gì?', options: ['Muốn làm con chim hót, cành hoa, nốt trầm xao xuyến để dâng hiến cho đời', 'Muốn đi khắp nơi để ngắm cảnh', 'Muốn trở về tuổi thơ', 'Muốn sống một cuộc đời giàu sang'], correct: 'Muốn làm con chim hót, cành hoa, nốt trầm xao xuyến để dâng hiến cho đời', explanation: 'Khát vọng cống hiến thiết tha, cảm động.' }
     ]
   }
+,
+  // Tiếng Anh và KHTN
+
+  {
+    "id": "anh6_c1",
+    "title": "Tiếng Anh 6 - Unit 1: My New School",
+    "subject": "Tiếng Anh",
+    "grade": 6,
+    "chapter": 1,
+    "questions": [
+      {
+        "id": "q1",
+        "type": "mcq",
+        "text": "Choose the word whose underlined part is pronounced differently: compass, homework, someone, love (o)",
+        "options": [
+          "compass",
+          "homework",
+          "someone",
+          "love"
+        ],
+        "correct": "homework",
+        "explanation": "'homework' has /əʊ/ sound, others have /ʌ/."
+      },
+      {
+        "id": "q2",
+        "type": "fill_blank",
+        "text": "Students in my school often ______ football in the afternoon.",
+        "options": [],
+        "correct": "play",
+        "explanation": "We use 'play' with sports like football."
+      },
+      {
+        "id": "q3",
+        "type": "true_false",
+        "text": "You use a calculator to draw circles.",
+        "options": [
+          "True",
+          "False"
+        ],
+        "correct": "False",
+        "explanation": "You use a compass to draw circles."
+      },
+      {
+        "id": "q4",
+        "type": "mcq",
+        "text": "My friend __________ English and Math on Tuesday.",
+        "options": [
+          "have",
+          "has",
+          "having",
+          "to have"
+        ],
+        "correct": "has",
+        "explanation": "'My friend' is singular, so we use 'has'."
+      },
+      {
+        "id": "q5",
+        "type": "fill_blank",
+        "text": "A __________ is a place where we go to borrow books.",
+        "options": [],
+        "correct": "library",
+        "explanation": "Library is the place for borrowing books."
+      }
+    ]
+  },
+  {
+    "id": "khtn6_c1",
+    "title": "KHTN 6 - Chương 1: Mở đầu về khoa học tự nhiên",
+    "subject": "KHTN",
+    "grade": 6,
+    "chapter": 1,
+    "questions": [
+      {
+        "id": "q1",
+        "type": "mcq",
+        "text": "Hoạt động nào sau đây KHÔNG phải là hoạt động nghiên cứu khoa học?",
+        "options": [
+          "Tìm hiểu vũ trụ",
+          "Sản xuất phân bón",
+          "Trồng hoa trong vườn nhà",
+          "Nghiên cứu vaccine"
+        ],
+        "correct": "Trồng hoa trong vườn nhà",
+        "explanation": "Trồng hoa là hoạt động thực tiễn thông thường, không mang tính chất nghiên cứu."
+      },
+      {
+        "id": "q2",
+        "type": "true_false",
+        "text": "Khoa học tự nhiên nghiên cứu về các hiện tượng xã hội và con người.",
+        "options": [
+          "True",
+          "False"
+        ],
+        "correct": "False",
+        "explanation": "Khoa học tự nhiên nghiên cứu về thế giới tự nhiên, không phải hiện tượng xã hội."
+      },
+      {
+        "id": "q3",
+        "type": "fill_blank",
+        "text": "Kính ______ quang học được dùng để quan sát các vật rất nhỏ.",
+        "options": [],
+        "correct": "hiển vi",
+        "explanation": "Kính hiển vi quang học giúp phóng to hình ảnh các vật thể nhỏ."
+      },
+      {
+        "id": "q4",
+        "type": "mcq",
+        "text": "Dụng cụ nào dùng để đo thể tích chất lỏng?",
+        "options": [
+          "Thước cuộn",
+          "Cân đồng hồ",
+          "Cốc đong",
+          "Kính lúp"
+        ],
+        "correct": "Cốc đong",
+        "explanation": "Cốc đong, ống đong dùng để đo thể tích chất lỏng."
+      },
+      {
+        "id": "q5",
+        "type": "fill_blank",
+        "text": "Đơn vị đo độ dài hợp pháp của nước ta là ______.",
+        "options": [],
+        "correct": "mét",
+        "explanation": "Mét (m) là đơn vị đo độ dài tiêu chuẩn."
+      }
+    ]
+  },
+  {
+    "id": "anh7_c1",
+    "title": "Tiếng Anh 7 - Unit 1: Hobbies",
+    "subject": "Tiếng Anh",
+    "grade": 7,
+    "chapter": 1,
+    "questions": [
+      {
+        "id": "q1",
+        "type": "mcq",
+        "text": "My sister likes ______ models in her free time.",
+        "options": [
+          "make",
+          "makes",
+          "making",
+          "made"
+        ],
+        "correct": "making",
+        "explanation": "After 'likes', we use V-ing (making)."
+      },
+      {
+        "id": "q2",
+        "type": "true_false",
+        "text": "Collecting stamps is a cheap hobby if you just collect them from letters you receive.",
+        "options": [
+          "True",
+          "False"
+        ],
+        "correct": "True",
+        "explanation": "It's cheap because you don't have to buy them."
+      },
+      {
+        "id": "q3",
+        "type": "fill_blank",
+        "text": "I think playing board games is ______ because I can play it with my friends.",
+        "options": [],
+        "correct": "interesting",
+        "explanation": "Interesting fits the context of enjoying a game with friends."
+      },
+      {
+        "id": "q4",
+        "type": "mcq",
+        "text": "Which word has a different sound: bird, girl, first, sister",
+        "options": [
+          "bird",
+          "girl",
+          "first",
+          "sister"
+        ],
+        "correct": "sister",
+        "explanation": "'sister' has /ə/ while the others have /ɜː/."
+      },
+      {
+        "id": "q5",
+        "type": "fill_blank",
+        "text": "He usually ______ judo every weekend.",
+        "options": [],
+        "correct": "does",
+        "explanation": "We use 'do' with judo, so third person singular is 'does'."
+      }
+    ]
+  },
+  {
+    "id": "khtn7_c1",
+    "title": "KHTN 7 - Chương 1: Nguyên tử - Nguyên tố hóa học",
+    "subject": "KHTN",
+    "grade": 7,
+    "chapter": 1,
+    "questions": [
+      {
+        "id": "q1",
+        "type": "mcq",
+        "text": "Hạt nhân nguyên tử được cấu tạo bởi các hạt nào?",
+        "options": [
+          "Proton và electron",
+          "Proton và neutron",
+          "Neutron và electron",
+          "Chỉ có proton"
+        ],
+        "correct": "Proton và neutron",
+        "explanation": "Hạt nhân chứa proton mang điện tích dương và neutron không mang điện."
+      },
+      {
+        "id": "q2",
+        "type": "true_false",
+        "text": "Khối lượng của nguyên tử tập trung hầu hết ở lớp vỏ electron.",
+        "options": [
+          "True",
+          "False"
+        ],
+        "correct": "False",
+        "explanation": "Khối lượng nguyên tử tập trung ở hạt nhân do khối lượng electron rất nhỏ."
+      },
+      {
+        "id": "q3",
+        "type": "fill_blank",
+        "text": "Trong nguyên tử, số lượng hạt proton luôn bằng số lượng hạt ______.",
+        "options": [],
+        "correct": "electron",
+        "explanation": "Nguyên tử trung hòa về điện nên số p bằng số e."
+      },
+      {
+        "id": "q4",
+        "type": "mcq",
+        "text": "Kí hiệu hóa học của nguyên tố Oxygen là gì?",
+        "options": [
+          "O",
+          "Ox",
+          "C",
+          "H"
+        ],
+        "correct": "O",
+        "explanation": "Oxygen có kí hiệu hóa học là O."
+      },
+      {
+        "id": "q5",
+        "type": "fill_blank",
+        "text": "Nguyên tố hóa học là tập hợp các nguyên tử cùng loại, có cùng số hạt ______ trong hạt nhân.",
+        "options": [],
+        "correct": "proton",
+        "explanation": "Nguyên tố hóa học được đặc trưng bởi số proton."
+      }
+    ]
+  },
+  {
+    "id": "anh8_c1",
+    "title": "Tiếng Anh 8 - Unit 1: Leisure Time",
+    "subject": "Tiếng Anh",
+    "grade": 8,
+    "chapter": 1,
+    "questions": [
+      {
+        "id": "q1",
+        "type": "mcq",
+        "text": "I fancy ______ origami when I have free time.",
+        "options": [
+          "fold",
+          "to fold",
+          "folding",
+          "folded"
+        ],
+        "correct": "folding",
+        "explanation": "After 'fancy', we use V-ing."
+      },
+      {
+        "id": "q2",
+        "type": "true_false",
+        "text": "'DIY' stands for 'Do It Yourself'.",
+        "options": [
+          "True",
+          "False"
+        ],
+        "correct": "True",
+        "explanation": "DIY is a common acronym for Do It Yourself."
+      },
+      {
+        "id": "q3",
+        "type": "fill_blank",
+        "text": "Many teenagers are addicted ______ social media.",
+        "options": [],
+        "correct": "to",
+        "explanation": "The adjective 'addicted' is followed by the preposition 'to'."
+      },
+      {
+        "id": "q4",
+        "type": "mcq",
+        "text": "She dislikes ______ because it takes too much time.",
+        "options": [
+          "window shopping",
+          "to window shopping",
+          "window shop",
+          "window shopped"
+        ],
+        "correct": "window shopping",
+        "explanation": "After 'dislikes', we use V-ing."
+      },
+      {
+        "id": "q5",
+        "type": "fill_blank",
+        "text": "Playing sports helps you keep ______ and healthy.",
+        "options": [],
+        "correct": "fit",
+        "explanation": "'Keep fit' is a common collocation."
+      }
+    ]
+  },
+  {
+    "id": "khtn8_c1",
+    "title": "KHTN 8 - Chương 1: Phản ứng hóa học",
+    "subject": "KHTN",
+    "grade": 8,
+    "chapter": 1,
+    "questions": [
+      {
+        "id": "q1",
+        "type": "mcq",
+        "text": "Hiện tượng nào sau đây là hiện tượng hóa học?",
+        "options": [
+          "Nước đá tan chảy",
+          "Đun sôi nước",
+          "Sắt gỉ sét",
+          "Thủy tinh vỡ"
+        ],
+        "correct": "Sắt gỉ sét",
+        "explanation": "Sắt gỉ sét tạo ra chất mới, là hiện tượng hóa học."
+      },
+      {
+        "id": "q2",
+        "type": "true_false",
+        "text": "Trong phản ứng hóa học, tổng khối lượng các chất tham gia luôn lớn hơn khối lượng sản phẩm.",
+        "options": [
+          "True",
+          "False"
+        ],
+        "correct": "False",
+        "explanation": "Theo định luật bảo toàn khối lượng, tổng khối lượng tham gia bằng tổng khối lượng sản phẩm."
+      },
+      {
+        "id": "q3",
+        "type": "fill_blank",
+        "text": "Chất biến đổi trong phản ứng gọi là chất ______.",
+        "options": [],
+        "correct": "tham gia",
+        "explanation": "Chất ban đầu bị biến đổi được gọi là chất tham gia phản ứng (hoặc chất phản ứng)."
+      },
+      {
+        "id": "q4",
+        "type": "mcq",
+        "text": "Dấu hiệu nhận biết có phản ứng hóa học xảy ra là:",
+        "options": [
+          "Có chất khí thoát ra",
+          "Có sự thay đổi màu sắc",
+          "Tạo ra chất kết tủa",
+          "Tất cả các ý trên"
+        ],
+        "correct": "Tất cả các ý trên",
+        "explanation": "Phát sinh khí, thay đổi màu, tạo kết tủa đều là dấu hiệu phản ứng hóa học."
+      },
+      {
+        "id": "q5",
+        "type": "fill_blank",
+        "text": "Phản ứng tỏa ______ là phản ứng giải phóng năng lượng ra môi trường.",
+        "options": [],
+        "correct": "nhiệt",
+        "explanation": "Phản ứng tỏa nhiệt là phản ứng sinh ra nhiệt lượng."
+      }
+    ]
+  },
+  {
+    "id": "anh9_c1",
+    "title": "Tiếng Anh 9 - Unit 1: Local Environment",
+    "subject": "Tiếng Anh",
+    "grade": 9,
+    "chapter": 1,
+    "questions": [
+      {
+        "id": "q1",
+        "type": "mcq",
+        "text": "They ______ this beautiful conical hat in Hue.",
+        "options": [
+          "made",
+          "make",
+          "making",
+          "are making"
+        ],
+        "correct": "make",
+        "explanation": "Present simple is used for general facts (they make hats in Hue)."
+      },
+      {
+        "id": "q2",
+        "type": "true_false",
+        "text": "A craftsman is a person who works with their hands to make things.",
+        "options": [
+          "True",
+          "False"
+        ],
+        "correct": "True",
+        "explanation": "This is the definition of a craftsman."
+      },
+      {
+        "id": "q3",
+        "type": "fill_blank",
+        "text": "We look ______ to seeing you again next week.",
+        "options": [],
+        "correct": "forward",
+        "explanation": "'Look forward to' means expecting something eagerly."
+      },
+      {
+        "id": "q4",
+        "type": "mcq",
+        "text": "She turned ______ the invitation because she was too busy.",
+        "options": [
+          "up",
+          "down",
+          "on",
+          "off"
+        ],
+        "correct": "down",
+        "explanation": "'Turn down' means to refuse."
+      },
+      {
+        "id": "q5",
+        "type": "fill_blank",
+        "text": "Bat Trang is one of the most famous ______ villages in Vietnam.",
+        "options": [],
+        "correct": "craft",
+        "explanation": "Bat Trang is a traditional craft village."
+      }
+    ]
+  },
+  {
+    "id": "khtn9_c1",
+    "title": "KHTN 9 - Chương 1: Năng lượng cơ học",
+    "subject": "KHTN",
+    "grade": 9,
+    "chapter": 1,
+    "questions": [
+      {
+        "id": "q1",
+        "type": "mcq",
+        "text": "Động năng của một vật phụ thuộc vào yếu tố nào?",
+        "options": [
+          "Chỉ khối lượng",
+          "Chỉ vận tốc",
+          "Khối lượng và vận tốc",
+          "Khối lượng và độ cao"
+        ],
+        "correct": "Khối lượng và vận tốc",
+        "explanation": "Động năng Wđ = 1/2.m.v^2 nên phụ thuộc khối lượng và vận tốc."
+      },
+      {
+        "id": "q2",
+        "type": "true_false",
+        "text": "Vật ở trên cao luôn có thế năng hấp dẫn so với mặt đất.",
+        "options": [
+          "True",
+          "False"
+        ],
+        "correct": "True",
+        "explanation": "Thế năng hấp dẫn phụ thuộc vào độ cao so với mốc (thường chọn mặt đất)."
+      },
+      {
+        "id": "q3",
+        "type": "fill_blank",
+        "text": "Cơ năng của vật bằng tổng ______ và thế năng của vật.",
+        "options": [],
+        "correct": "động năng",
+        "explanation": "Cơ năng = động năng + thế năng."
+      },
+      {
+        "id": "q4",
+        "type": "mcq",
+        "text": "Khi vật rơi tự do, năng lượng chuyển hóa như thế nào?",
+        "options": [
+          "Động năng thành thế năng",
+          "Thế năng thành động năng",
+          "Nhiệt năng thành cơ năng",
+          "Động năng giảm"
+        ],
+        "correct": "Thế năng thành động năng",
+        "explanation": "Khi rơi, độ cao giảm (thế năng giảm) và vận tốc tăng (động năng tăng)."
+      },
+      {
+        "id": "q5",
+        "type": "fill_blank",
+        "text": "Đơn vị đo cơ năng là ______.",
+        "options": [],
+        "correct": "Jun",
+        "explanation": "Đơn vị đo năng lượng và công trong hệ SI là Jun (Joule)."
+      }
+    ]
+  }
+,
+  // Lịch sử - Địa lí và GDCD
+
+  {
+    "id": "lsdl6_c1",
+    "title": "Lịch sử - Địa lí 6 - Chương 1: Hệ thống kinh vĩ tuyến. Tọa độ địa lí",
+    "subject": "Lịch sử - Địa lí",
+    "grade": 6,
+    "chapter": 1,
+    "questions": [
+      {
+        "id": "q1",
+        "type": "mcq",
+        "text": "Kinh tuyến là những đường:",
+        "options": [
+          "Nối liền hai điểm cực Bắc và cực Nam trên quả địa cầu.",
+          "Vòng tròn bao quanh quả địa cầu.",
+          "Vuông góc với trục Trái Đất.",
+          "Song song với Xích đạo."
+        ],
+        "correct": "Nối liền hai điểm cực Bắc và cực Nam trên quả địa cầu.",
+        "explanation": "Kinh tuyến là các nửa vòng tròn nối hai cực trên bề mặt quả địa cầu."
+      },
+      {
+        "id": "q2",
+        "type": "true_false",
+        "text": "Đường Xích đạo là vĩ tuyến lớn nhất trên quả địa cầu.",
+        "options": [
+          "True",
+          "False"
+        ],
+        "correct": "True",
+        "explanation": "Xích đạo là vòng tròn lớn nhất chia Trái Đất thành hai bán cầu Bắc và Nam."
+      },
+      {
+        "id": "q3",
+        "type": "mcq",
+        "text": "Tọa độ địa lí của một điểm là:",
+        "options": [
+          "Kinh độ của điểm đó.",
+          "Vĩ độ của điểm đó.",
+          "Kinh độ và vĩ độ của điểm đó.",
+          "Độ cao của điểm đó so với mực nước biển."
+        ],
+        "correct": "Kinh độ và vĩ độ của điểm đó.",
+        "explanation": "Tọa độ địa lí của một điểm được xác định bởi kinh độ và vĩ độ của điểm đó."
+      },
+      {
+        "id": "q4",
+        "type": "fill_blank",
+        "text": "Kinh tuyến gốc có số độ là ... độ.",
+        "options": [],
+        "correct": "0",
+        "explanation": "Kinh tuyến đi qua đài thiên văn Greenwich được chọn là kinh tuyến gốc (0 độ)."
+      },
+      {
+        "id": "q5",
+        "type": "true_false",
+        "text": "Mạng lưới kinh, vĩ tuyến giúp xác định chính xác vị trí của bất kì điểm nào trên Trái Đất.",
+        "options": [
+          "True",
+          "False"
+        ],
+        "correct": "True",
+        "explanation": "Mạng lưới tọa độ tạo bởi các kinh tuyến và vĩ tuyến là hệ tọa độ chung cho toàn cầu."
+      }
+    ]
+  },
+  {
+    "id": "gdcd6_c1",
+    "title": "GDCD 6 - Chương 1: Tự hào về truyền thống gia đình, dòng họ",
+    "subject": "GDCD",
+    "grade": 6,
+    "chapter": 1,
+    "questions": [
+      {
+        "id": "q1",
+        "type": "mcq",
+        "text": "Hành vi nào dưới đây thể hiện sự giữ gìn và phát huy truyền thống gia đình, dòng họ?",
+        "options": [
+          "Xấu hổ vì gia đình nghèo.",
+          "Cố gắng học tập tốt để làm rạng rỡ gia đình.",
+          "Che giấu việc làm sai trái của người thân.",
+          "Từ bỏ nghề truyền thống của gia đình vì thấy vất vả."
+        ],
+        "correct": "Cố gắng học tập tốt để làm rạng rỡ gia đình.",
+        "explanation": "Học tập tốt, sống lương thiện là cách thiết thực nhất để tiếp nối truyền thống tốt đẹp."
+      },
+      {
+        "id": "q2",
+        "type": "true_false",
+        "text": "Chỉ có những gia đình giàu có mới có truyền thống tốt đẹp để tự hào.",
+        "options": [
+          "True",
+          "False"
+        ],
+        "correct": "False",
+        "explanation": "Truyền thống tốt đẹp không phụ thuộc vào sự giàu nghèo mà là những giá trị tinh thần, đạo đức, lao động."
+      },
+      {
+        "id": "q3",
+        "type": "fill_blank",
+        "text": "Chúng ta cần biết ơn, trân trọng và tự ... về các truyền thống tốt đẹp của gia đình.",
+        "options": [],
+        "correct": "hào",
+        "explanation": "Tự hào về truyền thống gia đình là thái độ trân trọng các giá trị tốt đẹp."
+      },
+      {
+        "id": "q4",
+        "type": "mcq",
+        "text": "Truyền thống gia đình, dòng họ có ý nghĩa như thế nào đối với mỗi người?",
+        "options": [
+          "Tạo ra áp lực lớn trong cuộc sống.",
+          "Tiếp thêm sức mạnh, động lực để vươn lên.",
+          "Làm mất đi sự tự do cá nhân.",
+          "Gây cản trở sự phát triển của xã hội."
+        ],
+        "correct": "Tiếp thêm sức mạnh, động lực để vươn lên.",
+        "explanation": "Truyền thống tốt đẹp là bệ phóng tinh thần giúp mỗi người vững bước."
+      },
+      {
+        "id": "q5",
+        "type": "true_false",
+        "text": "Truyền thống hiếu học là một trong những truyền thống quý báu của nhiều gia đình, dòng họ ở Việt Nam.",
+        "options": [
+          "True",
+          "False"
+        ],
+        "correct": "True",
+        "explanation": "Người Việt Nam luôn coi trọng việc học và coi đó là truyền thống vẻ vang."
+      }
+    ]
+  },
+  {
+    "id": "lsdl7_c1",
+    "title": "Lịch sử - Địa lí 7 - Chương 1: Châu Âu",
+    "subject": "Lịch sử - Địa lí",
+    "grade": 7,
+    "chapter": 1,
+    "questions": [
+      {
+        "id": "q1",
+        "type": "mcq",
+        "text": "Châu Âu nằm chủ yếu ở đới khí hậu nào?",
+        "options": [
+          "Nhiệt đới",
+          "Cận nhiệt đới",
+          "Ôn đới",
+          "Hàn đới"
+        ],
+        "correct": "Ôn đới",
+        "explanation": "Phần lớn diện tích châu Âu nằm trong đới ôn hòa."
+      },
+      {
+        "id": "q2",
+        "type": "true_false",
+        "text": "Đường bờ biển châu Âu bị cắt xẻ mạnh, tạo thành nhiều bán đảo, vũng vịnh.",
+        "options": [
+          "True",
+          "False"
+        ],
+        "correct": "True",
+        "explanation": "Châu Âu có đường bờ biển dài và cắt xẻ mạnh nhất trong các châu lục."
+      },
+      {
+        "id": "q3",
+        "type": "fill_blank",
+        "text": "Dãy núi ngăn cách châu Á và châu Âu là dãy núi ...",
+        "options": [],
+        "correct": "U-ran",
+        "explanation": "Dãy U-ran (Ural) được coi là ranh giới tự nhiên giữa châu Âu và châu Á."
+      },
+      {
+        "id": "q4",
+        "type": "mcq",
+        "text": "Đặc điểm dân cư nổi bật của châu Âu hiện nay là:",
+        "options": [
+          "Dân số tăng nhanh.",
+          "Cơ cấu dân số trẻ.",
+          "Cơ cấu dân số già.",
+          "Tỉ lệ gia tăng tự nhiên rất cao."
+        ],
+        "correct": "Cơ cấu dân số già.",
+        "explanation": "Châu Âu có tỉ lệ sinh thấp và tuổi thọ cao, dẫn đến dân số già hóa."
+      },
+      {
+        "id": "q5",
+        "type": "true_false",
+        "text": "Đồng bằng chiếm phần lớn diện tích của châu Âu.",
+        "options": [
+          "True",
+          "False"
+        ],
+        "correct": "True",
+        "explanation": "Đồng bằng chiếm khoảng 2/3 diện tích lãnh thổ châu Âu."
+      }
+    ]
+  },
+  {
+    "id": "gdcd7_c1",
+    "title": "GDCD 7 - Chương 1: Tự hào về truyền thống quê hương",
+    "subject": "GDCD",
+    "grade": 7,
+    "chapter": 1,
+    "questions": [
+      {
+        "id": "q1",
+        "type": "mcq",
+        "text": "Hành động nào sau đây KHÔNG thể hiện niềm tự hào về truyền thống quê hương?",
+        "options": [
+          "Giới thiệu cảnh đẹp quê hương với bạn bè quốc tế.",
+          "Tích cực tham gia các lễ hội truyền thống của làng.",
+          "Chê bai các làn điệu dân ca của quê hương là lạc hậu.",
+          "Bảo vệ các di tích lịch sử tại địa phương."
+        ],
+        "correct": "Chê bai các làn điệu dân ca của quê hương là lạc hậu.",
+        "explanation": "Chê bai di sản văn hóa là đi ngược lại với việc gìn giữ và tự hào về quê hương."
+      },
+      {
+        "id": "q2",
+        "type": "true_false",
+        "text": "Mỗi địa phương đều có những truyền thống tốt đẹp riêng về văn hóa, lịch sử.",
+        "options": [
+          "True",
+          "False"
+        ],
+        "correct": "True",
+        "explanation": "Việt Nam có 54 dân tộc và vô vàn vùng miền, mỗi nơi đều có bản sắc riêng."
+      },
+      {
+        "id": "q3",
+        "type": "fill_blank",
+        "text": "Giữ gìn và phát huy truyền thống quê hương là trách nhiệm của ...",
+        "options": [],
+        "correct": "mọi người",
+        "explanation": "Đó không chỉ là việc của người lớn mà của tất cả công dân, kể cả học sinh."
+      },
+      {
+        "id": "q4",
+        "type": "mcq",
+        "text": "Ý nghĩa của việc giữ gìn truyền thống quê hương là gì?",
+        "options": [
+          "Góp phần làm phong phú bản sắc văn hóa dân tộc.",
+          "Giúp con người trở nên kiêu ngạo, coi thường nơi khác.",
+          "Làm cho kinh tế địa phương đi xuống.",
+          "Gây lãng phí thời gian và tiền bạc."
+        ],
+        "correct": "Góp phần làm phong phú bản sắc văn hóa dân tộc.",
+        "explanation": "Truyền thống quê hương là mảnh ghép tạo nên bức tranh văn hóa dân tộc đa dạng."
+      },
+      {
+        "id": "q5",
+        "type": "true_false",
+        "text": "Học sinh còn nhỏ tuổi nên chưa cần quan tâm đến việc giữ gìn truyền thống quê hương.",
+        "options": [
+          "True",
+          "False"
+        ],
+        "correct": "False",
+        "explanation": "Học sinh có thể góp phần qua những việc nhỏ như tìm hiểu lịch sử, bảo vệ cảnh quan,..."
+      }
+    ]
+  },
+  {
+    "id": "lsdl8_c1",
+    "title": "Lịch sử - Địa lí 8 - Chương 1: Châu Á",
+    "subject": "Lịch sử - Địa lí",
+    "grade": 8,
+    "chapter": 1,
+    "questions": [
+      {
+        "id": "q1",
+        "type": "mcq",
+        "text": "Châu Á là châu lục:",
+        "options": [
+          "Rộng lớn nhất thế giới.",
+          "Rộng thứ hai thế giới, sau châu Mĩ.",
+          "Rộng thứ ba thế giới, sau châu Phi và châu Mĩ.",
+          "Nhỏ nhất thế giới."
+        ],
+        "correct": "Rộng lớn nhất thế giới.",
+        "explanation": "Với diện tích khoảng 44,4 triệu km2, châu Á là châu lục lớn nhất thế giới."
+      },
+      {
+        "id": "q2",
+        "type": "true_false",
+        "text": "Châu Á có đầy đủ các đới khí hậu trên Trái Đất.",
+        "options": [
+          "True",
+          "False"
+        ],
+        "correct": "True",
+        "explanation": "Do lãnh thổ trải dài từ cực Bắc đến Xích đạo, châu Á có các đới khí hậu từ cực đến xích đạo."
+      },
+      {
+        "id": "q3",
+        "type": "fill_blank",
+        "text": "Đỉnh núi cao nhất thế giới nằm ở châu Á là đỉnh ...",
+        "options": [],
+        "correct": "E-vơ-rét",
+        "explanation": "Đỉnh E-vơ-rét (Everest) trên dãy Hi-ma-lay-a là đỉnh núi cao nhất thế giới."
+      },
+      {
+        "id": "q4",
+        "type": "mcq",
+        "text": "Khu vực nào ở châu Á chịu ảnh hưởng mạnh mẽ nhất của gió mùa?",
+        "options": [
+          "Tây Á, Trung Á.",
+          "Bắc Á, Đông Á.",
+          "Đông Á, Đông Nam Á và Nam Á.",
+          "Bắc Á, Trung Á."
+        ],
+        "correct": "Đông Á, Đông Nam Á và Nam Á.",
+        "explanation": "Đây là những khu vực có khí hậu gió mùa điển hình nhất trên thế giới."
+      },
+      {
+        "id": "q5",
+        "type": "true_false",
+        "text": "Sông ngòi ở châu Á phân bố rất đồng đều giữa các khu vực.",
+        "options": [
+          "True",
+          "False"
+        ],
+        "correct": "False",
+        "explanation": "Mạng lưới sông ngòi phân bố không đều, tập trung nhiều ở các khu vực có khí hậu gió mùa."
+      }
+    ]
+  },
+  {
+    "id": "gdcd8_c1",
+    "title": "GDCD 8 - Chương 1: Tự hào về truyền thống dân tộc Việt Nam",
+    "subject": "GDCD",
+    "grade": 8,
+    "chapter": 1,
+    "questions": [
+      {
+        "id": "q1",
+        "type": "mcq",
+        "text": "Truyền thống nào được coi là cốt lõi và cao quý nhất của dân tộc Việt Nam?",
+        "options": [
+          "Tôn sư trọng đạo.",
+          "Yêu nước.",
+          "Hiếu học.",
+          "Cần cù lao động."
+        ],
+        "correct": "Yêu nước.",
+        "explanation": "Chủ nghĩa yêu nước là sợi chỉ đỏ xuyên suốt lịch sử tồn tại và phát triển của dân tộc ta."
+      },
+      {
+        "id": "q2",
+        "type": "true_false",
+        "text": "Việc giữ gìn bản sắc văn hóa dân tộc chỉ có tác dụng trong thời kì phong kiến.",
+        "options": [
+          "True",
+          "False"
+        ],
+        "correct": "False",
+        "explanation": "Trong thời kì hội nhập, việc giữ gìn bản sắc càng có ý nghĩa quan trọng để 'hòa nhập không hòa tan'."
+      },
+      {
+        "id": "q3",
+        "type": "fill_blank",
+        "text": "Truyền thống dân tộc là những giá trị tốt đẹp được hình thành trong quá trình lịch sử lâu dài của ...",
+        "options": [],
+        "correct": "dân tộc",
+        "explanation": "Truyền thống là những gì kết tinh, lưu truyền qua nhiều thế hệ của cả một quốc gia, dân tộc."
+      },
+      {
+        "id": "q4",
+        "type": "mcq",
+        "text": "Biểu hiện nào sau đây đi ngược lại truyền thống tốt đẹp của dân tộc?",
+        "options": [
+          "Tham gia hiến máu nhân đạo.",
+          "Tìm hiểu lịch sử chống ngoại xâm của cha ông.",
+          "Thái độ sùng ngoại, chê bai hàng hóa và văn hóa trong nước.",
+          "Kính trọng người lớn tuổi."
+        ],
+        "correct": "Thái độ sùng ngoại, chê bai hàng hóa và văn hóa trong nước.",
+        "explanation": "Thái độ sùng ngoại, vọng ngoại làm mất đi tinh thần tự tôn dân tộc."
+      },
+      {
+        "id": "q5",
+        "type": "true_false",
+        "text": "Đoàn kết là một truyền thống sức mạnh giúp dân tộc ta vượt qua mọi thiên tai, địch họa.",
+        "options": [
+          "True",
+          "False"
+        ],
+        "correct": "True",
+        "explanation": "Tinh thần 'Tương thân tương ái', 'Lá lành đùm lá rách' luôn được phát huy trong khó khăn."
+      }
+    ]
+  },
+  {
+    "id": "lsdl9_c1",
+    "title": "Lịch sử - Địa lí 9 - Chương 1: Nước Nga và Liên Xô từ năm 1918 đến năm 1945",
+    "subject": "Lịch sử - Địa lí",
+    "grade": 9,
+    "chapter": 1,
+    "questions": [
+      {
+        "id": "q1",
+        "type": "mcq",
+        "text": "Liên bang Cộng hòa xã hội chủ nghĩa Xô viết (Liên Xô) được thành lập vào năm nào?",
+        "options": [
+          "1917",
+          "1918",
+          "1922",
+          "1924"
+        ],
+        "correct": "1922",
+        "explanation": "Cuối năm 1922, Đại hội Xô viết toàn Nga đã tuyên bố thành lập Liên Xô."
+      },
+      {
+        "id": "q2",
+        "type": "true_false",
+        "text": "Chính sách kinh tế mới (NEP) do V.I. Lê-nin khởi xướng đã cứu nguy cho nước Nga Xô viết thoát khỏi khủng hoảng trầm trọng.",
+        "options": [
+          "True",
+          "False"
+        ],
+        "correct": "True",
+        "explanation": "NEP thay thế Chính sách cộng sản thời chiến, giúp khôi phục nền kinh tế bị tàn phá sau nội chiến."
+      },
+      {
+        "id": "q3",
+        "type": "fill_blank",
+        "text": "Người lãnh đạo Cách mạng tháng Mười Nga vĩ đại là V.I. ...",
+        "options": [],
+        "correct": "Lê-nin",
+        "explanation": "Lê-nin và Đảng Bôn-sê-vích đã lãnh đạo cuộc cách mạng xã hội chủ nghĩa thành công ở Nga."
+      },
+      {
+        "id": "q4",
+        "type": "mcq",
+        "text": "Thành tựu lớn nhất của công cuộc xây dựng chủ nghĩa xã hội ở Liên Xô (1925-1941) là gì?",
+        "options": [
+          "Đưa con người lên vũ trụ.",
+          "Trở thành cường quốc công nghiệp đứng đầu châu Âu và thứ hai thế giới.",
+          "Chế tạo thành công bom nguyên tử.",
+          "Xóa bỏ hoàn toàn chế độ tư bản trên thế giới."
+        ],
+        "correct": "Trở thành cường quốc công nghiệp đứng đầu châu Âu và thứ hai thế giới.",
+        "explanation": "Chỉ sau vài kế hoạch 5 năm, Liên Xô từ một nước nông nghiệp lạc hậu đã vươn lên mạnh mẽ."
+      },
+      {
+        "id": "q5",
+        "type": "true_false",
+        "text": "Liên Xô không có đóng góp gì trong cuộc chiến tranh chống chủ nghĩa phát xít (Chiến tranh thế giới thứ hai).",
+        "options": [
+          "True",
+          "False"
+        ],
+        "correct": "False",
+        "explanation": "Liên Xô là một trong ba trụ cột của phe Đồng minh, lực lượng đi đầu và giữ vai trò quyết định tiêu diệt chủ nghĩa phát xít."
+      }
+    ]
+  },
+  {
+    "id": "gdcd9_c1",
+    "title": "GDCD 9 - Chương 1: Chí công vô tư",
+    "subject": "GDCD",
+    "grade": 9,
+    "chapter": 1,
+    "questions": [
+      {
+        "id": "q1",
+        "type": "mcq",
+        "text": "Chí công vô tư là phẩm chất đạo đức của con người thể hiện ở việc:",
+        "options": [
+          "Chỉ quan tâm đến lợi ích của bản thân mình.",
+          "Công bằng, không thiên vị, giải quyết công việc theo lẽ phải.",
+          "Bao che cho lỗi lầm của người thân.",
+          "Làm việc gì cũng phải có thù lao tương xứng."
+        ],
+        "correct": "Công bằng, không thiên vị, giải quyết công việc theo lẽ phải.",
+        "explanation": "Chí công vô tư đòi hỏi sự công minh, chính trực, đặt lợi ích tập thể lên trên cá nhân."
+      },
+      {
+        "id": "q2",
+        "type": "true_false",
+        "text": "Người chí công vô tư luôn được mọi người tin cậy và kính trọng.",
+        "options": [
+          "True",
+          "False"
+        ],
+        "correct": "True",
+        "explanation": "Sự công bằng và minh bạch luôn nhận được sự nể trọng từ xã hội."
+      },
+      {
+        "id": "q3",
+        "type": "fill_blank",
+        "text": "Chủ tịch Hồ Chí Minh đã căn dặn cán bộ, đảng viên phải 'Cần, kiệm, liêm, chính, chí công vô ...'.",
+        "options": [],
+        "correct": "tư",
+        "explanation": "Đây là tư tưởng đạo đức cốt lõi mà Bác Hồ luôn nhấn mạnh."
+      },
+      {
+        "id": "q4",
+        "type": "mcq",
+        "text": "Biểu hiện nào dưới đây trái với chí công vô tư?",
+        "options": [
+          "Bầu cử người có tài năng vào ban cán sự lớp.",
+          "Giáo viên chấm điểm công bằng cho tất cả học sinh.",
+          "Vì tình cảm cá nhân mà bỏ qua khuyết điểm của bạn.",
+          "Dũng cảm đấu tranh chống lại các hành vi tham nhũng."
+        ],
+        "correct": "Vì tình cảm cá nhân mà bỏ qua khuyết điểm của bạn.",
+        "explanation": "Hành động này thể hiện sự thiên vị, đặt tình cảm cá nhân lên trên sự thật và lẽ phải."
+      },
+      {
+        "id": "q5",
+        "type": "true_false",
+        "text": "Chí công vô tư chỉ là phẩm chất cần thiết đối với những người làm cán bộ lãnh đạo.",
+        "options": [
+          "True",
+          "False"
+        ],
+        "correct": "False",
+        "explanation": "Chí công vô tư là phẩm chất cần thiết đối với mọi công dân, học sinh trong cuộc sống hàng ngày."
+      }
+    ]
+  }
+,
+  // Tin học và Công nghệ
+
+  {
+    "id": "tin6_c1",
+    "title": "Tin học 6 - Chủ đề 1: Máy tính và cộng đồng",
+    "subject": "Tin học",
+    "grade": 6,
+    "chapter": 1,
+    "questions": [
+      {
+        "id": "t6_q1",
+        "type": "mcq",
+        "text": "Theo em, đâu là vật mang tin?",
+        "options": [
+          "A. Tiếng trống trường",
+          "B. Cuốn sách",
+          "C. Tiếng chim hót",
+          "D. Mùi hương hoa"
+        ],
+        "correct": "B. Cuốn sách",
+        "explanation": "Cuốn sách lưu trữ và truyền đạt thông tin có thể nhìn thấy và cầm nắm được, do đó nó là vật mang tin."
+      },
+      {
+        "id": "t6_q2",
+        "type": "true_false",
+        "text": "Thông tin là những gì đem lại sự hiểu biết cho con người về thế giới xung quanh và về chính mình.",
+        "options": [
+          "True",
+          "False"
+        ],
+        "correct": "True",
+        "explanation": "Đây là khái niệm cơ bản về thông tin được học trong sách giáo khoa."
+      },
+      {
+        "id": "t6_q3",
+        "type": "fill_blank",
+        "text": "Bộ não con người là một bộ phận có chức năng thu nhận và xử lý ___.",
+        "options": [],
+        "correct": "thông tin",
+        "explanation": "Não bộ đóng vai trò trung tâm xử lý thông tin của con người."
+      },
+      {
+        "id": "t6_q4",
+        "type": "true_false",
+        "text": "Máy tính có khả năng suy nghĩ giống hệt như con người trong mọi tình huống.",
+        "options": [
+          "True",
+          "False"
+        ],
+        "correct": "False",
+        "explanation": "Máy tính chỉ hoạt động dựa trên các chương trình và thuật toán do con người lập ra, không thể suy nghĩ giống hệt con người."
+      },
+      {
+        "id": "t6_q5",
+        "type": "mcq",
+        "text": "Đâu là thiết bị có chức năng xuất thông tin của máy tính?",
+        "options": [
+          "A. Bàn phím",
+          "B. Chuột",
+          "C. Màn hình",
+          "D. Micro"
+        ],
+        "correct": "C. Màn hình",
+        "explanation": "Màn hình giúp hiển thị thông tin xử lý từ máy tính để người dùng quan sát."
+      }
+    ]
+  },
+  {
+    "id": "cn6_c1",
+    "title": "Công nghệ 6 - Chương 1: Nhà ở",
+    "subject": "Công nghệ",
+    "grade": 6,
+    "chapter": 1,
+    "questions": [
+      {
+        "id": "cn6_q1",
+        "type": "mcq",
+        "text": "Vai trò chính của nhà ở đối với đời sống con người là gì?",
+        "options": [
+          "A. Chỉ để che nắng, che mưa",
+          "B. Là nơi trú ngụ, sinh hoạt và nghỉ ngơi của con người",
+          "C. Chỉ để cất giữ tài sản",
+          "D. Là nơi làm việc"
+        ],
+        "correct": "B. Là nơi trú ngụ, sinh hoạt và nghỉ ngơi của con người",
+        "explanation": "Nhà ở đáp ứng nhu cầu sinh hoạt, nghỉ ngơi và bảo vệ con người khỏi tác động của thiên nhiên."
+      },
+      {
+        "id": "cn6_q2",
+        "type": "true_false",
+        "text": "Nhà sàn là kiểu nhà phổ biến nhất ở các khu vực đồng bằng sông Cửu Long.",
+        "options": [
+          "True",
+          "False"
+        ],
+        "correct": "False",
+        "explanation": "Nhà sàn là kiểu kiến trúc phổ biến ở miền núi để tránh thú dữ và ngập lụt, không phải phổ biến nhất ở đồng bằng."
+      },
+      {
+        "id": "cn6_q3",
+        "type": "fill_blank",
+        "text": "Gạch, ngói, xi măng, thép là các vật liệu ___ dùng trong xây dựng nhà ở.",
+        "options": [],
+        "correct": "nhân tạo",
+        "explanation": "Đây là các vật liệu do con người chế tạo ra, khác với vật liệu tự nhiên như gỗ, tre."
+      },
+      {
+        "id": "cn6_q4",
+        "type": "true_false",
+        "text": "Phần móng nhà là bộ phận nằm sâu dưới mặt đất, có nhiệm vụ chịu lực cho toàn bộ ngôi nhà.",
+        "options": [
+          "True",
+          "False"
+        ],
+        "correct": "True",
+        "explanation": "Móng nhà là kết cấu kỹ thuật nằm dưới cùng của công trình xây dựng, truyền tải trọng lượng xuống nền đất."
+      },
+      {
+        "id": "cn6_q5",
+        "type": "mcq",
+        "text": "Kiểu kiến trúc nhà nào thường được xây dựng san sát nhau ở các đô thị đông đúc?",
+        "options": [
+          "A. Nhà biệt thự",
+          "B. Nhà sàn",
+          "C. Nhà liên kế (nhà ống)",
+          "D. Nhà nổi"
+        ],
+        "correct": "C. Nhà liên kế (nhà ống)",
+        "explanation": "Nhà liên kế (nhà ống) giúp tiết kiệm diện tích đất ở các khu đô thị đông dân cư."
+      }
+    ]
+  },
+  {
+    "id": "tin7_c1",
+    "title": "Tin học 7 - Chủ đề 1: Máy tính và cộng đồng",
+    "subject": "Tin học",
+    "grade": 7,
+    "chapter": 1,
+    "questions": [
+      {
+        "id": "t7_q1",
+        "type": "mcq",
+        "text": "Thiết bị nào sau đây là thiết bị vào của máy tính?",
+        "options": [
+          "A. Màn hình",
+          "B. Máy in",
+          "C. Bàn phím",
+          "D. Loa"
+        ],
+        "correct": "C. Bàn phím",
+        "explanation": "Bàn phím dùng để nhập dữ liệu (văn bản, lệnh) vào máy tính."
+      },
+      {
+        "id": "t7_q2",
+        "type": "true_false",
+        "text": "Máy quét (scanner) có chức năng đưa thông tin hình ảnh từ bên ngoài vào trong máy tính.",
+        "options": [
+          "True",
+          "False"
+        ],
+        "correct": "True",
+        "explanation": "Máy quét là thiết bị nhập dữ liệu dạng hình ảnh hoặc tài liệu giấy vào máy tính."
+      },
+      {
+        "id": "t7_q3",
+        "type": "fill_blank",
+        "text": "Màn hình cảm ứng trên điện thoại thông minh thực hiện chức năng của cả thiết bị vào và thiết bị ___.",
+        "options": [],
+        "correct": "ra",
+        "explanation": "Nó vừa hiển thị thông tin (ra) vừa nhận thao tác chạm của người dùng (vào)."
+      },
+      {
+        "id": "t7_q4",
+        "type": "true_false",
+        "text": "Dữ liệu trong máy tính không thể được truyền ra ngoài nếu không có màn hình.",
+        "options": [
+          "True",
+          "False"
+        ],
+        "correct": "False",
+        "explanation": "Dữ liệu có thể được đưa ra qua máy in, loa hoặc cổng mạng, không bắt buộc phải có màn hình."
+      },
+      {
+        "id": "t7_q5",
+        "type": "mcq",
+        "text": "Loa và tai nghe đóng vai trò là loại thiết bị gì trong hệ thống máy tính?",
+        "options": [
+          "A. Thiết bị vào",
+          "B. Thiết bị ra",
+          "C. Thiết bị lưu trữ",
+          "D. Thiết bị xử lý"
+        ],
+        "correct": "B. Thiết bị ra",
+        "explanation": "Chúng có chức năng xuất dữ liệu âm thanh từ máy tính ra môi trường bên ngoài."
+      }
+    ]
+  },
+  {
+    "id": "cn7_c1",
+    "title": "Công nghệ 7 - Chương 1: Trồng trọt",
+    "subject": "Công nghệ",
+    "grade": 7,
+    "chapter": 1,
+    "questions": [
+      {
+        "id": "cn7_q1",
+        "type": "mcq",
+        "text": "Một trong những vai trò quan trọng của trồng trọt đối với đời sống và kinh tế là gì?",
+        "options": [
+          "A. Cung cấp nguyên liệu cho công nghiệp chế biến",
+          "B. Sản xuất phương tiện giao thông",
+          "C. Cung cấp vật liệu xây dựng kim loại",
+          "D. Thiết kế thời trang"
+        ],
+        "correct": "A. Cung cấp nguyên liệu cho công nghiệp chế biến",
+        "explanation": "Trồng trọt cung cấp nông sản, làm nguyên liệu cho nhiều ngành công nghiệp chế biến."
+      },
+      {
+        "id": "cn7_q2",
+        "type": "true_false",
+        "text": "Trồng trọt trong nhà kính hoàn toàn không phụ thuộc vào ánh sáng mặt trời tự nhiên.",
+        "options": [
+          "True",
+          "False"
+        ],
+        "correct": "False",
+        "explanation": "Trồng trọt trong nhà kính vẫn có thể tận dụng ánh sáng mặt trời, nhưng giúp kiểm soát nhiệt độ và sâu bệnh tốt hơn."
+      },
+      {
+        "id": "cn7_q3",
+        "type": "fill_blank",
+        "text": "Lúa, ngô, khoai, sắn là các loại cây trồng thuộc nhóm cây cung cấp ___.",
+        "options": [],
+        "correct": "lương thực",
+        "explanation": "Đây là nhóm cây trồng chính cung cấp tinh bột và năng lượng cho con người."
+      },
+      {
+        "id": "cn7_q4",
+        "type": "true_false",
+        "text": "Sản phẩm của trồng trọt có thể được dùng làm thức ăn cho ngành chăn nuôi.",
+        "options": [
+          "True",
+          "False"
+        ],
+        "correct": "True",
+        "explanation": "Ví dụ ngô, sắn, cám gạo... được sử dụng làm thức ăn chăn nuôi rất phổ biến."
+      },
+      {
+        "id": "cn7_q5",
+        "type": "mcq",
+        "text": "Phương thức trồng trọt nào sau đây giúp chủ động kiểm soát các yếu tố khí hậu, dịch bệnh?",
+        "options": [
+          "A. Trồng trọt ngoài tự nhiên",
+          "B. Trồng trọt luân canh",
+          "C. Trồng trọt trong khu nhà kính, nhà lưới",
+          "D. Trồng trọt xen canh"
+        ],
+        "correct": "C. Trồng trọt trong khu nhà kính, nhà lưới",
+        "explanation": "Nhà kính, nhà lưới là hệ thống canh tác có kiểm soát môi trường (nhiệt độ, độ ẩm, côn trùng)."
+      }
+    ]
+  },
+  {
+    "id": "tin8_c1",
+    "title": "Tin học 8 - Chủ đề 1: Lịch sử máy tính",
+    "subject": "Tin học",
+    "grade": 8,
+    "chapter": 1,
+    "questions": [
+      {
+        "id": "t8_q1",
+        "type": "mcq",
+        "text": "Máy tính điện tử thế hệ thứ nhất sử dụng linh kiện điện tử nào làm thành phần chính?",
+        "options": [
+          "A. Bóng bán dẫn (Transistor)",
+          "B. Đèn điện tử chân không",
+          "C. Vi mạch (IC)",
+          "D. Bộ vi xử lý (Microprocessor)"
+        ],
+        "correct": "B. Đèn điện tử chân không",
+        "explanation": "Thế hệ máy tính đầu tiên (như ENIAC) sử dụng đèn điện tử chân không, có kích thước rất lớn và tiêu thụ nhiều điện."
+      },
+      {
+        "id": "t8_q2",
+        "type": "true_false",
+        "text": "Sự xuất hiện của bóng bán dẫn (transistor) đã giúp kích thước của máy tính giảm đi đáng kể so với thế hệ thứ nhất.",
+        "options": [
+          "True",
+          "False"
+        ],
+        "correct": "True",
+        "explanation": "Bóng bán dẫn nhỏ hơn, mát hơn và tin cậy hơn đèn chân không, là bước ngoặt cho thế hệ máy tính thứ hai."
+      },
+      {
+        "id": "t8_q3",
+        "type": "fill_blank",
+        "text": "Máy vi tính cá nhân (PC) bắt đầu trở nên phổ biến từ thế hệ máy tính thứ ___.",
+        "options": [],
+        "correct": "tư",
+        "explanation": "Sự ra đời của bộ vi xử lý ở thế hệ thứ 4 đã thu nhỏ máy tính để bàn cho người dùng cá nhân."
+      },
+      {
+        "id": "t8_q4",
+        "type": "true_false",
+        "text": "Mạng Internet xuất hiện trước khi máy tính điện tử đầu tiên ra đời.",
+        "options": [
+          "True",
+          "False"
+        ],
+        "correct": "False",
+        "explanation": "Máy tính điện tử (ENIAC) ra đời năm 1945, còn mạng ARPANET (tiền thân của Internet) ra đời cuối thập niên 1960."
+      },
+      {
+        "id": "t8_q5",
+        "type": "mcq",
+        "text": "Chiếc máy tính điện tử ENIAC được phát minh vào khoảng thời gian nào?",
+        "options": [
+          "A. Những năm 1840",
+          "B. Những năm 1940",
+          "C. Những năm 1970",
+          "D. Những năm 1990"
+        ],
+        "correct": "B. Những năm 1940",
+        "explanation": "ENIAC được phát triển trong Thế chiến II và công bố vào năm 1946."
+      }
+    ]
+  },
+  {
+    "id": "cn8_c1",
+    "title": "Công nghệ 8 - Chương 1: Vẽ kĩ thuật",
+    "subject": "Công nghệ",
+    "grade": 8,
+    "chapter": 1,
+    "questions": [
+      {
+        "id": "cn8_q1",
+        "type": "mcq",
+        "text": "Bản vẽ kĩ thuật được sử dụng chủ yếu để làm gì?",
+        "options": [
+          "A. Vẽ tranh phong cảnh",
+          "B. Thiết kế và chế tạo các sản phẩm công nghiệp",
+          "C. Chụp ảnh nghệ thuật",
+          "D. Soạn thảo văn bản"
+        ],
+        "correct": "B. Thiết kế và chế tạo các sản phẩm công nghiệp",
+        "explanation": "Bản vẽ kĩ thuật là ngôn ngữ chung trong kĩ thuật, dùng để chế tạo, thi công, lắp ráp."
+      },
+      {
+        "id": "cn8_q2",
+        "type": "true_false",
+        "text": "Trong phép chiếu vuông góc, hướng chiếu phải vuông góc với mặt phẳng hình chiếu.",
+        "options": [
+          "True",
+          "False"
+        ],
+        "correct": "True",
+        "explanation": "Đây là định nghĩa cơ bản của phép chiếu vuông góc để tạo ra các hình chiếu thẳng góc."
+      },
+      {
+        "id": "cn8_q3",
+        "type": "fill_blank",
+        "text": "Hình chiếu đứng có hướng chiếu từ ___ tới.",
+        "options": [],
+        "correct": "trước",
+        "explanation": "Theo quy ước vẽ kĩ thuật, hướng chiếu từ trước tới mặt phẳng chiếu đứng sẽ tạo ra hình chiếu đứng."
+      },
+      {
+        "id": "cn8_q4",
+        "type": "true_false",
+        "text": "Kích thước của khổ giấy A4 lớn hơn kích thước của khổ giấy A3.",
+        "options": [
+          "True",
+          "False"
+        ],
+        "correct": "False",
+        "explanation": "Khổ A3 gấp đôi diện tích khổ A4 (297x420 mm so với 210x297 mm)."
+      },
+      {
+        "id": "cn8_q5",
+        "type": "mcq",
+        "text": "Khi biểu diễn một vật thể, hình chiếu bằng được đặt ở vị trí nào so với hình chiếu đứng?",
+        "options": [
+          "A. Phía trên hình chiếu đứng",
+          "B. Bên phải hình chiếu đứng",
+          "C. Bên trái hình chiếu đứng",
+          "D. Phía dưới hình chiếu đứng"
+        ],
+        "correct": "D. Phía dưới hình chiếu đứng",
+        "explanation": "Theo tiêu chuẩn bản vẽ kĩ thuật, hình chiếu bằng nằm ở dưới hình chiếu đứng, hình chiếu cạnh ở bên phải."
+      }
+    ]
+  },
+  {
+    "id": "tin9_c1",
+    "title": "Tin học 9 - Chủ đề 1: Tin học và xã hội",
+    "subject": "Tin học",
+    "grade": 9,
+    "chapter": 1,
+    "questions": [
+      {
+        "id": "t9_q1",
+        "type": "mcq",
+        "text": "Sự phát triển của tin học đã mang lại lợi ích lớn nhất nào cho xã hội?",
+        "options": [
+          "A. Làm giảm chất lượng cuộc sống",
+          "B. Tăng hiệu suất công việc và thay đổi cách thức giao tiếp",
+          "C. Làm con người mất hoàn toàn khả năng tư duy",
+          "D. Hủy hoại hoàn toàn môi trường tự nhiên"
+        ],
+        "correct": "B. Tăng hiệu suất công việc và thay đổi cách thức giao tiếp",
+        "explanation": "Tin học giúp tự động hóa, tăng tốc độ xử lý và kết nối mọi người qua Internet."
+      },
+      {
+        "id": "t9_q2",
+        "type": "true_false",
+        "text": "Việc phát tán phần mềm độc hại (virus) trên mạng internet là hành vi vi phạm đạo đức và pháp luật.",
+        "options": [
+          "True",
+          "False"
+        ],
+        "correct": "True",
+        "explanation": "Hành vi này gây hại cho cộng đồng mạng và bị pháp luật nghiêm cấm."
+      },
+      {
+        "id": "t9_q3",
+        "type": "fill_blank",
+        "text": "Một trong những mặt trái của Internet là có thể gây ra tình trạng nghiện ___ nếu sử dụng không hợp lý.",
+        "options": [],
+        "correct": "mạng",
+        "explanation": "Nghiện mạng hoặc nghiện game, internet là vấn đề nhức nhối trong xã hội hiện đại."
+      },
+      {
+        "id": "t9_q4",
+        "type": "true_false",
+        "text": "Bản quyền phần mềm không còn quan trọng trong kỷ nguyên số vì mọi thứ đều có thể sao chép miễn phí.",
+        "options": [
+          "True",
+          "False"
+        ],
+        "correct": "False",
+        "explanation": "Bản quyền là sở hữu trí tuệ, sao chép trái phép là vi phạm pháp luật và gây thiệt hại cho tác giả."
+      },
+      {
+        "id": "t9_q5",
+        "type": "mcq",
+        "text": "Khi chia sẻ thông tin trên mạng xã hội, chúng ta cần lưu ý điều gì?",
+        "options": [
+          "A. Chỉ chia sẻ thông tin chưa được kiểm chứng",
+          "B. Chia sẻ thông tin cá nhân của người khác mà không cần xin phép",
+          "C. Đảm bảo thông tin chính xác, trung thực và không vi phạm pháp luật",
+          "D. Xúc phạm, công kích người khác"
+        ],
+        "correct": "C. Đảm bảo thông tin chính xác, trung thực và không vi phạm pháp luật",
+        "explanation": "Người dùng cần có trách nhiệm và đạo đức khi hoạt động trong không gian mạng."
+      }
+    ]
+  },
+  {
+    "id": "cn9_c1",
+    "title": "Công nghệ 9 - Chương 1: Định hướng nghề nghiệp",
+    "subject": "Công nghệ",
+    "grade": 9,
+    "chapter": 1,
+    "questions": [
+      {
+        "id": "cn9_q1",
+        "type": "mcq",
+        "text": "Mục đích chính của việc định hướng nghề nghiệp cho học sinh là gì?",
+        "options": [
+          "A. Bắt buộc học sinh làm nghề mà bố mẹ thích",
+          "B. Giúp học sinh tự đánh giá năng lực, sở thích để chọn nghề phù hợp",
+          "C. Chỉ để học sinh có điểm cao trên lớp",
+          "D. Định hướng sang làm việc ở nước ngoài"
+        ],
+        "correct": "B. Giúp học sinh tự đánh giá năng lực, sở thích để chọn nghề phù hợp",
+        "explanation": "Định hướng nghề nghiệp cung cấp thông tin để học sinh tự chọn lựa con đường tương lai phù hợp nhất với bản thân."
+      },
+      {
+        "id": "cn9_q2",
+        "type": "true_false",
+        "text": "Sở thích cá nhân là một yếu tố quan trọng cần xem xét khi chọn nghề.",
+        "options": [
+          "True",
+          "False"
+        ],
+        "correct": "True",
+        "explanation": "Làm công việc mình yêu thích sẽ giúp bản thân có động lực và dễ đạt thành công hơn."
+      },
+      {
+        "id": "cn9_q3",
+        "type": "fill_blank",
+        "text": "Thị trường lao động thường xuyên thay đổi nên học sinh cần quan tâm đến xu hướng nghề ___ trong tương lai.",
+        "options": [],
+        "correct": "nghiệp",
+        "explanation": "Xu hướng nghề nghiệp phản ánh nhu cầu nhân lực của xã hội, là yếu tố cần cân nhắc khi chọn nghề."
+      },
+      {
+        "id": "cn9_q4",
+        "type": "true_false",
+        "text": "Khi chọn nghề, không cần quan tâm đến yêu cầu về thể chất và sức khỏe của nghề nghiệp đó.",
+        "options": [
+          "True",
+          "False"
+        ],
+        "correct": "False",
+        "explanation": "Nhiều ngành nghề có yêu cầu khắt khe về sức khỏe (ví dụ: phi công, thợ mỏ...), do đó sức khỏe là yếu tố quyết định."
+      },
+      {
+        "id": "cn9_q5",
+        "type": "mcq",
+        "text": "Sự phát triển của công nghệ và tự động hóa có tác động thế nào đến thị trường nghề nghiệp?",
+        "options": [
+          "A. Làm mất hoàn toàn mọi việc làm của con người",
+          "B. Không có bất kỳ tác động nào",
+          "C. Xóa bỏ một số nghề cũ nhưng tạo ra nhiều nghề mới",
+          "D. Chỉ ảnh hưởng tới ngành nông nghiệp"
+        ],
+        "correct": "C. Xóa bỏ một số nghề cũ nhưng tạo ra nhiều nghề mới",
+        "explanation": "Công nghệ tiến bộ sẽ thay thế các công việc lặp đi lặp lại nhưng mở ra các cơ hội ở lĩnh vực mới như AI, dữ liệu."
+      }
+    ]
+  }
+
 ];
