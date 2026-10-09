@@ -5,6 +5,7 @@ import { auth, db } from './firebase';
 import { doc, getDoc, setDoc } from 'firebase/firestore';
 import { INITIAL_TOWN } from './data/townData';
 
+
 const SUBJECT_COLORS = {
   'Toán': 'text-blue-600 bg-blue-50 border-blue-200',
   'Văn': 'text-rose-600 bg-rose-50 border-rose-200',
@@ -122,7 +123,91 @@ export default function TownBuilder({ setActiveTab }) {
     setScore(0);
   };
 
-    return (
+  const markRoomCompleted = () => {
+    const newHouses = [...houses];
+    const hIndex = newHouses.findIndex(h => h.id === activeHouse.id);
+    const rIndex = newHouses[hIndex].rooms.findIndex(r => r.id === activeQuizRoom.id);
+    
+    newHouses[hIndex].rooms[rIndex].completed = true;
+    setHouses(newHouses);
+    setActiveQuizRoom(null);
+    
+    if (auth.currentUser) {
+      setDoc(doc(db, 'users', auth.currentUser.uid), {
+        townBuilder: newHouses
+      }, { merge: true }).catch(err => console.error("Lỗi đồng bộ thị trấn:", err));
+    }
+  };
+
+  const handleAnswerChange = (q, val) => {
+    if (submittedQuestions[q.id]) return;
+    setUserAnswers(prev => ({ ...prev, [q.id]: val }));
+    
+    if (q.type === 'mcq' || q.type === 'true_false') {
+      submitSingleQuestion(q, val);
+    }
+  };
+
+  const submitSingleQuestion = (q, val) => {
+    setSubmittedQuestions(prev => ({ ...prev, [q.id]: true }));
+    let isCorrect = false;
+    if (val.trim().toLowerCase() === q.correct.toLowerCase()) {
+      isCorrect = true;
+    }
+    
+    if (isCorrect) {
+      setScore(s => s + 1);
+    } else {
+      const newMistake = { ...q, subject: q.subject || (activeQuizRoom ? activeQuizRoom.subject : (typeof currentQuiz !== 'undefined' ? currentQuiz.subject : 'Tổng hợp')), userAnswer: val, timestamp: new Date().toISOString() };
+      const existing = JSON.parse(localStorage.getItem('study_app_mistakes') || '[]');
+      localStorage.setItem('study_app_mistakes', JSON.stringify([...existing, newMistake]));
+    }
+  };
+
+  const submitQuiz = () => {
+    let newScore = 0;
+    let newMistakes = [];
+    activeQuizRoom.questions.forEach(q => {
+      const uAns = userAnswers[q.id];
+      if (!uAns) {
+        newMistakes.push({ ...q, subject: q.subject || activeQuizRoom.subject || 'Tổng hợp', userAnswer: 'Không trả lời', timestamp: new Date().toISOString() });
+        return;
+      }
+      
+      let isCorrect = false;
+      if ((q.type === 'mcq' || q.type === 'true_false') && uAns === q.correct) {
+        isCorrect = true;
+      } else if (q.type === 'fill_blank' && uAns.trim().toLowerCase() === q.correct.toLowerCase()) {
+        isCorrect = true;
+      }
+      
+      if (isCorrect) {
+        newScore += 1;
+      } else {
+        newMistakes.push({ ...q, subject: q.subject || activeQuizRoom.subject || 'Tổng hợp', userAnswer: uAns, timestamp: new Date().toISOString() });
+      }
+    });
+    
+    // Lưu lỗi sai
+    if (newMistakes.length > 0) {
+      const existing = JSON.parse(localStorage.getItem('study_app_mistakes') || '[]');
+      localStorage.setItem('study_app_mistakes', JSON.stringify([...existing, ...newMistakes]));
+    }
+    
+    setScore(newScore);
+    setIsSubmitted(true);
+  };
+
+  
+
+  const getPhaseName = (completed, total) => {
+    if (completed === 0) return 'Tiểu hành tinh';
+    if (completed <= 2) return 'Hình thành lõi';
+    if (completed < total) return 'Tạo khí quyển';
+    return 'Tiến hóa hoàn tất';
+  };
+
+  return (
     <div className="animate-fade-in w-full h-full min-h-screen">
       {activeQuizRoom ? (
         <div className="bg-slate-50 animate-fade-in w-full min-h-screen m-0 p-0">
