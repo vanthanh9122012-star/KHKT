@@ -1,15 +1,22 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { createPortal } from 'react-dom';
-import { Upload, X, Loader2, FileText, CheckCircle2, Sparkles } from 'lucide-react';
-import { QUIZ_DATA } from './data/quizData';
+import { Upload, X, Loader2, FileText, Key, Sparkles } from 'lucide-react';
+import { GoogleGenAI } from '@google/genai';
+import * as mammoth from 'mammoth';
 
-export default function AIQuizGenerator({ onGenerated, onClose, addReward }) {
+export default function AIQuizGenerator({ onGenerated, onClose }) {
   const [file, setFile] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [subject, setSubject] = useState('Toán');
+  const [apiKey, setApiKey] = useState('');
 
-  const subjects = ['Toán', 'Lý', 'Hóa', 'Sinh', 'Văn', 'Sử', 'Địa', 'Anh'];
+  const subjects = ['Toán', 'Lý', 'Hóa', 'Sinh', 'Văn', 'Sử', 'Địa', 'Anh', 'Tin học', 'Công nghệ', 'GDCD'];
+
+  useEffect(() => {
+    const savedKey = localStorage.getItem('study_app_gemini_key');
+    if (savedKey) setApiKey(savedKey);
+  }, []);
 
   const handleFileChange = (e) => {
     const selected = e.target.files[0];
@@ -43,104 +50,82 @@ export default function AIQuizGenerator({ onGenerated, onClose, addReward }) {
     reader.onerror = error => reject(error);
   });
 
+  const extractDocxText = async (file) => {
+    const arrayBuffer = await file.arrayBuffer();
+    const result = await mammoth.extractRawText({ arrayBuffer });
+    return result.value;
+  };
+
   const generateQuiz = async () => {
     if (!file) {
       setError('Vui lòng chọn hoặc kéo thả một tài liệu!');
       return;
     }
+    if (!apiKey.trim()) {
+      setError('Vui lòng nhập Gemini API Key để AI có thể đọc file.');
+      return;
+    }
 
+    localStorage.setItem('study_app_gemini_key', apiKey.trim());
     setLoading(true);
     setError('');
 
     try {
-      // Giả lập thời gian AI đọc và phân tích tài liệu
-      await new Promise(resolve => setTimeout(resolve, 3000));
-      
-      // Map subject UI to QUIZ_DATA subjects
-      const subjectMap = {
-        'Lý': ['KHTN', 'Vật lý'],
-        'Hóa': ['KHTN', 'Hóa học'],
-        'Sinh': ['KHTN', 'Sinh học'],
-        'Toán': ['Toán'],
-        'Văn': ['Ngữ Văn'],
-        'Sử': ['Lịch sử - Địa lí', 'Lịch sử'],
-        'Địa': ['Lịch sử - Địa lí', 'Địa lí'],
-        'Anh': ['Tiếng Anh']
-      };
+      const ai = new GoogleGenAI({ apiKey: apiKey.trim(), dangerouslyAllowBrowser: true });
+      let contents = [];
+      const promptText = `Bạn là một giáo viên xuất sắc. Dựa vào nội dung tài liệu đính kèm, hãy tạo một bài kiểm tra môn ${subject} thật hay và chính xác với kiến thức trong tài liệu. 
+Bao gồm đúng 5 câu hỏi (trộn giữa Trắc nghiệm 4 đáp án, Đúng/Sai, Điền từ vào chỗ trống) và 2 câu tự luận (essay).
+Tất cả kiến thức phải BÁM SÁT 100% nội dung tài liệu, KHÔNG được lấy kiến thức ngoài luồng.
+Trả về DUY NHẤT một mảng JSON hợp lệ, không có thêm bất kỳ đoạn chữ nào khác, không dùng markdown code block.
+Cấu trúc JSON yêu cầu:
+[
+  { "id": "q1", "type": "mcq", "text": "Câu hỏi trắc nghiệm?", "options": ["A","B","C","D"], "correct": "A", "explanation": "Giải thích" },
+  { "id": "q2", "type": "true_false", "text": "Câu hỏi đúng sai?", "options": ["Đúng", "Sai"], "correct": "Đúng", "explanation": "Giải thích" },
+  { "id": "q3", "type": "fill_blank", "text": "Câu điền khuyết...", "options": [], "correct": "Từ cần điền", "explanation": "Giải thích" },
+  { "id": "e1", "type": "essay", "text": "Câu hỏi tự luận 1", "correct": "Hướng dẫn chấm điểm/Ý chính cần có" }
+]`;
 
-      const targetSubjects = subjectMap[subject] || [subject];
-      
-      // Lọc các bộ đề thuộc môn học tương ứng
-      let pool = QUIZ_DATA.filter(q => {
-        if (!q.subject) return false;
-        return targetSubjects.some(ts => q.subject.includes(ts) || ts.includes(q.subject));
-      });
-      
-      // Nếu vẫn không có, fallback tìm kiếm tất cả các bộ đề có chứa từ khóa của môn học
-      if (pool.length === 0) {
-        pool = QUIZ_DATA.filter(q => q.subject && q.subject.toLowerCase().includes(subject.toLowerCase()));
+      if (file.name.endsWith('.docx')) {
+        const text = await extractDocxText(file);
+        contents = [{ role: 'user', parts: [{ text: promptText }, { text: 'NỘI DUNG TÀI LIỆU:\n' + text.substring(0, 30000) }] }];
+      } else if (file.name.endsWith('.txt') || file.name.endsWith('.md')) {
+        const text = await file.text();
+        contents = [{ role: 'user', parts: [{ text: promptText }, { text: 'NỘI DUNG TÀI LIỆU:\n' + text.substring(0, 30000) }] }];
+      } else if (file.type === 'application/pdf' || file.type.startsWith('image/')) {
+        const b64 = await toBase64(file);
+        contents = [{ role: 'user', parts: [{ text: promptText }, { inlineData: { data: b64, mimeType: file.type } }] }];
+      } else {
+        throw new Error('Định dạng file chưa được hỗ trợ tốt nhất. Hãy dùng .docx, .pdf, .txt hoặc hình ảnh.');
       }
-      
-      // Tối hậu thư: chỉ lấy Toán nếu thực sự rỗng để tránh văng app, nhưng không trộn Ngữ Văn vào Lý
-      if (pool.length === 0) {
-        pool = QUIZ_DATA.slice(0, 1); 
-      }
-      
-      let allQuestions = pool.reduce((acc, curr) => [...acc, ...(curr.questions || [])], []);
-      
-      // Trích xuất từ khóa từ tên file để ưu tiên câu hỏi (Giả lập AI đọc nội dung)
-      const fileKeywords = file.name.toLowerCase().replace(/\.[^/.]+$/, "").split(/[\s_\-]+/).filter(w => w.length > 2);
-      
-      // Chấm điểm ưu tiên câu hỏi nếu chứa từ khóa của tên file
-      allQuestions.forEach(q => {
-        q.matchScore = 0;
-        const qText = (q.text + ' ' + (q.explanation || '')).toLowerCase();
-        fileKeywords.forEach(kw => {
-          if (qText.includes(kw)) q.matchScore += 1;
-        });
-      });
-      
-      // Sắp xếp: ưu tiên câu có matchScore cao, sau đó random
-      allQuestions = allQuestions.sort((a, b) => {
-        if (b.matchScore !== a.matchScore) return b.matchScore - a.matchScore;
-        return 0.5 - Math.random();
-      });
-      
-      const selectedQs = allQuestions.slice(0, 5).map((q, i) => {
-        const { matchScore, ...cleanQ } = q;
-        return {
-          ...cleanQ,
-          id: 'ai_q' + i + '_' + Date.now()
-        };
+
+      const response = await ai.models.generateContent({
+        model: 'gemini-2.5-flash',
+        contents: contents
       });
 
-      // Thêm 2 câu tự luận (mock) bám sát tên tài liệu
+      let responseText = response.text || '';
+      responseText = responseText.replace(/\s*```json/g, '').replace(/```\s*$/g, '').trim();
+      
+      const parsedQuestions = JSON.parse(responseText);
+      
+      if (!Array.isArray(parsedQuestions)) throw new Error("AI không trả về định dạng mảng.");
+
       const docName = file.name ? file.name.split('.')[0] : 'tài liệu';
-      selectedQs.push({
-        id: 'ai_essay1_' + Date.now(),
-        type: 'essay',
-        text: `Dựa vào tài liệu "${docName}" bạn vừa cung cấp, hãy tóm tắt những điểm cốt lõi nhất.`,
-        correct: 'Tóm tắt đầy đủ các ý chính, cấu trúc rõ ràng, bám sát nội dung.'
-      });
-      selectedQs.push({
-        id: 'ai_essay2_' + Date.now(),
-        type: 'essay',
-        text: `Phân tích một ví dụ thực tế liên quan đến nội dung "${docName}" để làm rõ kiến thức.`,
-        correct: 'Phân tích logic, lấy ví dụ thực tế chính xác và thuyết phục.'
-      });
-
       const quizData = {
         id: 'ai_' + Date.now(),
         title: 'Bài Test AI: ' + docName,
         subject: subject,
-        questions: selectedQs
+        questions: parsedQuestions.map((q, i) => ({
+          ...q,
+          id: 'ai_q' + i + '_' + Date.now()
+        }))
       };
       
       if (onGenerated) onGenerated(quizData);
       
     } catch (err) {
       console.error(err);
-      setError('Lỗi: ' + err.message);
+      setError('Lỗi AI: ' + err.message + '. Vui lòng kiểm tra lại API Key hoặc định dạng file.');
     } finally {
       setLoading(false);
     }
@@ -152,9 +137,9 @@ export default function AIQuizGenerator({ onGenerated, onClose, addReward }) {
         <div className="p-6 border-b border-gray-100 flex justify-between items-center bg-gray-50/50">
           <div>
             <h2 className="text-2xl font-bold text-gray-800 flex items-center gap-2">
-              <Sparkles className="text-primary" /> Tạo Đề Thi bằng AI
+              <Sparkles className="text-primary" /> Tạo Đề Thi bằng AI (Gemini)
             </h2>
-            <p className="text-gray-500 text-sm mt-1">Upload tài liệu bài giảng, sách, hoặc ghi chú để tạo bộ câu hỏi tự động.</p>
+            <p className="text-gray-500 text-sm mt-1">AI sẽ thực sự đọc nội dung tài liệu của bạn để tạo ra đề thi chính xác 100%.</p>
           </div>
           <button onClick={onClose} className="p-2 hover:bg-gray-200 rounded-full text-gray-500 transition">
             <X size={24} />
@@ -181,6 +166,19 @@ export default function AIQuizGenerator({ onGenerated, onClose, addReward }) {
                 </button>
               ))}
             </div>
+          </div>
+
+          <div className="mb-6">
+            <label className="block text-sm font-bold text-gray-700 mb-2 flex items-center gap-2">
+              <Key size={16} className="text-yellow-500" /> Gemini API Key
+            </label>
+            <input 
+              type="password"
+              placeholder="Nhập API Key của bạn (được lưu cục bộ)..."
+              value={apiKey}
+              onChange={e => setApiKey(e.target.value)}
+              className="w-full px-4 py-3 rounded-xl border-2 border-gray-200 focus:border-primary focus:ring-4 focus:ring-primary/20 outline-none transition"
+            />
           </div>
 
           <div 
@@ -210,7 +208,7 @@ export default function AIQuizGenerator({ onGenerated, onClose, addReward }) {
               <>
                 <Upload size={48} className="text-gray-400 mb-4" />
                 <h3 className="font-bold text-gray-800 text-lg mb-2">Kéo thả tài liệu vào đây</h3>
-                <p className="text-gray-500 text-sm">Hỗ trợ PDF, Word, Txt, Hình ảnh (tối đa 10MB)</p>
+                <p className="text-gray-500 text-sm">Hỗ trợ PDF, Word (.docx), Txt, Hình ảnh (tối đa 10MB)</p>
                 <div className="mt-6 px-6 py-2 bg-white border shadow-sm rounded-xl text-gray-700 font-bold hover:bg-gray-50">
                   Chọn file từ máy
                 </div>
@@ -228,13 +226,13 @@ export default function AIQuizGenerator({ onGenerated, onClose, addReward }) {
           </button>
           <button 
             onClick={generateQuiz}
-            disabled={loading || !file}
+            disabled={loading || !file || !apiKey.trim()}
             className="px-8 py-3 bg-gradient-to-r from-primary to-sky-600 text-white font-bold rounded-xl shadow-lg hover:shadow-xl transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
           >
             {loading ? (
-              <><Loader2 className="animate-spin" size={20} /> AI đang phân tích...</>
+              <><Loader2 className="animate-spin" size={20} /> AI đang đọc file...</>
             ) : (
-              <><Sparkles size={20} /> Bắt đầu Tạo</>
+              <><Sparkles size={20} /> Phân tích & Tạo Đề</>
             )}
           </button>
         </div>
