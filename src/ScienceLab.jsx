@@ -29,6 +29,79 @@ export default function ScienceLab({ addReward }) {
   ];
 
   const combos = {
+    'milk+heat': {
+      icon: '☕', name: 'Hiện tượng tạo váng và trào sữa (Vật lý/Hóa học)',
+      reaction: 'Biến tính protein bề mặt + Sự bay hơi',
+      desc: 'Sữa đóng một lớp váng mỏng trên bề mặt. Nếu đun sôi, sữa rất dễ bùng trào ra ngoài.',
+      explain: 'Nhiệt độ làm các protein (lactalbumin) đông tụ tạo thành lớp váng trên mặt. Lớp váng này ngăn hơi nước bay hơi. Khi áp suất hơi nước bên dưới đủ lớn sẽ phá vỡ lớp váng đẩy bọt sữa trào ra ngoài.'
+    },
+    'milk+acid': {
+      icon: '🧀', name: 'Đông tụ Protein (Hóa sinh)',
+      reaction: 'Casein + H⁺ → Casein kết tủa',
+      desc: 'Sữa lập tức bị vón cục mạnh, tách thành phần rắn (sữa đông) và phần nước trong (whey).',
+      explain: 'Axit mạnh (HCl, H2SO4) làm giảm pH của sữa đột ngột xuống dưới điểm đẳng điện của protein Casein (pH 4.6), triệt tiêu lực đẩy tĩnh điện khiến các hạt casein kết tụ lại với nhau.'
+    },
+    'milk+baking_soda': {
+      icon: '🧪', name: 'Trung hòa axit (Hóa học)',
+      reaction: 'Axit lactic + NaHCO3 → Muối + CO2 + H2O',
+      desc: 'Giảm độ chua của sữa, ngăn sữa bị kết tủa khi đun nóng.',
+      explain: 'Sữa (nhất là sữa cũ) có tính axit nhẹ do vi khuẩn sinh axit lactic. Baking soda có tính kiềm sẽ trung hòa axit này, bảo vệ cấu trúc hệ nhũ tương của sữa không bị phá vỡ khi gặp nhiệt độ cao.'
+    },
+    'milk+yeast': {
+      icon: '🍧', name: 'Lên men Lactic (Làm sữa chua)',
+      reaction: 'Lactose + Vi khuẩn Lactic → Axit Lactic',
+      desc: 'Sữa đặc lại, có vị chua nhẹ (Sữa chua / Yogurt).',
+      explain: 'Men vi sinh (vi khuẩn lactic) tiêu thụ đường lactose trong sữa và thải ra axit lactic. Axit này làm giảm pH của sữa, khiến protein casein đông tụ lại tạo thành kết cấu đặc mịn của sữa chua.'
+    },
+    'milk+sugar': {
+      icon: '🍮', name: 'Tăng áp suất thẩm thấu / Phản ứng Maillard',
+      reaction: 'Protein + Đường + Nhiệt → Hợp chất màu nâu',
+      desc: 'Sữa ngọt hơn. Nếu đun nóng lâu, sữa có thể chuyển sang màu nâu caramel.',
+      explain: 'Ở nhiệt độ cao, đường sẽ phản ứng với các axit amin trong protein sữa (Phản ứng Maillard) tạo ra các hợp chất có mùi thơm và màu nâu đặc trưng (giống màu kẹo karamel hay vỏ bánh mì).'
+    },
+    'milk+light': {
+      icon: '☀️', name: 'Oxy hóa quang hóa (Photo-oxidation)',
+      reaction: 'Riboflavin + UV + O2 → Phá hủy vitamin',
+      desc: 'Sữa giảm chất lượng dinh dưỡng và xuất hiện mùi hôi khó chịu.',
+      explain: 'Ánh sáng (nhất là tia UV) kích thích Riboflavin (Vitamin B2) trong sữa, tạo ra các gốc tự do phản ứng với chất béo và protein, sinh ra mùi "sunlight flavor" (mùi cháy khét do ánh sáng).'
+    },
+    'milk+oxygen': {
+      icon: '💨', name: 'Oxy hóa Lipid (Hóa học)',
+      reaction: 'O2 + Chất béo sữa → Peroxide',
+      desc: 'Sữa bị ôi thiu, mất vị thơm ngon ban đầu.',
+      explain: 'Oxy trong không khí từ từ phản ứng với các liên kết đôi của axit béo chưa no có trong chất béo của sữa, làm đứt gãy chuỗi carbon và tạo ra các hợp chất có mùi ôi khét.'
+    },
+    'milk+metal': {
+      icon: '🔩', name: 'Xúc tác oxy hóa',
+      reaction: 'Ion kim loại (Cu²⁺, Fe³⁺) xúc tác oxy hóa',
+      desc: 'Đẩy nhanh quá trình hỏng và ôi khét của sữa.',
+      explain: 'Các ion kim loại (như Sắt, Đồng) đóng vai trò là chất xúc tác cực mạnh, làm tăng tốc độ phản ứng oxy hóa chất béo và phá hủy vitamin C trong sữa, khiến sữa hỏng rất nhanh.'
+    },
+    'milk+salt': {
+      icon: '🧂', name: 'Kết tủa muối (Salting out)',
+      reaction: 'Cạnh tranh dung môi',
+      desc: 'Nếu cho quá nhiều muối, protein trong sữa có thể bị kết tủa.',
+      explain: 'Ở nồng độ muối rất cao, các ion của muối sẽ "tranh giành" nước với các phân tử protein (Casein). Khi mất đi lớp vỏ bọc nước (lớp hydrat hóa), protein sẽ kết tụ lại và tách ra khỏi dung dịch.'
+    },
+    'milk+oil': {
+      icon: '🛢️', name: 'Hệ nhũ tương không bền',
+      reaction: 'Phân tách lớp',
+      desc: 'Dầu nổi lên trên bề mặt sữa. Nếu đánh mạnh (có chất nhũ hóa) có thể tạo sốt.',
+      explain: 'Sữa chứa nhiều nước nên đẩy dầu mỡ nổi lên trên. Tuy nhiên sữa có chứa một ít chất nhũ hóa tự nhiên (phospholipid). Nếu khuấy rất mạnh, dầu có thể bị phân tán tạm thời vào sữa.'
+    },
+    'milk+water': {
+      icon: '💧', name: 'Pha loãng hệ nhũ tương (Vật lý)',
+      reaction: 'Giảm nồng độ các chất hòa tan và hệ keo',
+      desc: 'Sữa trở nên loãng hơn, bớt đục, ánh sáng truyền qua dễ dàng hơn.',
+      explain: 'Việc thêm nước chỉ làm tăng khoảng cách giữa các hạt chất béo và protein phân tán trong hệ nhũ tương, không gây ra sự biến đổi hóa học nào.'
+    },
+    'milk+electricity': {
+      icon: '⚡', name: 'Dẫn điện nhẹ',
+      reaction: 'Sự di chuyển của các ion khoáng',
+      desc: 'Dòng điện có thể đi qua sữa.',
+      explain: 'Sữa không phải là nước tinh khiết mà chứa rất nhiều khoáng chất hòa tan (như Canxi, Kali, Natri, Clo...) dưới dạng ion. Các ion này giúp sữa có khả năng dẫn điện nhẹ.'
+    },
+
     'soap+milk': {
       icon: '🎨', name: 'Giảm sức căng bề mặt (Magic Milk)',
       reaction: 'R-COONa + Triglyceride/Casein → Hạt Mixen',
