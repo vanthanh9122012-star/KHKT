@@ -140,6 +140,51 @@ export default function ScienceLab({ addReward }) {
       desc: 'Nhiệt độ làm Baking soda phân hủy sinh ra khí làm xốp bánh.',
       explain: 'Baking soda (Natri Bicacbonat) khi bị nướng ở nhiệt độ cao (trên 80°C) sẽ trải qua phản ứng nhiệt phân. Nó vỡ ra tạo thành muối natri cacbonat, hơi nước và đặc biệt là khí CO2. Các bong bóng khí CO2 bị kẹp lại trong bột mì sẽ giãn nở, giúp bánh bông lan, bánh quy trở nên phồng và xốp mềm.'
     }
+,
+
+    'milk+soap': {
+      icon: '🎨', name: 'Nhũ tương hóa & Giảm sức căng (Vật/Hóa học)',
+      reaction: 'Xà phòng + Chất béo (Sữa) → Hạt Mixen',
+      desc: 'Xà phòng làm giảm sức căng bề mặt của sữa và cuộn lấy các hạt béo.',
+      explain: 'Sữa là hỗn hợp của nước, protein và chất béo. Xà phòng chứa chất hoạt động bề mặt với cấu trúc một đầu ưa nước và một đầu kị nước (ưa béo). Khi nhỏ xà phòng vào sữa, nó lập tức làm giảm sức căng bề mặt, đồng thời các đầu kị nước lao đến bám vào hạt mỡ tạo thành các hạt Mixen lơ lửng. Quá trình xô đẩy này tạo ra các luồng cuộn xoáy mạnh mẽ (Magic Milk).'
+    },
+    'salt+heat': {
+      icon: '🔥', name: 'Sự nóng chảy (Vật lý)',
+      reaction: 'NaCl (rắn) + 801°C → NaCl (lỏng)',
+      desc: 'Cần nhiệt độ cực cao (hơn 800 độ) để muối ăn chuyển sang trạng thái lỏng.',
+      explain: 'Khác với đường rất dễ cháy khét, muối ăn (NaCl) có liên kết ion cực kỳ bền vững. Phải nung ở nhiệt độ lên đến 801°C, lưới tinh thể ion mới bắt đầu bị bẻ gãy và muối chuyển sang trạng thái lỏng. Ở điều kiện đun nấu bình thường trên bếp, muối chỉ nóng lên chứ không hề bị nóng chảy.'
+    },
+    'soil+water': {
+      icon: '🟤', name: 'Hỗn hợp huyền phù (Vật lý)',
+      reaction: 'Đất màu mỡ + Nước → Bùn đục',
+      desc: 'Đất hòa với nước tạo thành bùn, hòa tan các khoáng chất vi lượng.',
+      explain: 'Đất chứa hạt sét, cát, xác hữu cơ và chất khoáng. Khi trộn với nước, các hạt nhẹ lơ lửng tạo thành "huyền phù" làm nước đục, hạt nặng (cát) chìm xuống đáy. Đồng thời nước sẽ hòa tan các muối khoáng có trong đất (N, P, K), biến thành dạng dinh dưỡng lỏng rễ cây hút được.'
+    },
+    'yeast+heat': {
+      icon: '☠️', name: 'Sự ức chế / Chết men (Sinh học)',
+      reaction: 'Men vi sinh + Nhiệt độ cao → Men bị chết',
+      desc: 'Nhiệt độ quá cao (trên 50°C) sẽ làm hỏng tế bào và tiêu diệt nấm men.',
+      explain: 'Men vi sinh là các cơ thể sống vi mô. Chúng chỉ sinh sôi và hoạt động tốt ở nhiệt độ ấm (khoảng 30-35°C). Nếu tăng nhiệt độ lên quá cao (như dội nước sôi), các enzyme và protein trong tế bào men sẽ bị biến tính (chín), dẫn đến men bị tiêu diệt và mất hoàn toàn khả năng lên men bột bánh mì.'
+    },
+    'yeast+soil': {
+      icon: '🍄', name: 'Phân giải mùn hữu cơ (Sinh học)',
+      reaction: 'Vi sinh vật + Hữu cơ trong đất → Mùn + Dinh dưỡng',
+      desc: 'Men và vi sinh vật giúp phân hủy xác thực vật làm đất màu mỡ hơn.',
+      explain: 'Trong đất tự nhiên luôn chứa hệ vi sinh vật và nấm men khổng lồ. Chúng hoạt động như những nhà máy tái chế, tiết enzyme phân giải các tàn dư hữu cơ (lá rụng, xác chết) thành mùn và khoáng chất vô cơ. Nhờ đó đất trở nên tơi xốp, giữ ẩm tốt và trả lại dinh dưỡng cho chu trình tự nhiên.'
+    },
+    'sugar+water': {
+      icon: '🥤', name: 'Sự hòa tan không điện ly (Vật lý)',
+      reaction: 'Đường (rắn) + H2O → Nước đường',
+      desc: 'Các tinh thể đường khuếch tán đều trong nước nhưng không dẫn điện.',
+      explain: 'Phân tử đường (Sucrose) chứa nhiều nhóm -OH phân cực, nên rất dễ bị các phân tử nước kéo bứt ra khỏi tinh thể hạt đường. Khi hòa tan, đường len lỏi đều vào khoảng trống giữa các phân tử nước. Tuy nhiên, đường không phân ly thành các ion tích điện (như muối), nên nước đường hoàn toàn không dẫn điện.'
+    },
+    'oil+heat': {
+      icon: '🔥', name: 'Điểm khói / Sự cháy (Hóa học)',
+      reaction: 'Dầu ăn + Nhiệt độ cao → Khói trắng + Độc tố',
+      desc: 'Đun nóng dầu quá mức (Điểm khói) sẽ làm dầu bị phân hủy sinh ra khói.',
+      explain: 'Khi đun dầu ăn quá nhiệt (khoảng 200-250°C tùy loại), các phân tử axit béo bị bẻ gãy và phân hủy (oxy hóa) sinh ra khói trắng và các hợp chất độc hại như Aldehyde, Acrolein. Đây là lý do tại sao không nên chiên xào bằng dầu ở nhiệt độ bốc khói mịt mù.'
+    }
+
   };
 
   const getCombination = (id1, id2) => combos[`${id1}+${id2}`] || combos[`${id2}+${id1}`];
