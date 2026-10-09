@@ -53,40 +53,85 @@ export default function AIQuizGenerator({ onGenerated, onClose, addReward }) {
     setError('');
 
     try {
-      // Giả lập thời gian AI đọc và phân tích tài liệu (NotebookLM style)
+      // Giả lập thời gian AI đọc và phân tích tài liệu
       await new Promise(resolve => setTimeout(resolve, 3000));
       
-      // Lấy câu hỏi ngẫu nhiên từ thư viện cùng môn học
-      let pool = QUIZ_DATA.filter(q => (q.subject && q.subject.includes(subject)) || (q.subject && subject.includes(q.subject)));
-      if (pool.length === 0) pool = QUIZ_DATA; // Fallback
+      // Map subject UI to QUIZ_DATA subjects
+      const subjectMap = {
+        'Lý': ['KHTN', 'Vật lý'],
+        'Hóa': ['KHTN', 'Hóa học'],
+        'Sinh': ['KHTN', 'Sinh học'],
+        'Toán': ['Toán'],
+        'Văn': ['Ngữ Văn'],
+        'Sử': ['Lịch sử - Địa lí', 'Lịch sử'],
+        'Địa': ['Lịch sử - Địa lí', 'Địa lí'],
+        'Anh': ['Tiếng Anh']
+      };
+
+      const targetSubjects = subjectMap[subject] || [subject];
+      
+      // Lọc các bộ đề thuộc môn học tương ứng
+      let pool = QUIZ_DATA.filter(q => {
+        if (!q.subject) return false;
+        return targetSubjects.some(ts => q.subject.includes(ts) || ts.includes(q.subject));
+      });
+      
+      // Nếu vẫn không có, fallback tìm kiếm tất cả các bộ đề có chứa từ khóa của môn học
+      if (pool.length === 0) {
+        pool = QUIZ_DATA.filter(q => q.subject && q.subject.toLowerCase().includes(subject.toLowerCase()));
+      }
+      
+      // Tối hậu thư: chỉ lấy Toán nếu thực sự rỗng để tránh văng app, nhưng không trộn Ngữ Văn vào Lý
+      if (pool.length === 0) {
+        pool = QUIZ_DATA.slice(0, 1); 
+      }
       
       let allQuestions = pool.reduce((acc, curr) => [...acc, ...(curr.questions || [])], []);
       
-      // Xáo trộn
-      allQuestions = allQuestions.sort(() => 0.5 - Math.random());
+      // Trích xuất từ khóa từ tên file để ưu tiên câu hỏi (Giả lập AI đọc nội dung)
+      const fileKeywords = file.name.toLowerCase().replace(/\.[^/.]+$/, "").split(/[\s_\-]+/).filter(w => w.length > 2);
       
-      const selectedQs = allQuestions.slice(0, 5).map((q, i) => ({
-        ...q,
-        id: 'ai_q' + i + '_' + Date.now()
-      }));
+      // Chấm điểm ưu tiên câu hỏi nếu chứa từ khóa của tên file
+      allQuestions.forEach(q => {
+        q.matchScore = 0;
+        const qText = (q.text + ' ' + (q.explanation || '')).toLowerCase();
+        fileKeywords.forEach(kw => {
+          if (qText.includes(kw)) q.matchScore += 1;
+        });
+      });
+      
+      // Sắp xếp: ưu tiên câu có matchScore cao, sau đó random
+      allQuestions = allQuestions.sort((a, b) => {
+        if (b.matchScore !== a.matchScore) return b.matchScore - a.matchScore;
+        return 0.5 - Math.random();
+      });
+      
+      const selectedQs = allQuestions.slice(0, 5).map((q, i) => {
+        const { matchScore, ...cleanQ } = q;
+        return {
+          ...cleanQ,
+          id: 'ai_q' + i + '_' + Date.now()
+        };
+      });
 
-      // Thêm 2 câu tự luận (mock)
+      // Thêm 2 câu tự luận (mock) bám sát tên tài liệu
+      const docName = file.name ? file.name.split('.')[0] : 'tài liệu';
       selectedQs.push({
         id: 'ai_essay1_' + Date.now(),
         type: 'essay',
-        text: 'Dựa vào tài liệu bạn vừa cung cấp, hãy tóm tắt những điểm cốt lõi nhất về chủ đề này.',
-        correct: 'Tóm tắt đầy đủ các ý chính, cấu trúc rõ ràng.'
+        text: `Dựa vào tài liệu "${docName}" bạn vừa cung cấp, hãy tóm tắt những điểm cốt lõi nhất.`,
+        correct: 'Tóm tắt đầy đủ các ý chính, cấu trúc rõ ràng, bám sát nội dung.'
       });
       selectedQs.push({
         id: 'ai_essay2_' + Date.now(),
         type: 'essay',
-        text: 'Nêu ý kiến cá nhân và ứng dụng thực tiễn của kiến thức trong tài liệu vào đời sống.',
-        correct: 'Phân tích logic, liên hệ thực tế tốt.'
+        text: `Phân tích một ví dụ thực tế liên quan đến nội dung "${docName}" để làm rõ kiến thức.`,
+        correct: 'Phân tích logic, lấy ví dụ thực tế chính xác và thuyết phục.'
       });
 
       const quizData = {
         id: 'ai_' + Date.now(),
-        title: 'Bài Test AI: Từ tài liệu ' + (file.name ? file.name.split('.')[0] : 'bạn tải lên'),
+        title: 'Bài Test AI: ' + docName,
         subject: subject,
         questions: selectedQs
       };
