@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Book, CheckCircle2, X, AlertCircle, Award, Target, Sparkles, Lightbulb, Lock, Unlock } from 'lucide-react';
+import { Book, CheckCircle2, X, AlertCircle, Award, Target, Sparkles, Lightbulb, Lock, Unlock, Trash2 } from 'lucide-react';
 import { QUIZ_DATA } from './data/quizData';
 import AIQuizGenerator from './AIQuizGenerator';
 import { GoogleGenAI } from '@google/genai';
@@ -133,6 +133,15 @@ export default function QuizManager({ addReward }) {
   };
 
   
+  
+  const deleteCustomQuiz = (id) => {
+    if(window.confirm('Bạn có chắc chắn muốn xóa bài test này?')) {
+      const updated = customQuizzes.filter(q => q.id !== id);
+      setCustomQuizzes(updated);
+      localStorage.setItem('study_app_custom_quizzes', JSON.stringify(updated));
+    }
+  };
+    
   const isQuizLocked = (quiz) => {
     if (!quiz.chapter || quiz.chapter === 1) return false;
     const prevQuiz = allQuizzes.find(q => q.subject === quiz.subject && q.grade === quiz.grade && q.chapter === quiz.chapter - 1);
@@ -315,7 +324,14 @@ export default function QuizManager({ addReward }) {
                 {quiz.chapter && <span className="text-xs font-bold text-indigo-600 bg-indigo-50 border border-indigo-200 px-2 py-1 rounded">Chương {quiz.chapter}</span>}
                 <span className="text-xs font-bold text-gray-500 bg-gray-100 border border-gray-200 px-2 py-1 rounded">{quiz.questions.length} câu</span>
               </div>
-              {isQuizLocked(quiz) && <Lock size={18} className="text-gray-400" />}
+              <div className="flex items-center gap-2">
+                  {quiz.id.startsWith('ai_') && (
+                    <button onClick={(e) => { e.stopPropagation(); deleteCustomQuiz(quiz.id); }} className="text-red-400 hover:text-red-600 transition" title="Xóa đề này">
+                      <Trash2 size={18} />
+                    </button>
+                  )}
+                  {isQuizLocked(quiz) && <Lock size={18} className="text-gray-400" />}
+                </div>
             </div>
             <h3 className="text-xl font-bold text-gray-800 mb-2 group-hover:text-primary transition">{quiz.title}</h3>
             <p className="text-gray-500 text-sm mb-6 line-clamp-2">Làm bài tập đa dạng (Trắc nghiệm, Tự luận, Đúng/Sai...) để nhận XP.</p>
