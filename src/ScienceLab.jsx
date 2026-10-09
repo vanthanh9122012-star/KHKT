@@ -144,7 +144,7 @@ export default function ScienceLab({ addReward }) {
 
     'milk+soap': {
       icon: '🎨', name: 'Nhũ tương hóa & Giảm sức căng (Vật/Hóa học)',
-      reaction: 'Xà phòng + Chất béo (Sữa) → Hạt Mixen',
+      reaction: 'R-COONa (Xà phòng) + Triglyceride (Sữa) → Hạt Mixen',
       desc: 'Xà phòng làm giảm sức căng bề mặt của sữa và cuộn lấy các hạt béo.',
       explain: 'Sữa là hỗn hợp của nước, protein và chất béo. Xà phòng chứa chất hoạt động bề mặt với cấu trúc một đầu ưa nước và một đầu kị nước (ưa béo). Khi nhỏ xà phòng vào sữa, nó lập tức làm giảm sức căng bề mặt, đồng thời các đầu kị nước lao đến bám vào hạt mỡ tạo thành các hạt Mixen lơ lửng. Quá trình xô đẩy này tạo ra các luồng cuộn xoáy mạnh mẽ (Magic Milk).'
     },
@@ -168,19 +168,19 @@ export default function ScienceLab({ addReward }) {
     },
     'yeast+soil': {
       icon: '🍄', name: 'Phân giải mùn hữu cơ (Sinh học)',
-      reaction: 'Vi sinh vật + Hữu cơ trong đất → Mùn + Dinh dưỡng',
+      reaction: 'Vi sinh vật + Hữu cơ → Mùn + Khoáng vô cơ + CO2↑',
       desc: 'Men và vi sinh vật giúp phân hủy xác thực vật làm đất màu mỡ hơn.',
       explain: 'Trong đất tự nhiên luôn chứa hệ vi sinh vật và nấm men khổng lồ. Chúng hoạt động như những nhà máy tái chế, tiết enzyme phân giải các tàn dư hữu cơ (lá rụng, xác chết) thành mùn và khoáng chất vô cơ. Nhờ đó đất trở nên tơi xốp, giữ ẩm tốt và trả lại dinh dưỡng cho chu trình tự nhiên.'
     },
     'sugar+water': {
       icon: '🥤', name: 'Sự hòa tan không điện ly (Vật lý)',
-      reaction: 'Đường (rắn) + H2O → Nước đường',
+      reaction: 'C12H22O11 (rắn) + H2O → C12H22O11 (aq)',
       desc: 'Các tinh thể đường khuếch tán đều trong nước nhưng không dẫn điện.',
       explain: 'Phân tử đường (Sucrose) chứa nhiều nhóm -OH phân cực, nên rất dễ bị các phân tử nước kéo bứt ra khỏi tinh thể hạt đường. Khi hòa tan, đường len lỏi đều vào khoảng trống giữa các phân tử nước. Tuy nhiên, đường không phân ly thành các ion tích điện (như muối), nên nước đường hoàn toàn không dẫn điện.'
     },
     'oil+heat': {
       icon: '🔥', name: 'Điểm khói / Sự cháy (Hóa học)',
-      reaction: 'Dầu ăn + Nhiệt độ cao → Khói trắng + Độc tố',
+      reaction: '(C17H33COO)3C3H5 + t° → C3H4O (Acrolein) + 3 C17H33COOH',
       desc: 'Đun nóng dầu quá mức (Điểm khói) sẽ làm dầu bị phân hủy sinh ra khói.',
       explain: 'Khi đun dầu ăn quá nhiệt (khoảng 200-250°C tùy loại), các phân tử axit béo bị bẻ gãy và phân hủy (oxy hóa) sinh ra khói trắng và các hợp chất độc hại như Aldehyde, Acrolein. Đây là lý do tại sao không nên chiên xào bằng dầu ở nhiệt độ bốc khói mịt mù.'
     }
