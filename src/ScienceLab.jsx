@@ -29,6 +29,37 @@ export default function ScienceLab({ addReward }) {
   ];
 
   const combos = {
+    'soap+vinegar': {
+      icon: '🌫️', name: 'Mất khả năng tẩy rửa (Hóa học)',
+      reaction: 'RCOONa + CH3COOH → RCOOH↓ + CH3COONa',
+      desc: 'Dung dịch bị đục, xuất hiện kết tủa dạng keo hoặc váng mỡ nổi lên trên bề mặt.',
+      explain: 'Giấm chứa axit axetic (CH3COOH) mạnh hơn axit béo tự do. Nó đẩy axit béo ra khỏi muối của xà phòng. Axit béo (RCOOH) sinh ra không tan trong nước tạo thành váng đục, làm xà phòng mất khả năng tạo bọt và tẩy rửa.'
+    },
+    'acid+soap': {
+      icon: '☁️', name: 'Phá hủy xà phòng (Hóa học)',
+      reaction: 'RCOONa + HCl → RCOOH↓ + NaCl',
+      desc: 'Dung dịch đục ngay lập tức, kết tủa axit béo đóng vón mạnh mẽ nổi lên trên mặt nước.',
+      explain: 'Các axit vô cơ mạnh (HCl, H2SO4) phản ứng mãnh liệt với xà phòng tạo thành axit béo tự do (RCOOH) không tan trong nước. Phản ứng này vô hiệu hóa hoàn toàn tính tẩy rửa của xà phòng.'
+    },
+    'oil+soap': {
+      icon: '🫧', name: 'Sự nhũ tương hóa (Hóa lý)',
+      reaction: 'Đuôi kị nước bám dầu, đầu ưa nước bám nước',
+      desc: 'Dầu ăn bị phân tán thành các giọt lơ lửng, tạo hệ nhũ tương bền vững (nước đục như sữa).',
+      explain: 'Phân tử xà phòng có đầu phân cực (-COONa) ưa nước và đuôi hidrocacbon kị nước nhưng ưa dầu. Đuôi kị nước cắm vào giọt dầu, đầu ưa nước quay ra ngoài dung dịch tạo thành các micelle. Micelle ngăn giọt dầu gom lại, giúp dầu bị cuốn trôi.'
+    },
+    'salt+soap': {
+      icon: '❄️', name: 'Hiện tượng xát muối xà phòng (Salting out)',
+      reaction: 'RCOONa ⇌ RCOO⁻ + Na⁺',
+      desc: 'Xuất hiện kết tủa xà phòng màu trắng tách ra khỏi dung dịch và nổi lên trên.',
+      explain: 'Khi thêm NaCl, nồng độ ion Na⁺ tăng vọt. Theo nguyên lý chuyển dịch cân bằng Le Chatelier, cân bằng dịch chuyển về bên trái, làm độ tan của xà phòng giảm mạnh dẫn đến kết tinh. Đây là phương pháp thu hồi xà phòng trong công nghiệp nấu xà phòng.'
+    },
+    'water+soap': {
+      icon: '🧽', name: 'Sự thủy phân tạo kiềm (Hóa học)',
+      reaction: 'RCOO⁻ + H2O ⇌ RCOOH + OH⁻',
+      desc: 'Xà phòng tan một phần, tạo cảm giác nhờn, tạo bọt khi khuấy và làm xanh quỳ tím (kiềm nhẹ).',
+      explain: 'Xà phòng là muối của axit yếu và bazo mạnh nên bị thủy phân một phần trong nước. Sự xuất hiện của ion OH⁻ làm cho dung dịch xà phòng có tính kiềm nhẹ (pH ≈ 9 - 10).'
+    },
+
     // Existing combos with upgraded educational info
     'water+heat': { 
       icon: '☁️', name: 'Sự bay hơi (Vật lý)', 
@@ -122,12 +153,7 @@ export default function ScienceLab({ addReward }) {
       desc: 'Dầu ăn không tan trong nước và nổi lên trên bề mặt do nhẹ hơn.',
       explain: 'Phân tử nước có tính phân cực cao (ưa nước), trong khi dầu ăn cấu tạo từ các hydrocarbon không phân cực (kỵ nước). Do nguyên tắc "đồng thanh tương ứng" trong dung môi, chúng đẩy nhau. Hơn nữa, khối lượng riêng của dầu nhẹ hơn nước nên dầu luôn nổi lên trên tạo thành hai lớp rõ rệt.'
     },
-    'oil+soap': {
-      icon: '🫧', name: 'Sự nhũ tương hóa (Hóa lý)',
-      reaction: 'Dầu + Xà phòng + Nước → Hỗn hợp nhũ tương',
-      desc: 'Xà phòng bọc lấy các hạt dầu, giúp dầu mỡ tan được trong nước.',
-      explain: 'Xà phòng có cấu trúc phân tử đặc biệt: một đầu "ưa nước" và một đuôi dài "kỵ nước" (ưa dầu). Khi rửa chén, đuôi kỵ nước cắm chặt vào vết dầu mỡ, còn đầu ưa nước quay ra ngoài liên kết với nước. Cấu trúc micelle này kéo các hạt dầu tách rời ra, lơ lửng trong nước và dễ dàng bị rửa trôi.'
-    },
+    
     'milk+vinegar': {
       icon: '🧀', name: 'Sự đông tụ Protein (Sinh hóa)',
       reaction: 'Casein (trong sữa) + Axit → Biến tính protein kết tủa',
