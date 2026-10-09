@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { INITIAL_FLASHCARDS } from './data/flashcardData';
 import { createPortal } from 'react-dom';
 import {  CheckCircle2, X, Lightbulb, Sparkles , RotateCcw } from 'lucide-react';
 import { GoogleGenAI } from '@google/genai';
@@ -53,20 +54,41 @@ export default function ReviewManager({ addReward }) {
   
 
   
-  const generateDistractors = (correctAnswer) => {
-    let allFlashcards = [];
+  const generateDistractors = (correctAnswer, subject) => {
+    let allFlashcards = [...INITIAL_FLASHCARDS];
     try {
-      allFlashcards = JSON.parse(localStorage.getItem('studyflow_vocab') || '[]');
+      const localVocab = JSON.parse(localStorage.getItem('studyflow_vocab') || '[]');
+      if (localVocab.length > 0) {
+        allFlashcards = [...allFlashcards, ...localVocab];
+      }
     } catch(e) {}
-    let pool = allFlashcards.map(c => c.answer).filter(a => a && a.trim() !== '' && a !== correctAnswer);
+    
+    // Filter by subject first for relevance
+    let subjectPool = allFlashcards
+      .filter(c => c.subject === subject && c.answer && c.answer.trim() !== '' && c.answer !== correctAnswer)
+      .map(c => c.answer);
+      
+    // Remove duplicates
+    subjectPool = [...new Set(subjectPool)];
+
     let options = [correctAnswer];
     for (let i = 0; i < 3; i++) {
-      if (pool.length > 0) {
-        const randIdx = Math.floor(Math.random() * pool.length);
-        options.push(pool[randIdx]);
-        pool.splice(randIdx, 1);
+      if (subjectPool.length > 0) {
+        const randIdx = Math.floor(Math.random() * subjectPool.length);
+        options.push(subjectPool[randIdx]);
+        subjectPool.splice(randIdx, 1);
       } else {
-        options.push('Phương án nhiễu ' + (i + 1));
+        // Fallback to random if not enough in subject
+        let fallbackPool = allFlashcards
+          .filter(c => c.answer && c.answer.trim() !== '' && c.answer !== correctAnswer && !options.includes(c.answer))
+          .map(c => c.answer);
+        
+        if (fallbackPool.length > 0) {
+          const randIdx = Math.floor(Math.random() * fallbackPool.length);
+          options.push(fallbackPool[randIdx]);
+        } else {
+          options.push('Phương án nhiễu ' + (i + 1));
+        }
       }
     }
     return options.sort(() => Math.random() - 0.5);
@@ -75,7 +97,7 @@ export default function ReviewManager({ addReward }) {
   const retryOriginalQuestion = (mistake) => {
     let options = mistake.options || [];
     if (options.length < 2) {
-      options = generateDistractors(mistake.correctAnswer || mistake.correct);
+      options = generateDistractors(mistake.correctAnswer || mistake.correct, mistake.subject);
     }
     setReviewQuestion({
       ...mistake,
@@ -97,7 +119,7 @@ export default function ReviewManager({ addReward }) {
       ...card,
       text: card.question,
       type: 'mcq',
-      options: generateDistractors(card.answer),
+      options: generateDistractors(card.answer, card.subject),
       correct: card.answer,
       explanation: 'Đây là nội dung ghi nhớ.',
       isAi: false,
