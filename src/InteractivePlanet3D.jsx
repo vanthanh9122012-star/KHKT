@@ -4,10 +4,10 @@ import { OrbitControls, Stars, Sphere, Ring } from '@react-three/drei';
 import * as THREE from 'three';
 
 const PLANET_PROFILES = [
-  { name: 'Mars', endColor: '#dc2626', endEmissive: '#b91c1c', atmos: '#f87171', textureMap: 'moon_map.jpg', hasRing: false, grad: ['#ef4444', '#f97316', '#fcd34d'] }, // Lớp 6
-  { name: 'Earth', endColor: '#ffffff', endEmissive: '#3b82f6', atmos: '#60a5fa', textureMap: 'earth_map.jpg', hasRing: false, grad: ['#3b82f6', '#8b5cf6', '#ec4899'] }, // Lớp 7
-  { name: 'Jupiter', endColor: '#d97706', endEmissive: '#b45309', atmos: '#fcd34d', textureMap: 'moon_map.jpg', hasRing: false, grad: ['#8b5cf6', '#d946ef', '#f97316'] }, // Lớp 8 - Purple/Orange Gradient
-  { name: 'Saturn', endColor: '#ca8a04', endEmissive: '#a16207', atmos: '#fde047', textureMap: 'moon_map.jpg', hasRing: true, grad: ['#eab308', '#f97316', '#ef4444'] }  // Lớp 9
+  { name: 'Mars', endColor: '#dc2626', endEmissive: '#b91c1c', atmos: '#f87171', textureMap: 'moon_map.jpg', hasRing: false, grad: ['#991b1b', '#dc2626', '#f97316'] }, // Đỏ - thống nhất
+  { name: 'Earth', endColor: '#ffffff', endEmissive: '#3b82f6', atmos: '#60a5fa', textureMap: 'earth_map.jpg', hasRing: false, grad: ['#1e3a8a', '#3b82f6', '#22d3ee'] }, // Xanh dương - thống nhất
+  { name: 'Jupiter', endColor: '#d97706', endEmissive: '#b45309', atmos: '#fcd34d', textureMap: 'moon_map.jpg', hasRing: false, grad: ['#4c1d95', '#8b5cf6', '#d946ef'] }, // Tím - thống nhất
+  { name: 'Saturn', endColor: '#ca8a04', endEmissive: '#a16207', atmos: '#fde047', textureMap: 'moon_map.jpg', hasRing: true, grad: ['#a16207', '#eab308', '#fef08a'] }  // Vàng - thống nhất
 ];
 
 const EvolvingPlanet = ({ completed, total, index }) => {
@@ -39,8 +39,8 @@ const EvolvingPlanet = ({ completed, total, index }) => {
     canvas.height = 512;
     const context = canvas.getContext('2d');
     
-    // Diagonal gradient for nice 3D coverage
-    const gradient = context.createLinearGradient(0, 0, 512, 512);
+    // Vertical gradient for seamless 3D wrapping without seams
+    const gradient = context.createLinearGradient(0, 0, 0, 512);
     gradient.addColorStop(0, profile.grad[0]);
     gradient.addColorStop(0.5, profile.grad[1]);
     gradient.addColorStop(1, profile.grad[2]);
