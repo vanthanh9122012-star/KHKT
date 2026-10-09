@@ -125,7 +125,8 @@ export default function QuizManager({ addReward }) {
   };
 
   const handleAIGenerated = (newQuiz) => {
-    const updated = [newQuiz, ...customQuizzes];
+    let current = Array.isArray(customQuizzes) ? customQuizzes : [];
+    const updated = [newQuiz, ...current];
     setCustomQuizzes(updated);
     localStorage.setItem('study_app_custom_quizzes', JSON.stringify(updated));
     setShowAIModal(false);

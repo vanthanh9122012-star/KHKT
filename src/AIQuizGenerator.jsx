@@ -57,10 +57,10 @@ export default function AIQuizGenerator({ onGenerated, onClose, addReward }) {
       await new Promise(resolve => setTimeout(resolve, 3000));
       
       // Lấy câu hỏi ngẫu nhiên từ thư viện cùng môn học
-      let pool = QUIZ_DATA.filter(q => q.subject.includes(subject) || subject.includes(q.subject));
+      let pool = QUIZ_DATA.filter(q => (q.subject && q.subject.includes(subject)) || (q.subject && subject.includes(q.subject)));
       if (pool.length === 0) pool = QUIZ_DATA; // Fallback
       
-      let allQuestions = pool.reduce((acc, curr) => [...acc, ...curr.questions], []);
+      let allQuestions = pool.reduce((acc, curr) => [...acc, ...(curr.questions || [])], []);
       
       // Xáo trộn
       allQuestions = allQuestions.sort(() => 0.5 - Math.random());
@@ -95,7 +95,7 @@ export default function AIQuizGenerator({ onGenerated, onClose, addReward }) {
       
     } catch (err) {
       console.error(err);
-      setError('Đã xảy ra lỗi khi xử lý tài liệu.');
+      setError('Lỗi: ' + err.message);
     } finally {
       setLoading(false);
     }
