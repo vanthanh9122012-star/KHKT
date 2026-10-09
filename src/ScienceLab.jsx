@@ -31,13 +31,13 @@ export default function ScienceLab({ addReward }) {
   const combos = {
     'milk+heat': {
       icon: '☕', name: 'Hiện tượng tạo váng và trào sữa (Vật lý/Hóa học)',
-      reaction: 'Biến tính protein bề mặt + Sự bay hơi',
+      reaction: 'Lactalbumin + Casein + t° → Màng váng Protein',
       desc: 'Sữa đóng một lớp váng mỏng trên bề mặt. Nếu đun sôi, sữa rất dễ bùng trào ra ngoài.',
       explain: 'Nhiệt độ làm các protein (lactalbumin) đông tụ tạo thành lớp váng trên mặt. Lớp váng này ngăn hơi nước bay hơi. Khi áp suất hơi nước bên dưới đủ lớn sẽ phá vỡ lớp váng đẩy bọt sữa trào ra ngoài.'
     },
     'milk+acid': {
       icon: '🧀', name: 'Đông tụ Protein (Hóa sinh)',
-      reaction: 'Casein + H⁺ → Casein kết tủa',
+      reaction: 'Casein(mang điện âm) + H⁺ (từ HCl/H2SO4) → Casein (trung hòa)↓',
       desc: 'Sữa lập tức bị vón cục mạnh, tách thành phần rắn (sữa đông) và phần nước trong (whey).',
       explain: 'Axit mạnh (HCl, H2SO4) làm giảm pH của sữa đột ngột xuống dưới điểm đẳng điện của protein Casein (pH 4.6), triệt tiêu lực đẩy tĩnh điện khiến các hạt casein kết tụ lại với nhau.'
     },
@@ -79,25 +79,25 @@ export default function ScienceLab({ addReward }) {
     },
     'milk+salt': {
       icon: '🧂', name: 'Kết tủa muối (Salting out)',
-      reaction: 'Cạnh tranh dung môi',
+      reaction: 'Casein(H2O)n + NaCl (nồng độ cao) → Casein↓ + Na⁺(H2O) + Cl⁻(H2O)',
       desc: 'Nếu cho quá nhiều muối, protein trong sữa có thể bị kết tủa.',
       explain: 'Ở nồng độ muối rất cao, các ion của muối sẽ "tranh giành" nước với các phân tử protein (Casein). Khi mất đi lớp vỏ bọc nước (lớp hydrat hóa), protein sẽ kết tụ lại và tách ra khỏi dung dịch.'
     },
     'milk+oil': {
       icon: '🛢️', name: 'Hệ nhũ tương không bền',
-      reaction: 'Phân tách lớp',
+      reaction: 'Nhũ tương: (RCOO)3C3H5 + H2O (trong sữa) ⇌ Tách lớp',
       desc: 'Dầu nổi lên trên bề mặt sữa. Nếu đánh mạnh (có chất nhũ hóa) có thể tạo sốt.',
       explain: 'Sữa chứa nhiều nước nên đẩy dầu mỡ nổi lên trên. Tuy nhiên sữa có chứa một ít chất nhũ hóa tự nhiên (phospholipid). Nếu khuấy rất mạnh, dầu có thể bị phân tán tạm thời vào sữa.'
     },
     'milk+water': {
       icon: '💧', name: 'Pha loãng hệ nhũ tương (Vật lý)',
-      reaction: 'Giảm nồng độ các chất hòa tan và hệ keo',
+      reaction: 'Casein/Lactose + H2O (thêm vào) → Hệ keo pha loãng',
       desc: 'Sữa trở nên loãng hơn, bớt đục, ánh sáng truyền qua dễ dàng hơn.',
       explain: 'Việc thêm nước chỉ làm tăng khoảng cách giữa các hạt chất béo và protein phân tán trong hệ nhũ tương, không gây ra sự biến đổi hóa học nào.'
     },
     'milk+electricity': {
       icon: '⚡', name: 'Dẫn điện nhẹ',
-      reaction: 'Sự di chuyển của các ion khoáng',
+      reaction: 'Ca²⁺, K⁺, Na⁺, Cl⁻ (trong sữa) + e⁻ → Dẫn điện (Di chuyển ion)',
       desc: 'Dòng điện có thể đi qua sữa.',
       explain: 'Sữa không phải là nước tinh khiết mà chứa rất nhiều khoáng chất hòa tan (như Canxi, Kali, Natri, Clo...) dưới dạng ion. Các ion này giúp sữa có khả năng dẫn điện nhẹ.'
     },
@@ -116,13 +116,13 @@ export default function ScienceLab({ addReward }) {
     },
     'soap+sugar': {
       icon: '🎈', name: 'Tăng độ bền bong bóng (Vật lý)',
-      reaction: 'Đường làm tăng độ nhớt của dung dịch',
+      reaction: 'RCOONa + C6H12O6 (Đường) + H2O → Dung dịch đồng nhất (tăng độ nhớt)',
       desc: 'Không phản ứng hóa học. Tuy nhiên dung dịch xà phòng sẽ có độ nhớt cao hơn, bong bóng xà phòng lâu tan hơn.',
       explain: 'Phân tử đường (C6H12O6) hòa tan vào nước giữa các màng xà phòng, làm chậm quá trình bay hơi của nước, giúp màng bong bóng bền vững hơn và khó vỡ hơn.'
     },
     'soap+heat': {
       icon: '🔥', name: 'Tăng tốc độ nhũ tương hóa (Vật lý)',
-      reaction: 'Nhiệt năng làm tăng chuyển động phân tử',
+      reaction: 'RCOONa (ít tan) + t° → RCOONa (hòa tan hoàn toàn)',
       desc: 'Xà phòng tan nhanh hơn, nhũ tương hóa và đánh bay vết bẩn dầu mỡ nhanh và mạnh hơn.',
       explain: 'Nhiệt độ cao làm tăng độ tan của xà phòng trong nước và tăng chuyển động nhiệt của các phân tử, giúp đuôi kị nước của xà phòng đâm vào chất béo nhanh hơn.'
     },
@@ -140,31 +140,31 @@ export default function ScienceLab({ addReward }) {
     },
     'soap+electricity': {
       icon: '⚡', name: 'Điện phân dung dịch (Hóa học)',
-      reaction: 'Điện phân dung dịch điện ly',
+      reaction: '2RCOONa + 2H2O (điện phân) → R-R + 2CO2↑ + 2NaOH + H2↑',
       desc: 'Xảy ra quá trình điện phân dung dịch điện ly.',
       explain: 'Xà phòng là muối phân ly ra ion RCOO⁻ và Na⁺. Dòng điện đi qua sẽ gây ra các phản ứng điện phân tại các điện cực sinh ra khí (H2, O2).'
     },
     'soap+yeast': {
       icon: '🦠', name: 'Ức chế vi sinh vật (Sinh học)',
-      reaction: 'Xà phòng phá vỡ màng tế bào men',
+      reaction: 'RCOONa + Tế bào men → Phá vỡ màng Lipid tế bào',
       desc: 'Không có phản ứng hóa học tạo chất mới, nhưng xà phòng sẽ diệt hoặc ức chế men vi sinh.',
       explain: 'Tính tẩy rửa và nhũ tương hóa của xà phòng sẽ hòa tan lớp màng lipid bảo vệ của tế bào men vi sinh, làm hỏng màng và tiêu diệt chúng.'
     },
     'soap+seed': {
       icon: '🌱', name: 'Ức chế nảy mầm (Sinh học)',
-      reaction: 'Hỏng màng tế bào hạt giống',
+      reaction: 'RCOONa + Hạt giống → Phá hủy màng tế bào hạt',
       desc: 'Xà phòng nồng độ cao làm hạt giống không thể nảy mầm.',
       explain: 'Chất hoạt động bề mặt phá hủy lớp màng bảo vệ tự nhiên của hạt, gây độc tính hoặc ức chế quá trình hô hấp, hút nước nảy mầm của hạt giống.'
     },
     'soap+soil': {
       icon: '🪨', name: 'Phân tán hạt đất (Hóa lý)',
-      reaction: 'Xà phòng bọc các hạt sét/mùn',
+      reaction: 'RCOONa + Hạt sét (SiO2/Al2O3) → Mixen lơ lửng',
       desc: 'Không phản ứng hóa học đặc trưng, xà phòng giúp rửa trôi bùn đất nhanh hơn.',
       explain: 'Các phân tử xà phòng làm giảm sức căng bề mặt của nước, len lỏi vào các khe hở của đất và bọc lấy các hạt sét, hạt mùn, giúp chúng lơ lửng và dễ bị rửa trôi.'
     },
     'soap+metal': {
       icon: '🔩', name: 'Làm sạch bề mặt kim loại',
-      reaction: 'Cuốn trôi dầu mỡ trên kim loại',
+      reaction: 'RCOONa + Fe/Zn → Không phản ứng hóa học (Chỉ rửa trôi dầu mỡ)',
       desc: 'Không phản ứng hóa học trực tiếp với kim loại ở điều kiện thường.',
       explain: 'Xà phòng chỉ có tác dụng nhũ tương hóa và cuốn trôi các lớp dầu mỡ công nghiệp bám trên bề mặt kim loại chứ không tác dụng trực tiếp với Fe, Zn.'
     },
@@ -183,7 +183,7 @@ export default function ScienceLab({ addReward }) {
     },
     'oil+soap': {
       icon: '🫧', name: 'Sự nhũ tương hóa (Hóa lý)',
-      reaction: 'Đuôi kị nước bám dầu, đầu ưa nước bám nước',
+      reaction: 'RCOONa + (R-COO)3C3H5 → Mixen nhũ tương lơ lửng',
       desc: 'Dầu ăn bị phân tán thành các giọt lơ lửng, tạo hệ nhũ tương bền vững (nước đục như sữa).',
       explain: 'Phân tử xà phòng có đầu phân cực (-COONa) ưa nước và đuôi hidrocacbon kị nước nhưng ưa dầu. Đuôi kị nước cắm vào giọt dầu, đầu ưa nước quay ra ngoài dung dịch tạo thành các micelle. Micelle ngăn giọt dầu gom lại, giúp dầu bị cuốn trôi.'
     },
@@ -269,13 +269,13 @@ export default function ScienceLab({ addReward }) {
     },
     'acid+vinegar': {
       icon: '🧫', name: 'Hỗn hợp Axit (Không phản ứng)',
-      reaction: 'HCl/H2SO4 + CH3COOH → Hỗn hợp axit',
+      reaction: 'HCl/H2SO4 + CH3COOH → Hỗn hợp hai axit (Không PƯ)',
       desc: 'Hai axit kết hợp với nhau không sinh ra phản ứng hóa học mà chỉ hòa trộn vật lý.',
       explain: 'Cả Axit vô cơ và Giấm đều mang tính axit (chuyên nhường ion H+). Vì chúng có cùng bản chất hóa học, khi trộn lẫn sẽ không xảy ra phản ứng trao đổi hay oxi hóa khử. Thay vào đó, chúng chỉ hòa quyện tạo thành một dung dịch có tính axit tổng hợp mạnh hơn.'
     },
     'electricity+metal': {
       icon: '💡', name: 'Sự dẫn điện & Tỏa nhiệt (Vật lý)',
-      reaction: 'Kim loại + Dòng điện → Điện trở sinh nhiệt',
+      reaction: 'Fe/Zn + e⁻ (Dòng điện) → Dẫn điện + Nhiệt lượng (t°)',
       desc: 'Kim loại cho dòng điện đi qua dễ dàng nhờ mạng lưới electron tự do.',
       explain: 'Kim loại có mạng tinh thể chứa vô số các electron tự do. Khi có hiệu điện thế, các electron di chuyển thành dòng có hướng. Tuy nhiên, sự va chạm của chúng với các ion dương ở nút mạng tinh thể sẽ cản trở dòng điện (điện trở) và biến điện năng thành nhiệt năng (nguyên lý của dây tóc bóng đèn).'
     },
@@ -289,14 +289,14 @@ export default function ScienceLab({ addReward }) {
     },
     'water+oil': {
       icon: '🥗', name: 'Sự phân tách lớp (Vật lý)',
-      reaction: 'H2O + Dầu ăn → Không hòa tan, phân lớp',
+      reaction: 'H2O + (RCOO)3C3H5 → Không phản ứng (Phân lớp do khối lượng riêng)',
       desc: 'Dầu ăn không tan trong nước và nổi lên trên bề mặt do nhẹ hơn.',
       explain: 'Phân tử nước có tính phân cực cao (ưa nước), trong khi dầu ăn cấu tạo từ các hydrocarbon không phân cực (kỵ nước). Do nguyên tắc "đồng thanh tương ứng" trong dung môi, chúng đẩy nhau. Hơn nữa, khối lượng riêng của dầu nhẹ hơn nước nên dầu luôn nổi lên trên tạo thành hai lớp rõ rệt.'
     },
     
     'milk+vinegar': {
       icon: '🧀', name: 'Sự đông tụ Protein (Sinh hóa)',
-      reaction: 'Casein (trong sữa) + Axit → Biến tính protein kết tủa',
+      reaction: 'Casein(mang điện âm) + CH3COOH → Casein↓ + CH3COO⁻',
       desc: 'Giấm làm sữa bị tách nước và vón cục lại thành phô mai tươi.',
       explain: 'Sữa chứa nhiều protein dạng keo gọi là casein mang điện tích âm, giúp chúng đẩy nhau và lơ lửng trong nước. Khi thêm axit (Giấm), ion H+ trung hòa điện tích này. Các phân tử casein mất lực đẩy, kết dính lại với nhau thành các cục vón màu trắng. Đây là nguyên lý cơ bản để làm phô mai, sữa chua hoặc đậu hũ.'
     },
@@ -317,13 +317,13 @@ export default function ScienceLab({ addReward }) {
     },
     'soil+water': {
       icon: '🟤', name: 'Hỗn hợp huyền phù (Vật lý)',
-      reaction: 'Đất màu mỡ + Nước → Bùn đục',
+      reaction: 'SiO2, Mùn hữu cơ + H2O → Huyền phù (Bùn đục)',
       desc: 'Đất hòa với nước tạo thành bùn, hòa tan các khoáng chất vi lượng.',
       explain: 'Đất chứa hạt sét, cát, xác hữu cơ và chất khoáng. Khi trộn với nước, các hạt nhẹ lơ lửng tạo thành "huyền phù" làm nước đục, hạt nặng (cát) chìm xuống đáy. Đồng thời nước sẽ hòa tan các muối khoáng có trong đất (N, P, K), biến thành dạng dinh dưỡng lỏng rễ cây hút được.'
     },
     'yeast+heat': {
       icon: '☠️', name: 'Sự ức chế / Chết men (Sinh học)',
-      reaction: 'Men vi sinh + Nhiệt độ cao → Men bị chết',
+      reaction: 'Men vi sinh + t°(>50°C) → Biến tính protein (Men chết)',
       desc: 'Nhiệt độ quá cao (trên 50°C) sẽ làm hỏng tế bào và tiêu diệt nấm men.',
       explain: 'Men vi sinh là các cơ thể sống vi mô. Chúng chỉ sinh sôi và hoạt động tốt ở nhiệt độ ấm (khoảng 30-35°C). Nếu tăng nhiệt độ lên quá cao (như dội nước sôi), các enzyme và protein trong tế bào men sẽ bị biến tính (chín), dẫn đến men bị tiêu diệt và mất hoàn toàn khả năng lên men bột bánh mì.'
     },
