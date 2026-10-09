@@ -29,6 +29,73 @@ export default function ScienceLab({ addReward }) {
   ];
 
   const combos = {
+    'soap+milk': {
+      icon: '🎨', name: 'Giảm sức căng bề mặt (Magic Milk)',
+      reaction: 'R-COONa + Triglyceride/Casein → Hạt Mixen',
+      desc: 'Tạo hiện tượng các vệt màu chuyển động linh hoạt. Có thể gây đông tụ một phần protein sữa.',
+      explain: 'Xà phòng phá vỡ sức căng bề mặt của nước và liên kết với phân tử chất béo/protein trong sữa, làm chúng di chuyển xáo trộn mạnh mẽ. Môi trường kiềm nhẹ của xà phòng làm biến tính màng protein bọc giọt chất béo.'
+    },
+    'soap+baking_soda': {
+      icon: '🫧', name: 'Tăng cường tẩy rửa (Hệ đệm kiềm)',
+      reaction: 'RCOONa + NaHCO3 → Hệ đệm kiềm ổn định',
+      desc: 'Không xảy ra phản ứng hóa học rõ rệt, nhưng làm tăng khả năng tẩy rửa và tạo môi trường đệm kiềm ổn định.',
+      explain: 'Cả xà phòng và NaHCO3 đều có tính kiềm nhẹ. NaHCO3 cung cấp ion bicarbonate hỗ trợ trung hòa các vết bẩn có tính axit và làm mềm nước.'
+    },
+    'soap+sugar': {
+      icon: '🎈', name: 'Tăng độ bền bong bóng (Vật lý)',
+      reaction: 'Đường làm tăng độ nhớt của dung dịch',
+      desc: 'Không phản ứng hóa học. Tuy nhiên dung dịch xà phòng sẽ có độ nhớt cao hơn, bong bóng xà phòng lâu tan hơn.',
+      explain: 'Phân tử đường (C6H12O6) hòa tan vào nước giữa các màng xà phòng, làm chậm quá trình bay hơi của nước, giúp màng bong bóng bền vững hơn và khó vỡ hơn.'
+    },
+    'soap+heat': {
+      icon: '🔥', name: 'Tăng tốc độ nhũ tương hóa (Vật lý)',
+      reaction: 'Nhiệt năng làm tăng chuyển động phân tử',
+      desc: 'Xà phòng tan nhanh hơn, nhũ tương hóa và đánh bay vết bẩn dầu mỡ nhanh và mạnh hơn.',
+      explain: 'Nhiệt độ cao làm tăng độ tan của xà phòng trong nước và tăng chuyển động nhiệt của các phân tử, giúp đuôi kị nước của xà phòng đâm vào chất béo nhanh hơn.'
+    },
+    'soap+oxygen': {
+      icon: '💨', name: 'Oxy hóa chậm (Hóa học)',
+      reaction: 'O2 + Gốc axit béo chưa no → Hợp chất ôi khét',
+      desc: 'Ở điều kiện thường không phản ứng. Về lâu dài có thể làm xà phòng bị gắt dầu hoặc ôi.',
+      explain: 'Khí Oxi trong không khí từ từ oxy hóa các gốc axit béo chưa no (chứa liên kết đôi C=C) có trong xà phòng, làm thay đổi cấu trúc và gây mùi khó chịu.'
+    },
+    'soap+light': {
+      icon: '☀️', name: 'Xúc tác oxy hóa',
+      reaction: 'Ánh sáng UV xúc tác phản ứng oxy hóa',
+      desc: 'Xúc tác quá trình làm hỏng, ôi khét xà phòng khi tiếp xúc không khí lâu ngày.',
+      explain: 'Ánh sáng (đặc biệt là tia UV) kết hợp với Oxi sẽ đẩy nhanh tốc độ phân hủy và oxy hóa gốc axit béo chưa no trong xà phòng.'
+    },
+    'soap+electricity': {
+      icon: '⚡', name: 'Điện phân dung dịch (Hóa học)',
+      reaction: 'Điện phân dung dịch điện ly',
+      desc: 'Xảy ra quá trình điện phân dung dịch điện ly.',
+      explain: 'Xà phòng là muối phân ly ra ion RCOO⁻ và Na⁺. Dòng điện đi qua sẽ gây ra các phản ứng điện phân tại các điện cực sinh ra khí (H2, O2).'
+    },
+    'soap+yeast': {
+      icon: '🦠', name: 'Ức chế vi sinh vật (Sinh học)',
+      reaction: 'Xà phòng phá vỡ màng tế bào men',
+      desc: 'Không có phản ứng hóa học tạo chất mới, nhưng xà phòng sẽ diệt hoặc ức chế men vi sinh.',
+      explain: 'Tính tẩy rửa và nhũ tương hóa của xà phòng sẽ hòa tan lớp màng lipid bảo vệ của tế bào men vi sinh, làm hỏng màng và tiêu diệt chúng.'
+    },
+    'soap+seed': {
+      icon: '🌱', name: 'Ức chế nảy mầm (Sinh học)',
+      reaction: 'Hỏng màng tế bào hạt giống',
+      desc: 'Xà phòng nồng độ cao làm hạt giống không thể nảy mầm.',
+      explain: 'Chất hoạt động bề mặt phá hủy lớp màng bảo vệ tự nhiên của hạt, gây độc tính hoặc ức chế quá trình hô hấp, hút nước nảy mầm của hạt giống.'
+    },
+    'soap+soil': {
+      icon: '🪨', name: 'Phân tán hạt đất (Hóa lý)',
+      reaction: 'Xà phòng bọc các hạt sét/mùn',
+      desc: 'Không phản ứng hóa học đặc trưng, xà phòng giúp rửa trôi bùn đất nhanh hơn.',
+      explain: 'Các phân tử xà phòng làm giảm sức căng bề mặt của nước, len lỏi vào các khe hở của đất và bọc lấy các hạt sét, hạt mùn, giúp chúng lơ lửng và dễ bị rửa trôi.'
+    },
+    'soap+metal': {
+      icon: '🔩', name: 'Làm sạch bề mặt kim loại',
+      reaction: 'Cuốn trôi dầu mỡ trên kim loại',
+      desc: 'Không phản ứng hóa học trực tiếp với kim loại ở điều kiện thường.',
+      explain: 'Xà phòng chỉ có tác dụng nhũ tương hóa và cuốn trôi các lớp dầu mỡ công nghiệp bám trên bề mặt kim loại chứ không tác dụng trực tiếp với Fe, Zn.'
+    },
+
     'soap+vinegar': {
       icon: '🌫️', name: 'Mất khả năng tẩy rửa (Hóa học)',
       reaction: 'RCOONa + CH3COOH → RCOOH↓ + CH3COONa',
@@ -168,12 +235,7 @@ export default function ScienceLab({ addReward }) {
     }
 ,
 
-    'milk+soap': {
-      icon: '🎨', name: 'Nhũ tương hóa & Giảm sức căng (Vật/Hóa học)',
-      reaction: 'R-COONa (Xà phòng) + Triglyceride (Sữa) → Hạt Mixen',
-      desc: 'Xà phòng làm giảm sức căng bề mặt của sữa và cuộn lấy các hạt béo.',
-      explain: 'Sữa là hỗn hợp của nước, protein và chất béo. Xà phòng chứa chất hoạt động bề mặt với cấu trúc một đầu ưa nước và một đầu kị nước (ưa béo). Khi nhỏ xà phòng vào sữa, nó lập tức làm giảm sức căng bề mặt, đồng thời các đầu kị nước lao đến bám vào hạt mỡ tạo thành các hạt Mixen lơ lửng. Quá trình xô đẩy này tạo ra các luồng cuộn xoáy mạnh mẽ (Magic Milk).'
-    },
+    
     'salt+heat': {
       icon: '🔥', name: 'Sự nóng chảy (Vật lý)',
       reaction: 'NaCl (rắn) + 801°C → NaCl (lỏng)',
