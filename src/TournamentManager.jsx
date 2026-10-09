@@ -9,8 +9,33 @@ const BOT_NAMES = [
   "Nguyệt Minh", "Thu Trà", "Trúc Đào", "Hương Ly"
 ];
 
-// Combine all questions from quizData
-const ALL_QUESTIONS = QUIZ_DATA.reduce((acc, qz) => [...acc, ...qz.questions], []);
+// Combine all questions from quizData and generate options for fill_blank
+const RAW_QUESTIONS = QUIZ_DATA.reduce((acc, qz) => [...acc, ...qz.questions.map(q => ({...q, subject: qz.subject}))], []);
+
+const ALL_QUESTIONS = RAW_QUESTIONS.map(q => {
+  if (!q.options || q.options.length < 2) {
+    let subjectPool = RAW_QUESTIONS
+      .filter(other => other.subject === q.subject && other.correct && other.correct !== q.correct)
+      .map(other => other.correct);
+    
+    // Deduplicate
+    subjectPool = [...new Set(subjectPool)];
+    
+    let options = [q.correct];
+    for (let i = 0; i < 3; i++) {
+      if (subjectPool.length > 0) {
+         const randIdx = Math.floor(Math.random() * subjectPool.length);
+         options.push(subjectPool[randIdx]);
+         subjectPool.splice(randIdx, 1);
+      } else {
+         options.push('Phương án nhiễu ' + (i+1));
+      }
+    }
+    options.sort(() => 0.5 - Math.random());
+    return { ...q, options };
+  }
+  return q;
+});
 
 const TournamentManager = ({ addReward, currentUser }) => {
   const [isOpen, setIsOpen] = useState(false);
