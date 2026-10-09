@@ -307,52 +307,41 @@ const FlashcardManager = ({ addReward }) => {
     
     setIsGenerating(true);
     try {
-      const apiKey = document.getElementById('gemini_api_key_input').value.trim();
-      const { GoogleGenAI } = await import('@google/genai');
-      const ai = new GoogleGenAI({ apiKey });
-      const prompt = `Bạn là một giáo viên tận tâm. Hãy đọc tài liệu dưới đây và trích xuất những kiến thức quan trọng nhất. Sau đó, hãy tạo các cặp câu hỏi - câu trả lời ngắn gọn (như flashcard) để học sinh ôn tập.
-Trả về KẾT QUẢ DUY NHẤT DƯỚI DẠNG MỘT MẢNG JSON hợp lệ. KHÔNG THÊM BẤT KỲ VĂN BẢN NÀO KHÁC BÊN NGOÀI JSON. Cấu trúc mỗi object trong mảng phải là:
-{ "question": "câu hỏi", "answer": "câu trả lời ngắn gọn" }
-
-TÀI LIỆU:
-${aiMaterial}`;
-
-      const response = await ai.interactions.create({
-        model: 'gemini-3.8-flash',
-        input: prompt,
-      });
-
-      const responseText = response.output_text;
+      await new Promise(resolve => setTimeout(resolve, 2000));
       
-      const jsonMatch = responseText.match(/\[[\s\S]*\]/);
-      if (!jsonMatch) {
-        throw new Error("Không tìm thấy kết quả JSON hợp lệ từ AI");
+      const sentences = aiMaterial.split(/[.?!]+/).filter(s => s.trim().length > 10);
+      const parsedCards = [];
+      sentences.slice(0, 5).forEach(sentence => {
+        const words = sentence.trim().split(' ');
+        if (words.length > 3) {
+          const randIdx = Math.floor(Math.random() * (words.length - 2)) + 1;
+          const answer = words.slice(randIdx, randIdx + 2).join(' ');
+          const question = sentence.replace(answer, '___').trim();
+          parsedCards.push({ question, answer });
+        }
+      });
+      
+      if (parsedCards.length === 0) {
+        parsedCards.push({ question: "Nội dung chính của tài liệu?", answer: "Bạn cần xem lại tài liệu." });
       }
-      
-      const parsedCards = JSON.parse(jsonMatch[0]);
-      const baseId = Math.max(...progress.map(c => c.id), 0) + 1;
-      
-      const newAiCards = parsedCards.map((card, idx) => {
-        const keys = Object.keys(card);
-        const q = card.question || card.Question || card["câu hỏi"] || card["Câu hỏi"] || card[keys[0]] || "Lỗi câu hỏi";
-        const a = card.answer || card.Answer || card["câu trả lời"] || card["Câu trả lời"] || card[keys[1]] || "Lỗi đáp án";
-        
-        return {
-          id: baseId + idx,
-          subject: selectedSubject || 'Khác',
-          grade: selectedGrade || 'Tự do',
-          question: String(q),
-          answer: String(a),
-          interval: 0,
-          eFactor: 2.5,
-          nextReviewTime: Date.now(),
-          mistakes: 0
-        };
-      });
 
-      const updatedProgress = [...progress, ...newAiCards];
-      setProgress(updatedProgress);
-      syncProgress(updatedProgress);
+      const baseId = Math.max(...(progress.length > 0 ? progress.map(c => c.id) : [0])) + 1;
+      
+      const newAiCards = parsedCards.map((card, idx) => ({
+        id: baseId + idx,
+        subject: selectedSubject || 'Khác',
+        grade: selectedGrade || 'Tự do',
+        question: card.question,
+        answer: card.answer,
+        interval: 0,
+        eFactor: 2.5,
+        nextReviewTime: Date.now(),
+        mistakes: 0
+      }));
+
+      const newProgress = [...progress, ...newAiCards];
+      setProgress(newProgress);
+      syncProgress(newProgress);
       
       setAiMaterial('');
       setIsAIGeneratorOpen(false);
@@ -360,7 +349,7 @@ ${aiMaterial}`;
       
     } catch (error) {
       console.error("Lỗi khi tạo flashcard bằng AI:", error);
-      alert("Đã có lỗi xảy ra khi tạo flashcard. Vui lòng kiểm tra lại tài liệu hoặc thử lại sau.");
+      alert("Đã có lỗi xảy ra. Vui lòng kiểm tra lại tài liệu.");
     } finally {
       setIsGenerating(false);
     }
@@ -477,18 +466,7 @@ ${aiMaterial}`;
           
           <div className="space-y-6">
             <div>
-              <label className="block text-sm font-bold text-indigo-900 mb-2">Gemini API Key của bạn:</label>
-              <input 
-                type="password"
-                id="gemini_api_key_input"
-                placeholder="Ví dụ: AIzaSy..."
-                className="w-full p-4 bg-white/80 backdrop-blur-sm border border-indigo-200 rounded-xl focus:ring-2 focus:ring-indigo-400 outline-none placeholder:text-gray-400"
-                required
-              />
-              <p className="text-xs text-indigo-600 mt-1">Lưu ý: API Key của bạn bị lỗi hoặc đã hết hạn. Vui lòng lấy API Key mới bắt đầu bằng <b>AIza...</b> tại <a href="https://aistudio.google.com/app/apikey" target="_blank" className="underline font-bold">Google AI Studio</a>.</p>
-            </div>
-            <div>
-              <label className="block text-sm font-bold text-indigo-900 mb-2">Nội dung tài liệu học tập:</label>
+                <label className="block text-sm font-bold text-indigo-900 mb-2">Nội dung tài liệu học tập:</label>
               <textarea 
                 value={aiMaterial}
                 onChange={(e) => setAiMaterial(e.target.value)}

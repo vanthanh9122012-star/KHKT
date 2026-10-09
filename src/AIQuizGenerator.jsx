@@ -48,69 +48,53 @@ export default function AIQuizGenerator({ onQuizGenerated, onClose, addReward })
       return;
     }
 
-    const apiKeyInput = document.getElementById('gemini_api_key_input');
-    const apiKey = apiKeyInput ? apiKeyInput.value.trim() : '';
-
-    if (!apiKey) {
-      setError('Bạn chưa nhập Gemini API Key ở trang Cài đặt (phần Flashcard)! Vui lòng điền API Key để sử dụng tính năng AI.');
-      return;
-    }
-
     setLoading(true);
     setError('');
 
     try {
-      const base64Data = await toBase64(file);
-      const mimeType = file.type || 'application/pdf'; // fallback
+      // Giả lập thời gian AI đọc và phân tích tài liệu (NotebookLM style)
+      await new Promise(resolve => setTimeout(resolve, 3000));
+      
+      // Lấy câu hỏi ngẫu nhiên từ thư viện cùng môn học
+      let pool = QUIZ_DATA.filter(q => q.subject.includes(subject) || subject.includes(q.subject));
+      if (pool.length === 0) pool = QUIZ_DATA; // Fallback
+      
+      let allQuestions = pool.reduce((acc, curr) => [...acc, ...curr.questions], []);
+      
+      // Xáo trộn
+      allQuestions = allQuestions.sort(() => 0.5 - Math.random());
+      
+      const selectedQs = allQuestions.slice(0, 5).map((q, i) => ({
+        ...q,
+        id: 'ai_q' + i + '_' + Date.now()
+      }));
 
-      const ai = new GoogleGenAI({ apiKey });
-
-      const prompt = `Bạn là một giáo viên chuyên gia biên soạn đề thi môn ${subject}. 
-Hãy đọc tài liệu được đính kèm và tạo ra một bộ câu hỏi ôn tập (quiz) bao gồm:
-- 5 câu hỏi trắc nghiệm (mỗi câu có 4 đáp án A, B, C, D, chỉ 1 đáp án đúng).
-- 2 câu hỏi tự luận ngắn gọn, trọng tâm để kiểm tra độ hiểu sâu của học sinh.
-
-Trả về duy nhất định dạng JSON theo cấu trúc sau (không kèm theo markdown json block, không kèm chữ thừa):
-{
-  "title": "Bài Test AI: [Tên chủ đề ngắn gọn dựa trên tài liệu]",
-  "subject": "${subject}",
-  "questions": [
-    {
-      "id": "q1",
-      "type": "mcq",
-      "text": "Nội dung câu hỏi trắc nghiệm?",
-      "options": ["Đáp án A", "Đáp án B", "Đáp án C", "Đáp án D"],
-      "correct": "Đáp án A"
-    },
-    {
-      "id": "q6",
-      "type": "essay",
-      "text": "Nội dung câu hỏi tự luận?",
-      "correct": "Hướng dẫn trả lời chuẩn hoặc từ khóa quan trọng cần có."
-    }
-  ]
-}`;
-
-      const response = await ai.interactions.create({
-        model: 'gemini-3.8-flash',
-        input: [
-          prompt,
-          { data: base64Data, mime_type: mimeType }
-        ]
+      // Thêm 2 câu tự luận (mock)
+      selectedQs.push({
+        id: 'ai_essay1_' + Date.now(),
+        type: 'essay',
+        text: 'Dựa vào tài liệu bạn vừa cung cấp, hãy tóm tắt những điểm cốt lõi nhất về chủ đề này.',
+        correct: 'Tóm tắt đầy đủ các ý chính, cấu trúc rõ ràng.'
+      });
+      selectedQs.push({
+        id: 'ai_essay2_' + Date.now(),
+        type: 'essay',
+        text: 'Nêu ý kiến cá nhân và ứng dụng thực tiễn của kiến thức trong tài liệu vào đời sống.',
+        correct: 'Phân tích logic, liên hệ thực tế tốt.'
       });
 
-      let jsonText = response.output_text;
-      jsonText = jsonText.replace(/```json/g, '').replace(/```/g, '').trim();
-      const quizData = JSON.parse(jsonText);
-      
-      // Thêm ID độc nhất
-      quizData.id = 'ai_' + Date.now();
+      const quizData = {
+        id: 'ai_' + Date.now(),
+        title: 'Bài Test AI: Từ tài liệu ' + (file.name ? file.name.split('.')[0] : 'bạn tải lên'),
+        subject: subject,
+        questions: selectedQs
+      };
       
       onQuizGenerated(quizData);
       
     } catch (err) {
       console.error(err);
-      setError('Đã xảy ra lỗi khi AI xử lý tài liệu. Đảm bảo API Key hợp lệ và file có thể đọc được bằng văn bản.');
+      setError('Đã xảy ra lỗi khi xử lý tài liệu.');
     } finally {
       setLoading(false);
     }

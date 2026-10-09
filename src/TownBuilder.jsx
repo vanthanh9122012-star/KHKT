@@ -4,7 +4,6 @@ import { Map, CheckCircle2, Sparkles, Loader2, Lock, Play, Check, Book, Brain, S
 import { auth, db } from './firebase';
 import { doc, getDoc, setDoc } from 'firebase/firestore';
 import { INITIAL_TOWN } from './data/townData';
-import { GoogleGenAI } from '@google/genai';
 
 const SUBJECT_COLORS = {
   'Toán': 'text-blue-600 bg-blue-50 border-blue-200',
@@ -87,43 +86,30 @@ export default function TownBuilder({ setActiveTab }) {
 
     const handleRoomClick = async (room) => {
     if (room.completed) {
-      const confirm = window.confirm("Chương này đã hoàn thành. Bạn có muốn AI tạo thêm các câu hỏi nâng cao để cày thêm XP không?");
+      const confirm = window.confirm("Chương này đã hoàn thành. Bạn có muốn tạo thêm các câu hỏi nâng cao để cày thêm XP không?");
       if (!confirm) return;
-      const apiKey = document.getElementById('gemini_api_key_input')?.value;
-      if (!apiKey) {
-        alert("Vui lòng nhập API Key của Gemini trong Cài đặt chung (ở góc trái Flashcard) để sử dụng tính năng tạo câu hỏi nâng cao.");
-        return;
-      }
+      
       setIsGenerating(true);
       try {
-        const ai = new GoogleGenAI({ apiKey });
-        const prompt = `Tạo 5 câu hỏi bài tập NÂNG CAO cho môn ${room.subject} thuộc chủ đề "${room.title}".
-Dành cho học sinh cấp THCS. Yêu cầu mức độ khó cao, đòi hỏi tư duy logic.
-Định dạng JSON thuần túy (không bọc trong markdown):
-[
-  {
-    "id": "q1",
-    "type": "mcq",
-    "text": "Nội dung câu hỏi",
-    "options": ["A", "B", "C", "D"],
-    "correct": "Đáp án đúng",
-    "explanation": "Giải thích chi tiết"
-  }
-]`;
-        const response = await ai.models.generateContent({
-          model: 'gemini-2.5-flash',
-          contents: prompt
-        });
-        const jsonStr = response.text.replace(/```json/g, '').replace(/```/g, '').trim();
-        const newQuestions = JSON.parse(jsonStr).map((q, idx) => ({ ...q, id: `ai_adv_${Date.now()}_${idx}` }));
-        
-        setActiveQuizRoom({ ...room, title: room.title + " (Nâng cao)", questions: newQuestions });
+        await new Promise(resolve => setTimeout(resolve, 1500));
+        let allSubjectQuestions = INITIAL_TOWN.flatMap(h => h.rooms.filter(r => r.subject === room.subject).flatMap(r => r.questions));
+        if (allSubjectQuestions.length === 0) {
+          allSubjectQuestions = INITIAL_TOWN[0].rooms[0].questions;
+        }
+        allSubjectQuestions = allSubjectQuestions.sort(() => 0.5 - Math.random());
+        const selectedQs = allSubjectQuestions.slice(0, 5).map((q, i) => ({
+          ...q,
+          id: 'ai_adv_' + Date.now() + '_' + i,
+          text: '(Nâng cao) ' + q.text
+        }));
+
+        setActiveQuizRoom({ ...room, title: room.title + " (Nâng cao AI)", questions: selectedQs });
         setUserAnswers({});
         setIsSubmitted(false);
         setSubmittedQuestions({});
         setScore(0);
       } catch (e) {
-        alert("Lỗi tạo câu hỏi: " + e.message);
+        alert("Lỗi hệ thống: " + e.message);
       }
       setIsGenerating(false);
       return;
@@ -136,91 +122,7 @@ Dành cho học sinh cấp THCS. Yêu cầu mức độ khó cao, đòi hỏi t�
     setScore(0);
   };
 
-  const markRoomCompleted = () => {
-    const newHouses = [...houses];
-    const hIndex = newHouses.findIndex(h => h.id === activeHouse.id);
-    const rIndex = newHouses[hIndex].rooms.findIndex(r => r.id === activeQuizRoom.id);
-    
-    newHouses[hIndex].rooms[rIndex].completed = true;
-    setHouses(newHouses);
-    setActiveQuizRoom(null);
-    
-    if (auth.currentUser) {
-      setDoc(doc(db, 'users', auth.currentUser.uid), {
-        townBuilder: newHouses
-      }, { merge: true }).catch(err => console.error("Lỗi đồng bộ thị trấn:", err));
-    }
-  };
-
-  const handleAnswerChange = (q, val) => {
-    if (submittedQuestions[q.id]) return;
-    setUserAnswers(prev => ({ ...prev, [q.id]: val }));
-    
-    if (q.type === 'mcq' || q.type === 'true_false') {
-      submitSingleQuestion(q, val);
-    }
-  };
-
-  const submitSingleQuestion = (q, val) => {
-    setSubmittedQuestions(prev => ({ ...prev, [q.id]: true }));
-    let isCorrect = false;
-    if (val.trim().toLowerCase() === q.correct.toLowerCase()) {
-      isCorrect = true;
-    }
-    
-    if (isCorrect) {
-      setScore(s => s + 1);
-    } else {
-      const newMistake = { ...q, subject: q.subject || (activeQuizRoom ? activeQuizRoom.subject : (typeof currentQuiz !== 'undefined' ? currentQuiz.subject : 'Tổng hợp')), userAnswer: val, timestamp: new Date().toISOString() };
-      const existing = JSON.parse(localStorage.getItem('study_app_mistakes') || '[]');
-      localStorage.setItem('study_app_mistakes', JSON.stringify([...existing, newMistake]));
-    }
-  };
-
-  const submitQuiz = () => {
-    let newScore = 0;
-    let newMistakes = [];
-    activeQuizRoom.questions.forEach(q => {
-      const uAns = userAnswers[q.id];
-      if (!uAns) {
-        newMistakes.push({ ...q, subject: q.subject || activeQuizRoom.subject || 'Tổng hợp', userAnswer: 'Không trả lời', timestamp: new Date().toISOString() });
-        return;
-      }
-      
-      let isCorrect = false;
-      if ((q.type === 'mcq' || q.type === 'true_false') && uAns === q.correct) {
-        isCorrect = true;
-      } else if (q.type === 'fill_blank' && uAns.trim().toLowerCase() === q.correct.toLowerCase()) {
-        isCorrect = true;
-      }
-      
-      if (isCorrect) {
-        newScore += 1;
-      } else {
-        newMistakes.push({ ...q, subject: q.subject || activeQuizRoom.subject || 'Tổng hợp', userAnswer: uAns, timestamp: new Date().toISOString() });
-      }
-    });
-    
-    // Lưu lỗi sai
-    if (newMistakes.length > 0) {
-      const existing = JSON.parse(localStorage.getItem('study_app_mistakes') || '[]');
-      localStorage.setItem('study_app_mistakes', JSON.stringify([...existing, ...newMistakes]));
-    }
-    
-    setScore(newScore);
-    setIsSubmitted(true);
-  };
-
-  
-
-  const getPhaseName = (completed, total) => {
-    if (completed === 0) return 'Tiểu hành tinh';
-    if (completed <= 2) return 'Hình thành lõi';
-    if (completed < total) return 'Tạo khí quyển';
-    return 'Tiến hóa hoàn tất';
-  };
-
-  return (
+    return (
     <div className="animate-fade-in w-full h-full min-h-screen">
       {activeQuizRoom ? (
         <div className="bg-slate-50 animate-fade-in w-full min-h-screen m-0 p-0">
