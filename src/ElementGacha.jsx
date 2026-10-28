@@ -1,7 +1,7 @@
-import React, { useState, useEffect, useCallback, useMemo } from 'react';
+import React, { useState, useEffect, useRef, useCallback, useMemo } from 'react';
 import { 
   Sparkles, Gem, HelpCircle, Trophy, RefreshCw, X, Award, ChevronRight, 
-  Layers, Info, ShieldCheck, Flame, Atom, Star, CheckCircle2, Volume2, VolumeX, Eye, Zap
+  Layers, Info, ShieldCheck, Flame, Atom, Star, CheckCircle2, Volume2, VolumeX, Eye, Zap, Timer
 } from 'lucide-react';
 import { GACHA_ELEMENTS, pullRandomElement } from './data/elementsGachaData';
 
@@ -35,19 +35,28 @@ function playSound(type) {
     if (type === 'crank') {
       osc.type = 'sawtooth';
       osc.frequency.setValueAtTime(140, ctx.currentTime);
-      osc.frequency.exponentialRampToValueAtTime(320, ctx.currentTime + 0.1);
-      gain.gain.setValueAtTime(0.2, ctx.currentTime);
-      gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.12);
+      osc.frequency.exponentialRampToValueAtTime(320, ctx.currentTime + 0.15);
+      gain.gain.setValueAtTime(0.25, ctx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.15);
       osc.start();
-      osc.stop(ctx.currentTime + 0.12);
+      osc.stop(ctx.currentTime + 0.15);
+    } else if (type === 'tumble') {
+      // Sound of plastic balls colliding/tumbling inside the gacha sphere
+      osc.type = 'triangle';
+      osc.frequency.setValueAtTime(320 + Math.random() * 260, ctx.currentTime);
+      osc.frequency.exponentialRampToValueAtTime(140, ctx.currentTime + 0.06);
+      gain.gain.setValueAtTime(0.09, ctx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.06);
+      osc.start();
+      osc.stop(ctx.currentTime + 0.06);
     } else if (type === 'drop') {
       osc.type = 'triangle';
-      osc.frequency.setValueAtTime(350, ctx.currentTime);
-      osc.frequency.exponentialRampToValueAtTime(180, ctx.currentTime + 0.15);
-      gain.gain.setValueAtTime(0.3, ctx.currentTime);
-      gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.18);
+      osc.frequency.setValueAtTime(380, ctx.currentTime);
+      osc.frequency.exponentialRampToValueAtTime(150, ctx.currentTime + 0.22);
+      gain.gain.setValueAtTime(0.35, ctx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.25);
       osc.start();
-      osc.stop(ctx.currentTime + 0.18);
+      osc.stop(ctx.currentTime + 0.25);
     } else if (type === 'legendary') {
       const notes = [523.25, 659.25, 783.99, 1046.50, 1318.51];
       notes.forEach((freq, i) => {
@@ -59,9 +68,9 @@ function playSound(type) {
         g.connect(ctx.destination);
         const startTime = ctx.currentTime + i * 0.08;
         g.gain.setValueAtTime(0.2, startTime);
-        g.gain.exponentialRampToValueAtTime(0.01, startTime + 0.3);
+        g.gain.exponentialRampToValueAtTime(0.01, startTime + 0.35);
         o.start(startTime);
-        o.stop(startTime + 0.35);
+        o.stop(startTime + 0.4);
       });
     } else if (type === 'rare') {
       [587.33, 739.99, 880].forEach(freq => {
@@ -92,20 +101,250 @@ function playSound(type) {
       });
     }
   } catch {
-    // Audio non-blocking fail-safe
+    // Audio fail-safe
   }
 }
 
+// 16 Element Balls for 2D Canvas Physics Simulation
+const BALL_PRESETS = [
+  { symbol: 'Au', color1: '#fef08a', color2: '#eab308', color3: '#854d0e', glow: 'rgba(234,179,8,0.8)', text: '#422006' },
+  { symbol: 'Pt', color1: '#cffafe', color2: '#06b6d4', color3: '#155e75', glow: 'rgba(6,182,212,0.8)', text: '#083344' },
+  { symbol: 'U',  color1: '#bef264', color2: '#22c55e', color3: '#14532d', glow: 'rgba(34,197,94,0.8)', text: '#052e16' },
+  { symbol: 'Fr', color1: '#fecaca', color2: '#ef4444', color3: '#991b1b', glow: 'rgba(239,68,68,0.8)', text: '#450a0a' },
+  { symbol: 'Ag', color1: '#ffffff', color2: '#cbd5e1', color3: '#475569', glow: 'rgba(203,213,225,0.8)', text: '#0f172a' },
+  { symbol: 'Ti', color1: '#e9d5ff', color2: '#a855f7', color3: '#581c87', glow: 'rgba(168,85,247,0.8)', text: '#3b0764' },
+  { symbol: 'W',  color1: '#fed7aa', color2: '#f97316', color3: '#9a3412', glow: 'rgba(249,115,22,0.8)', text: '#431407' },
+  { symbol: 'He', color1: '#fef08a', color2: '#facc15', color3: '#a16207', glow: 'rgba(250,204,21,0.8)', text: '#422006' },
+  { symbol: 'Hg', color1: '#e2e8f0', color2: '#94a3b8', color3: '#334155', glow: 'rgba(148,163,184,0.8)', text: '#0f172a' },
+  { symbol: 'Fe', color1: '#ffedd5', color2: '#ea580c', color3: '#7c2d12', glow: 'rgba(234,88,12,0.8)', text: '#ffffff' },
+  { symbol: 'O',  color1: '#bae6fd', color2: '#0ea5e9', color3: '#0369a1', glow: 'rgba(14,165,233,0.8)', text: '#ffffff' },
+  { symbol: 'H',  color1: '#a5f3fc', color2: '#06b6d4', color3: '#0e7490', glow: 'rgba(6,182,212,0.8)', text: '#ffffff' },
+  { symbol: 'Cl', color1: '#d9f99d', color2: '#84cc16', color3: '#3f6212', glow: 'rgba(132,204,22,0.8)', text: '#1a2e05' },
+  { symbol: 'Na', color1: '#fef08a', color2: '#eab308', color3: '#a16207', glow: 'rgba(234,179,8,0.8)', text: '#422006' },
+  { symbol: 'Cu', color1: '#fed7aa', color2: '#d97706', color3: '#78350f', glow: 'rgba(217,119,6,0.8)', text: '#ffffff' },
+  { symbol: 'C',  color1: '#cbd5e1', color2: '#475569', color3: '#1e293b', glow: 'rgba(71,85,105,0.8)', text: '#ffffff' }
+];
+
 export default function ElementGacha({ addReward, gamification }) {
   const [isSpinning, setIsSpinning] = useState(false);
+  const [spinTimeRemaining, setSpinTimeRemaining] = useState(5.0);
   const [pulledResults, setPulledResults] = useState(null);
   const [activeRevealedIndex, setActiveRevealedIndex] = useState(0);
+  const [droppedBall, setDroppedBall] = useState(null);
   const [showOddsModal, setShowOddsModal] = useState(false);
   const [showCodexModal, setShowCodexModal] = useState(false);
   const [selectedCodexElement, setSelectedCodexElement] = useState(null);
   const [collection, setCollection] = useState({});
   const [soundEnabled, setSoundEnabled] = useState(true);
   const [crankDegree, setCrankDegree] = useState(0);
+
+  const canvasRef = useRef(null);
+  const physicsRef = useRef(null);
+  const tumbleIntervalRef = useRef(null);
+
+  // Initialize Canvas 2D Tumbler Physics
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+
+    const width = canvas.width;
+    const height = canvas.height;
+    const cx = width / 2;
+    const cy = height / 2;
+    const containerRadius = (width / 2) - 4;
+    const ballRadius = 17;
+    const maxDist = containerRadius - ballRadius;
+
+    // Create 16 balls with initial resting positions at the bottom
+    const balls = BALL_PRESETS.map((preset, i) => {
+      const angle = Math.PI * 0.2 + (i / BALL_PRESETS.length) * Math.PI * 0.6;
+      const dist = maxDist * (0.4 + (i % 3) * 0.25);
+      return {
+        x: cx + Math.cos(angle) * dist,
+        y: cy + Math.sin(angle) * dist,
+        vx: (Math.random() - 0.5) * 1.5,
+        vy: (Math.random() - 0.5) * 1.5,
+        rot: Math.random() * Math.PI * 2,
+        r: ballRadius,
+        ...preset
+      };
+    });
+
+    physicsRef.current = { balls, isSpinning: false };
+    let animationFrameId;
+
+    const render = () => {
+      const isSpin = physicsRef.current?.isSpinning || false;
+      ctx.clearRect(0, 0, width, height);
+
+      // Glass bowl inner shadow/glow
+      const domeGrad = ctx.createRadialGradient(cx, cy - 20, 10, cx, cy, containerRadius);
+      domeGrad.addColorStop(0, 'rgba(15, 23, 42, 0.2)');
+      domeGrad.addColorStop(0.8, 'rgba(30, 41, 59, 0.4)');
+      domeGrad.addColorStop(1, 'rgba(56, 189, 248, 0.15)');
+      ctx.fillStyle = domeGrad;
+      ctx.beginPath();
+      ctx.arc(cx, cy, containerRadius, 0, Math.PI * 2);
+      ctx.fill();
+
+      // Physics update for each ball
+      for (let i = 0; i < balls.length; i++) {
+        const b = balls[i];
+
+        if (isSpin) {
+          // Dynamic vortex swirling turbulence
+          const dx = b.x - cx;
+          const dy = b.y - cy;
+          const dist = Math.sqrt(dx * dx + dy * dy) || 1;
+          const angle = Math.atan2(dy, dx);
+
+          // Centrifugal + rotational force
+          const swirlSpeed = 2.2;
+          b.vx += -Math.sin(angle) * swirlSpeed + (Math.random() - 0.5) * 2.8;
+          b.vy += Math.cos(angle) * swirlSpeed + (Math.random() - 0.5) * 2.8 - 0.8; // Upward suction
+
+          // Max speed clamp
+          const currentSpeed = Math.sqrt(b.vx * b.vx + b.vy * b.vy);
+          if (currentSpeed > 16) {
+            b.vx = (b.vx / currentSpeed) * 16;
+            b.vy = (b.vy / currentSpeed) * 16;
+          }
+        } else {
+          // Normal idle: gravity pulling down + gentle settle
+          b.vy += 0.22;
+          b.vx *= 0.96;
+          b.vy *= 0.96;
+        }
+
+        b.x += b.vx;
+        b.y += b.vy;
+        b.rot += b.vx * 0.08;
+
+        // Circular boundary bounce
+        const dx = b.x - cx;
+        const dy = b.y - cy;
+        const dist = Math.sqrt(dx * dx + dy * dy);
+
+        if (dist > maxDist) {
+          const nx = dx / dist;
+          const ny = dy / dist;
+          b.x = cx + nx * maxDist;
+          b.y = cy + ny * maxDist;
+
+          const dot = b.vx * nx + b.vy * ny;
+          if (dot > 0) {
+            const restitution = isSpin ? 0.92 : 0.65;
+            b.vx = (b.vx - 1.9 * dot * nx) * restitution;
+            b.vy = (b.vy - 1.9 * dot * ny) * restitution;
+          }
+        }
+      }
+
+      // Ball-to-ball collisions (Elastic circle-circle physics)
+      for (let i = 0; i < balls.length; i++) {
+        for (let j = i + 1; j < balls.length; j++) {
+          const b1 = balls[i];
+          const b2 = balls[j];
+          const dx = b2.x - b1.x;
+          const dy = b2.y - b1.y;
+          const dist = Math.sqrt(dx * dx + dy * dy);
+          const minDist = b1.r + b2.r;
+
+          if (dist < minDist && dist > 0) {
+            const nx = dx / dist;
+            const ny = dy / dist;
+            const overlap = 0.5 * (minDist - dist);
+
+            b1.x -= nx * overlap;
+            b1.y -= ny * overlap;
+            b2.x += nx * overlap;
+            b2.y += ny * overlap;
+
+            const kx = b1.vx - b2.vx;
+            const ky = b1.vy - b2.vy;
+            const p = kx * nx + ky * ny;
+
+            if (p > 0) {
+              const restitution = 0.88;
+              b1.vx -= p * nx * restitution;
+              b1.vy -= p * ny * restitution;
+              b2.vx += p * nx * restitution;
+              b2.vy += p * ny * restitution;
+            }
+          }
+        }
+      }
+
+      // Draw all balls with 3D gradient shading & symbols
+      for (let i = 0; i < balls.length; i++) {
+        const b = balls[i];
+
+        ctx.save();
+        ctx.translate(b.x, b.y);
+
+        // Glow effect
+        ctx.shadowColor = b.glow;
+        ctx.shadowBlur = isSpin ? 18 : 8;
+
+        // Ball body 3D gradient
+        const sphereGrad = ctx.createRadialGradient(-b.r * 0.35, -b.r * 0.35, b.r * 0.1, 0, 0, b.r);
+        sphereGrad.addColorStop(0, b.color1);
+        sphereGrad.addColorStop(0.5, b.color2);
+        sphereGrad.addColorStop(1, b.color3);
+
+        ctx.fillStyle = sphereGrad;
+        ctx.beginPath();
+        ctx.arc(0, 0, b.r, 0, Math.PI * 2);
+        ctx.fill();
+
+        // Equator ring to make ball spin visually noticeable
+        ctx.rotate(b.rot);
+        ctx.strokeStyle = 'rgba(255, 255, 255, 0.4)';
+        ctx.lineWidth = 1.8;
+        ctx.beginPath();
+        ctx.ellipse(0, 0, b.r - 1, b.r * 0.35, 0, 0, Math.PI * 2);
+        ctx.stroke();
+
+        // Element symbol in center
+        ctx.shadowBlur = 0;
+        ctx.fillStyle = b.text;
+        ctx.font = '900 11px sans-serif';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillText(b.symbol, 0, 1);
+
+        // Specular highlight dot (light reflection)
+        ctx.fillStyle = 'rgba(255, 255, 255, 0.75)';
+        ctx.beginPath();
+        ctx.arc(-b.r * 0.35, -b.r * 0.35, 3, 0, Math.PI * 2);
+        ctx.fill();
+
+        ctx.restore();
+      }
+
+      // Glass reflection crescent overlay
+      ctx.save();
+      ctx.beginPath();
+      ctx.ellipse(cx - 35, cy - 45, 65, 30, -Math.PI / 4, 0, Math.PI * 2);
+      ctx.fillStyle = 'rgba(255, 255, 255, 0.08)';
+      ctx.fill();
+      ctx.restore();
+
+      animationFrameId = requestAnimationFrame(render);
+    };
+
+    animationFrameId = requestAnimationFrame(render);
+    return () => cancelAnimationFrame(animationFrameId);
+  }, []);
+
+  // Sync isSpinning with physics engine
+  useEffect(() => {
+    if (physicsRef.current) {
+      physicsRef.current.isSpinning = isSpinning;
+    }
+  }, [isSpinning]);
 
   // Load element collection from localStorage
   useEffect(() => {
@@ -146,7 +385,7 @@ export default function ElementGacha({ addReward, gamification }) {
     }
   }, [addReward, soundEnabled]);
 
-  // Snappy, high-performance Spin logic (500ms duration for instant responsiveness)
+  // 5-SECOND REAL ROTATING GACHA PHYSICS SPIN LOGIC
   const handleSpin = useCallback((count = 1) => {
     const cost = count * 200;
     if (currentRubies < cost) {
@@ -163,58 +402,89 @@ export default function ElementGacha({ addReward, gamification }) {
 
     setIsSpinning(true);
     setPulledResults(null);
+    setDroppedBall(null);
     setActiveRevealedIndex(0);
+    setSpinTimeRemaining(5.0);
 
-    // Fast crank rotation
-    setCrankDegree(prev => prev + 360 * 2);
+    // Continuous 5-second multi-turn crank rotation (15 full rotations)
+    setCrankDegree(prev => prev + 360 * 15);
     if (soundEnabled) playSound('crank');
 
-    setTimeout(() => {
-      if (soundEnabled) playSound('drop');
-    }, 200);
+    // Continuous ball rattling/tumbling sound interval
+    if (tumbleIntervalRef.current) clearInterval(tumbleIntervalRef.current);
+    tumbleIntervalRef.current = setInterval(() => {
+      if (soundEnabled) playSound('tumble');
+    }, 110);
 
-    // Perform Pulls fast (500ms total wait time)
-    setTimeout(() => {
-      const results = [];
-      const updatedCollection = { ...collection };
+    // 5-second countdown timer interval (updates every 100ms)
+    const startTime = Date.now();
+    const duration = 5000; // Exact 5 seconds as requested!
+    
+    const countdownInterval = setInterval(() => {
+      const elapsed = Date.now() - startTime;
+      const remaining = Math.max(0, (duration - elapsed) / 1000);
+      setSpinTimeRemaining(Number(remaining.toFixed(1)));
 
-      for (let i = 0; i < count; i++) {
-        const pull = pullRandomElement();
-        const el = pull.element;
-        const isFirstTime = !updatedCollection[el.id];
-
-        if (isFirstTime) {
-          updatedCollection[el.id] = {
-            count: 1,
-            firstUnlockedAt: Date.now(),
-            level: 1
-          };
-        } else {
-          updatedCollection[el.id].count = (updatedCollection[el.id].count || 1) + 1;
-        }
-
-        results.push({
-          ...el,
-          isNew: isFirstTime,
-          pullRarity: pull.rarity
-        });
+      if (elapsed >= 4100 && !droppedBall) {
+        // At 4.1s, the winning capsule drops into the tray
+        if (soundEnabled) playSound('drop');
+        setDroppedBall(true);
       }
 
-      saveCollection(updatedCollection);
-      setPulledResults(results);
-      setIsSpinning(false);
+      if (elapsed >= duration) {
+        clearInterval(countdownInterval);
+        if (tumbleIntervalRef.current) clearInterval(tumbleIntervalRef.current);
 
-      if (soundEnabled) {
-        if (results.some(r => r.rarity === 'legendary')) {
-          playSound('legendary');
-        } else if (results.some(r => r.rarity === 'rare')) {
-          playSound('rare');
-        } else {
-          playSound('common');
+        // Final pull resolution
+        const results = [];
+        const updatedCollection = { ...collection };
+
+        for (let i = 0; i < count; i++) {
+          const pull = pullRandomElement();
+          const el = pull.element;
+          const isFirstTime = !updatedCollection[el.id];
+
+          if (isFirstTime) {
+            updatedCollection[el.id] = {
+              count: 1,
+              firstUnlockedAt: Date.now(),
+              level: 1
+            };
+          } else {
+            updatedCollection[el.id].count = (updatedCollection[el.id].count || 1) + 1;
+          }
+
+          results.push({
+            ...el,
+            isNew: isFirstTime,
+            pullRarity: pull.rarity
+          });
+        }
+
+        saveCollection(updatedCollection);
+        setPulledResults(results);
+        setIsSpinning(false);
+
+        // Sound fanfare upon revealing
+        if (soundEnabled) {
+          if (results.some(r => r.rarity === 'legendary')) {
+            playSound('legendary');
+          } else if (results.some(r => r.rarity === 'rare')) {
+            playSound('rare');
+          } else {
+            playSound('common');
+          }
         }
       }
-    }, 500);
-  }, [currentRubies, isSpinning, addReward, soundEnabled, collection, saveCollection]);
+    }, 100);
+  }, [currentRubies, isSpinning, addReward, soundEnabled, collection, saveCollection, droppedBall]);
+
+  // Clean up timer on unmount
+  useEffect(() => {
+    return () => {
+      if (tumbleIntervalRef.current) clearInterval(tumbleIntervalRef.current);
+    };
+  }, []);
 
   // Stats calculation
   const totalElementsCount = GACHA_ELEMENTS.length;
@@ -240,7 +510,7 @@ export default function ElementGacha({ addReward, gamification }) {
               </span>
             </h2>
             <p className="text-slate-300 mt-1.5 text-xs sm:text-sm max-w-xl leading-relaxed">
-              Quay các viên nang nguyên tố Bảng tuần hoàn! Tỉ lệ ra nguyên tố <span className="text-yellow-300 font-bold">Cực hiếm là 3%</span>, <span className="text-purple-300 font-bold">Hiếm vừa là 10%</span> (200 💎 / lượt).
+              Mô phỏng quả cầu quay vật lý 5 giây chân thực! Tỉ lệ ra nguyên tố <span className="text-yellow-300 font-bold">Cực hiếm là 3%</span>, <span className="text-purple-300 font-bold">Hiếm vừa là 10%</span> (200 💎 / lượt).
             </p>
           </div>
 
@@ -297,74 +567,69 @@ export default function ElementGacha({ addReward, gamification }) {
               </div>
             </div>
 
-            {/* Glass Capsule Chamber */}
-            <div className="relative w-60 sm:w-64 h-60 sm:h-64 rounded-full border-4 border-cyan-400/40 bg-gradient-to-b from-cyan-900/30 via-slate-900/60 to-indigo-900/40 backdrop-blur-md shadow-[inset_0_0_35px_rgba(34,211,238,0.2)] overflow-hidden flex items-center justify-center">
+            {/* REAL 2D CANVAS PHYSICS CHAMBER: Circular Glass Dome */}
+            <div className="relative w-64 h-64 rounded-full border-4 border-cyan-400/50 bg-gradient-to-b from-slate-950 via-indigo-950/80 to-slate-950 backdrop-blur-md shadow-[inset_0_0_40px_rgba(34,211,238,0.3),0_0_30px_rgba(99,102,241,0.3)] overflow-hidden flex items-center justify-center">
               
-              {/* Glass reflection highlight */}
-              <div className="absolute -top-8 left-8 w-40 h-20 bg-white/10 rounded-full blur-md transform -rotate-45 pointer-events-none"></div>
-              
-              {/* Floating Element Balls Inside Chamber */}
-              <div className={`relative w-full h-full flex items-center justify-center ${isSpinning ? 'animate-spin' : ''}`}>
-                {/* Legendary Golden Ball (Au) */}
-                <div className="absolute top-10 left-12 w-11 h-11 rounded-full bg-gradient-to-br from-yellow-300 via-amber-400 to-amber-600 border-2 border-yellow-200 shadow-[0_0_12px_rgba(250,204,21,0.8)] flex items-center justify-center font-black text-xs text-slate-950">
-                  Au
-                </div>
-                {/* Legendary Green Ball (U) */}
-                <div className="absolute top-9 right-12 w-10 h-10 rounded-full bg-gradient-to-br from-lime-300 via-emerald-400 to-green-700 border-2 border-emerald-200 shadow-[0_0_12px_rgba(52,211,153,0.8)] flex items-center justify-center font-black text-xs text-slate-950">
-                  U
-                </div>
-                {/* Rare Silver Ball (Ag) */}
-                <div className="absolute bottom-12 left-10 w-10 h-10 rounded-full bg-gradient-to-br from-slate-100 via-slate-300 to-slate-500 border-2 border-white shadow-[0_0_10px_rgba(255,255,255,0.7)] flex items-center justify-center font-black text-xs text-slate-900">
-                  Ag
-                </div>
-                {/* Rare Purple Ball (Ti) */}
-                <div className="absolute bottom-11 right-11 w-11 h-11 rounded-full bg-gradient-to-br from-purple-400 via-indigo-500 to-violet-800 border-2 border-purple-300 shadow-[0_0_12px_rgba(168,85,247,0.8)] flex items-center justify-center font-black text-xs text-white">
-                  Ti
-                </div>
-                {/* Common Blue Ball (O) */}
-                <div className="absolute center w-11 h-11 rounded-full bg-gradient-to-br from-sky-300 via-blue-500 to-cyan-600 border-2 border-cyan-200 shadow-[0_0_10px_rgba(56,189,248,0.7)] flex items-center justify-center font-black text-xs text-white">
-                  O
-                </div>
-                {/* Common Red Ball (Fe) */}
-                <div className="absolute top-24 left-24 w-9 h-9 rounded-full bg-gradient-to-br from-orange-400 via-red-500 to-amber-700 border-2 border-orange-200 shadow-[0_0_8px_rgba(249,115,22,0.6)] flex items-center justify-center font-black text-[11px] text-white">
-                  Fe
-                </div>
-                {/* Common Green Ball (Cl) */}
-                <div className="absolute bottom-20 right-20 w-9 h-9 rounded-full bg-gradient-to-br from-lime-300 via-green-500 to-emerald-700 border-2 border-lime-200 shadow-[0_0_8px_rgba(132,204,22,0.6)] flex items-center justify-center font-black text-[11px] text-slate-950">
-                  Cl
-                </div>
-              </div>
+              {/* Canvas Physics Simulation of Bouncing Balls */}
+              <canvas
+                ref={canvasRef}
+                width={256}
+                height={256}
+                className="w-full h-full rounded-full cursor-pointer"
+                title="Quả cầu Gacha chứa các nguyên tố chuyển động vật lý chân thực"
+              />
 
-              {/* Shaking vibration on spin */}
+              {/* Glowing Aura During Spin */}
               {isSpinning && (
-                <div className="absolute inset-0 bg-cyan-400/20 backdrop-blur-sm animate-ping rounded-full pointer-events-none"></div>
+                <div className="absolute inset-0 bg-cyan-400/15 rounded-full pointer-events-none animate-pulse"></div>
               )}
             </div>
 
             {/* Machine Lower Body: Crank Knob & Chute */}
             <div className="w-full mt-5 flex items-center justify-around bg-slate-900/90 rounded-2xl p-3.5 border border-slate-700/80">
               
-              {/* Rotating Mechanical Crank */}
+              {/* Rotating Mechanical Crank with 5-second smooth rotation */}
               <div className="flex flex-col items-center">
                 <button
                   onClick={() => handleSpin(1)}
                   disabled={isSpinning}
-                  style={{ transform: `rotate(${crankDegree}deg)` }}
-                  className="w-14 h-14 rounded-full bg-gradient-to-br from-slate-200 via-slate-400 to-slate-700 border-4 border-slate-300 shadow-xl flex items-center justify-center transition-transform duration-500 active:scale-95 hover:brightness-110 cursor-pointer"
-                  title="Nhấn để vặn cần quay Gacha"
+                  style={{ 
+                    transform: `rotate(${crankDegree}deg)`,
+                    transition: isSpinning ? 'transform 5s cubic-bezier(0.15, 0.85, 0.25, 1)' : 'transform 0.5s ease-out'
+                  }}
+                  className={`w-14 h-14 rounded-full bg-gradient-to-br from-slate-200 via-slate-400 to-slate-700 border-4 border-slate-300 shadow-xl flex items-center justify-center active:scale-95 hover:brightness-110 cursor-pointer ${
+                    isSpinning ? 'cursor-not-allowed' : ''
+                  }`}
+                  title="Nhấn để vặn cần quay Gacha 5 giây"
                 >
                   <div className="w-3.5 h-10 bg-indigo-600 rounded-full shadow-inner transform -rotate-45"></div>
                 </button>
-                <span className="text-[10px] font-bold text-slate-400 mt-1.5">Tay Vặn Xoay</span>
+                <span className="text-[10px] font-bold text-slate-400 mt-1.5">
+                  {isSpinning ? 'Đang Xoay 5s...' : 'Tay Vặn Xoay'}
+                </span>
               </div>
 
-              {/* Output Chute Tray */}
+              {/* Output Chute Tray: Drops capsule at 4.2s */}
               <div className="flex flex-col items-center">
-                <div className="w-20 h-14 bg-slate-950 rounded-2xl border-2 border-slate-700 shadow-inner flex items-center justify-center relative overflow-hidden">
+                <div className={`w-20 h-14 bg-slate-950 rounded-2xl border-2 transition-all flex items-center justify-center relative overflow-hidden ${
+                  droppedBall ? 'border-amber-400 shadow-[0_0_15px_rgba(251,191,36,0.5)]' : 'border-slate-700 shadow-inner'
+                }`}>
                   <div className="absolute inset-x-0 top-0 h-1.5 bg-gradient-to-b from-black/80 to-transparent"></div>
-                  {isSpinning ? (
-                    <div className="w-8 h-8 rounded-full bg-gradient-to-tr from-amber-300 to-pink-500 animate-bounce shadow-[0_0_12px_rgba(244,63,94,0.8)]"></div>
-                  ) : (
+                  
+                  {isSpinning && !droppedBall && (
+                    <div className="flex items-center gap-1">
+                      <span className="w-2 h-2 rounded-full bg-cyan-400 animate-ping"></span>
+                      <span className="text-[10px] font-mono text-cyan-300 font-bold">Chờ bóng...</span>
+                    </div>
+                  )}
+
+                  {droppedBall && (
+                    <div className="w-8 h-8 rounded-full bg-gradient-to-tr from-amber-300 via-yellow-400 to-amber-600 border-2 border-yellow-200 shadow-[0_0_15px_rgba(250,204,21,0.9)] animate-bounce flex items-center justify-center">
+                      <Sparkles size={14} className="text-slate-950 animate-spin" />
+                    </div>
+                  )}
+
+                  {!isSpinning && !droppedBall && (
                     <span className="text-[11px] text-slate-600 font-bold uppercase tracking-wider">Cửa Ra</span>
                   )}
                 </div>
@@ -386,7 +651,7 @@ export default function ElementGacha({ addReward, gamification }) {
                 }`}
               >
                 <span className="flex items-center gap-1.5">
-                  <RefreshCw size={15} className={isSpinning ? "animate-spin" : ""} /> Quay 1 Lần
+                  <RefreshCw size={15} className={isSpinning ? "animate-spin" : ""} /> Quay 1 Lần (5s)
                 </span>
                 <span className="text-[11px] opacity-90 font-mono text-cyan-200">200 💎 Ruby</span>
               </button>
@@ -426,24 +691,50 @@ export default function ElementGacha({ addReward, gamification }) {
           </div>
         </div>
 
-        {/* Right Column: Display of Pulled Result or Information */}
+        {/* Right Column: Display of Pulled Result or 5-Second Spinning Countdown */}
         <div className="lg:col-span-5 flex flex-col items-center justify-center">
           
-          {/* While Spinning animation */}
+          {/* While Spinning: 5-Second Real-Time Countdown & Progress */}
           {isSpinning && (
-            <div className="w-full bg-slate-900/80 border border-cyan-500/30 rounded-3xl p-6 sm:p-8 text-center flex flex-col items-center justify-center min-h-[24rem] shadow-2xl backdrop-blur-xl animate-fade-in">
-              <Atom size={56} className="text-cyan-400 animate-spin mb-3" />
-              <h3 className="text-xl font-black text-cyan-300 tracking-wider animate-pulse">ĐANG PHÂN TÁCH NGUYÊN TỬ...</h3>
-              <p className="text-slate-400 text-xs mt-1.5">Mở khóa viên nang năng lượng...</p>
-              <div className="w-40 h-2 bg-slate-800 rounded-full mt-5 overflow-hidden">
-                <div className="h-full bg-gradient-to-r from-cyan-400 via-indigo-500 to-pink-500 rounded-full animate-pulse"></div>
+            <div className="w-full bg-slate-900/90 border border-cyan-500/40 rounded-3xl p-6 sm:p-8 text-center flex flex-col items-center justify-center min-h-[25rem] shadow-[0_0_30px_rgba(6,182,212,0.2)] backdrop-blur-xl animate-fade-in relative overflow-hidden">
+              <div className="absolute top-0 right-0 w-36 h-36 bg-cyan-500/15 rounded-full blur-2xl"></div>
+
+              {/* Animated Atom / Energy Sphere */}
+              <div className="relative mb-4">
+                <Atom size={64} className="text-cyan-400 animate-spin" />
+                <div className="absolute inset-0 flex items-center justify-center">
+                  <Timer size={24} className="text-yellow-300 animate-pulse" />
+                </div>
+              </div>
+
+              {/* 5-Second Countdown Display */}
+              <div className="text-3xl font-black text-transparent bg-clip-text bg-gradient-to-r from-cyan-300 via-amber-300 to-pink-400 font-mono tracking-wider">
+                {spinTimeRemaining.toFixed(1)}s
+              </div>
+
+              <h3 className="text-lg font-black text-white tracking-wide mt-2">
+                {spinTimeRemaining > 1.2 ? 'ĐANG KHUẤY TRỘN VIÊN NANG...' : 'VIÊN NANG ĐANG RƠI VÀO KHAY!'}
+              </h3>
+              
+              <p className="text-slate-400 text-xs mt-1 max-w-xs leading-relaxed">
+                {spinTimeRemaining > 2.5 
+                  ? 'Các quả bóng nguyên tố đang xoay và va chạm vật lý bên trong buồng kính...'
+                  : 'Sắp hoàn tất! Đang định vị nguyên tố trúng thưởng...'}
+              </p>
+
+              {/* Progress bar across 5 seconds */}
+              <div className="w-56 h-3 bg-slate-950 rounded-full mt-6 overflow-hidden border border-slate-800 p-0.5">
+                <div 
+                  className="h-full bg-gradient-to-r from-cyan-400 via-indigo-500 to-pink-500 rounded-full transition-all duration-100 shadow-[0_0_10px_rgba(244,63,94,0.6)]"
+                  style={{ width: `${Math.min(100, ((5.0 - spinTimeRemaining) / 5.0) * 100)}%` }}
+                ></div>
               </div>
             </div>
           )}
 
-          {/* Result Card Revealed */}
+          {/* Result Card Revealed (After 5 Seconds) */}
           {!isSpinning && pulledResults && (
-            <div className="w-full space-y-3.5 animate-fade-in">
+            <div className="w-full space-y-3.5 animate-pop-in">
               {/* If multi-pull (10x), show pagination / list selector */}
               {pulledResults.length > 1 && (
                 <div className="flex items-center justify-between bg-slate-900/80 p-2 rounded-2xl border border-slate-700">
@@ -550,7 +841,7 @@ export default function ElementGacha({ addReward, gamification }) {
                         onClick={() => handleSpin(1)}
                         className="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-white text-xs font-bold rounded-xl border border-slate-600 transition flex items-center gap-1.5 shadow active:scale-95 cursor-pointer"
                       >
-                        <RefreshCw size={13} /> Quay Tiếp (200 💎)
+                        <RefreshCw size={13} /> Quay Tiếp (5s - 200 💎)
                       </button>
                     </div>
                   </div>
@@ -561,13 +852,13 @@ export default function ElementGacha({ addReward, gamification }) {
 
           {/* Idle Placeholder when no pull made yet */}
           {!isSpinning && !pulledResults && (
-            <div className="w-full bg-slate-900/60 border border-slate-800 rounded-3xl p-6 sm:p-8 text-center flex flex-col items-center justify-center min-h-[24rem] shadow-xl backdrop-blur-md">
+            <div className="w-full bg-slate-900/60 border border-slate-800 rounded-3xl p-6 sm:p-8 text-center flex flex-col items-center justify-center min-h-[25rem] shadow-xl backdrop-blur-md">
               <div className="w-16 h-16 rounded-full bg-indigo-500/10 border-2 border-indigo-400/30 flex items-center justify-center text-indigo-400 mb-3 shadow-inner">
                 <Atom size={32} className="animate-pulse" />
               </div>
               <h3 className="text-lg font-bold text-white mb-1.5">Sẵn Sàng Khởi Động Gacha</h3>
               <p className="text-slate-400 text-xs max-w-sm leading-relaxed mb-5">
-                Nhấn cần vặn hoặc chọn nút <span className="text-cyan-300 font-bold">"Quay 1 Lần"</span> (200 💎) để mở khóa các nguyên tố hóa học vào bộ sưu tập của bạn.
+                Nhấn cần vặn hoặc chọn nút <span className="text-cyan-300 font-bold">"Quay 1 Lần"</span> (200 💎) để xoay các viên nang chuyển động vật lý trong 5 giây và mở khóa nguyên tố vào sổ tay.
               </p>
               <div className="flex gap-3">
                 <button
