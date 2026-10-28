@@ -201,7 +201,7 @@ const TournamentManager = ({ addReward, currentUser }) => {
   const [participants, setParticipants] = useState([]);
   const [currentQuestions, setCurrentQuestions] = useState([]);
   const [currentQIndex, setCurrentQIndex] = useState(0);
-  const [timeLeft, setTimeLeft] = useState(10);
+  const [timeLeft, setTimeLeft] = useState(30); // Tăng thêm 20s theo yêu cầu (10s -> 30s)
   const [roundScore, setRoundScore] = useState(0);
   const [hasAnswered, setHasAnswered] = useState(false);
   const [selectedAnswer, setSelectedAnswer] = useState(null);
@@ -287,7 +287,7 @@ const TournamentManager = ({ addReward, currentUser }) => {
     setCurrentQIndex(0);
     setHasAnswered(false);
     setSelectedAnswer(null);
-    setTimeLeft(10);
+    setTimeLeft(30);
     setActiveBuffs({ doubleScore: false, freezeBots: false, shield: false });
     setEliminatedOptions([]);
 
@@ -392,7 +392,7 @@ const TournamentManager = ({ addReward, currentUser }) => {
         setCurrentQIndex(prev => prev + 1);
         setHasAnswered(false);
         setSelectedAnswer(null);
-        setTimeLeft(10);
+        setTimeLeft(30);
       } else {
         finishRound();
       }
@@ -449,7 +449,7 @@ const TournamentManager = ({ addReward, currentUser }) => {
   // Start Round 5: Siêu AI Challenge
   const startAiChallenge = (finalists) => {
     setStage('aiChallenge');
-    setTimeLeft(35);
+    setTimeLeft(55); // Tăng thêm 20s theo yêu cầu (35s -> 55s)
     setRoundScore(0);
     setHasAnswered(false);
     setSelectedAnswer(null);
@@ -482,8 +482,8 @@ const TournamentManager = ({ addReward, currentUser }) => {
         if (botFreezeRemaining <= 0) {
           setBotAProgress(prev => {
             if (prev >= 100) return 100;
-            // Bot A solves in ~20-24s (approx 4.5% per second)
-            const inc = Math.random() * 3 + 3.5;
+            // Bot A solves in ~36-44s (approx 2.5% per second)
+            const inc = Math.random() * 1.5 + 2.0;
             const next = prev + inc;
             if (next >= 100) {
               handleBotSolved('bot_a');
@@ -494,8 +494,8 @@ const TournamentManager = ({ addReward, currentUser }) => {
 
           setBotBProgress(prev => {
             if (prev >= 100) return 100;
-            // Bot B solves in ~23-28s (approx 4% per second)
-            const inc = Math.random() * 2.8 + 2.8;
+            // Bot B solves in ~42-50s (approx 2.1% per second)
+            const inc = Math.random() * 1.3 + 1.6;
             const next = prev + inc;
             if (next >= 100) {
               handleBotSolved('bot_b');
@@ -710,9 +710,9 @@ const TournamentManager = ({ addReward, currentUser }) => {
           <div className="absolute top-0 left-0 w-full h-2 bg-slate-100">
             <div 
               className={`h-full transition-all duration-1000 ease-linear ${
-                timeLeft <= 3 ? 'bg-rose-500 animate-pulse' : 'bg-indigo-600'
+                timeLeft <= 5 ? 'bg-rose-500 animate-pulse' : 'bg-indigo-600'
               }`}
-              style={{ width: `${(timeLeft / 10) * 100}%` }}
+              style={{ width: `${(timeLeft / 30) * 100}%` }}
             ></div>
           </div>
           
@@ -727,7 +727,7 @@ const TournamentManager = ({ addReward, currentUser }) => {
                 Đúng tích lũy: <strong className="text-indigo-600">{correctAnswerCount}</strong> câu
               </div>
               <div className="flex items-center gap-2 text-rose-500 font-black text-xl">
-                <Clock size={22} className={timeLeft <= 3 ? 'animate-spin' : ''} /> 00:{timeLeft.toString().padStart(2, '0')}
+                <Clock size={22} className={timeLeft <= 5 ? 'animate-spin' : ''} /> 00:{timeLeft.toString().padStart(2, '0')}
               </div>
             </div>
           </div>
