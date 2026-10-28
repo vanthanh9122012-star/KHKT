@@ -1,11 +1,13 @@
 import React, { useState } from 'react';
+import ElementGacha from './ElementGacha';
 import { FlaskConical, Atom, RefreshCw, Zap, BookOpen, Sparkles } from 'lucide-react';
 
-export default function ScienceLab({ addReward }) {
+export default function ScienceLab({ addReward, gamification }) {
   const [slot1, setSlot1] = useState(null);
   const [slot2, setSlot2] = useState(null);
   const [result, setResult] = useState(null);
   const [isExploding, setIsExploding] = useState(false);
+  const [activeMode, setActiveMode] = useState('lab'); // 'lab' | 'gacha'
 
   const elements = [
     { id: 'water', icon: '💧', name: 'Nước (H2O)', color: 'bg-blue-100 text-blue-600 border-blue-200' },
@@ -403,6 +405,64 @@ export default function ScienceLab({ addReward }) {
           <h2 className="text-3xl font-black text-white mb-2 tracking-wide">PHÒNG THÍ NGHIỆM <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-indigo-400">VIRTUAL LAB</span></h2>
           <p className="text-slate-400 font-medium text-lg max-w-2xl mx-auto">Nơi mô phỏng các phản ứng khoa học kì thú. Kết hợp các nguyên tố và môi trường để khám phá định luật vạn vật!</p>
         </header>
+        {/* Navigation Tabs between Virtual Lab and Gacha Machine */}
+        <div className="flex justify-center mb-8">
+          <div className="inline-flex p-1.5 bg-slate-950/80 rounded-2xl border border-slate-700/80 shadow-2xl backdrop-blur-xl gap-2">
+            <button
+              onClick={() => setActiveMode('lab')}
+              className={`flex items-center gap-2.5 px-6 py-3 rounded-xl font-black text-sm transition-all duration-300 ${
+                activeMode === 'lab'
+                  ? 'bg-gradient-to-r from-cyan-500 to-blue-600 text-white shadow-[0_0_20px_rgba(6,182,212,0.4)]'
+                  : 'text-slate-400 hover:text-white hover:bg-slate-800/60'
+              }`}
+            >
+              <FlaskConical size={18} />
+              <span>Bàn Thí Nghiệm</span>
+            </button>
+
+            <button
+              onClick={() => setActiveMode('gacha')}
+              className={`flex items-center gap-2.5 px-6 py-3 rounded-xl font-black text-sm transition-all duration-300 ${
+                activeMode === 'gacha'
+                  ? 'bg-gradient-to-r from-amber-500 via-rose-500 to-purple-600 text-white shadow-[0_0_20px_rgba(244,63,94,0.4)]'
+                  : 'text-slate-400 hover:text-white hover:bg-slate-800/60'
+              }`}
+            >
+              <Sparkles size={18} className="text-yellow-300 animate-spin" />
+              <span>Gacha Nguyên Tố</span>
+              <span className="ml-1 px-2.5 py-0.5 text-[10px] bg-rose-500/90 text-white rounded-full font-black uppercase tracking-wider">
+                200 💎
+              </span>
+            </button>
+          </div>
+        </div>
+
+        {activeMode === 'gacha' ? (
+          <ElementGacha addReward={addReward} gamification={gamification} />
+        ) : (
+          <>
+            {/* Banner to Gacha */}
+            <div className="mb-8 p-4 rounded-2xl bg-gradient-to-r from-indigo-950/60 via-purple-950/60 to-slate-900 border border-indigo-500/30 flex flex-col sm:flex-row items-center justify-between gap-4 shadow-lg">
+              <div className="flex items-center gap-3.5">
+                <div className="p-3 bg-yellow-500/20 text-yellow-300 rounded-xl border border-yellow-500/30 text-2xl shadow-inner">
+                  🎰
+                </div>
+                <div>
+                  <h4 className="text-sm font-bold text-white flex items-center gap-2">
+                    Máy Quay Gacha Nguyên Tố Bảng Tuần Hoàn
+                    <span className="text-[10px] bg-rose-500 text-white px-2 py-0.5 rounded-full font-extrabold uppercase">Cực hiếm 3%</span>
+                  </h4>
+                  <p className="text-xs text-slate-400 mt-0.5">Mỗi lượt 200 Ruby. Cơ hội thu thập Vàng (Au), Urani (U), Bạch kim (Pt), Titan (Ti)...</p>
+                </div>
+              </div>
+              <button
+                onClick={() => setActiveMode('gacha')}
+                className="px-5 py-2.5 bg-gradient-to-r from-amber-500 to-rose-500 hover:from-amber-400 hover:to-rose-400 text-white font-black text-xs rounded-xl shadow-[0_0_15px_rgba(244,63,94,0.3)] transition whitespace-nowrap active:scale-95"
+              >
+                Vào Máy Quay Gacha →
+              </button>
+            </div>
+
 
         <div className="bg-slate-800/50 backdrop-blur-xl border border-slate-700 p-8 rounded-3xl mb-10 shadow-inner">
           <div className="flex flex-col md:flex-row gap-6 md:gap-10 items-center justify-center min-h-[16rem]">
@@ -496,6 +556,8 @@ export default function ScienceLab({ addReward }) {
             ))}
           </div>
         </div>
+                </>
+        )}
       </div>
     </div>
   );

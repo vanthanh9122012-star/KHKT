@@ -1258,7 +1258,7 @@ export default function App() {
   const addReward = (xpPoints, rubyPoints = 0, newBadge = null) => {
     setGamification(prev => {
       let newXp = prev.xp + xpPoints;
-      let newRubies = (prev.rubies || 0) + rubyPoints;
+      let newRubies = Math.max(0, (prev.rubies || 0) + rubyPoints);
       let newLevel = prev.level;
       let newBadges = [...prev.badges];
       let didLevelUp = false;
@@ -1332,7 +1332,7 @@ export default function App() {
           {activeTab === 'flashcard' && <FlashcardManager addReward={addReward} />}
           {activeTab === 'quiz' && <QuizManager addReward={addReward} />}
           {activeTab === 'assessment' && <AssessmentManager addReward={addReward} />}
-          {activeTab === 'games' && <GamesManager addReward={addReward} />}
+          {activeTab === 'games' && <GamesManager addReward={addReward} gamification={gamification} />}
             {activeTab === 'competition' && <TournamentManager addReward={addReward} currentUser={currentUser} />}
           {activeTab === 'tasks' && <TownBuilder setActiveTab={setActiveTab} />}
           {activeTab === 'review' && <ReviewManager addReward={addReward} />}
