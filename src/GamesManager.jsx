@@ -83,7 +83,7 @@ export default function GamesManager({ addReward }) {
         </div>
       )}
 
-      {activeGame === 'word' && <CatchWordGame addReward={addReward} />}
+      {activeGame === 'word' && <CatchWordGame addReward={addReward} onBack={() => setActiveGame(null)} />}
       {activeGame === 'sudoku' && <FruitBox addReward={addReward} />}
       {activeGame === 'science' && <ScienceLab addReward={addReward} />}
       {activeGame === 'caro' && <HistoryGeoCaro addReward={addReward} />}

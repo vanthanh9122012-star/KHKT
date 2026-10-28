@@ -267,7 +267,8 @@ export const CATCH_WORD_TOPICS = [
       { emojis: '📖 + 🌐', hint: 'Cuốn từ điển dày cộp tra cứu ý nghĩa các từ ngữ', answer: 'DICTIONARY' },
       { emojis: '🪟 + 🪟', hint: 'Tấm kính cửa sổ trong suốt đón ánh sáng vào phòng', answer: 'WINDOWPANE' },
       { emojis: '🔥 + 🪵', hint: 'Những khúc củi khô nhóm lửa nấu ăn sưởi ấm', answer: 'FIREWOOD' },
-      { emojis: '🐴 + 👟', hint: 'Thanh sắt hình chữ U đóng dưới móng bảo vệ chân ngựa', answer: 'HORSESHOE' }
+      { emojis: '🐴 + 👟', hint: 'Thanh sắt hình chữ U đóng dưới móng bảo vệ chân ngựa', answer: 'HORSESHOE' },
+      { emojis: '🚪 + 🔑', hint: 'Chiếc ổ khóa sắt bảo vệ an toàn cho ngôi nhà (Khóa cửa)', answer: 'PADLOCK' }
     ],
     dailyBonus: [
       { emojis: '🖊️ + 🔪', hint: 'Chiếc dao gọt bút chì nhọn hoắt trong hộp bút', answer: 'PENKNIFE' },
@@ -404,7 +405,8 @@ export const CATCH_WORD_TOPICS = [
       { emojis: '👨‍🍳 + 🍳', hint: 'Bếp trưởng tài ba nấu ra các món ăn ngon miệng', answer: 'CHEF' },
       { emojis: '✈️ + 👨‍✈️', hint: 'Phi công điều khiển chuyến bay an toàn trên không trung', answer: 'PILOT' },
       { emojis: '⚓ + 👨‍✈️', hint: 'Thuyền trưởng chỉ huy con tàu vượt sóng to gió lớn', answer: 'CAPTAIN' },
-      { emojis: '🕵️ + 🔍', hint: 'Thám tử tài ba dùng kính lúp truy tìm dấu vết phá án', answer: 'DETECTIVE' }
+      { emojis: '🕵️ + 🔍', hint: 'Thám tử tài ba dùng kính lúp truy tìm dấu vết phá án', answer: 'DETECTIVE' },
+      { emojis: '⚖️ + 👨‍⚖️', hint: 'Vị quan tòa xét xử các vụ án công minh trước tòa án', answer: 'JUDGE' }
     ],
     dailyBonus: [
       { emojis: '📰 + 🎙️', hint: 'Biên tập viên truyền hình dẫn chương trình tin tức mỗi tối', answer: 'NEWSCASTER' },
