@@ -108,7 +108,7 @@ const Sidebar = ({ activeTab, setActiveTab, gamification, currentUser, setShowAu
               <div className="flex items-center justify-between mt-1">
                 <div className="text-[11px] text-gray-500 truncate font-medium flex items-center gap-1">
                   <Award size={12} className="text-yellow-500" />
-                  {gamification?.badges?.[gamification.badges.length - 1] || 'Tân binh'}
+                  {getBadgeForLevel(gamification?.level || 1)}
                 </div>
                 <div className="text-[11px] font-bold text-red-500 flex items-center gap-1 bg-red-50 px-1.5 py-0.5 rounded">
                   <Gem size={12} />
@@ -641,18 +641,62 @@ const MOMENTUM_QUOTES = [
   { text: "Tiến bộ dù chậm vẫn tốt hơn là không có bất kỳ sự tiến bộ nào.", author: "Khuyết danh" }
 ];
 
+export const toRoman = (num) => {
+  if (num <= 0) return 'I';
+  const romanMap = [
+    [1000, 'M'], [900, 'CM'], [500, 'D'], [400, 'CD'],
+    [100, 'C'], [90, 'XC'], [50, 'L'], [40, 'XL'],
+    [10, 'X'], [9, 'IX'], [5, 'V'], [4, 'IV'], [1, 'I']
+  ];
+  let res = '';
+  let n = num;
+  for (const [val, roman] of romanMap) {
+    while (n >= val) {
+      res += roman;
+      n -= val;
+    }
+  }
+  return res || 'I';
+};
+
+export const getBadgeForLevel = (level) => {
+  const lvl = Math.max(1, Math.floor(level || 1));
+  switch (lvl) {
+    case 1: return '🌱 Tân Binh I';
+    case 2: return '📖 Học Giả I';
+    case 3: return '🧠 Tri Thức I';
+    case 4: return '⚡ Tinh Anh I';
+    case 5: return '⚡ Tinh Anh II';
+    case 6: return '⚡ Tinh Anh III';
+    case 7: return '👑 Bậc Thầy I';
+    case 8: return '👑 Bậc Thầy II';
+    case 9: return '👑 Bậc Thầy III';
+    case 10: return '💎 Huyền Thoại I';
+    case 11: return '💎 Huyền Thoại II';
+    case 12: return '💎 Huyền Thoại III';
+    case 13: return '🔥 Thần Thoại I';
+    case 14: return '🔥 Thần Thoại II';
+    case 15: return '🔥 Thần Thoại III';
+    case 16: return '🌟 Đại Kiện Tướng I';
+    case 17: return '🌟 Đại Kiện Tướng II';
+    case 18: return '🌟 Đại Kiện Tướng III';
+    default:
+      return '🌌 Chí Tôn ' + toRoman(lvl - 18);
+  }
+};
+
 const MOCK_USERS = [
-  { id: 'm1', name: 'Nguyễn Văn A', totalXp: 16500, badge: '💎 Huyền thoại', avatar: 'https://ui-avatars.com/api/?name=Nguyễn+A&background=fef08a&color=a16207' },
-  { id: 'm2', name: 'Trần Thị B', totalXp: 6860, badge: '👑 Bậc thầy', avatar: 'https://ui-avatars.com/api/?name=Trần+B&background=e9d5ff&color=7e22ce' },
-  { id: 'm3', name: 'Lê Hoàng C', totalXp: 5950, badge: '👑 Bậc thầy', avatar: 'https://ui-avatars.com/api/?name=Lê+C&background=bfdbfe&color=1d4ed8' },
-  { id: 'm4', name: 'Phạm D', totalXp: 2940, badge: '⚡ Tinh anh', avatar: 'https://ui-avatars.com/api/?name=Phạm+D&background=bbf7d0&color=15803d' },
-  { id: 'm5', name: 'Hoàng E', totalXp: 2170, badge: '🧠 Tri thức', avatar: 'https://ui-avatars.com/api/?name=Hoàng+E&background=fecaca&color=b91c1c' },
-  { id: 'm6', name: 'Ngô F', totalXp: 1050, badge: '📖 Học giả', avatar: 'https://ui-avatars.com/api/?name=Ngô+F&background=fed7aa&color=c2410c' },
+  { id: 'm1', name: 'Nguyễn Văn A', totalXp: 16500, badge: '💎 Huyền Thoại I', avatar: 'https://ui-avatars.com/api/?name=Nguyễn+A&background=fef08a&color=a16207' },
+  { id: 'm2', name: 'Trần Thị B', totalXp: 6860, badge: '👑 Bậc Thầy II', avatar: 'https://ui-avatars.com/api/?name=Trần+B&background=e9d5ff&color=7e22ce' },
+  { id: 'm3', name: 'Lê Hoàng C', totalXp: 5950, badge: '👑 Bậc Thầy I', avatar: 'https://ui-avatars.com/api/?name=Lê+C&background=bfdbfe&color=1d4ed8' },
+  { id: 'm4', name: 'Phạm D', totalXp: 2940, badge: '⚡ Tinh Anh II', avatar: 'https://ui-avatars.com/api/?name=Phạm+D&background=bbf7d0&color=15803d' },
+  { id: 'm5', name: 'Hoàng E', totalXp: 2170, badge: '⚡ Tinh Anh I', avatar: 'https://ui-avatars.com/api/?name=Hoàng+E&background=fecaca&color=b91c1c' },
+  { id: 'm6', name: 'Ngô F', totalXp: 1050, badge: '📖 Học Giả I', avatar: 'https://ui-avatars.com/api/?name=Ngô+F&background=fed7aa&color=c2410c' },
 ];
 
 const LeaderboardManager = ({ gamification }) => {
   const currentTotalXp = 175 * (gamification?.level || 1) * ((gamification?.level || 1) - 1) + (gamification?.xp || 0);
-  const currentBadge = gamification?.badges?.[gamification.badges.length - 1] || '🌱 Tân binh';
+  const currentBadge = getBadgeForLevel(gamification?.level || 1);
   
   const allUsers = [
     ...MOCK_USERS,
@@ -1149,7 +1193,7 @@ const StatsDashboard = () => {
 const INITIAL_GAMIFICATION = {
   xp: 0,
   level: 1,
-  badges: ['🌱 Tân binh'],
+  badges: ['🌱 Tân Binh I'],
   rubies: 0
 };
 
@@ -1287,7 +1331,7 @@ export default function App() {
       const newState = { xp: newXp, level: newLevel, badges: newBadges, rubies: newRubies };
       
       if (didLevelUp) {
-        setLevelUpInfo({ level: newLevel, badge: newBadges[newBadges.length - 1] });
+        setLevelUpInfo({ level: newLevel, badge: getBadgeForLevel(newLevel) });
         setShowLevelUp(true);
         setTimeout(() => setShowLevelUp(false), 5000);
       }
