@@ -1,27 +1,18 @@
 import React, { useState } from 'react';
-import { Gamepad2, Brain, FlaskConical, Trophy, Sparkles, Star, Target, CheckCircle2, Atom } from 'lucide-react';
+import { Gamepad2, Brain, FlaskConical, Trophy, Sparkles, Star, Target, CheckCircle2 } from 'lucide-react';
 import HistoryGeoCaro from './HistoryGeoCaro';
 import FruitBox from './FruitBox';
 import CatchWordGame from './CatchWordGame';
 import ScienceLab from './ScienceLab';
-import ElementGacha from './ElementGacha';
 
 export default function GamesManager({ addReward, gamification }) {
   const [activeGame, setActiveGame] = useState(null);
 
   const games = [
     { 
-      id: 'gacha', 
-      title: 'Gacha Nguyên Tố 🎰', 
-      desc: 'Quay viên nang nguyên tố Bảng tuần hoàn (200 💎 / lượt). Tỷ lệ cực hiếm 3%!',
-      icon: <Sparkles size={32} className="text-amber-500 animate-pulse" />,
-      color: 'from-amber-100 via-yellow-50 to-orange-100',
-      border: 'border-amber-300'
-    },
-    { 
       id: 'science', 
       title: 'Khám phá Lý-Hóa-Sinh', 
-      desc: 'Kết hợp các nguyên liệu để mô phỏng hiện tượng tự nhiên kỳ thú & Gacha nguyên tố.',
+      desc: 'Phòng thí nghiệm Virtual Lab: Mô phỏng phản ứng khoa học & Tích hợp Máy Gacha Nguyên Tố (200 💎).',
       icon: <FlaskConical size={32} className="text-emerald-500" />,
       color: 'from-emerald-100 to-teal-200',
       border: 'border-emerald-200'
@@ -29,7 +20,7 @@ export default function GamesManager({ addReward, gamification }) {
     { 
       id: 'word', 
       title: 'Đuổi hình bắt chữ', 
-      desc: 'Học từ vựng Tiếng Anh qua các biểu tượng Emojis thú vị.',
+      desc: 'Học từ vựng Tiếng Anh qua các biểu tượng Emojis thú vị theo nhiều chủ đề.',
       icon: <Brain size={32} className="text-pink-500" />,
       color: 'from-pink-100 to-rose-200',
       border: 'border-pink-200'
@@ -70,7 +61,7 @@ export default function GamesManager({ addReward, gamification }) {
       </header>
 
       {!activeGame && (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-8">
           {games.map(game => (
             <div 
               key={game.id}
@@ -92,7 +83,6 @@ export default function GamesManager({ addReward, gamification }) {
         </div>
       )}
 
-      {activeGame === 'gacha' && <ElementGacha addReward={addReward} gamification={gamification} />}
       {activeGame === 'science' && <ScienceLab addReward={addReward} gamification={gamification} />}
       {activeGame === 'word' && <CatchWordGame addReward={addReward} onBack={() => setActiveGame(null)} />}
       {activeGame === 'sudoku' && <FruitBox addReward={addReward} />}

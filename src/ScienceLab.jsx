@@ -381,7 +381,7 @@ export default function ScienceLab({ addReward, gamification }) {
           });
         }
         setIsExploding(false);
-      }, 800);
+      }, 180);
     }
   };
 
@@ -437,11 +437,10 @@ export default function ScienceLab({ addReward, gamification }) {
           </div>
         </div>
 
-        {activeMode === 'gacha' ? (
-          <ElementGacha addReward={addReward} gamification={gamification} />
-        ) : (
-          <>
-            {/* Banner to Gacha */}
+        
+        {/* Lab View (Instant 0ms display toggle) */}
+        <div style={{ display: activeMode === 'lab' ? 'block' : 'none' }}>
+          {/* Banner to Gacha */}
             <div className="mb-8 p-4 rounded-2xl bg-gradient-to-r from-indigo-950/60 via-purple-950/60 to-slate-900 border border-indigo-500/30 flex flex-col sm:flex-row items-center justify-between gap-4 shadow-lg">
               <div className="flex items-center gap-3.5">
                 <div className="p-3 bg-yellow-500/20 text-yellow-300 rounded-xl border border-yellow-500/30 text-2xl shadow-inner">
@@ -556,8 +555,12 @@ export default function ScienceLab({ addReward, gamification }) {
             ))}
           </div>
         </div>
-                </>
-        )}
+        </div>
+
+        {/* Gacha View (Instant 0ms display toggle) */}
+        <div style={{ display: activeMode === 'gacha' ? 'block' : 'none' }}>
+          <ElementGacha addReward={addReward} gamification={gamification} />
+        </div>
       </div>
     </div>
   );
