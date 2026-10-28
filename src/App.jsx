@@ -14,7 +14,7 @@ import { onAuthStateChanged, signOut } from 'firebase/auth';
 import { doc, getDoc, setDoc } from 'firebase/firestore';
 import { auth, db } from './firebase';
 
-const SUBJECTS = ['Tổng hợp', 'Toán', 'Văn', 'Anh', 'Sử', 'Địa', 'Vật lý', 'Hóa học', 'Sinh học'];
+const SUBJECTS = ['Toán', 'Văn', 'Anh', 'Sử', 'Địa', 'Vật lý', 'Hóa học', 'Sinh học'];
 const GRADES = ['Lớp 6', 'Lớp 7', 'Lớp 8', 'Lớp 9'];
 
 const SUBJECT_COLORS = {
