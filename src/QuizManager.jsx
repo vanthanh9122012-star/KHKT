@@ -72,8 +72,12 @@ export default function QuizManager({ addReward }) {
   const submitSingleQuestion = (q, val) => {
     setSubmittedQuestions(prev => ({ ...prev, [q.id]: true }));
     let isCorrect = false;
-    if (val.trim().toLowerCase() === q.correct.toLowerCase()) {
-      isCorrect = true;
+    if (q.type === 'mcq' || q.type === 'true_false') {
+      isCorrect = val.trim().toLowerCase() === q.correct.toLowerCase();
+    } else if (q.type === 'fill_blank' || q.type === 'short_answer') {
+      isCorrect = val.trim().toLowerCase() === q.correct.toLowerCase();
+    } else if (q.type === 'essay') {
+      isCorrect = val.trim().length >= 10;
     }
     
     if (isCorrect) {
@@ -99,10 +103,10 @@ export default function QuizManager({ addReward }) {
       let isCorrect = false;
       if ((q.type === 'mcq' || q.type === 'true_false') && uAns === q.correct) {
         isCorrect = true;
-      } else if (q.type === 'fill_blank' && uAns.trim().toLowerCase() === q.correct.toLowerCase()) {
+      } else if ((q.type === 'fill_blank' || q.type === 'short_answer') && uAns.trim().toLowerCase() === q.correct.toLowerCase()) {
         isCorrect = true;
       } else if (q.type === 'essay') {
-        isCorrect = false; 
+        isCorrect = uAns.trim().length >= 10;
       }
 
       if (isCorrect) newScore += 1;
@@ -168,14 +172,45 @@ export default function QuizManager({ addReward }) {
 
           <div className="flex-1 p-6 sm:p-10 max-w-5xl mx-auto w-full space-y-8 pb-32">
           {activeQuiz.questions.map((q, idx) => (
-            <div key={q.id} className="bg-surface rounded-3xl p-6 shadow-sm border border-gray-100">
-              <h3 className="text-lg font-bold text-gray-800 mb-4">Câu {idx + 1}: {q.text}</h3>
+            <div key={q.id} className="bg-surface rounded-3xl p-6 md:p-8 shadow-sm border border-gray-100">
+              <div className="flex items-center justify-between mb-4 flex-wrap gap-2">
+                <div className="flex items-center gap-2">
+                  <span className="font-black text-gray-800 text-lg">Câu {idx + 1}</span>
+                  {q.type === 'mcq' && (
+                    <span className="text-xs font-bold px-3 py-1 rounded-full bg-blue-50 text-blue-700 border border-blue-200">
+                      Trắc nghiệm 4 đáp án
+                    </span>
+                  )}
+                  {q.type === 'true_false' && (
+                    <span className="text-xs font-bold px-3 py-1 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200">
+                      Đúng / Sai
+                    </span>
+                  )}
+                  {q.type === 'fill_blank' && (
+                    <span className="text-xs font-bold px-3 py-1 rounded-full bg-amber-50 text-amber-700 border border-amber-200">
+                      Điền khuyết
+                    </span>
+                  )}
+                  {q.type === 'short_answer' && (
+                    <span className="text-xs font-bold px-3 py-1 rounded-full bg-purple-50 text-purple-700 border border-purple-200">
+                      Câu trả lời ngắn
+                    </span>
+                  )}
+                  {q.type === 'essay' && (
+                    <span className="text-xs font-bold px-3 py-1 rounded-full bg-rose-50 text-rose-700 border border-rose-200">
+                      Tự luận
+                    </span>
+                  )}
+                </div>
+              </div>
+
+              <h3 className="text-lg font-bold text-gray-800 mb-5 leading-relaxed">{q.text}</h3>
               
               {(q.type === 'mcq' || q.type === 'true_false') ? (
                 <div className="space-y-3">
-                  {q.options.map(opt => (
-                    <label key={opt} className={`flex items-center gap-3 p-3 rounded-xl border-2 transition-all cursor-pointer ${
-                      userAnswers[q.id] === opt ? 'border-sky-500 bg-sky-50' : 'border-gray-100 hover:border-gray-200 bg-white'
+                  {(q.options || ['Đúng', 'Sai']).map(opt => (
+                    <label key={opt} className={`flex items-center gap-3 p-4 rounded-2xl border-2 transition-all cursor-pointer ${
+                      userAnswers[q.id] === opt ? 'border-sky-500 bg-sky-50/50 shadow-sm' : 'border-gray-100 hover:border-gray-200 bg-white'
                     } ${(isSubmitted || submittedQuestions[q.id]) && opt === q.correct ? 'border-green-500 bg-green-50' : ''}`}>
                       <input 
                         type="radio" 
@@ -186,35 +221,35 @@ export default function QuizManager({ addReward }) {
                         disabled={isSubmitted || submittedQuestions[q.id]}
                         className="w-5 h-5 text-sky-500 border-gray-300 focus:ring-sky-500"
                       />
-                      <span className={`font-medium ${(isSubmitted || submittedQuestions[q.id]) && opt === q.correct ? 'text-green-700' : 'text-gray-700'}`}>{opt}</span>
+                      <span className={`font-medium ${(isSubmitted || submittedQuestions[q.id]) && opt === q.correct ? 'text-green-800 font-bold' : 'text-gray-700'}`}>{opt}</span>
                       {(isSubmitted || submittedQuestions[q.id]) && opt === q.correct && <CheckCircle2 size={20} className="ml-auto text-green-500" />}
                       {(isSubmitted || submittedQuestions[q.id]) && userAnswers[q.id] === opt && opt !== q.correct && <X size={20} className="ml-auto text-red-500" />}
                     </label>
                   ))}
                   {(isSubmitted || submittedQuestions[q.id]) && userAnswers[q.id] !== q.correct && q.explanation && (
-                    <div className="mt-4 text-sm bg-orange-50 text-orange-800 p-3 rounded-xl border border-orange-200 font-medium">
-                      {q.explanation}
+                    <div className="mt-4 text-sm bg-orange-50 text-orange-800 p-3.5 rounded-xl border border-orange-200 font-medium">
+                      💡 <strong>Giải thích:</strong> {q.explanation}
                     </div>
                   )}
                 </div>
-              ) : q.type === 'fill_blank' ? (
+              ) : (q.type === 'fill_blank' || q.type === 'short_answer') ? (
                 <div className="space-y-3">
                   <input 
                     type="text"
                     value={userAnswers[q.id] || ''}
                     onChange={(e) => handleAnswerChange(q, e.target.value)}
                     disabled={isSubmitted || submittedQuestions[q.id]}
-                    placeholder="Nhập đáp án của bạn..."
-                    className={`w-full p-4 border-2 rounded-xl outline-none transition ${
-                      !(isSubmitted || submittedQuestions[q.id]) ? 'border-gray-100 focus:border-sky-500' :
-                      userAnswers[q.id]?.trim().toLowerCase() === q.correct.toLowerCase() ? 'border-green-500 bg-green-50 text-green-800' : 'border-red-500 bg-red-50 text-red-800'
+                    placeholder={q.type === 'fill_blank' ? "Nhập từ hoặc cụm từ điền vào chỗ trống..." : "Nhập câu trả lời ngắn (số hoặc từ khóa)..."}
+                    className={`w-full p-4 border-2 rounded-2xl outline-none transition font-medium ${
+                      !(isSubmitted || submittedQuestions[q.id]) ? 'border-gray-200 focus:border-sky-500 focus:ring-4 focus:ring-sky-100' :
+                      userAnswers[q.id]?.trim().toLowerCase() === q.correct.toLowerCase() ? 'border-green-500 bg-green-50 text-green-800 font-bold' : 'border-red-500 bg-red-50 text-red-800'
                     }`}
                   />
-                  {(isSubmitted || submittedQuestions[q.id]) && userAnswers[q.id]?.trim().toLowerCase() !== q.correct.toLowerCase() && (
-                    <div className="p-3 bg-sky-50 rounded-xl border border-sky-100 mt-3">
-                      <span className="text-xs font-bold text-sky-600 block mb-1">Đáp án đúng:</span>
-                      <span className="font-bold text-gray-800">{q.correct}</span>
-                      {q.explanation && <p className="text-sm text-gray-600 mt-1">{q.explanation}</p>}
+                  {(isSubmitted || submittedQuestions[q.id]) && (
+                    <div className="p-4 bg-sky-50 rounded-2xl border border-sky-100 mt-3">
+                      <span className="text-xs font-bold text-sky-600 block mb-1">Đáp án đúng chuẩn:</span>
+                      <span className="font-bold text-gray-800 text-base">{q.correct}</span>
+                      {q.explanation && <p className="text-sm text-gray-600 mt-1.5">💡 <strong>Giải thích:</strong> {q.explanation}</p>}
                     </div>
                   )}
                 </div>
@@ -224,14 +259,14 @@ export default function QuizManager({ addReward }) {
                     value={userAnswers[q.id] || ''}
                     onChange={(e) => handleAnswerChange(q, e.target.value)}
                     disabled={isSubmitted || submittedQuestions[q.id]}
-                    placeholder="Trình bày tự luận..."
-                    className="w-full h-32 p-4 border-2 border-gray-100 rounded-xl focus:border-sky-500 outline-none transition resize-none"
+                    placeholder="Trình bày bài làm tự luận của bạn..."
+                    className="w-full h-32 p-4 border-2 border-gray-200 rounded-2xl focus:border-sky-500 focus:ring-4 focus:ring-sky-100 outline-none transition resize-none font-medium leading-relaxed"
                   ></textarea>
                   {(isSubmitted || submittedQuestions[q.id]) && (
-                    <div className="p-4 bg-sky-50 rounded-xl border border-sky-100 mt-3">
-                      <span className="text-xs font-bold text-sky-600 block mb-1">Gợi ý / Bareme:</span>
-                      <span className="font-medium text-gray-800">{q.correct}</span>
-                      {q.explanation && <p className="text-sm text-gray-600 mt-1">{q.explanation}</p>}
+                    <div className="p-4 bg-purple-50 rounded-2xl border border-purple-100 mt-3">
+                      <span className="text-xs font-bold text-purple-700 block mb-1">✨ Gợi ý chấm điểm / Đáp án mẫu (Bareme):</span>
+                      <p className="font-medium text-gray-800 text-sm leading-relaxed">{q.correct}</p>
+                      {q.explanation && <p className="text-sm text-gray-600 mt-2">💡 <strong>Hướng dẫn:</strong> {q.explanation}</p>}
                     </div>
                   )}
                 </div>

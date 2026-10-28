@@ -74,7 +74,7 @@ export default function AIQuizGenerator({ onGenerated, onClose }) {
       const ai = new GoogleGenAI({ apiKey: apiKey.trim(), dangerouslyAllowBrowser: true });
       let contents = [];
       const promptText = `Bạn là một giáo viên xuất sắc. Dựa vào nội dung tài liệu đính kèm, hãy tạo một bài kiểm tra môn ${subject} thật hay và chính xác với kiến thức trong tài liệu. 
-Bao gồm đúng 5 câu hỏi (trộn giữa Trắc nghiệm 4 đáp án, Đúng/Sai, Điền từ vào chỗ trống) và 2 câu tự luận (essay).
+Bao gồm đúng 10 câu hỏi đa dạng các dạng bài tập: Trắc nghiệm 4 đáp án (type: "mcq"), Đúng/Sai (type: "true_false"), Điền từ vào chỗ trống (type: "fill_blank"), Câu trả lời ngắn (type: "short_answer"), và Tự luận (type: "essay").
 Tất cả kiến thức phải BÁM SÁT 100% nội dung tài liệu, KHÔNG được lấy kiến thức ngoài luồng.
 Trả về DUY NHẤT một mảng JSON hợp lệ, không có thêm bất kỳ đoạn chữ nào khác, không dùng markdown code block.
 Cấu trúc JSON yêu cầu:
