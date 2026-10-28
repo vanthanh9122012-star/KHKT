@@ -97,12 +97,12 @@ const Sidebar = ({ activeTab, setActiveTab, gamification, currentUser, setShowAu
             <div className="hidden md:block text-left w-full overflow-hidden">
               <div className="flex justify-between items-center">
                 <span className="text-sm font-bold text-gray-800 truncate">{currentUser.username}</span>
-                <span className="text-[10px] font-bold text-sky-600">{gamification?.xp || 0}/{(gamification?.level || 1) * 50} XP</span>
+                <span className="text-[10px] font-bold text-sky-600">{gamification?.xp || 0}/{(gamification?.level || 1) * 350} XP</span>
               </div>
               <div className="w-full bg-sky-200/50 h-1.5 rounded-full mt-1.5 overflow-hidden">
                 <div 
                   className="bg-sky-500 h-full rounded-full transition-all duration-500" 
-                  style={{width: `${((gamification?.xp || 0) / ((gamification?.level || 1) * 50)) * 100}%`}}
+                  style={{width: `${Math.min(100, ((gamification?.xp || 0) / ((gamification?.level || 1) * 350)) * 100)}%`}}
                 ></div>
               </div>
               <div className="flex items-center justify-between mt-1">
@@ -642,16 +642,16 @@ const MOMENTUM_QUOTES = [
 ];
 
 const MOCK_USERS = [
-  { id: 'm1', name: 'Nguyễn Văn A', totalXp: 1250, badge: '💎 Huyền thoại', avatar: 'https://ui-avatars.com/api/?name=Nguyễn+A&background=fef08a&color=a16207' },
-  { id: 'm2', name: 'Trần Thị B', totalXp: 980, badge: '👑 Bậc thầy', avatar: 'https://ui-avatars.com/api/?name=Trần+B&background=e9d5ff&color=7e22ce' },
-  { id: 'm3', name: 'Lê Hoàng C', totalXp: 850, badge: '👑 Bậc thầy', avatar: 'https://ui-avatars.com/api/?name=Lê+C&background=bfdbfe&color=1d4ed8' },
-  { id: 'm4', name: 'Phạm D', totalXp: 420, badge: '⚡ Tinh anh', avatar: 'https://ui-avatars.com/api/?name=Phạm+D&background=bbf7d0&color=15803d' },
-  { id: 'm5', name: 'Hoàng E', totalXp: 310, badge: '🧠 Tri thức', avatar: 'https://ui-avatars.com/api/?name=Hoàng+E&background=fecaca&color=b91c1c' },
-  { id: 'm6', name: 'Ngô F', totalXp: 150, badge: '📖 Học giả', avatar: 'https://ui-avatars.com/api/?name=Ngô+F&background=fed7aa&color=c2410c' },
+  { id: 'm1', name: 'Nguyễn Văn A', totalXp: 16500, badge: '💎 Huyền thoại', avatar: 'https://ui-avatars.com/api/?name=Nguyễn+A&background=fef08a&color=a16207' },
+  { id: 'm2', name: 'Trần Thị B', totalXp: 6860, badge: '👑 Bậc thầy', avatar: 'https://ui-avatars.com/api/?name=Trần+B&background=e9d5ff&color=7e22ce' },
+  { id: 'm3', name: 'Lê Hoàng C', totalXp: 5950, badge: '👑 Bậc thầy', avatar: 'https://ui-avatars.com/api/?name=Lê+C&background=bfdbfe&color=1d4ed8' },
+  { id: 'm4', name: 'Phạm D', totalXp: 2940, badge: '⚡ Tinh anh', avatar: 'https://ui-avatars.com/api/?name=Phạm+D&background=bbf7d0&color=15803d' },
+  { id: 'm5', name: 'Hoàng E', totalXp: 2170, badge: '🧠 Tri thức', avatar: 'https://ui-avatars.com/api/?name=Hoàng+E&background=fecaca&color=b91c1c' },
+  { id: 'm6', name: 'Ngô F', totalXp: 1050, badge: '📖 Học giả', avatar: 'https://ui-avatars.com/api/?name=Ngô+F&background=fed7aa&color=c2410c' },
 ];
 
 const LeaderboardManager = ({ gamification }) => {
-  const currentTotalXp = 25 * (gamification?.level || 1) * ((gamification?.level || 1) - 1) + (gamification?.xp || 0);
+  const currentTotalXp = 175 * (gamification?.level || 1) * ((gamification?.level || 1) - 1) + (gamification?.xp || 0);
   const currentBadge = gamification?.badges?.[gamification.badges.length - 1] || '🌱 Tân binh';
   
   const allUsers = [
@@ -840,7 +840,7 @@ const ParentPortal = ({ gamification }) => {
             </div>
             <div className="flex justify-between items-center p-4 bg-gray-50 rounded-2xl">
               <span className="text-gray-600 font-medium">Tổng kinh nghiệm (XP)</span>
-              <span className="font-bold text-sky-600 text-lg">{gamification?.xp || 0} / {(gamification?.level || 1) * 50} XP</span>
+              <span className="font-bold text-sky-600 text-lg">{gamification?.xp || 0} / {(gamification?.level || 1) * 350} XP</span>
             </div>
             <div className="flex justify-between items-center p-4 bg-gray-50 rounded-2xl">
               <span className="text-gray-600 font-medium">Đá quý tích lũy</span>
@@ -1271,7 +1271,7 @@ export default function App() {
         10: '💎 Huyền thoại'
       };
 
-      const getXpReq = (lvl) => lvl * 50;
+      const getXpReq = (lvl) => lvl * 350;
       let xpReq = getXpReq(newLevel);
 
       while (newXp >= xpReq) {
