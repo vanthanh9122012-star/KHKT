@@ -38,7 +38,6 @@ const ALL_QUESTIONS = RAW_QUESTIONS.map(q => {
 });
 
 const TournamentManager = ({ addReward, currentUser }) => {
-  const [isOpen, setIsOpen] = useState(false);
   const [stage, setStage] = useState('lobby'); // lobby, playing, roundResult, tournamentEnd
   const [round, setRound] = useState(1);
   const [participants, setParticipants] = useState([]);
@@ -51,18 +50,6 @@ const TournamentManager = ({ addReward, currentUser }) => {
 
   const ROUND_NAMES = ["Sơ lọc", "Tuyển chọn", "Tứ kết", "Bán kết", "Chung kết"];
   const ADVANCE_COUNTS = [10, 8, 4, 2, 1]; // How many advance to next round
-
-  useEffect(() => {
-    // Check if today is a competition day
-    const today = new Date();
-    const d = today.getDate();
-    const m = today.getMonth() + 1;
-    
-    // Allowed days: 1/1, 2/2, ..., 12/12 OR today for testing
-    if (d === m || (d === 8 && m === 10) || (d === 9 && m === 10) || (d === 10 && m === 10)) {
-      setIsOpen(true);
-    }
-  }, []);
 
   const startTournament = () => {
     const initialParticipants = BOT_NAMES.map((name, i) => ({
@@ -190,17 +177,6 @@ const TournamentManager = ({ addReward, currentUser }) => {
     }
   };
 
-  if (!isOpen) {
-    return (
-      <div className="flex flex-col items-center justify-center h-full p-8 text-center bg-slate-50">
-        <Trophy size={80} className="text-slate-300 mb-6" />
-        <h2 className="text-3xl font-black text-slate-700 mb-4">Cổng Không Gian Đã Đóng</h2>
-        <p className="text-lg text-slate-500 max-w-lg">
-          Trang thẻ cuộc thi liên trường chỉ mở cửa vào các ngày lễ đặc biệt trong tháng (5/5, 9/9, 10/10...). Vui lòng quay lại sau!
-        </p>
-      </div>
-    );
-  }
 
   return (
     <div className="p-4 md:p-8 max-w-4xl mx-auto min-h-screen">
