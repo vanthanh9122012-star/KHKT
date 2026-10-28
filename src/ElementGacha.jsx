@@ -125,7 +125,7 @@ const BALL_PRESETS = [
   { symbol: 'C',  color1: '#cbd5e1', color2: '#475569', color3: '#1e293b', glow: 'rgba(71,85,105,0.8)', text: '#ffffff' }
 ];
 
-export default function ElementGacha({ addReward, gamification }) {
+export default function ElementGacha({ addReward, gamification, onElementUnlocked }) {
   const [isSpinning, setIsSpinning] = useState(false);
   const [spinTimeRemaining, setSpinTimeRemaining] = useState(5.0);
   const [pulledResults, setPulledResults] = useState(null);
@@ -362,6 +362,8 @@ export default function ElementGacha({ addReward, gamification }) {
     setCollection(newColl);
     try {
       localStorage.setItem('studyflow_element_collection', JSON.stringify(newColl));
+      if (onElementUnlocked) onElementUnlocked();
+      window.dispatchEvent(new Event('studyflow_element_unlocked'));
     } catch (e) {
       console.error('Error saving element collection:', e);
     }

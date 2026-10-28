@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import ElementGacha from './ElementGacha';
-import { FlaskConical, Atom, RefreshCw, Zap, BookOpen, Sparkles } from 'lucide-react';
+import { GACHA_ELEMENTS } from './data/elementsGachaData';
+import { FlaskConical, Atom, RefreshCw, Zap, BookOpen, Sparkles, Filter, Layers, Star } from 'lucide-react';
 
 export default function ScienceLab({ addReward, gamification }) {
   const [slot1, setSlot1] = useState(null);
@@ -8,6 +9,51 @@ export default function ScienceLab({ addReward, gamification }) {
   const [result, setResult] = useState(null);
   const [isExploding, setIsExploding] = useState(false);
   const [activeMode, setActiveMode] = useState('lab'); // 'lab' | 'gacha'
+  const [unlockedGachaElements, setUnlockedGachaElements] = useState([]);
+  const [cabinetFilter, setCabinetFilter] = useState('all'); // 'all' | 'base' | 'gacha'
+
+  const loadUnlockedElements = () => {
+    try {
+      const saved = localStorage.getItem('studyflow_element_collection');
+      if (saved) {
+        const coll = JSON.parse(saved);
+        const list = Object.keys(coll).map(id => {
+          const found = GACHA_ELEMENTS.find(e => e.id === id);
+          if (!found) return null;
+          return {
+            id: found.id,
+            symbol: found.symbol,
+            name: found.name + ' (' + found.symbol + ')',
+            rawName: found.name,
+            atomicNumber: found.atomicNumber,
+            category: found.category,
+            isGachaElement: true,
+            rarity: found.rarity,
+            stars: found.stars,
+            color: found.rarity === 'legendary' 
+              ? 'bg-gradient-to-br from-amber-50 to-yellow-100 text-amber-950 border-yellow-400 shadow-[0_0_12px_rgba(250,204,21,0.5)]'
+              : found.rarity === 'rare'
+              ? 'bg-gradient-to-br from-purple-50 to-fuchsia-100 text-purple-950 border-purple-400 shadow-[0_0_10px_rgba(168,85,247,0.4)]'
+              : 'bg-gradient-to-br from-sky-50 to-cyan-100 text-cyan-950 border-cyan-400 shadow-sm',
+            data: found
+          };
+        }).filter(Boolean);
+        setUnlockedGachaElements(list);
+      }
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
+  React.useEffect(() => {
+    loadUnlockedElements();
+    window.addEventListener('storage', loadUnlockedElements);
+    window.addEventListener('studyflow_element_unlocked', loadUnlockedElements);
+    return () => {
+      window.removeEventListener('storage', loadUnlockedElements);
+      window.removeEventListener('studyflow_element_unlocked', loadUnlockedElements);
+    };
+  }, []);
 
   const elements = [
     { id: 'water', icon: '💧', name: 'Nước (H2O)', color: 'bg-blue-100 text-blue-600 border-blue-200' },
@@ -350,7 +396,143 @@ export default function ScienceLab({ addReward, gamification }) {
 
   };
 
-  const getCombination = (id1, id2) => combos[`${id1}+${id2}`] || combos[`${id2}+${id1}`];
+  const getCombination = (item1, item2) => {
+    const id1 = item1.id;
+    const id2 = item2.id;
+    const direct = combos[`${id1}+${id2}`] || combos[`${id2}+${id1}`];
+    if (direct) return direct;
+
+    // Specific elemental interactions
+    if ((id1 === 'au' && id2 === 'acid') || (id2 === 'au' && id1 === 'acid')) {
+      return {
+        icon: '👑',
+        name: 'Hòa tan Vàng bằng nước cường toan (Aqua Regia)',
+        reaction: 'Au + 3HNO3 + 4HCl → H[AuCl4] + 3NO2↑ + 3H2O',
+        desc: 'Vàng không tan trong axit đơn chất, nhưng bị hòa tan mãnh liệt trong nước cường toan (hỗn hợp HNO3 + HCl tỉ lệ 1:3).',
+        explain: 'Axit nitric HNO3 oxy hóa một lượng nhỏ vàng thành Au³⁺, sau đó ion Cl⁻ từ axit clohiđric HCl tạo phức chất cực bền [AuCl4]⁻, làm dịch chuyển cân bằng khiến vàng bị hòa tan hoàn toàn!'
+      };
+    }
+    if ((id1 === 'au' && id2 === 'heat') || (id2 === 'au' && id1 === 'heat')) {
+      return {
+        icon: '🔥',
+        name: 'Nung chảy Vàng nguyên chất (1064°C)',
+        reaction: 'Au (rắn) + 1064°C → Au (lỏng)',
+        desc: 'Vàng nóng chảy thành chất lỏng màu vàng cam lấp lánh và không hề bị xỉn màu hay gỉ sét do oxy hóa.',
+        explain: 'Vàng là kim loại trơ bậc nhất bảng tuần hoàn, ngay cả khi nung chảy ở nhiệt độ hàng nghìn độ C thì các nguyên tử oxy trong không khí vẫn không thể phá vỡ liên kết kim loại của vàng.'
+      };
+    }
+    if ((id1 === 'u' && id2 === 'electricity') || (id2 === 'u' && id1 === 'electricity')) {
+      return {
+        icon: '⚡',
+        name: 'Phân hạch hạt nhân (Năng lượng nguyên tử)',
+        reaction: '²³⁵U + n → ¹⁴¹Ba + ⁹²Kr + 3n + 200 MeV',
+        desc: 'Năng lượng hạt nhân tạo ra nhiệt lượng khổng lồ đun sôi nước làm quay turbine máy phát điện nguyên tử.',
+        explain: 'Phân hạch hạt nhân từ 1 kg Urani tạo ra năng lượng tương đương với việc đốt cháy hàng nghìn tấn than đá, là nền tảng của các nhà máy điện hạt nhân sạch hiện đại.'
+      };
+    }
+    if ((id1 === 'ti' && id2 === 'heat') || (id2 === 'ti' && id1 === 'heat')) {
+      return {
+        icon: '🌈',
+        name: 'Tạo màng Oxit Titan đa sắc (Anodizing)',
+        reaction: 'Ti + O2 + t° → TiO2 (màng quang học giao thoa)',
+        desc: 'Bề mặt kim loại Titan tạo lớp màng oxit phản chiếu ánh sáng đổi màu cầu vồng ngoạn mục.',
+        explain: 'Lớp oxit titan TiO2 mỏng cỡ vài trăm nanomet gây hiện tượng giao thoa sóng ánh sáng, tạo ra màu xanh lục, tím, vàng kim tự nhiên tuyệt đẹp mà không cần bất kỳ chất nhuộm màu nào.'
+      };
+    }
+    if ((id1 === 'ag' && id2 === 'light') || (id2 === 'ag' && id1 === 'light')) {
+      return {
+        icon: '📷',
+        name: 'Phản ứng quang hóa muối Bạc (Nhiếp ảnh cổ điển)',
+        reaction: '2Ag⁺ + 2e⁻ (dưới ánh sáng) → 2Ag↓ (đen)',
+        desc: 'Các hạt ion bạc chuyển thành bạc kim loại màu đen dưới tác dụng của photon ánh sáng.',
+        explain: 'Đây chính là nguyên lý của toàn bộ phim ảnh đen trắng truyền thống: ánh sáng chiếu vào phim làm muối bạc phân hủy tạo nên bức ảnh.'
+      };
+    }
+    if ((id1 === 'h' && id2 === 'oxygen') || (id2 === 'h' && id1 === 'oxygen')) {
+      return {
+        icon: '💧',
+        name: 'Phản ứng nổ tổng hợp Nước',
+        reaction: '2H2 + O2 → 2H2O + 572 kJ',
+        desc: 'Khí Hiđro cháy mãnh liệt trong Oxi với tiếng nổ ròn, tỏa nhiệt lượng cực lớn và sinh ra Nước.',
+        explain: 'Đây là phản ứng nhiên liệu đẩy tên lửa con thoi vũ trụ và pin nhiên liệu hydro sạch không phát thải khí nhà kính.'
+      };
+    }
+    if ((id1 === 'na' && id2 === 'water') || (id2 === 'na' && id1 === 'water')) {
+      return {
+        icon: '💥',
+        name: 'Natri nổ mãnh liệt trong nước',
+        reaction: '2Na + 2H2O → 2NaOH + H2↑ + Q (tỏa nhiệt bốc cháy)',
+        desc: 'Mẩu Natri nóng chảy vo tròn chạy xèo xèo trên mặt nước, bốc ngọn lửa màu vàng rực.',
+        explain: 'Natri khử nước giải phóng khí H2, nhiệt phản ứng rất lớn làm hydro bốc cháy với ngọn lửa vàng đặc trưng của ion natri.'
+      };
+    }
+    if ((id1 === 'fe' && id2 === 'oxygen') || (id2 === 'fe' && id1 === 'oxygen')) {
+      return {
+        icon: '🧱',
+        name: 'Hiện tượng oxy hóa tạo gỉ sắt',
+        reaction: '4Fe + 3O2 → 2Fe2O3 (sắt oxit nâu đỏ)',
+        desc: 'Sắt kết hợp với oxi trong không khí ẩm tạo thành lớp gỉ sét màu nâu đỏ bong tróc.',
+        explain: 'Lớp oxit sắt xốp và giòn, không bảo vệ được lõi sắt bên trong như nhôm hay crom, khiến kim loại sắt bị ăn mòn dần theo thời gian.'
+      };
+    }
+
+    // Two periodic elements generic combination
+    if (item1.isGachaElement && item2.isGachaElement) {
+      const sym1 = item1.symbol;
+      const sym2 = item2.symbol;
+      const name1 = item1.rawName || item1.name;
+      const name2 = item2.rawName || item2.name;
+      const cat1 = item1.category || '';
+      const cat2 = item2.category || '';
+
+      const isMetal1 = cat1.includes('Kim loại') || cat1.includes('Lantanit') || cat1.includes('Actinit');
+      const isMetal2 = cat2.includes('Kim loại') || cat2.includes('Lantanit') || cat2.includes('Actinit');
+
+      if (isMetal1 && isMetal2) {
+        return {
+          icon: '🛡️',
+          name: `Hợp kim ${name1} - ${name2}`,
+          reaction: `${sym1} + ${sym2} → Hợp kim (${sym1}-${sym2}) [Dung dịch rắn]`,
+          desc: `Kết hợp hai kim loại ${name1} và ${name2} tạo thành mạng tinh thể hợp kim với cơ tính vượt trội.`,
+          explain: `Khi nấu chảy hai kim loại cùng nhau, các nguyên tử ${sym1} và ${sym2} hòa lẫn tạo thành mạng tinh thể hợp kim, thường có độ cứng, khả năng chống mài mòn và chịu nhiệt cao hơn nhiều so với từng kim loại đơn chất.`
+        };
+      } else if ((isMetal1 && !isMetal2) || (!isMetal1 && isMetal2)) {
+        const metal = isMetal1 ? sym1 : sym2;
+        const nonMetal = isMetal1 ? sym2 : sym1;
+        return {
+          icon: '⚡',
+          name: `Hợp chất Ion giữa ${name1} và ${name2}`,
+          reaction: `${metal} + ${nonMetal} → Hợp chất ion ${metal}${nonMetal}`,
+          desc: `Kim loại nhường electron cho phi kim tạo thành mạng tinh thể ion bền vững.`,
+          explain: `Sự chênh lệch độ âm điện giữa kim loại và phi kim tạo nên liên kết ion vững chắc. Các hợp chất này thường có nhiệt độ nóng chảy cao và dẫn điện tốt khi nóng chảy hoặc hòa tan trong nước.`
+        };
+      } else {
+        return {
+          icon: '🔬',
+          name: `Hợp chất cộng hóa trị ${name1} - ${name2}`,
+          reaction: `${sym1} + ${sym2} → Phân tử ${sym1}-${sym2} [Góp chung electron]`,
+          desc: `Hai phi kim dùng chung các cặp electron hóa trị để đạt cấu hình electron bền vững.`,
+          explain: `Liên kết cộng hóa trị giữa ${name1} và ${name2} tạo nên các phân tử độc đáo với các trạng thái khí, lỏng hoặc rắn tùy thuộc vào lực liên kết liên phân tử.`
+        };
+      }
+    }
+
+    // Element + base reagent generic response
+    if (item1.isGachaElement || item2.isGachaElement) {
+      const gachaItem = item1.isGachaElement ? item1 : item2;
+      const reagentItem = item1.isGachaElement ? item2 : item1;
+
+      return {
+        icon: '⚗️',
+        name: `Khảo sát phản ứng ${gachaItem.name} với ${reagentItem.name}`,
+        reaction: `${gachaItem.symbol} + [${reagentItem.name}] → Khảo sát tính chất hóa học`,
+        desc: `Thử nghiệm tính chất hóa học giữa nguyên tố ${gachaItem.name} (Z=${gachaItem.atomicNumber}) và môi trường ${reagentItem.name}.`,
+        explain: `Mỗi nguyên tố trong bảng tuần hoàn có mức độ hoạt động hóa học đặc trưng dựa trên cấu hình electron lớp ngoài cùng. Hãy thử kết hợp với các chất oxi hóa mạnh như Axit hoặc Oxi để kích hoạt phản ứng!`
+      };
+    }
+
+    return null;
+  };
 
   const handleSelect = (el) => {
     if (result) {
@@ -367,7 +549,7 @@ export default function ScienceLab({ addReward, gamification }) {
       setSlot2(el);
       setIsExploding(true);
       setTimeout(() => {
-        const combo = getCombination(slot1.id, el.id);
+        const combo = getCombination(slot1, el);
         if (combo) {
           setResult(combo);
           if (addReward) addReward(20, 5); 
@@ -468,7 +650,16 @@ export default function ScienceLab({ addReward, gamification }) {
             
             <div className={`w-36 h-36 rounded-[2rem] border-2 flex items-center justify-center text-6xl shadow-2xl transition-all duration-300 ${slot1 ? 'bg-slate-800 border-cyan-500 shadow-cyan-500/20' : 'bg-slate-800/30 border-slate-600 border-dashed hover:border-slate-500 hover:bg-slate-800/60'} relative group`}>
               {slot1 ? (
-                <div className="animate-pop-in relative z-10">{slot1.icon}</div>
+                <div className="animate-pop-in relative z-10">
+                  {slot1.isGachaElement ? (
+                    <div className="w-20 h-20 rounded-2xl bg-slate-900 border-2 border-yellow-400 flex flex-col items-center justify-center font-mono shadow-xl">
+                      <span className="text-[10px] text-slate-400">{slot1.atomicNumber}</span>
+                      <span className="text-2xl font-black text-yellow-300">{slot1.symbol}</span>
+                    </div>
+                  ) : (
+                    slot1.icon
+                  )}
+                </div>
               ) : (
                 <span className="text-slate-600 font-black opacity-30">1</span>
               )}
@@ -480,7 +671,16 @@ export default function ScienceLab({ addReward, gamification }) {
             
             <div className={`w-36 h-36 rounded-[2rem] border-2 flex items-center justify-center text-6xl shadow-2xl transition-all duration-300 ${slot2 ? 'bg-slate-800 border-indigo-500 shadow-indigo-500/20' : 'bg-slate-800/30 border-slate-600 border-dashed hover:border-slate-500 hover:bg-slate-800/60'} relative`}>
               {slot2 ? (
-                <div className="animate-pop-in relative z-10">{slot2.icon}</div>
+                <div className="animate-pop-in relative z-10">
+                  {slot2.isGachaElement ? (
+                    <div className="w-20 h-20 rounded-2xl bg-slate-900 border-2 border-indigo-400 flex flex-col items-center justify-center font-mono shadow-xl">
+                      <span className="text-[10px] text-slate-400">{slot2.atomicNumber}</span>
+                      <span className="text-2xl font-black text-cyan-300">{slot2.symbol}</span>
+                    </div>
+                  ) : (
+                    slot2.icon
+                  )}
+                </div>
               ) : (
                 <span className="text-slate-600 font-black opacity-30">2</span>
               )}
@@ -536,15 +736,58 @@ export default function ScienceLab({ addReward, gamification }) {
         </div>
 
         <div className="bg-slate-800/80 backdrop-blur-md p-6 rounded-[2rem] border border-slate-700">
-          <div className="flex items-center gap-2 text-slate-300 font-bold mb-4 uppercase tracking-wider text-sm">
-            <Sparkles size={16} className="text-yellow-400"/> Tủ hóa chất & nguyên liệu
+          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-5 pb-3 border-b border-slate-700/80">
+            <div className="flex items-center gap-2 text-slate-200 font-extrabold uppercase tracking-wider text-sm">
+              <Sparkles size={18} className="text-yellow-400 animate-spin"/> TỦ HÓA CHẤT & NGUYÊN LIỆU
+              <span className="ml-1 text-xs text-cyan-300 font-mono bg-cyan-950/60 border border-cyan-500/30 px-2 py-0.5 rounded-full">
+                {cabinetFilter === 'base' ? elements.length : cabinetFilter === 'gacha' ? unlockedGachaElements.length : (elements.length + unlockedGachaElements.length)} chất
+              </span>
+            </div>
+
+            {/* Cabinet Category Filter Tabs */}
+            <div className="flex items-center gap-1.5 bg-slate-900/90 p-1 rounded-xl border border-slate-700/80 text-xs font-bold">
+              <button
+                onClick={() => setCabinetFilter('all')}
+                className={`px-3 py-1.5 rounded-lg transition active:scale-95 cursor-pointer ${
+                  cabinetFilter === 'all' 
+                    ? 'bg-cyan-500 text-slate-950 shadow-[0_0_10px_rgba(6,182,212,0.5)]' 
+                    : 'text-slate-400 hover:text-white'
+                }`}
+              >
+                Tất cả ({elements.length + unlockedGachaElements.length})
+              </button>
+              <button
+                onClick={() => setCabinetFilter('base')}
+                className={`px-3 py-1.5 rounded-lg transition active:scale-95 cursor-pointer ${
+                  cabinetFilter === 'base' 
+                    ? 'bg-cyan-500 text-slate-950 shadow-[0_0_10px_rgba(6,182,212,0.5)]' 
+                    : 'text-slate-400 hover:text-white'
+                }`}
+              >
+                Cơ bản ({elements.length})
+              </button>
+              <button
+                onClick={() => setCabinetFilter('gacha')}
+                className={`px-3 py-1.5 rounded-lg transition active:scale-95 cursor-pointer flex items-center gap-1 ${
+                  cabinetFilter === 'gacha' 
+                    ? 'bg-amber-400 text-slate-950 shadow-[0_0_10px_rgba(251,191,36,0.5)]' 
+                    : 'text-amber-300 hover:text-white'
+                }`}
+              >
+                <span>🎰 Đã Mở Gacha</span>
+                <span className="px-1.5 py-0.2 bg-rose-500 text-white rounded-full text-[10px]">{unlockedGachaElements.length}</span>
+              </button>
+            </div>
           </div>
+
+          {/* List of Reagents & Unlocked Gacha Elements */}
           <div className="flex flex-wrap gap-3">
-            {elements.map(el => (
+            {/* Base Reagents */}
+            {(cabinetFilter === 'all' || cabinetFilter === 'base') && elements.map(el => (
               <button 
                 key={el.id}
                 onClick={() => handleSelect(el)}
-                className={`flex items-center gap-3 px-4 py-3 rounded-2xl font-bold transition-all transform hover:-translate-y-1 active:scale-95 border-2 shadow-sm
+                className={`flex items-center gap-3 px-4 py-3 rounded-2xl font-bold transition-all transform hover:-translate-y-1 active:scale-95 border-2 shadow-sm cursor-pointer
                   ${(slot1?.id === el.id || slot2?.id === el.id) ? 'bg-slate-700 border-slate-500 text-white opacity-50 cursor-not-allowed scale-95' : `bg-white ${el.color} hover:shadow-lg`}
                 `}
                 disabled={slot1?.id === el.id || slot2?.id === el.id || isExploding}
@@ -553,13 +796,58 @@ export default function ScienceLab({ addReward, gamification }) {
                 <span>{el.name}</span>
               </button>
             ))}
+
+            {/* Unlocked Gacha Elements */}
+            {(cabinetFilter === 'all' || cabinetFilter === 'gacha') && unlockedGachaElements.map(el => (
+              <button 
+                key={el.id}
+                onClick={() => handleSelect(el)}
+                className={`flex items-center gap-2.5 px-3.5 py-2.5 rounded-2xl font-bold transition-all transform hover:-translate-y-1 active:scale-95 border-2 shadow-sm cursor-pointer
+                  ${(slot1?.id === el.id || slot2?.id === el.id) ? 'bg-slate-700 border-slate-500 text-white opacity-50 cursor-not-allowed scale-95' : `${el.color} hover:shadow-xl`}
+                `}
+                disabled={slot1?.id === el.id || slot2?.id === el.id || isExploding}
+                title={`${el.name} - ${el.category}`}
+              >
+                <div className="w-8 h-8 rounded-xl bg-slate-900/90 text-white flex flex-col items-center justify-center font-mono shadow border border-white/20 flex-shrink-0">
+                  <span className="text-[8px] text-slate-400 leading-none">{el.atomicNumber}</span>
+                  <span className="font-black text-xs leading-none text-yellow-300">{el.symbol}</span>
+                </div>
+                <div className="text-left">
+                  <div className="text-xs font-black leading-tight flex items-center gap-1">
+                    <span>{el.name}</span>
+                    {el.rarity === 'legendary' && <span className="text-[10px] text-amber-500">🌟</span>}
+                    {el.rarity === 'rare' && <span className="text-[10px] text-purple-600">⭐</span>}
+                  </div>
+                  <div className="text-[9px] opacity-75 font-medium leading-none">{el.category}</div>
+                </div>
+              </button>
+            ))}
+
+            {/* Notice if no Gacha elements unlocked yet */}
+            {unlockedGachaElements.length === 0 && (cabinetFilter === 'all' || cabinetFilter === 'gacha') && (
+              <div className="w-full p-4 rounded-2xl bg-indigo-950/40 border border-indigo-500/30 flex flex-col sm:flex-row items-center justify-between gap-3 text-center sm:text-left mt-2 animate-fade-in">
+                <div className="flex items-center gap-3">
+                  <span className="text-2xl">🎰</span>
+                  <div>
+                    <h5 className="text-xs font-bold text-white">Chưa có nguyên tố nào từ Bảng tuần hoàn được mở khóa</h5>
+                    <p className="text-[11px] text-slate-400">Hãy quay Gacha (200 💎) để bổ sung Vàng, Urani, Bạch kim, Titan... trực tiếp vào Tủ hóa chất này!</p>
+                  </div>
+                </div>
+                <button
+                  onClick={() => setActiveMode('gacha')}
+                  className="px-4 py-2 bg-gradient-to-r from-amber-500 to-rose-500 hover:from-amber-400 hover:to-rose-400 text-white font-bold text-xs rounded-xl shadow transition whitespace-nowrap active:scale-95 cursor-pointer"
+                >
+                  Quay Gacha Ngay →
+                </button>
+              </div>
+            )}
           </div>
         </div>
         </div>
 
         {/* Gacha View (Instant 0ms display toggle) */}
         <div style={{ display: activeMode === 'gacha' ? 'block' : 'none' }}>
-          <ElementGacha addReward={addReward} gamification={gamification} />
+          <ElementGacha addReward={addReward} gamification={gamification} onElementUnlocked={loadUnlockedElements} />
         </div>
       </div>
     </div>
