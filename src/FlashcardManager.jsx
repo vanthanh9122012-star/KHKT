@@ -3,7 +3,7 @@ import {
   BookOpen, Layers, Play, Check, X, Search, Filter, Plus, Trash2, 
   Edit3, History, Cloud, Sparkles, Bot, Loader2, CheckCircle2, 
   RotateCcw, Calendar, Clock, ChevronRight, FileText, ArrowRight,
-  Download, Eye, AlertCircle, Sparkle
+  Download, Eye, AlertCircle, Sparkle, CornerDownLeft
 } from 'lucide-react';
 import { doc, getDoc, setDoc } from 'firebase/firestore';
 import { auth, db } from './firebase';
@@ -43,8 +43,8 @@ export default function FlashcardManager({ addReward, currentUser }) {
   const [cloudSyncedTime, setCloudSyncedTime] = useState(null);
   const [notification, setNotification] = useState(null);
 
-  // Tab điều hướng chính: 'study' (Ôn tập) | 'continuous' (Thêm liên tiếp) | 'batch' (Thêm hàng loạt) | 'manage' (Quản lý) | 'history' (Lịch sử chung)
-  const [activeTab, setActiveTab] = useState('study');
+  // Tab điều hướng: 'study' (Ôn tập) | 'unified_create' (Trang Thống Nhất Thêm & Nhập) | 'manage' (Quản lý) | 'history' (Lịch sử)
+  const [activeTab, setActiveTab] = useState('unified_create');
 
   // Bộ lọc & Tìm kiếm
   const [selectedSubject, setSelectedSubject] = useState(null);
@@ -58,7 +58,7 @@ export default function FlashcardManager({ addReward, currentUser }) {
   const [isFlipped, setIsFlipped] = useState(false);
   const [isStudying, setIsStudying] = useState(false);
 
-  // Thêm thẻ liên tiếp
+  // Form Thêm thẻ liên tiếp
   const [newCard, setNewCard] = useState({
     subject: 'Anh',
     grade: 'Lớp 9',
@@ -69,11 +69,11 @@ export default function FlashcardManager({ addReward, currentUser }) {
   const [sessionAddedCount, setSessionAddedCount] = useState(0);
   const questionInputRef = useRef(null);
 
-  // Thêm hàng loạt (Batch Creator)
+  // Bảng nhập hàng loạt (Batch Creator)
   const [batchRows, setBatchRows] = useState([
-    { question: '', answer: '', subject: 'Anh', grade: 'Lớp 9' },
-    { question: '', answer: '', subject: 'Anh', grade: 'Lớp 9' },
-    { question: '', answer: '', subject: 'Anh', grade: 'Lớp 9' }
+    { id: 'draft_1', question: '', answer: '', subject: 'Anh', grade: 'Lớp 9', isSaved: false },
+    { id: 'draft_2', question: '', answer: '', subject: 'Anh', grade: 'Lớp 9', isSaved: false },
+    { id: 'draft_3', question: '', answer: '', subject: 'Anh', grade: 'Lớp 9', isSaved: false }
   ]);
   const [quickPasteText, setQuickPasteText] = useState('');
   const [showQuickPaste, setShowQuickPaste] = useState(false);
@@ -182,7 +182,7 @@ export default function FlashcardManager({ addReward, currentUser }) {
         }
       } catch (err) {
         console.error('Lỗi đồng bộ Firebase:', err);
-        showToast('Đã lưu nội bộ (Không thể đồng bộ lên Firebase lúc này)', 'error');
+        showToast('Đã lưu nội bộ (Không thể kết nối Firebase lúc này)', 'error');
       } finally {
         setIsSavingCloud(false);
       }
@@ -218,7 +218,6 @@ export default function FlashcardManager({ addReward, currentUser }) {
         ]
       }));
 
-      // Lọc không trùng câu hỏi
       const existingQuestions = new Set(cards.map(c => c.question.trim().toLowerCase()));
       const uniqueSamples = sampleToAdd.filter(c => !existingQuestions.has(c.question.trim().toLowerCase()));
 
@@ -239,7 +238,7 @@ export default function FlashcardManager({ addReward, currentUser }) {
 
   const dueCards = filteredCards.filter(c => c.nextReviewTime <= Date.now());
 
-  // 5. Thêm liên tiếp 1 thẻ (Giữ nguyên form, lưu ngay lên Firebase, auto focus)
+  // 5. Thêm liên tiếp 1 thẻ (Lưu Firebase tức thì + đưa xuống bảng bên dưới + autofocus)
   const handleAddCardContinuous = (e) => {
     if (e) e.preventDefault();
     if (!newCard.question.trim() || !newCard.answer.trim()) {
@@ -267,7 +266,7 @@ export default function FlashcardManager({ addReward, currentUser }) {
       history: [
         {
           id: 'hist_' + now,
-          action: 'Tạo thẻ mới',
+          action: 'Tạo thẻ mới (Liên tiếp)',
           timestamp: now,
           dateFormatted: new Date(now).toLocaleString('vi-VN'),
           user: userName,
@@ -276,13 +275,27 @@ export default function FlashcardManager({ addReward, currentUser }) {
       ]
     };
 
+    // Lưu ngay lên Firebase
     const updated = [cardItem, ...cards];
     syncCards(updated, `✅ Đã lưu thẻ #${sessionAddedCount + 1} lên Firebase!`);
     
+    // Đưa ngay thẻ này xuống đầu Bảng hàng loạt để người dùng nhìn thấy trạng thái "Đã lưu Firebase"
+    setBatchRows(prev => [
+      {
+        id: cardItem.id,
+        question: cardItem.question,
+        answer: cardItem.answer,
+        subject: cardItem.subject,
+        grade: cardItem.grade,
+        isSaved: true
+      },
+      ...prev.filter(r => r.question.trim() !== '' || r.answer.trim() !== '')
+    ]);
+
     // Tăng đếm phiên
     setSessionAddedCount(prev => prev + 1);
 
-    // Reset nội dung mặt trước, mặt sau - giữ nguyên môn và lớp để nhập nhanh tiếp
+    // Reset nội dung mặt trước, mặt sau - giữ nguyên môn và lớp để gõ tiếp
     setNewCard(prev => ({ ...prev, question: '', answer: '', note: '' }));
 
     // Focus lại vào ô Mặt trước
@@ -291,7 +304,33 @@ export default function FlashcardManager({ addReward, currentUser }) {
     }
   };
 
-  // Xử lý phím tắt Ctrl + Enter để lưu và thêm tiếp
+  // Thêm thẻ vào bảng bên dưới dưới dạng bản nháp (chưa lưu Firebase ngay)
+  const handleAddCardToTableDraft = (e) => {
+    if (e) e.preventDefault();
+    if (!newCard.question.trim() || !newCard.answer.trim()) {
+      showToast('Vui lòng nhập cả mặt trước và mặt sau của thẻ!', 'error');
+      return;
+    }
+
+    const draftId = `draft_${Date.now()}_${Math.floor(Math.random() * 1000)}`;
+    setBatchRows(prev => [
+      {
+        id: draftId,
+        question: newCard.question.trim(),
+        answer: newCard.answer.trim(),
+        subject: newCard.subject,
+        grade: newCard.grade,
+        isSaved: false
+      },
+      ...prev
+    ]);
+
+    setNewCard(prev => ({ ...prev, question: '', answer: '', note: '' }));
+    showToast('Đã thêm thẻ vào bảng bên dưới! Nhớ bấm "Lưu tất cả" khi hoàn tất.', 'info');
+    if (questionInputRef.current) questionInputRef.current.focus();
+  };
+
+  // Phím tắt Ctrl + Enter để lưu và thêm tiếp
   const handleKeyDownContinuous = (e) => {
     if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
       e.preventDefault();
@@ -299,30 +338,50 @@ export default function FlashcardManager({ addReward, currentUser }) {
     }
   };
 
-  // 6. Thêm hàng loạt (Batch Creator)
+  // 6. Xử lý Bảng nhập hàng loạt (Batch Creator)
   const handleAddBatchRow = () => {
     const lastRow = batchRows[batchRows.length - 1] || { subject: 'Anh', grade: 'Lớp 9' };
-    setBatchRows([...batchRows, { question: '', answer: '', subject: lastRow.subject, grade: lastRow.grade }]);
+    const draftId = `draft_${Date.now()}_${Math.floor(Math.random() * 1000)}`;
+    setBatchRows([...batchRows, { id: draftId, question: '', answer: '', subject: lastRow.subject, grade: lastRow.grade, isSaved: false }]);
   };
 
   const handleRemoveBatchRow = (index) => {
-    if (batchRows.length <= 1) return;
+    if (batchRows.length <= 1) {
+      setBatchRows([{ id: 'draft_' + Date.now(), question: '', answer: '', subject: 'Anh', grade: 'Lớp 9', isSaved: false }]);
+      return;
+    }
     setBatchRows(batchRows.filter((_, idx) => idx !== index));
   };
 
   const handleBatchRowChange = (index, field, value) => {
     const updated = [...batchRows];
     updated[index][field] = value;
+    // Nếu sửa câu hỏi hoặc đáp án thì đánh dấu chưa lưu để sync
+    if (field === 'question' || field === 'answer' || field === 'subject' || field === 'grade') {
+      updated[index].isSaved = false;
+    }
     setBatchRows(updated);
   };
 
-  // Phân tích văn bản dán nhanh (Quick Paste: mỗi dòng dạng "Câu hỏi - Đáp án" hoặc ngăn cách bởi tab)
+  // Dọn các dòng trống trong bảng
+  const handleClearEmptyRows = () => {
+    const filtered = batchRows.filter(r => r.question.trim() !== '' || r.answer.trim() !== '');
+    if (filtered.length === 0) {
+      setBatchRows([{ id: 'draft_' + Date.now(), question: '', answer: '', subject: 'Anh', grade: 'Lớp 9', isSaved: false }]);
+    } else {
+      setBatchRows(filtered);
+    }
+    showToast('Đã dọn dẹp các dòng trống trong bảng!');
+  };
+
+  // Phân tích văn bản dán nhanh (Quick Paste: "Câu hỏi - Đáp án")
   const handleApplyQuickPaste = () => {
     if (!quickPasteText.trim()) return;
     const lines = quickPasteText.split('\n').map(l => l.trim()).filter(l => l.length > 0);
     const parsedRows = [];
+    const now = Date.now();
 
-    lines.forEach(line => {
+    lines.forEach((line, idx) => {
       let q = '', a = '';
       if (line.includes('\t')) {
         const parts = line.split('\t');
@@ -343,19 +402,23 @@ export default function FlashcardManager({ addReward, currentUser }) {
 
       if (q) {
         parsedRows.push({
+          id: `draft_${now}_${idx}`,
           question: q,
           answer: a || '',
           subject: selectedSubject || 'Anh',
-          grade: selectedGrade || 'Lớp 9'
+          grade: selectedGrade || 'Lớp 9',
+          isSaved: false
         });
       }
     });
 
     if (parsedRows.length > 0) {
-      setBatchRows(parsedRows);
+      // Đưa các dòng mới vào đầu bảng
+      const existingFilled = batchRows.filter(r => r.question.trim() !== '' || r.answer.trim() !== '');
+      setBatchRows([...parsedRows, ...existingFilled]);
       setShowQuickPaste(false);
       setQuickPasteText('');
-      showToast(`Đã nhận dạng được ${parsedRows.length} dòng thẻ! Bạn có thể xem lại và bấm Lưu.`);
+      showToast(`Đã nhận dạng được ${parsedRows.length} dòng thẻ! Nhớ bấm "Lưu tất cả lên Firebase".`);
     }
   };
 
@@ -363,13 +426,19 @@ export default function FlashcardManager({ addReward, currentUser }) {
   const handleSaveAllBatch = async () => {
     const validRows = batchRows.filter(r => r.question.trim() !== '' && r.answer.trim() !== '');
     if (validRows.length === 0) {
-      showToast('Chưa có dòng thẻ hợp lệ nào có đầy đủ mặt trước và mặt sau!', 'error');
+      showToast('Chưa có dòng thẻ nào có đầy đủ mặt trước và mặt sau để lưu!', 'error');
+      return;
+    }
+
+    const unsavedRows = validRows.filter(r => !r.isSaved);
+    if (unsavedRows.length === 0) {
+      showToast('Tất cả các thẻ trong bảng đã được lưu trên Firebase!', 'info');
       return;
     }
 
     const now = Date.now();
-    const newItems = validRows.map((r, idx) => ({
-      id: `user_${now}_${idx}_${Math.floor(Math.random() * 1000)}`,
+    const newItems = unsavedRows.map((r, idx) => ({
+      id: r.id && !r.id.startsWith('draft_') ? r.id : `user_${now}_${idx}_${Math.floor(Math.random() * 1000)}`,
       subject: r.subject || 'Khác',
       grade: r.grade || 'Tự do',
       question: r.question.trim(),
@@ -394,15 +463,14 @@ export default function FlashcardManager({ addReward, currentUser }) {
       ]
     }));
 
-    const updated = [...newItems, ...cards];
-    await syncCards(updated, `🎉 Đã lưu thành công ${newItems.length} thẻ mới lên Firebase!`);
-    
-    // Reset bảng
-    setBatchRows([
-      { question: '', answer: '', subject: 'Anh', grade: 'Lớp 9' },
-      { question: '', answer: '', subject: 'Anh', grade: 'Lớp 9' }
-    ]);
-    setActiveTab('manage');
+    const newIds = new Set(newItems.map(item => item.id));
+    const updatedCards = [...newItems, ...cards.filter(c => !newIds.has(c.id))];
+
+    await syncCards(updatedCards, `🎉 Đã lưu thành công ${newItems.length} thẻ mới lên Firebase!`);
+
+    // Đánh dấu tất cả dòng trong bảng là đã lưu
+    setBatchRows(prev => prev.map(r => ({ ...r, isSaved: true })));
+    setSessionAddedCount(prev => prev + newItems.length);
   };
 
   // 7. Chỉnh sửa thẻ & Lưu lịch sử thay đổi (Audit History)
@@ -413,7 +481,6 @@ export default function FlashcardManager({ addReward, currentUser }) {
     const original = cards.find(c => c.id === editingCard.id);
     const now = Date.now();
 
-    // Nhận diện các thay đổi
     const changeList = [];
     if (original) {
       if (original.question !== editingCard.question.trim()) changeList.push('Sửa mặt trước');
@@ -604,6 +671,10 @@ export default function FlashcardManager({ addReward, currentUser }) {
   });
   allHistoryEvents.sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0));
 
+  // Đếm số dòng hợp lệ và chưa lưu trong bảng hàng loạt
+  const validBatchCount = batchRows.filter(r => r.question.trim() !== '' && r.answer.trim() !== '').length;
+  const unsavedBatchCount = batchRows.filter(r => r.question.trim() !== '' && r.answer.trim() !== '' && !r.isSaved).length;
+
   // ====================== GIAO DIỆN HỌC TẬP (STUDY VIEW) ======================
   if (isStudying) {
     if (dueList.length === 0) return null;
@@ -780,7 +851,7 @@ export default function FlashcardManager({ addReward, currentUser }) {
         </div>
       </header>
 
-      {/* Tabs điều hướng các chế độ */}
+      {/* Tabs điều hướng các chế độ - Gộp thành 1 Tab thống nhất duy nhất cho việc Thêm & Nhập */}
       <div className="flex flex-wrap items-center gap-2 border-b border-gray-200 pb-3">
         <button
           onClick={() => setActiveTab('study')}
@@ -793,31 +864,21 @@ export default function FlashcardManager({ addReward, currentUser }) {
           <Play size={16} /> Ôn tập ({dueCards.length} thẻ đến hạn)
         </button>
 
+        {/* TAB THỐNG NHẤT: KẾT HỢP CẢ THÊM LIÊN TIẾP & NHẬP HÀNG LOẠT VÀO 1 TRANG */}
         <button
-          onClick={() => setActiveTab('continuous')}
+          onClick={() => setActiveTab('unified_create')}
           className={`px-5 py-2.5 rounded-2xl text-sm font-extrabold transition-all flex items-center gap-2 ${
-            activeTab === 'continuous'
+            activeTab === 'unified_create'
               ? 'bg-emerald-600 text-white shadow-md shadow-emerald-200 scale-105'
               : 'bg-white text-gray-600 hover:bg-emerald-50 border border-gray-100'
           }`}
         >
-          <Plus size={16} /> Thêm thẻ liên tiếp
+          <Plus size={16} /> Thêm & Nhập thẻ (Thống nhất)
           {sessionAddedCount > 0 && (
             <span className="bg-white text-emerald-700 px-2 py-0.5 rounded-full text-xs font-black">
               +{sessionAddedCount}
             </span>
           )}
-        </button>
-
-        <button
-          onClick={() => setActiveTab('batch')}
-          className={`px-5 py-2.5 rounded-2xl text-sm font-extrabold transition-all flex items-center gap-2 ${
-            activeTab === 'batch'
-              ? 'bg-indigo-600 text-white shadow-md shadow-indigo-200 scale-105'
-              : 'bg-white text-gray-600 hover:bg-indigo-50 border border-gray-100'
-          }`}
-        >
-          <FileText size={16} /> Nhập hàng loạt (Batch)
         </button>
 
         <button
@@ -995,7 +1056,7 @@ export default function FlashcardManager({ addReward, currentUser }) {
                 </button>
               ) : (
                 <button
-                  onClick={() => setActiveTab('continuous')}
+                  onClick={() => setActiveTab('unified_create')}
                   className="px-6 py-3.5 bg-emerald-600 text-white rounded-2xl font-bold shadow-md hover:bg-emerald-700 transition flex items-center gap-2"
                 >
                   <Plus size={18} /> Tự tạo thẻ flashcard đầu tiên ngay!
@@ -1028,275 +1089,314 @@ export default function FlashcardManager({ addReward, currentUser }) {
         </div>
       )}
 
-      {/* ====================== TAB 2: THÊM LIÊN TIẾP NHIỀU THẺ (CONTINUOUS FAST ADD) ====================== */}
-      {activeTab === 'continuous' && (
-        <div className="bg-white rounded-3xl p-6 md:p-8 shadow-sm border border-sky-100 animate-fade-in">
-          <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 pb-6 border-b border-gray-100">
-            <div>
-              <h2 className="text-2xl font-extrabold text-gray-800 flex items-center gap-2">
-                <Plus className="text-emerald-600" size={26} /> Thêm Thẻ Liên Tiếp (Tự động lưu Firebase)
-              </h2>
-              <p className="text-gray-500 text-sm mt-1">
-                Bấm phím tắt <kbd className="px-2 py-0.5 bg-gray-100 border border-gray-300 rounded font-mono text-xs font-bold text-gray-700">Ctrl + Enter</kbd> để lưu ngay thẻ hiện tại lên Firebase và tiếp tục gõ thẻ tiếp theo mà không cần chạm chuột!
-              </p>
-            </div>
-            <div className="flex items-center gap-3">
-              <div className="px-4 py-2 bg-emerald-50 text-emerald-700 border border-emerald-200 rounded-2xl text-sm font-bold flex items-center gap-2">
-                <span>Đã thêm phiên này:</span>
-                <span className="text-lg font-black text-emerald-800">{sessionAddedCount}</span>
+      {/* ====================== TAB 2: TRANG THỐNG NHẤT (KẾT HỢP CẢ THÊM LIÊN TIẾP & BẢNG HÀNG LOẠT) ====================== */}
+      {activeTab === 'unified_create' && (
+        <div className="space-y-8 animate-fade-in">
+          
+          {/* PHẦN 1: THÊM THẺ LIÊN TIẾP (TỰ ĐỘNG LƯU FIREBASE) */}
+          <div className="bg-white rounded-3xl p-6 md:p-8 shadow-sm border border-emerald-100/80">
+            <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 pb-6 border-b border-gray-100">
+              <div>
+                <h2 className="text-2xl font-extrabold text-gray-800 flex items-center gap-2">
+                  <Plus className="text-emerald-600" size={26} /> Thêm Thẻ Liên Tiếp (Tự động lưu Firebase)
+                </h2>
+                <p className="text-gray-500 text-sm mt-1">
+                  Bấm phím tắt <kbd className="px-2 py-0.5 bg-gray-100 border border-gray-300 rounded font-mono text-xs font-bold text-gray-700">Ctrl + Enter</kbd> để lưu ngay thẻ hiện tại lên Firebase và tiếp tục gõ thẻ tiếp theo mà không cần chạm chuột!
+                </p>
+              </div>
+              <div className="flex items-center gap-3">
+                <div className="px-4 py-2 bg-emerald-50 text-emerald-700 border border-emerald-200 rounded-2xl text-sm font-bold flex items-center gap-2">
+                  <span>Đã thêm phiên này:</span>
+                  <span className="text-lg font-black text-emerald-800">{sessionAddedCount}</span>
+                </div>
               </div>
             </div>
+
+            <form onSubmit={handleAddCardContinuous} onKeyDown={handleKeyDownContinuous} className="mt-6 space-y-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-xs font-extrabold text-gray-700 uppercase tracking-wider mb-2">
+                    PHÂN MÔN
+                  </label>
+                  <select 
+                    value={newCard.subject}
+                    onChange={(e) => setNewCard({ ...newCard, subject: e.target.value })}
+                    className="w-full p-3.5 bg-gray-50 border border-gray-200 rounded-xl font-bold text-gray-800 focus:ring-2 focus:ring-emerald-500 outline-none"
+                  >
+                    {SUBJECTS.map(s => <option key={s} value={s}>{s}</option>)}
+                  </select>
+                </div>
+
+                <div>
+                  <label className="block text-xs font-extrabold text-gray-700 uppercase tracking-wider mb-2">
+                    KHỐI LỚP
+                  </label>
+                  <select 
+                    value={newCard.grade}
+                    onChange={(e) => setNewCard({ ...newCard, grade: e.target.value })}
+                    className="w-full p-3.5 bg-gray-50 border border-gray-200 rounded-xl font-bold text-gray-800 focus:ring-2 focus:ring-emerald-500 outline-none"
+                  >
+                    {GRADES.map(g => <option key={g} value={g}>{g}</option>)}
+                  </select>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {/* Mặt trước */}
+                <div className="space-y-2">
+                  <label className="block text-xs font-extrabold text-sky-700 uppercase tracking-wider flex items-center gap-1.5">
+                    <span className="w-2 h-2 rounded-full bg-sky-500"></span> • MẶT TRƯỚC (CÂU HỎI / TỪ VỰNG / THUẬT NGỮ) *
+                  </label>
+                  <textarea 
+                    ref={questionInputRef}
+                    value={newCard.question}
+                    onChange={(e) => setNewCard({ ...newCard, question: e.target.value })}
+                    placeholder="Ví dụ: Công thức tính diện tích hình thang là gì?"
+                    className="w-full p-4 bg-sky-50/40 border-2 border-sky-200 rounded-2xl h-36 resize-none focus:ring-2 focus:ring-sky-500 outline-none text-gray-800 placeholder:text-gray-400 font-medium"
+                    required
+                  />
+                </div>
+
+                {/* Mặt sau */}
+                <div className="space-y-2">
+                  <label className="block text-xs font-extrabold text-emerald-700 uppercase tracking-wider flex items-center gap-1.5">
+                    <span className="w-2 h-2 rounded-full bg-emerald-500"></span> • MẶT SAU (ĐÁP ÁN / ĐỊNH NGHĨA / GIẢI THÍCH) *
+                  </label>
+                  <textarea 
+                    value={newCard.answer}
+                    onChange={(e) => setNewCard({ ...newCard, answer: e.target.value })}
+                    placeholder="Ví dụ: S = (a + b) * h / 2"
+                    className="w-full p-4 bg-emerald-50/40 border-2 border-emerald-200 rounded-2xl h-36 resize-none focus:ring-2 focus:ring-emerald-500 outline-none text-gray-800 placeholder:text-gray-400 font-medium"
+                    required
+                  />
+                </div>
+              </div>
+
+              <div>
+                <label className="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-1.5">
+                  GHI CHÚ THÊM (TÙY CHỌN)
+                </label>
+                <input 
+                  type="text"
+                  value={newCard.note}
+                  onChange={(e) => setNewCard({ ...newCard, note: e.target.value })}
+                  placeholder="Ví dụ: Ghi nhớ mẹo tính nhanh..."
+                  className="w-full p-3 bg-gray-50 border border-gray-200 rounded-xl text-sm font-medium focus:ring-2 focus:ring-emerald-500 outline-none"
+                />
+              </div>
+
+              {/* Các nút lưu của Form */}
+              <div className="flex flex-col sm:flex-row justify-between items-center gap-4 pt-4 border-t border-gray-100">
+                <span className="text-xs text-gray-500 flex items-center gap-1.5">
+                  <Cloud size={16} className="text-sky-500" />
+                  Mỗi khi bấm lưu, thẻ sẽ được đồng bộ ngay tức thì lên Firebase tài khoản của bạn.
+                </span>
+
+                <div className="flex items-center gap-3 w-full sm:w-auto">
+                  <button 
+                    type="button"
+                    onClick={() => setActiveTab('manage')}
+                    className="px-5 py-3 text-gray-600 bg-gray-100 hover:bg-gray-200 rounded-xl font-bold transition text-sm flex-1 sm:flex-none text-center"
+                  >
+                    Xem danh sách ({cards.length})
+                  </button>
+
+                  <button 
+                    type="button"
+                    onClick={handleAddCardToTableDraft}
+                    className="px-5 py-3 text-indigo-700 bg-indigo-50 hover:bg-indigo-100 border border-indigo-200 rounded-xl font-bold transition text-sm flex-1 sm:flex-none text-center"
+                    title="Đưa thẻ này xuống bảng bên dưới để chỉnh sửa cùng lúc"
+                  >
+                    + Thêm vào bảng bên dưới
+                  </button>
+
+                  <button 
+                    type="submit"
+                    className="px-8 py-3.5 bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold rounded-2xl shadow-lg shadow-emerald-200 hover:-translate-y-0.5 transition flex items-center justify-center gap-2 flex-1 sm:flex-none"
+                  >
+                    <Plus size={20} />
+                    <span>+ Lưu & Thêm tiếp (Ctrl+Enter)</span>
+                  </button>
+                </div>
+              </div>
+            </form>
           </div>
 
-          <form onSubmit={handleAddCardContinuous} onKeyDown={handleKeyDownContinuous} className="mt-6 space-y-6">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          {/* PHẦN 2: BẢNG NHẬP THẺ HÀNG LOẠT (BẢNG NHẬP NHANH) - NỐI TIẾP THỐNG NHẤT */}
+          <div className="bg-white rounded-3xl p-6 md:p-8 shadow-sm border border-indigo-100/80 space-y-6">
+            <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 pb-6 border-b border-gray-100">
               <div>
-                <label className="block text-xs font-extrabold text-gray-700 uppercase tracking-wider mb-2">
-                  Phân môn
-                </label>
-                <select 
-                  value={newCard.subject}
-                  onChange={(e) => setNewCard({ ...newCard, subject: e.target.value })}
-                  className="w-full p-3.5 bg-gray-50 border border-gray-200 rounded-xl font-bold text-gray-800 focus:ring-2 focus:ring-emerald-500 outline-none"
+                <h2 className="text-2xl font-extrabold text-gray-800 flex items-center gap-2">
+                  <FileText className="text-indigo-600" size={26} /> Nhập Thẻ Hàng Loạt (Bảng Nhập Nhanh)
+                </h2>
+                <p className="text-gray-500 text-sm mt-1">
+                  Điền nhiều thẻ trên cùng một bảng hoặc dán danh sách từ vựng/kiến thức để lưu tất cả chỉ trong 1 lần bấm!
+                </p>
+              </div>
+              <div className="flex items-center gap-2">
+                <button 
+                  onClick={() => setShowQuickPaste(!showQuickPaste)}
+                  className="px-4 py-2 bg-indigo-50 text-indigo-700 hover:bg-indigo-100 border border-indigo-200 rounded-xl text-xs font-bold transition flex items-center gap-1.5"
                 >
-                  {SUBJECTS.map(s => <option key={s} value={s}>{s}</option>)}
-                </select>
-              </div>
-
-              <div>
-                <label className="block text-xs font-extrabold text-gray-700 uppercase tracking-wider mb-2">
-                  Khối lớp
-                </label>
-                <select 
-                  value={newCard.grade}
-                  onChange={(e) => setNewCard({ ...newCard, grade: e.target.value })}
-                  className="w-full p-3.5 bg-gray-50 border border-gray-200 rounded-xl font-bold text-gray-800 focus:ring-2 focus:ring-emerald-500 outline-none"
-                >
-                  {GRADES.map(g => <option key={g} value={g}>{g}</option>)}
-                </select>
+                  <Sparkle size={16} /> {showQuickPaste ? 'Đóng Dán Nhanh' : '✨ Dán nhanh từ văn bản'}
+                </button>
               </div>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {/* Mặt trước */}
-              <div className="space-y-2">
-                <label className="block text-xs font-extrabold text-sky-700 uppercase tracking-wider flex items-center gap-1.5">
-                  <span className="w-2 h-2 rounded-full bg-sky-500"></span> Mặt trước (Câu hỏi / Từ vựng / Thuật ngữ) *
-                </label>
+            {/* Hộp dán nhanh từ văn bản (Quick Paste) */}
+            {showQuickPaste && (
+              <div className="bg-indigo-50/70 p-5 rounded-2xl border border-indigo-200 space-y-3 animate-fade-in">
+                <h3 className="text-sm font-extrabold text-indigo-900">
+                  Nhập danh sách theo dòng (Định dạng: Mặt trước - Mặt sau)
+                </h3>
+                <p className="text-xs text-indigo-700/80">
+                  Mỗi dòng là một thẻ. Phân tách câu hỏi và câu trả lời bằng dấu gạch nối ` - ` hoặc phím Tab.
+                </p>
                 <textarea 
-                  ref={questionInputRef}
-                  value={newCard.question}
-                  onChange={(e) => setNewCard({ ...newCard, question: e.target.value })}
-                  placeholder="Ví dụ: Công thức tính diện tích hình thang là gì?"
-                  className="w-full p-4 bg-sky-50/40 border-2 border-sky-200 rounded-2xl h-36 resize-none focus:ring-2 focus:ring-sky-500 outline-none text-gray-800 placeholder:text-gray-400 font-medium"
-                  required
+                  value={quickPasteText}
+                  onChange={(e) => setQuickPasteText(e.target.value)}
+                  placeholder={"Apple - Quả táo\nBanana - Quả chuối\nS = v * t - Công thức tính quãng đường"}
+                  className="w-full p-4 bg-white border border-indigo-200 rounded-xl h-32 resize-none text-sm font-mono focus:ring-2 focus:ring-indigo-400 outline-none"
                 />
+                <div className="flex justify-end gap-2">
+                  <button 
+                    onClick={() => setShowQuickPaste(false)}
+                    className="px-4 py-2 text-gray-600 hover:bg-gray-200 rounded-lg text-xs font-bold"
+                  >
+                    Hủy
+                  </button>
+                  <button 
+                    onClick={handleApplyQuickPaste}
+                    className="px-5 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg text-xs font-bold shadow-md shadow-indigo-200"
+                  >
+                    Phân tích thành các dòng thẻ
+                  </button>
+                </div>
+              </div>
+            )}
+
+            {/* Bảng nhập hàng loạt */}
+            <div className="space-y-4">
+              <div className="overflow-x-auto">
+                <table className="w-full text-left border-collapse">
+                  <thead>
+                    <tr className="border-b border-gray-200 text-xs font-extrabold text-gray-500 uppercase tracking-wider">
+                      <th className="py-3 px-2 w-10 text-center">STT</th>
+                      <th className="py-3 px-3 w-1/3">MẶT TRƯỚC (CÂU HỎI / TỪ VỰNG) *</th>
+                      <th className="py-3 px-3 w-1/3">MẶT SAU (ĐÁP ÁN / ĐỊNH NGHĨA) *</th>
+                      <th className="py-3 px-2 w-28">MÔN</th>
+                      <th className="py-3 px-2 w-28">LỚP</th>
+                      <th className="py-3 px-2 w-28 text-center">TRẠNG THÁI</th>
+                      <th className="py-3 px-2 w-12 text-center">XÓA</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-gray-100">
+                    {batchRows.map((row, idx) => (
+                      <tr key={row.id || idx} className="hover:bg-gray-50/80 transition-colors">
+                        <td className="py-3 px-2 text-xs font-bold text-gray-400 text-center">{idx + 1}</td>
+                        <td className="py-3 px-3">
+                          <input 
+                            type="text"
+                            value={row.question}
+                            onChange={(e) => handleBatchRowChange(idx, 'question', e.target.value)}
+                            placeholder="Mặt trước..."
+                            className="w-full p-2.5 bg-gray-50 border border-gray-200 rounded-lg text-sm font-medium focus:ring-2 focus:ring-indigo-400 outline-none"
+                          />
+                        </td>
+                        <td className="py-3 px-3">
+                          <input 
+                            type="text"
+                            value={row.answer}
+                            onChange={(e) => handleBatchRowChange(idx, 'answer', e.target.value)}
+                            placeholder="Mặt sau..."
+                            className="w-full p-2.5 bg-gray-50 border border-gray-200 rounded-lg text-sm font-medium focus:ring-2 focus:ring-indigo-400 outline-none"
+                          />
+                        </td>
+                        <td className="py-3 px-2">
+                          <select 
+                            value={row.subject}
+                            onChange={(e) => handleBatchRowChange(idx, 'subject', e.target.value)}
+                            className="w-full p-2.5 bg-gray-50 border border-gray-200 rounded-lg text-xs font-bold text-gray-700 outline-none"
+                          >
+                            {SUBJECTS.map(s => <option key={s} value={s}>{s}</option>)}
+                          </select>
+                        </td>
+                        <td className="py-3 px-2">
+                          <select 
+                            value={row.grade}
+                            onChange={(e) => handleBatchRowChange(idx, 'grade', e.target.value)}
+                            className="w-full p-2.5 bg-gray-50 border border-gray-200 rounded-lg text-xs font-bold text-gray-700 outline-none"
+                          >
+                            {GRADES.map(g => <option key={g} value={g}>{g}</option>)}
+                          </select>
+                        </td>
+                        <td className="py-3 px-2 text-center">
+                          {row.isSaved ? (
+                            <span className="inline-flex items-center gap-1 text-[11px] font-bold text-emerald-700 bg-emerald-50 border border-emerald-200 px-2 py-0.5 rounded-full">
+                              <CheckCircle2 size={12} /> Đã lưu
+                            </span>
+                          ) : (
+                            <span className="inline-flex items-center gap-1 text-[11px] font-bold text-amber-700 bg-amber-50 border border-amber-200 px-2 py-0.5 rounded-full">
+                              <Clock size={12} /> Chưa lưu
+                            </span>
+                          )}
+                        </td>
+                        <td className="py-3 px-2 text-center">
+                          <button 
+                            onClick={() => handleRemoveBatchRow(idx)}
+                            className="p-2 text-gray-400 hover:text-red-500 rounded-lg transition"
+                            title="Xóa dòng này"
+                          >
+                            <Trash2 size={16} />
+                          </button>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
               </div>
 
-              {/* Mặt sau */}
-              <div className="space-y-2">
-                <label className="block text-xs font-extrabold text-emerald-700 uppercase tracking-wider flex items-center gap-1.5">
-                  <span className="w-2 h-2 rounded-full bg-emerald-500"></span> Mặt sau (Đáp án / Định nghĩa / Giải thích) *
-                </label>
-                <textarea 
-                  value={newCard.answer}
-                  onChange={(e) => setNewCard({ ...newCard, answer: e.target.value })}
-                  placeholder="Ví dụ: S = (a + b) * h / 2"
-                  className="w-full p-4 bg-emerald-50/40 border-2 border-emerald-200 rounded-2xl h-36 resize-none focus:ring-2 focus:ring-emerald-500 outline-none text-gray-800 placeholder:text-gray-400 font-medium"
-                  required
-                />
-              </div>
-            </div>
+              {/* Dưới bảng: Thêm dòng, Dọn trống và Lưu tất cả lên Firebase */}
+              <div className="flex flex-col sm:flex-row justify-between items-center gap-4 pt-4 border-t border-gray-100">
+                <div className="flex items-center gap-2">
+                  <button 
+                    type="button"
+                    onClick={handleAddBatchRow}
+                    className="px-5 py-2.5 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 rounded-xl font-bold text-sm transition flex items-center gap-2 border border-indigo-200"
+                  >
+                    <Plus size={18} /> + Thêm dòng mới
+                  </button>
 
-            <div>
-              <label className="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-1.5">
-                Ghi chú thêm (Tùy chọn)
-              </label>
-              <input 
-                type="text"
-                value={newCard.note}
-                onChange={(e) => setNewCard({ ...newCard, note: e.target.value })}
-                placeholder="Ví dụ: Ghi nhớ mẹo tính nhanh..."
-                className="w-full p-3 bg-gray-50 border border-gray-200 rounded-xl text-sm font-medium focus:ring-2 focus:ring-emerald-500 outline-none"
-              />
-            </div>
+                  <button 
+                    type="button"
+                    onClick={handleClearEmptyRows}
+                    className="px-4 py-2.5 text-gray-500 hover:text-gray-700 hover:bg-gray-100 rounded-xl font-bold text-sm transition"
+                    title="Xóa bớt các dòng chưa nhập nội dung"
+                  >
+                    Dọn dòng trống
+                  </button>
+                </div>
 
-            {/* Các nút lưu */}
-            <div className="flex flex-col sm:flex-row justify-between items-center gap-4 pt-4 border-t border-gray-100">
-              <span className="text-xs text-gray-500 flex items-center gap-1.5">
-                <Cloud size={16} className="text-sky-500" />
-                Mỗi khi bấm lưu, thẻ sẽ được đồng bộ ngay tức thì lên Firebase tài khoản của bạn.
-              </span>
-
-              <div className="flex items-center gap-3 w-full sm:w-auto">
                 <button 
                   type="button"
-                  onClick={() => setActiveTab('manage')}
-                  className="px-5 py-3 text-gray-600 bg-gray-100 hover:bg-gray-200 rounded-xl font-bold transition text-sm flex-1 sm:flex-none text-center"
+                  onClick={handleSaveAllBatch}
+                  className="px-8 py-3.5 bg-indigo-600 hover:bg-indigo-700 text-white font-extrabold rounded-2xl shadow-lg shadow-indigo-200 hover:-translate-y-0.5 transition flex items-center gap-2"
                 >
-                  Xem danh sách ({cards.length})
-                </button>
-
-                <button 
-                  type="submit"
-                  className="px-8 py-3.5 bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold rounded-2xl shadow-lg shadow-emerald-200 hover:-translate-y-0.5 transition flex items-center justify-center gap-2 flex-1 sm:flex-none"
-                >
-                  <Plus size={20} />
-                  <span>Lưu & Thêm tiếp (Ctrl+Enter)</span>
+                  <Cloud size={20} />
+                  <span>
+                    {unsavedBatchCount > 0 
+                      ? `Lưu tất cả ${unsavedBatchCount} thẻ lên Firebase` 
+                      : `Đồng bộ tất cả ${validBatchCount} thẻ lên Firebase`}
+                  </span>
                 </button>
               </div>
             </div>
-          </form>
+          </div>
+
         </div>
       )}
 
-      {/* ====================== TAB 3: THÊM HÀNG LOẠT (BATCH CREATOR) ====================== */}
-      {activeTab === 'batch' && (
-        <div className="bg-white rounded-3xl p-6 md:p-8 shadow-sm border border-sky-100 animate-fade-in space-y-6">
-          <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 pb-6 border-b border-gray-100">
-            <div>
-              <h2 className="text-2xl font-extrabold text-gray-800 flex items-center gap-2">
-                <FileText className="text-indigo-600" size={26} /> Nhập Thẻ Hàng Loạt (Bảng Nhập Nhanh)
-              </h2>
-              <p className="text-gray-500 text-sm mt-1">
-                Điền nhiều thẻ trên cùng một bảng hoặc dán danh sách từ vựng/kiến thức để lưu tất cả chỉ trong 1 lần bấm!
-              </p>
-            </div>
-            <div className="flex items-center gap-2">
-              <button 
-                onClick={() => setShowQuickPaste(!showQuickPaste)}
-                className="px-4 py-2 bg-indigo-50 text-indigo-700 hover:bg-indigo-100 border border-indigo-200 rounded-xl text-xs font-bold transition flex items-center gap-1.5"
-              >
-                <Sparkle size={16} /> {showQuickPaste ? 'Đóng Dán Nhanh' : 'Dán nhanh từ văn bản'}
-              </button>
-            </div>
-          </div>
-
-          {/* Hộp dán nhanh từ văn bản */}
-          {showQuickPaste && (
-            <div className="bg-indigo-50/70 p-5 rounded-2xl border border-indigo-200 space-y-3 animate-fade-in">
-              <h3 className="text-sm font-extrabold text-indigo-900">
-                Nhập danh sách theo dòng (Định dạng: Mặt trước - Mặt sau)
-              </h3>
-              <p className="text-xs text-indigo-700/80">
-                Mỗi dòng là một thẻ. Phân tách câu hỏi và câu trả lời bằng dấu gạch nối ` - ` hoặc phím Tab.
-              </p>
-              <textarea 
-                value={quickPasteText}
-                onChange={(e) => setQuickPasteText(e.target.value)}
-                placeholder={"Apple - Quả táo\nBanana - Quả chuối\nS = v * t - Công thức tính quãng đường"}
-                className="w-full p-4 bg-white border border-indigo-200 rounded-xl h-32 resize-none text-sm font-mono focus:ring-2 focus:ring-indigo-400 outline-none"
-              />
-              <div className="flex justify-end gap-2">
-                <button 
-                  onClick={() => setShowQuickPaste(false)}
-                  className="px-4 py-2 text-gray-600 hover:bg-gray-200 rounded-lg text-xs font-bold"
-                >
-                  Hủy
-                </button>
-                <button 
-                  onClick={handleApplyQuickPaste}
-                  className="px-5 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg text-xs font-bold shadow-md shadow-indigo-200"
-                >
-                  Phân tích thành các dòng thẻ
-                </button>
-              </div>
-            </div>
-          )}
-
-          {/* Bảng nhập hàng loạt */}
-          <div className="space-y-4">
-            <div className="overflow-x-auto">
-              <table className="w-full text-left border-collapse">
-                <thead>
-                  <tr className="border-b border-gray-200 text-xs font-extrabold text-gray-500 uppercase tracking-wider">
-                    <th className="py-3 px-2 w-10">STT</th>
-                    <th className="py-3 px-3 w-1/3">Mặt trước (Câu hỏi / Từ vựng) *</th>
-                    <th className="py-3 px-3 w-1/3">Mặt sau (Đáp án / Định nghĩa) *</th>
-                    <th className="py-3 px-2 w-28">Môn</th>
-                    <th className="py-3 px-2 w-28">Lớp</th>
-                    <th className="py-3 px-2 w-12 text-center">Xóa</th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-gray-100">
-                  {batchRows.map((row, idx) => (
-                    <tr key={idx} className="hover:bg-gray-50/80 transition-colors">
-                      <td className="py-3 px-2 text-xs font-bold text-gray-400 text-center">{idx + 1}</td>
-                      <td className="py-3 px-3">
-                        <input 
-                          type="text"
-                          value={row.question}
-                          onChange={(e) => handleBatchRowChange(idx, 'question', e.target.value)}
-                          placeholder="Mặt trước..."
-                          className="w-full p-2.5 bg-gray-50 border border-gray-200 rounded-lg text-sm font-medium focus:ring-2 focus:ring-indigo-400 outline-none"
-                        />
-                      </td>
-                      <td className="py-3 px-3">
-                        <input 
-                          type="text"
-                          value={row.answer}
-                          onChange={(e) => handleBatchRowChange(idx, 'answer', e.target.value)}
-                          placeholder="Mặt sau..."
-                          className="w-full p-2.5 bg-gray-50 border border-gray-200 rounded-lg text-sm font-medium focus:ring-2 focus:ring-indigo-400 outline-none"
-                        />
-                      </td>
-                      <td className="py-3 px-2">
-                        <select 
-                          value={row.subject}
-                          onChange={(e) => handleBatchRowChange(idx, 'subject', e.target.value)}
-                          className="w-full p-2.5 bg-gray-50 border border-gray-200 rounded-lg text-xs font-bold text-gray-700 outline-none"
-                        >
-                          {SUBJECTS.map(s => <option key={s} value={s}>{s}</option>)}
-                        </select>
-                      </td>
-                      <td className="py-3 px-2">
-                        <select 
-                          value={row.grade}
-                          onChange={(e) => handleBatchRowChange(idx, 'grade', e.target.value)}
-                          className="w-full p-2.5 bg-gray-50 border border-gray-200 rounded-lg text-xs font-bold text-gray-700 outline-none"
-                        >
-                          {GRADES.map(g => <option key={g} value={g}>{g}</option>)}
-                        </select>
-                      </td>
-                      <td className="py-3 px-2 text-center">
-                        <button 
-                          onClick={() => handleRemoveBatchRow(idx)}
-                          disabled={batchRows.length <= 1}
-                          className="p-2 text-gray-400 hover:text-red-500 rounded-lg transition disabled:opacity-30"
-                          title="Xóa dòng này"
-                        >
-                          <Trash2 size={16} />
-                        </button>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-
-            <div className="flex flex-col sm:flex-row justify-between items-center gap-4 pt-4 border-t border-gray-100">
-              <button 
-                type="button"
-                onClick={handleAddBatchRow}
-                className="px-5 py-2.5 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 rounded-xl font-bold text-sm transition flex items-center gap-2 border border-indigo-200"
-              >
-                <Plus size={18} /> Thêm dòng mới
-              </button>
-
-              <button 
-                type="button"
-                onClick={handleSaveAllBatch}
-                className="px-8 py-3.5 bg-indigo-600 hover:bg-indigo-700 text-white font-extrabold rounded-2xl shadow-lg shadow-indigo-200 hover:-translate-y-0.5 transition flex items-center gap-2"
-              >
-                <Cloud size={20} />
-                <span>Lưu tất cả {batchRows.filter(r => r.question.trim()).length} thẻ lên Firebase</span>
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* ====================== TAB 4: DANH SÁCH & QUẢN LÝ THẺ (MANAGE MODE) ====================== */}
+      {/* ====================== TAB 3: DANH SÁCH & QUẢN LÝ THẺ (MANAGE MODE) ====================== */}
       {activeTab === 'manage' && (
         <div className="space-y-6">
           <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 bg-white p-6 rounded-3xl border border-sky-100 shadow-sm">
@@ -1311,10 +1411,10 @@ export default function FlashcardManager({ addReward, currentUser }) {
 
             <div className="flex items-center gap-3">
               <button 
-                onClick={() => setActiveTab('continuous')}
+                onClick={() => setActiveTab('unified_create')}
                 className="px-4 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-sm font-bold shadow-md shadow-emerald-200 transition flex items-center gap-2"
               >
-                <Plus size={16} /> Thêm thẻ mới
+                <Plus size={16} /> Thêm & Nhập thẻ mới
               </button>
             </div>
           </div>
@@ -1328,7 +1428,7 @@ export default function FlashcardManager({ addReward, currentUser }) {
               </p>
               <div className="flex justify-center gap-3 pt-2">
                 <button 
-                  onClick={() => setActiveTab('continuous')}
+                  onClick={() => setActiveTab('unified_create')}
                   className="px-6 py-3 bg-primary text-white rounded-xl font-bold text-sm shadow-md"
                 >
                   Tạo thẻ ngay
@@ -1414,7 +1514,7 @@ export default function FlashcardManager({ addReward, currentUser }) {
         </div>
       )}
 
-      {/* ====================== TAB 5: LỊCH SỬ CHỈNH SỬA TOÀN BỘ (GLOBAL AUDIT LOG) ====================== */}
+      {/* ====================== TAB 4: LỊCH SỬ CHỈNH SỬA TOÀN BỘ (GLOBAL AUDIT LOG) ====================== */}
       {activeTab === 'history' && (
         <div className="bg-white rounded-3xl p-6 md:p-8 shadow-sm border border-sky-100 animate-fade-in space-y-6">
           <div className="flex justify-between items-center pb-6 border-b border-gray-100">
