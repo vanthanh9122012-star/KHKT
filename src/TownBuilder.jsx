@@ -24,16 +24,16 @@ const SUBJECT_COLORS = {
   'Công nghệ': 'text-yellow-600 bg-yellow-50 border-yellow-200',
 };
 
-// Vị trí các hành tinh dọc theo con đường uốn lượn S-Curve khớp với ảnh
+// Vị trí các hành tinh dọc theo con đường uốn lượn ngang (Horizontal Cosmic Journey)
 const PLANET_MAP_POSITIONS = [
-  // 0: Khởi Nguyên (Lớp 6) - Phía dưới bên trái
-  { top: '68%', left: '20%', rocketOffset: { x: 95, y: -20, rotate: -35 } },
-  // 1: Khí Quyển (Lớp 7) - Phía giữa bên trái
-  { top: '48%', left: '16%', rocketOffset: { x: 95, y: -25, rotate: -20 } },
-  // 2: Tinh Thể (Lớp 8) - Phía trên bên phải
-  { top: '28%', left: '68%', rocketOffset: { x: -95, y: -20, rotate: 30 } },
-  // 3: Tối Thượng (Lớp 9) - Đỉnh vũ trụ phía trên
-  { top: '8%', left: '26%', rocketOffset: { x: 90, y: 15, rotate: -45 } }
+  // 0: Khởi Nguyên (Lớp 6) - Cung 1 bên trái
+  { top: '48%', left: '14%', rocketOffset: { x: 70, y: -45, rotate: 30 } },
+  // 1: Khí Quyển (Lớp 7) - Cung 2 giữa trái
+  { top: '28%', left: '38%', rocketOffset: { x: 70, y: -45, rotate: 15 } },
+  // 2: Tinh Thể (Lớp 8) - Cung 3 giữa phải
+  { top: '48%', left: '63%', rocketOffset: { x: 70, y: -45, rotate: -25 } },
+  // 3: Tối Thượng (Lớp 9) - Cung 4 bên phải
+  { top: '28%', left: '87%', rocketOffset: { x: -70, y: -45, rotate: -45 } }
 ];
 
 export default function TownBuilder({ setActiveTab, addReward, gamification }) {
@@ -417,7 +417,7 @@ export default function TownBuilder({ setActiveTab, addReward, gamification }) {
           </div>
         </div>
       ) : (
-        <div className="space-y-6 pb-12 p-4 md:p-8 h-full max-w-5xl mx-auto">
+        <div className="space-y-6 pb-12 p-4 md:p-8 h-full max-w-6xl mx-auto">
           {!isPlanetDetailView ? (
             <>
               {/* HEADER VŨ TRỤ */}
@@ -427,7 +427,7 @@ export default function TownBuilder({ setActiveTab, addReward, gamification }) {
                     <Map className="text-purple-400" size={28} /> My Universe • Hành Trình Vũ Trụ
                   </h1>
                   <p className="text-purple-200/80 font-medium text-xs md:text-sm">
-                    Khám phá 4 đại hành tinh 3D dọc theo con đường thiên hà. Giải các bài tập tư duy bậc cao để tiến hóa hành tinh!
+                    Khám phá 4 đại hành tinh 3D dọc theo con đường thiên hà nằm ngang. Giải các bài tập tư duy bậc cao để tiến hóa hành tinh!
                   </p>
                 </div>
 
@@ -476,120 +476,206 @@ export default function TownBuilder({ setActiveTab, addReward, gamification }) {
                 </div>
               )}
 
-              {/* BẢN ĐỒ VŨ TRỤ THEO ĐÚNG HÌNH ẢNH MINH HỌA (VERTICAL JOURNEY S-CURVE MAP) */}
-              <div className="relative w-full max-w-2xl mx-auto rounded-[3rem] overflow-hidden shadow-2xl border-4 border-purple-900/50 bg-[#16082b] min-h-[960px] md:min-h-[1050px]">
+              {/* BẢN ĐỒ VŨ TRỤ NẰM NGANG (HORIZONTAL JOURNEY S-CURVE MAP) */}
+              <div className="relative w-full max-w-6xl mx-auto rounded-[3rem] overflow-hidden shadow-2xl border-4 border-purple-900/50 bg-[#0c021c] overflow-x-auto hide-scrollbar">
                 
-                {/* 1. Lớp hình nền Vũ Trụ Chuẩn Theo Ảnh */}
-                <img 
-                  src="/universe_map.png" 
-                  alt="Universe Map" 
-                  className="absolute inset-0 w-full h-full object-cover opacity-90 pointer-events-none select-none"
-                />
+                {/* Horizontal canvas container */}
+                <div className="relative min-w-[960px] w-full min-h-[530px] md:min-h-[570px] overflow-hidden select-none">
+                  
+                  {/* 1. Lớp hình nền Vũ Trụ Ngang lung linh với Nebula & Bụi Sao */}
+                  <div className="absolute inset-0 bg-gradient-to-r from-[#090115] via-[#140529] to-[#090115] pointer-events-none" />
+                  <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-purple-600/15 rounded-full blur-[100px] pointer-events-none" />
+                  <div className="absolute top-1/3 right-1/4 w-96 h-96 bg-indigo-600/15 rounded-full blur-[100px] pointer-events-none" />
+                  <div className="absolute bottom-10 left-1/2 -translate-x-1/2 w-[700px] h-48 bg-fuchsia-600/10 rounded-full blur-[90px] pointer-events-none" />
 
-                {/* 2. Lớp bụi sao & ánh sáng vũ trụ lung linh */}
-                <div className="absolute inset-0 bg-gradient-to-t from-purple-950/40 via-transparent to-purple-900/30 pointer-events-none" />
+                  {/* 2. Đường quỹ đạo nối liền các hành tinh nằm ngang bằng SVG */}
+                  <svg className="absolute inset-0 w-full h-full pointer-events-none" preserveAspectRatio="none" viewBox="0 0 1000 500">
+                    <defs>
+                      <linearGradient id="cosmicOrbitGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                        <stop offset="0%" stopColor="#a855f7" stopOpacity="0.8" />
+                        <stop offset="35%" stopColor="#ec4899" stopOpacity="0.9" />
+                        <stop offset="70%" stopColor="#a855f7" stopOpacity="0.9" />
+                        <stop offset="100%" stopColor="#38bdf8" stopOpacity="0.8" />
+                      </linearGradient>
+                      <filter id="orbitGlow" x="-20%" y="-20%" width="140%" height="140%">
+                        <feGaussianBlur stdDeviation="8" result="blur" />
+                        <feMerge>
+                          <feMergeNode in="blur" />
+                          <feMergeNode in="SourceGraphic" />
+                        </feMerge>
+                      </filter>
+                    </defs>
+                    
+                    {/* Glowing outer aura */}
+                    <path
+                      d="M 50 240 C 180 320, 260 140, 380 140 C 500 140, 520 240, 630 240 C 740 240, 780 140, 930 140"
+                      fill="none"
+                      stroke="rgba(216, 180, 254, 0.2)"
+                      strokeWidth="16"
+                      strokeLinecap="round"
+                    />
 
-                {/* 3. CON TÀU VŨ TRỤ (ROCKET) BAY THEO HÀNH TINH ĐANG CHỌN */}
-                <div 
-                  className="absolute z-30 transition-all duration-700 pointer-events-none transform -translate-x-1/2 -translate-y-1/2 flex flex-col items-center"
-                  style={{
-                    top: `calc(${activePos.top} + ${activePos.rocketOffset.y}px)`,
-                    left: `calc(${activePos.left} + ${activePos.rocketOffset.x}px)`,
-                    transform: `translate(-50%, -50%) rotate(${activePos.rocketOffset.rotate}deg)`
-                  }}
-                >
-                  <div className="relative">
-                    {/* Thân tên lửa */}
-                    <div className="w-12 h-14 bg-gradient-to-t from-slate-200 to-red-500 rounded-t-full border-2 border-white shadow-xl flex items-center justify-center relative">
-                      <div className="w-4 h-4 rounded-full bg-sky-200 border border-slate-700 shadow-inner" />
-                      {/* Cánh tên lửa */}
-                      <div className="absolute -left-2 bottom-0 w-3 h-5 bg-red-600 rounded-l-md" />
-                      <div className="absolute -right-2 bottom-0 w-3 h-5 bg-red-600 rounded-r-md" />
+                    {/* Main dashed trajectory path */}
+                    <path
+                      d="M 50 240 C 180 320, 260 140, 380 140 C 500 140, 520 240, 630 240 C 740 240, 780 140, 930 140"
+                      fill="none"
+                      stroke="url(#cosmicOrbitGrad)"
+                      strokeWidth="4"
+                      strokeDasharray="8 8"
+                      strokeLinecap="round"
+                      filter="url(#orbitGlow)"
+                    />
+                  </svg>
+
+                  {/* 3. Các bậc đá thiên thạch tím (Polygonal Asteroids) trôi nổi dọc quỹ đạo */}
+                  {/* Trạm xuất phát góc trái */}
+                  <div className="absolute left-[3%] top-[48%] -translate-y-1/2 flex flex-col items-center pointer-events-none opacity-80">
+                    <div className="w-10 h-10 rounded-full border-2 border-dashed border-purple-400 bg-purple-900/40 flex items-center justify-center text-lg animate-spin-slow">
+                      🛰️
                     </div>
-                    {/* Ngọn lửa phản lực động cơ */}
-                    <div className="w-4 h-6 mx-auto -mt-0.5 bg-gradient-to-b from-yellow-300 via-orange-500 to-transparent rounded-b-full animate-pulse filter drop-shadow-[0_0_8px_rgba(255,165,0,0.9)]" />
+                    <span className="text-[9px] font-black uppercase tracking-widest text-purple-300 mt-1">Trạm Phóng</span>
                   </div>
-                </div>
 
-                {/* 4. CÁC ĐẠI HÀNH TINH 3D TỰ XOAY DỌC THEO CON ĐƯỜNG ĐÁ */}
-                {houses.map((house, index) => {
-                  const comp = house.rooms.filter(r => r.completed).length;
-                  const tot = house.rooms.length;
-                  const isActive = index === activeHouseIndex;
-                  const pos = PLANET_MAP_POSITIONS[index] || PLANET_MAP_POSITIONS[0];
+                  {/* Cụm đá 1 giữa hành tinh 0 và 1 */}
+                  <div className="absolute left-[26%] top-[38%] -translate-y-1/2 flex gap-2 pointer-events-none opacity-75">
+                    <div className="w-7 h-6 bg-[#502868] border border-purple-400/50 rounded-lg transform rotate-12 shadow-lg" />
+                    <div className="w-5 h-4 bg-[#3e1e52] border border-purple-400/40 rounded-md transform -rotate-6 mt-2" />
+                    <div className="w-6 h-5 bg-[#5c2a78] border border-purple-400/50 rounded-lg transform rotate-45 -mt-1" />
+                  </div>
 
-                  return (
-                    <div 
-                      key={house.id}
-                      className="absolute z-20 transform -translate-x-1/2 -translate-y-1/2 cursor-pointer transition-all duration-300 group"
-                      style={{ top: pos.top, left: pos.left }}
-                      onClick={() => {
-                        setActiveHouseIndex(index);
-                      }}
-                    >
-                      {/* Khối Cầu Hành Tinh 3D Thật Tự Xoay */}
-                      <div className={`
-                        relative w-36 h-36 md:w-44 md:h-44 transition-transform duration-500
-                        ${isActive ? 'scale-115 drop-shadow-[0_0_25px_rgba(224,86,253,0.8)]' : 'scale-100 hover:scale-105'}
-                      `}>
-                        <InteractivePlanet3D completed={comp} total={tot} index={index} isDetail={false} />
+                  {/* Cụm đá 2 giữa hành tinh 1 và 2 */}
+                  <div className="absolute left-[50%] top-[39%] -translate-y-1/2 flex gap-2 pointer-events-none opacity-75">
+                    <div className="w-7 h-6 bg-[#5c2a78] border border-purple-400/50 rounded-lg transform -rotate-12 shadow-lg" />
+                    <div className="w-8 h-7 bg-[#4b2263] border border-purple-400/40 rounded-md transform rotate-12 mt-1" />
+                    <div className="w-5 h-5 bg-[#3a1b4e] border border-purple-400/40 rounded-md transform -rotate-45" />
+                  </div>
 
-                        {/* Huy hiệu hoàn thành góc hành tinh */}
-                        {comp === tot && (
-                          <div className="absolute -top-1 -right-1 bg-green-500 text-white p-1.5 rounded-full shadow-lg border-2 border-white animate-bounce">
-                            <Check size={18} strokeWidth={3} />
-                          </div>
-                        )}
+                  {/* Cụm đá 3 giữa hành tinh 2 và 3 */}
+                  <div className="absolute left-[75%] top-[38%] -translate-y-1/2 flex gap-2 pointer-events-none opacity-75">
+                    <div className="w-7 h-6 bg-[#502868] border border-purple-400/50 rounded-lg transform rotate-45 shadow-lg" />
+                    <div className="w-6 h-5 bg-[#3e1e52] border border-purple-400/40 rounded-md transform -rotate-12 mt-2" />
+                    <div className="w-6 h-5 bg-[#5c2a78] border border-purple-400/50 rounded-lg transform rotate-12 -mt-1" />
+                  </div>
+
+                  {/* 4. CON TÀU VŨ TRỤ (ROCKET) BAY THEO HÀNH TINH ĐANG CHỌN */}
+                  <div 
+                    className="absolute z-30 transition-all duration-700 pointer-events-none transform -translate-x-1/2 -translate-y-1/2 flex flex-col items-center"
+                    style={{
+                      top: `calc(${activePos.top} + ${activePos.rocketOffset.y}px)`,
+                      left: `calc(${activePos.left} + ${activePos.rocketOffset.x}px)`,
+                      transform: `translate(-50%, -50%) rotate(${activePos.rocketOffset.rotate}deg)`
+                    }}
+                  >
+                    <div className="relative">
+                      {/* Thân tên lửa */}
+                      <div className="w-10 h-12 bg-gradient-to-t from-slate-200 to-red-500 rounded-t-full border-2 border-white shadow-xl flex items-center justify-center relative">
+                        <div className="w-3.5 h-3.5 rounded-full bg-sky-200 border border-slate-700 shadow-inner" />
+                        <div className="absolute -left-2 bottom-0 w-2.5 h-4 bg-red-600 rounded-l-md" />
+                        <div className="absolute -right-2 bottom-0 w-2.5 h-4 bg-red-600 rounded-r-md" />
                       </div>
+                      {/* Ngọn lửa phản lực động cơ */}
+                      <div className="w-3.5 h-5 mx-auto -mt-0.5 bg-gradient-to-b from-yellow-300 via-orange-500 to-transparent rounded-b-full animate-pulse filter drop-shadow-[0_0_8px_rgba(255,165,0,0.9)]" />
+                    </div>
+                  </div>
 
-                      {/* Thẻ Thông Tin Nhỏ Treo Cạnh Hành Tinh */}
-                      <div className={`
-                        mt-1 p-2.5 px-3.5 rounded-2xl text-center backdrop-blur-md transition-all duration-300 max-w-[190px] mx-auto
-                        ${isActive 
-                          ? 'bg-purple-900/90 text-white border-2 border-purple-400 shadow-xl' 
-                          : 'bg-slate-900/80 text-purple-100 border border-purple-800/60 hover:bg-slate-900/95'}
-                      `}>
-                        <h4 className="font-extrabold text-xs md:text-sm truncate">{house.title.split('-')[0]}</h4>
-                        <div className="flex items-center justify-center gap-1.5 mt-1 text-[11px] text-amber-300 font-bold">
-                          <span>{comp}/{tot} phòng</span>
-                          <span>•</span>
-                          <span className="text-purple-200">{getPhaseName(comp, tot).split(' ')[0]}</span>
+                  {/* 5. CÁC ĐẠI HÀNH TINH 3D TỰ XOAY THEO HÀNG NGANG */}
+                  {houses.map((house, index) => {
+                    const comp = house.rooms.filter(r => r.completed).length;
+                    const tot = house.rooms.length;
+                    const isActive = index === activeHouseIndex;
+                    const pos = PLANET_MAP_POSITIONS[index] || PLANET_MAP_POSITIONS[0];
+
+                    return (
+                      <div 
+                        key={house.id}
+                        className="absolute z-20 transform -translate-x-1/2 -translate-y-1/2 cursor-pointer transition-all duration-300 group"
+                        style={{ top: pos.top, left: pos.left }}
+                        onClick={() => {
+                          setActiveHouseIndex(index);
+                        }}
+                      >
+                        {/* Khối Cầu Hành Tinh 3D Thật Tự Xoay */}
+                        <div className={`
+                          relative w-28 h-28 sm:w-32 sm:h-32 md:w-36 md:h-36 transition-transform duration-500
+                          ${isActive ? 'scale-115 drop-shadow-[0_0_25px_rgba(224,86,253,0.9)]' : 'scale-100 hover:scale-105'}
+                        `}>
+                          <InteractivePlanet3D completed={comp} total={tot} index={index} isDetail={false} />
+
+                          {/* Huy hiệu hoàn thành góc hành tinh */}
+                          {comp === tot && (
+                            <div className="absolute -top-1 -right-1 bg-green-500 text-white p-1.5 rounded-full shadow-lg border-2 border-white animate-bounce">
+                              <Check size={16} strokeWidth={3} />
+                            </div>
+                          )}
+                        </div>
+
+                        {/* Thẻ Thông Tin Nhỏ Treo Cạnh Hành Tinh */}
+                        <div className={`
+                          mt-1 p-2 px-3 rounded-2xl text-center backdrop-blur-md transition-all duration-300 max-w-[160px] mx-auto
+                          ${isActive 
+                            ? 'bg-purple-900/90 text-white border-2 border-purple-400 shadow-xl' 
+                            : 'bg-slate-900/80 text-purple-100 border border-purple-800/60 hover:bg-slate-900/95'}
+                        `}>
+                          <h4 className="font-extrabold text-xs truncate">{house.title.split('-')[0]}</h4>
+                          <div className="flex items-center justify-center gap-1.5 mt-0.5 text-[10px] text-amber-300 font-bold">
+                            <span>{comp}/{tot} phòng</span>
+                            <span>•</span>
+                            <span className="text-purple-200">{getPhaseName(comp, tot).split(' ')[0]}</span>
+                          </div>
                         </div>
                       </div>
-                    </div>
-                  );
-                })}
+                    );
+                  })}
 
-                {/* 5. THANH ĐIỀU KHIỂN & KHÁM PHÁ NẰM Ở ĐÁY BẢN ĐỒ */}
-                <div className="absolute bottom-5 left-5 right-5 z-40 bg-slate-900/90 backdrop-blur-md p-4 sm:p-5 rounded-3xl border-2 border-purple-500/40 shadow-2xl flex flex-col sm:flex-row items-center justify-between gap-4">
-                  <div className="flex items-center gap-3 w-full sm:w-auto">
-                    <div className="w-12 h-12 rounded-2xl bg-purple-600/30 border border-purple-400/40 flex items-center justify-center text-purple-300 shrink-0">
-                      <Rocket size={24} />
+                  {/* 6. THANH ĐIỀU KHIỂN & KHÁM PHÁ NẰM Ở ĐÁY BẢN ĐỒ */}
+                  <div className="absolute bottom-4 left-4 right-4 z-40 bg-slate-900/90 backdrop-blur-md p-3 sm:p-4 rounded-2xl border-2 border-purple-500/40 shadow-2xl flex flex-col sm:flex-row items-center justify-between gap-3">
+                    <div className="flex items-center gap-3 w-full sm:w-auto">
+                      <div className="w-10 h-10 rounded-xl bg-purple-600/30 border border-purple-400/40 flex items-center justify-center text-purple-300 shrink-0">
+                        <Rocket size={20} />
+                      </div>
+                      <div>
+                        <div className="flex items-center gap-2">
+                          <span className="text-[10px] font-black uppercase text-purple-400 tracking-wider">
+                            Hành Tinh Đang Chọn:
+                          </span>
+                          <span className="text-xs text-amber-300 font-bold">
+                            {completedRooms}/{totalRooms} phòng
+                          </span>
+                        </div>
+                        <h3 className="text-sm sm:text-base font-black text-white truncate">
+                          {activeHouse.title}
+                        </h3>
+                      </div>
                     </div>
-                    <div>
-                      <span className="text-[10px] font-black uppercase text-purple-400 tracking-wider block">
-                        Hành Tinh Đang Chọn:
-                      </span>
-                      <h3 className="text-base sm:text-lg font-black text-white truncate">
-                        {activeHouse.title}
-                      </h3>
-                      <p className="text-xs text-purple-200/70 font-medium">
-                        {completedRooms}/{totalRooms} phòng đã giải mã ({getPhaseName(completedRooms, totalRooms)})
-                      </p>
+
+                    <div className="flex items-center gap-2 w-full sm:w-auto justify-end">
+                      {/* Nút chuyển nhanh giữa các hành tinh */}
+                      <button
+                        onClick={() => setActiveHouseIndex(prev => (prev - 1 + houses.length) % houses.length)}
+                        className="px-3 py-2 bg-slate-800 hover:bg-slate-700 text-purple-200 text-xs font-bold rounded-xl border border-purple-700/50 transition cursor-pointer"
+                        title="Hành tinh trước"
+                      >
+                        &larr; Trước
+                      </button>
+                      <button
+                        onClick={() => setActiveHouseIndex(prev => (prev + 1) % houses.length)}
+                        className="px-3 py-2 bg-slate-800 hover:bg-slate-700 text-purple-200 text-xs font-bold rounded-xl border border-purple-700/50 transition cursor-pointer"
+                        title="Hành tinh tiếp theo"
+                      >
+                        Sau &rarr;
+                      </button>
+
+                      <button
+                        onClick={() => setIsPlanetDetailView(true)}
+                        className="px-5 py-2.5 bg-gradient-to-r from-purple-600 via-indigo-600 to-sky-600 hover:from-purple-500 hover:to-sky-500 text-white font-extrabold rounded-xl shadow-lg shadow-purple-500/30 flex items-center justify-center gap-2 text-xs sm:text-sm transition-all hover:scale-105 active:scale-95 cursor-pointer"
+                      >
+                        <Sparkles size={16} />
+                        <span>Khám phá 8 phòng học &rarr;</span>
+                      </button>
                     </div>
                   </div>
 
-                  <div className="flex items-center gap-2 w-full sm:w-auto">
-                    <button
-                      onClick={() => setIsPlanetDetailView(true)}
-                      className="w-full sm:w-auto px-6 py-3.5 bg-gradient-to-r from-purple-600 via-indigo-600 to-sky-600 hover:from-purple-500 hover:to-sky-500 text-white font-extrabold rounded-2xl shadow-lg shadow-purple-500/30 flex items-center justify-center gap-2 text-sm transition-all hover:scale-105 active:scale-95"
-                    >
-                      <Sparkles size={18} />
-                      <span>Khám phá 8 phòng học &rarr;</span>
-                    </button>
-                  </div>
                 </div>
-
               </div>
             </>
           ) : (
