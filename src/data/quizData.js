@@ -1,4 +1,3 @@
-// Updated QUIZ_DATA with 20 questions per quiz across diverse formats (MCQ, True/False, Fill Blank, Short Answer, Essay)
 export const QUIZ_DATA = [
   {
     "id": "toan6_ch1",
@@ -33,9 +32,14 @@ export const QUIZ_DATA = [
       },
       {
         "id": "t6_c1_q3",
-        "type": "fill_blank",
+        "type": "mcq",
         "text": "Kết quả của phép tính 2^3 là...",
-        "options": [],
+        "options": [
+          "8",
+          "6",
+          "9",
+          "16"
+        ],
         "correct": "8",
         "explanation": "2^3 = 2 x 2 x 2 = 8."
       },
@@ -78,9 +82,14 @@ export const QUIZ_DATA = [
       },
       {
         "id": "t6_c1_q7",
-        "type": "fill_blank",
+        "type": "mcq",
         "text": "Tập hợp các chữ số cấu tạo nên số 2026 có ... phần tử.",
-        "options": [],
+        "options": [
+          "3",
+          "2",
+          "4",
+          "5"
+        ],
         "correct": "3",
         "explanation": "Các chữ số là 0, 2, 6 nên có 3 phần tử."
       },
@@ -171,17 +180,27 @@ export const QUIZ_DATA = [
       },
       {
         "id": "t6_c1_q16",
-        "type": "fill_blank",
+        "type": "mcq",
         "text": "Số tự nhiên nhỏ nhất có 3 chữ số khác nhau là...",
-        "options": [],
+        "options": [
+          "102",
+          "100",
+          "123",
+          "101"
+        ],
         "correct": "102",
         "explanation": "Số nhỏ nhất có 3 chữ số khác nhau là 102."
       },
       {
         "id": "t6_c1_q17",
-        "type": "fill_blank",
+        "type": "mcq",
         "text": "Kết quả của phép chia 7^8 : 7^5 = 7^...",
-        "options": [],
+        "options": [
+          "3",
+          "2",
+          "13",
+          "40"
+        ],
         "correct": "3",
         "explanation": "8 - 5 = 3."
       },
@@ -244,9 +263,14 @@ export const QUIZ_DATA = [
       },
       {
         "id": "t6_c2_q3",
-        "type": "fill_blank",
+        "type": "mcq",
         "text": "Số nguyên tố nhỏ nhất là...",
-        "options": [],
+        "options": [
+          "2",
+          "0",
+          "1",
+          "3"
+        ],
         "correct": "2",
         "explanation": "2 là số nguyên tố nhỏ nhất và cũng là số nguyên tố chẵn duy nhất."
       },
@@ -289,9 +313,14 @@ export const QUIZ_DATA = [
       },
       {
         "id": "t6_c2_q7",
-        "type": "fill_blank",
+        "type": "mcq",
         "text": "Ước chung lớn nhất của 12 và 18 bằng...",
-        "options": [],
+        "options": [
+          "6",
+          "2",
+          "3",
+          "36"
+        ],
         "correct": "6",
         "explanation": "ƯCLN(12, 18) = 6."
       },
@@ -382,17 +411,27 @@ export const QUIZ_DATA = [
       },
       {
         "id": "t6_c2_q16",
-        "type": "fill_blank",
+        "type": "mcq",
         "text": "Số chia hết cho 3 có tổng các chữ số chia hết cho...",
-        "options": [],
+        "options": [
+          "3",
+          "2",
+          "6",
+          "9"
+        ],
         "correct": "3",
         "explanation": "Dấu hiệu chia hết cho 3."
       },
       {
         "id": "t6_c2_q17",
-        "type": "fill_blank",
+        "type": "mcq",
         "text": "Tập hợp các ước tự nhiên của 6 gồm ... phần tử.",
-        "options": [],
+        "options": [
+          "4",
+          "2",
+          "3",
+          "6"
+        ],
         "correct": "4",
         "explanation": "Ư(6) = {1, 2, 3, 6} gồm 4 phần tử."
       },
@@ -455,9 +494,14 @@ export const QUIZ_DATA = [
       },
       {
         "id": "t6_c3_q3",
-        "type": "fill_blank",
+        "type": "mcq",
         "text": "Kết quả của phép tính (-5) + (-7) là...",
-        "options": [],
+        "options": [
+          "-12",
+          "12",
+          "-2",
+          "2"
+        ],
         "correct": "-12",
         "explanation": "(-5) + (-7) = -(5 + 7) = -12."
       },
@@ -500,9 +544,14 @@ export const QUIZ_DATA = [
       },
       {
         "id": "t6_c3_q7",
-        "type": "fill_blank",
+        "type": "mcq",
         "text": "Số đối của số -15 là...",
-        "options": [],
+        "options": [
+          "15",
+          "-15",
+          "0",
+          "1/15"
+        ],
         "correct": "15",
         "explanation": "Số đối của -a là a."
       },
@@ -593,17 +642,27 @@ export const QUIZ_DATA = [
       },
       {
         "id": "t6_c3_q16",
-        "type": "fill_blank",
+        "type": "mcq",
         "text": "Khoảng cách từ điểm -4 đến điểm 0 trên trục số bằng ... đơn vị.",
-        "options": [],
+        "options": [
+          "4",
+          "8",
+          "-15",
+          "2"
+        ],
         "correct": "4",
         "explanation": "Giá trị tuyệt đối |-4| = 4."
       },
       {
         "id": "t6_c3_q17",
-        "type": "fill_blank",
+        "type": "mcq",
         "text": "Kết quả của phép tính 12 - (-8) = ...",
-        "options": [],
+        "options": [
+          "20",
+          "tự nhiên",
+          "phân số",
+          "vô tỉ"
+        ],
         "correct": "20",
         "explanation": "12 + 8 = 20."
       },
@@ -666,9 +725,14 @@ export const QUIZ_DATA = [
       },
       {
         "id": "v6_c1_q3",
-        "type": "fill_blank",
+        "type": "mcq",
         "text": "Tác giả của tác phẩm \"Dế Mèn phiêu lưu kí\" là nhà văn...",
-        "options": [],
+        "options": [
+          "Tô Hoài",
+          "Nam Cao",
+          "Thạch Lam",
+          "Vũ Trọng Phụng"
+        ],
         "correct": "Tô Hoài",
         "explanation": "Tô Hoài là tác giả."
       },
@@ -711,9 +775,14 @@ export const QUIZ_DATA = [
       },
       {
         "id": "v6_c1_q7",
-        "type": "fill_blank",
+        "type": "mcq",
         "text": "Tác phẩm 'Bài học đường đời đầu tiên' được trích từ kiệt tác ... của nhà văn Tô Hoài.",
-        "options": [],
+        "options": [
+          "Dế Mèn phiêu lưu ký",
+          "Đất rừng phương Nam",
+          "Búp sen xanh",
+          "Góc sân và khoảng trời"
+        ],
         "correct": "Dế Mèn phiêu lưu ký",
         "explanation": "Trích từ truyện Dế Mèn phiêu lưu ký."
       },
@@ -804,17 +873,27 @@ export const QUIZ_DATA = [
       },
       {
         "id": "v6_c1_q16",
-        "type": "fill_blank",
+        "type": "mcq",
         "text": "Thành ngữ 'Ếch ngồi đáy ...' phê phán những kẻ hiểu biết hạn hẹp nhưng lại huênh hoang tự đắc.",
-        "options": [],
+        "options": [
+          "giếng",
+          "ao",
+          "hồ",
+          "sông"
+        ],
         "correct": "giếng",
         "explanation": "Ếch ngồi đáy giếng."
       },
       {
         "id": "v6_c1_q17",
-        "type": "fill_blank",
+        "type": "mcq",
         "text": "Bộ phận chủ ngữ và vị ngữ là hai thành phần ... của câu đơn.",
-        "options": [],
+        "options": [
+          "chính",
+          "phụ",
+          "biệt lập",
+          "khởi ngữ"
+        ],
         "correct": "chính",
         "explanation": "Thành phần chính của câu."
       },
@@ -877,9 +956,14 @@ export const QUIZ_DATA = [
       },
       {
         "id": "v6_c2_q3",
-        "type": "fill_blank",
+        "type": "mcq",
         "text": "Trong bài thơ \"Mây và sóng\", em bé đã từ chối lời rủ rê của những người trên mây và trong sóng để ở nhà với...",
-        "options": [],
+        "options": [
+          "mẹ",
+          "bà",
+          "bố",
+          "chị"
+        ],
         "correct": "mẹ",
         "explanation": "Em bé luôn hướng về mẹ, tình mẫu tử chiến thắng mọi cám dỗ."
       },
@@ -922,9 +1006,14 @@ export const QUIZ_DATA = [
       },
       {
         "id": "v6_c2_q7",
-        "type": "fill_blank",
+        "type": "mcq",
         "text": "Bài thơ 'Chuyện cổ tích về loài người' của nhà thơ ... lý giải nguồn gốc tình yêu thương gia đình.",
-        "options": [],
+        "options": [
+          "Xuân Quỳnh",
+          "Lâm Thị Mỹ Dạ",
+          "Huy Cận",
+          "Trần Đăng Khoa"
+        ],
         "correct": "Xuân Quỳnh",
         "explanation": "Tác giả là nhà thơ Xuân Quỳnh."
       },
@@ -1015,17 +1104,27 @@ export const QUIZ_DATA = [
       },
       {
         "id": "v6_c2_q16",
-        "type": "fill_blank",
+        "type": "mcq",
         "text": "Biện pháp tu từ gọi tên sự vật, hiện tượng này bằng tên sự vật, hiện tượng khác có nét tương đồng gọi là ...",
-        "options": [],
+        "options": [
+          "ẩn dụ",
+          "hoán dụ",
+          "so sánh",
+          "nhân hóa"
+        ],
         "correct": "ẩn dụ",
         "explanation": "Biện pháp ẩn dụ."
       },
       {
         "id": "v6_c2_q17",
-        "type": "fill_blank",
+        "type": "mcq",
         "text": "Hoàn thiện câu tục ngữ: 'Công cha như núi Thái Sơn / Nghĩa mẹ như nước trong ... chảy ra.'",
-        "options": [],
+        "options": [
+          "nguồn",
+          "suối",
+          "sông",
+          "biển"
+        ],
         "correct": "nguồn",
         "explanation": "Ca dao về công ơn cha mẹ."
       },
@@ -1088,9 +1187,14 @@ export const QUIZ_DATA = [
       },
       {
         "id": "v6_c3_q3",
-        "type": "fill_blank",
+        "type": "mcq",
         "text": "Lần quẹt diêm cuối cùng, cô bé bán diêm đã nhìn thấy ai?",
-        "options": [],
+        "options": [
+          "bà nội",
+          "mẹ",
+          "ông già Noel",
+          "thiên thần"
+        ],
         "correct": "bà nội",
         "explanation": "Hình ảnh người bà hiền từ hiện ra trong lần quẹt diêm cuối."
       },
@@ -1133,9 +1237,14 @@ export const QUIZ_DATA = [
       },
       {
         "id": "v6_c3_q7",
-        "type": "fill_blank",
+        "type": "mcq",
         "text": "Nhân vật người anh hùng làng Gióng gắn liền với truyền thuyết đánh đuổi giặc ... xâm lược.",
-        "options": [],
+        "options": [
+          "Ân",
+          "Minh",
+          "Thanh",
+          "Nguyên - Mông"
+        ],
         "correct": "Ân",
         "explanation": "Thánh Gióng đánh giặc Ân."
       },
@@ -1226,17 +1335,27 @@ export const QUIZ_DATA = [
       },
       {
         "id": "v6_c3_q16",
-        "type": "fill_blank",
+        "type": "mcq",
         "text": "Địa danh núi ... gắn liền với nơi ngự trị của thần Sơn Tinh (Chúa sơn lâm).",
-        "options": [],
+        "options": [
+          "Ba Vì",
+          "Tam Đảo",
+          "Hoàng Liên Sơn",
+          "Yên Tử"
+        ],
         "correct": "Ba Vì",
         "explanation": "Núi Tản Viên (Ba Vì)."
       },
       {
         "id": "v6_c3_q17",
-        "type": "fill_blank",
+        "type": "mcq",
         "text": "Chiếc đàn thần của Thạch Sanh gảy lên tiếng đàn giải nỗi oan và làm quân 18 nước chư hầu bủn rủn chân tay gọi là tiếng đàn ...",
-        "options": [],
+        "options": [
+          "công lí",
+          "tình yêu",
+          "hòa bình",
+          "tự do"
+        ],
         "correct": "công lí",
         "explanation": "Tiếng đàn công lí và hòa bình."
       },
@@ -1299,9 +1418,14 @@ export const QUIZ_DATA = [
       },
       {
         "id": "t7_c1_q3",
-        "type": "fill_blank",
+        "type": "mcq",
         "text": "Số đối của -3/4 là...",
-        "options": [],
+        "options": [
+          "3/4",
+          "1/4",
+          "4/3",
+          "1/2"
+        ],
         "correct": "3/4",
         "explanation": "Số đối của a/b là -a/b."
       },
@@ -1344,9 +1468,14 @@ export const QUIZ_DATA = [
       },
       {
         "id": "t7_c1_q7",
-        "type": "fill_blank",
+        "type": "mcq",
         "text": "Kết quả của phép tính (-1/2)^2 dưới dạng phân số tối giản là...",
-        "options": [],
+        "options": [
+          "1/4",
+          "0.2",
+          "0.25",
+          "0.75"
+        ],
         "correct": "1/4",
         "explanation": "(-1/2) * (-1/2) = 1/4."
       },
@@ -1437,17 +1566,27 @@ export const QUIZ_DATA = [
       },
       {
         "id": "t7_c1_q16",
-        "type": "fill_blank",
+        "type": "mcq",
         "text": "Tập hợp các số hữu tỉ được kí hiệu bằng chữ cái in hoa...",
-        "options": [],
+        "options": [
+          "Q",
+          "N",
+          "Z",
+          "R"
+        ],
         "correct": "Q",
         "explanation": "Kí hiệu Q."
       },
       {
         "id": "t7_c1_q17",
-        "type": "fill_blank",
+        "type": "mcq",
         "text": "Kết quả của phép tính (-2/5) + 3/5 dưới dạng phân số tối giản là...",
-        "options": [],
+        "options": [
+          "1/5",
+          "0.75",
+          "1.75",
+          "-1.75"
+        ],
         "correct": "1/5",
         "explanation": "(-2 + 3)/5 = 1/5."
       },
@@ -1510,9 +1649,14 @@ export const QUIZ_DATA = [
       },
       {
         "id": "t7_c2_q3",
-        "type": "fill_blank",
+        "type": "mcq",
         "text": "Giá trị tuyệt đối của -15 là...",
-        "options": [],
+        "options": [
+          "15",
+          "-5",
+          "25",
+          "10"
+        ],
         "correct": "15",
         "explanation": "Giá trị tuyệt đối của một số luôn không âm."
       },
@@ -1555,9 +1699,14 @@ export const QUIZ_DATA = [
       },
       {
         "id": "t7_c2_q7",
-        "type": "fill_blank",
+        "type": "mcq",
         "text": "Số Pi (π ≈ 3,14159...) là một số vô tỉ có biểu diễn dưới dạng số thập phân vô hạn...",
-        "options": [],
+        "options": [
+          "không tuần hoàn",
+          "-4",
+          "8",
+          "16"
+        ],
         "correct": "không tuần hoàn",
         "explanation": "Định nghĩa số vô tỉ."
       },
@@ -1648,17 +1797,27 @@ export const QUIZ_DATA = [
       },
       {
         "id": "t7_c2_q16",
-        "type": "fill_blank",
+        "type": "mcq",
         "text": "Kí hiệu tập hợp số thực là chữ cái...",
-        "options": [],
+        "options": [
+          "R",
+          "Q",
+          "Z",
+          "N"
+        ],
         "correct": "R",
         "explanation": "Kí hiệu R (Real numbers)."
       },
       {
         "id": "t7_c2_q17",
-        "type": "fill_blank",
+        "type": "mcq",
         "text": "Nếu x^2 = 49 (với x > 0) thì x = ...",
-        "options": [],
+        "options": [
+          "7",
+          "4",
+          "5",
+          "4.4"
+        ],
         "correct": "7",
         "explanation": "7^2 = 49."
       },
@@ -1721,9 +1880,14 @@ export const QUIZ_DATA = [
       },
       {
         "id": "t7_c3_q3",
-        "type": "fill_blank",
+        "type": "mcq",
         "text": "Qua một điểm ở ngoài một đường thẳng, chỉ có ... đường thẳng song song với đường thẳng đó.",
-        "options": [],
+        "options": [
+          "1",
+          "90",
+          "360",
+          "120"
+        ],
         "correct": "1",
         "explanation": "Tiên đề Ơ-clit."
       },
@@ -1766,9 +1930,14 @@ export const QUIZ_DATA = [
       },
       {
         "id": "t7_c3_q7",
-        "type": "fill_blank",
+        "type": "mcq",
         "text": "Nếu một đường thẳng cắt hai đường thẳng song song thì hai góc so le trong...",
-        "options": [],
+        "options": [
+          "bằng nhau",
+          "45",
+          "90",
+          "180"
+        ],
         "correct": "bằng nhau",
         "explanation": "Tính chất hai đường thẳng song song."
       },
@@ -1859,17 +2028,27 @@ export const QUIZ_DATA = [
       },
       {
         "id": "t7_c3_q16",
-        "type": "fill_blank",
+        "type": "mcq",
         "text": "Hai góc có tổng số đo bằng 90 độ được gọi là hai góc...",
-        "options": [],
+        "options": [
+          "bằng nhau",
+          "bù nhau",
+          "phụ nhau",
+          "kề nhau"
+        ],
         "correct": "phụ nhau",
         "explanation": "Định nghĩa hai góc phụ nhau."
       },
       {
         "id": "t7_c3_q17",
-        "type": "fill_blank",
+        "type": "mcq",
         "text": "Qua một điểm ở ngoài một đường thẳng, có ... đường thẳng song song với đường thẳng đó.",
-        "options": [],
+        "options": [
+          "duy nhất một",
+          "cắt nhau",
+          "vuông góc",
+          "trùng nhau"
+        ],
         "correct": "duy nhất một",
         "explanation": "Tiên đề Euclid về đường thẳng song song."
       },
@@ -1932,9 +2111,14 @@ export const QUIZ_DATA = [
       },
       {
         "id": "v7_c1_q3",
-        "type": "fill_blank",
+        "type": "mcq",
         "text": "Mên và Mon lo lắng cho bầy chim chìa vôi non vì trời đang mưa và nước sông đang...",
-        "options": [],
+        "options": [
+          "dâng lên",
+          "rút xuống",
+          "đóng băng",
+          "chảy xiết"
+        ],
         "correct": "dâng lên",
         "explanation": "Nước sông dâng cao đe dọa tổ chim."
       },
@@ -1977,9 +2161,14 @@ export const QUIZ_DATA = [
       },
       {
         "id": "v7_c1_q7",
-        "type": "fill_blank",
+        "type": "mcq",
         "text": "Văn bản 'Bầy chim chìa vôi' là truyện ngắn đặc sắc của nhà văn ...",
-        "options": [],
+        "options": [
+          "Nguyễn Quang Thiều",
+          "Đoàn Giỏi",
+          "Nguyễn Nhật Ánh",
+          "Trần Đăng Khoa"
+        ],
         "correct": "Nguyễn Quang Thiều",
         "explanation": "Tác giả Nguyễn Quang Thiều."
       },
@@ -2070,17 +2259,27 @@ export const QUIZ_DATA = [
       },
       {
         "id": "v7_c1_q16",
-        "type": "fill_blank",
+        "type": "mcq",
         "text": "Thiên nhiên rừng tràm ... trong Đất rừng phương Nam hiện lên hoang sơ, trù phú và tràn đầy sức sống.",
-        "options": [],
+        "options": [
+          "U Minh",
+          "Cúc Phương",
+          "Nam Cát Tiên",
+          "Bạch Mã"
+        ],
         "correct": "U Minh",
         "explanation": "Rừng tràm U Minh."
       },
       {
         "id": "v7_c1_q17",
-        "type": "fill_blank",
+        "type": "mcq",
         "text": "Thành ngữ 'Non xanh nước ...' miêu tả cảnh đẹp thiên nhiên sông núi thanh bình.",
-        "options": [],
+        "options": [
+          "biếc",
+          "trong",
+          "thẳm",
+          "ngát"
+        ],
         "correct": "biếc",
         "explanation": "Non xanh nước biếc."
       },
@@ -2143,9 +2342,14 @@ export const QUIZ_DATA = [
       },
       {
         "id": "v7_c2_q3",
-        "type": "fill_blank",
+        "type": "mcq",
         "text": "Trong bài thơ \"Gặp lá cơm nếp\", người lính nhớ về ai khi ngửi thấy mùi xôi?",
-        "options": [],
+        "options": [
+          "mẹ",
+          "bà",
+          "vợ",
+          "con"
+        ],
         "correct": "mẹ",
         "explanation": "Mùi xôi gợi nhớ người mẹ hiền."
       },
@@ -2188,9 +2392,14 @@ export const QUIZ_DATA = [
       },
       {
         "id": "v7_c2_q7",
-        "type": "fill_blank",
+        "type": "mcq",
         "text": "Bài thơ 'Đồng dao mùa xuân' của Nguyễn Khoa Điềm viết về hình ảnh người lính ...",
-        "options": [],
+        "options": [
+          "Cụ Hồ",
+          "Giải phóng quân",
+          "Vệ quốc quân",
+          "Liệt sĩ"
+        ],
         "correct": "Cụ Hồ",
         "explanation": "Hình ảnh người lính anh dũng thời kỳ kháng chiến chống Mỹ."
       },
@@ -2281,17 +2490,27 @@ export const QUIZ_DATA = [
       },
       {
         "id": "v7_c2_q16",
-        "type": "fill_blank",
+        "type": "mcq",
         "text": "Mùi vị lá nếp thơm nồng trong bài thơ 'Gặp lá cơm nếp' gắn liền với hương vị của đất nước và tình yêu người ...",
-        "options": [],
+        "options": [
+          "mẹ",
+          "bà",
+          "chị",
+          "cha"
+        ],
         "correct": "mẹ",
         "explanation": "Tình mẹ ấm áp nấu xôi nếp."
       },
       {
         "id": "v7_c2_q17",
-        "type": "fill_blank",
+        "type": "mcq",
         "text": "Biện pháp tu từ nói quá còn được gọi là biện pháp khoa ...",
-        "options": [],
+        "options": [
+          "trương",
+          "đại",
+          "ngôn",
+          "văn"
+        ],
         "correct": "trương",
         "explanation": "Khoa trương, phóng đại sự thật có dụng ý nghệ thuật."
       },
@@ -2354,9 +2573,14 @@ export const QUIZ_DATA = [
       },
       {
         "id": "v7_c3_q3",
-        "type": "fill_blank",
+        "type": "mcq",
         "text": "Cốm thường được ăn kèm với loại quả nào trong dịp thu về?",
-        "options": [],
+        "options": [
+          "hồng",
+          "chuối",
+          "bưởi",
+          "ổi"
+        ],
         "correct": "hồng",
         "explanation": "Cốm vòng ăn với hồng đỏ là sự kết hợp tinh tế."
       },
@@ -2399,9 +2623,14 @@ export const QUIZ_DATA = [
       },
       {
         "id": "v7_c3_q7",
-        "type": "fill_blank",
+        "type": "mcq",
         "text": "Hoàn thiện câu tục ngữ: 'Uống nước nhớ ...'",
-        "options": [],
+        "options": [
+          "nguồn",
+          "suối",
+          "người trồng cây",
+          "cội"
+        ],
         "correct": "nguồn",
         "explanation": "Uống nước nhớ nguồn."
       },
@@ -2492,17 +2721,27 @@ export const QUIZ_DATA = [
       },
       {
         "id": "v7_c3_q16",
-        "type": "fill_blank",
+        "type": "mcq",
         "text": "Hoàn thiện câu tục ngữ: 'Học thầy không tày học ...'",
-        "options": [],
+        "options": [
+          "bạn",
+          "thầy",
+          "sách",
+          "đời"
+        ],
         "correct": "bạn",
         "explanation": "Đề cao việc học hỏi từ bạn bè xung quanh."
       },
       {
         "id": "v7_c3_q17",
-        "type": "fill_blank",
+        "type": "mcq",
         "text": "Câu tục ngữ 'Đói cho sạch, rách cho ...' khuyên răn con người giữ gìn nhân phẩm trong sạch dù hoàn cảnh khốn khó.",
-        "options": [],
+        "options": [
+          "thơm",
+          "sạch",
+          "trong",
+          "lành"
+        ],
         "correct": "thơm",
         "explanation": "Đói cho sạch, rách cho thơm."
       },
@@ -2565,9 +2804,14 @@ export const QUIZ_DATA = [
       },
       {
         "id": "t8_c1_q3",
-        "type": "fill_blank",
+        "type": "mcq",
         "text": "Kết quả của phép nhân đơn thức 2x với đa thức (x - 3) là...",
-        "options": [],
+        "options": [
+          "2x^2 - 6x",
+          "2",
+          "3",
+          "5"
+        ],
         "correct": "2x^2 - 6x",
         "explanation": "2x(x) - 2x(3) = 2x^2 - 6x."
       },
@@ -2610,9 +2854,14 @@ export const QUIZ_DATA = [
       },
       {
         "id": "t8_c1_q7",
-        "type": "fill_blank",
+        "type": "mcq",
         "text": "Đơn thức 3x^2y^3 có bậc bằng...",
-        "options": [],
+        "options": [
+          "5",
+          "2",
+          "3",
+          "6"
+        ],
         "correct": "5",
         "explanation": "Bậc = 2 + 3 = 5."
       },
@@ -2703,17 +2952,27 @@ export const QUIZ_DATA = [
       },
       {
         "id": "t8_c1_q16",
-        "type": "fill_blank",
+        "type": "mcq",
         "text": "Đa thức một biến thu gọn được sắp xếp theo lũy thừa ... hoặc tăng dần của biến.",
-        "options": [],
+        "options": [
+          "giảm dần",
+          "5xy",
+          "6xy",
+          "8xy"
+        ],
         "correct": "giảm dần",
         "explanation": "Cách sắp xếp đa thức."
       },
       {
         "id": "t8_c1_q17",
-        "type": "fill_blank",
+        "type": "mcq",
         "text": "Kết quả phép chia 6x^3y^2 cho 2xy bằng ...",
-        "options": [],
+        "options": [
+          "3x^2y",
+          "đồng bậc",
+          "bằng nhau",
+          "đối nhau"
+        ],
         "correct": "3x^2y",
         "explanation": "6/2 = 3, x^3/x = x^2, y^2/y = y."
       },
@@ -2776,9 +3035,14 @@ export const QUIZ_DATA = [
       },
       {
         "id": "t8_c2_q3",
-        "type": "fill_blank",
+        "type": "mcq",
         "text": "Điền vào chỗ trống: (x - y)^3 = x^3 - 3x^2y + 3xy^2 - ...",
-        "options": [],
+        "options": [
+          "y^3",
+          "y^2",
+          "3y^3",
+          "-y^3"
+        ],
         "correct": "y^3",
         "explanation": "Lập phương của một hiệu."
       },
@@ -2821,9 +3085,14 @@ export const QUIZ_DATA = [
       },
       {
         "id": "t8_c2_q7",
-        "type": "fill_blank",
+        "type": "mcq",
         "text": "Khai triển hiệu hai bình phương: x^2 - 9 = (x - 3)(...)",
-        "options": [],
+        "options": [
+          "x + 3",
+          "x - 3",
+          "x + 9",
+          "x - 9"
+        ],
         "correct": "x + 3",
         "explanation": "a^2 - b^2 = (a - b)(a + b)."
       },
@@ -2914,17 +3183,27 @@ export const QUIZ_DATA = [
       },
       {
         "id": "t8_c2_q16",
-        "type": "fill_blank",
+        "type": "mcq",
         "text": "Phân tích đa thức thành nhân tử: 2x + 4 = 2(...)",
-        "options": [],
+        "options": [
+          "x + 2",
+          "x + 4",
+          "2x + 1",
+          "x - 2"
+        ],
         "correct": "x + 2",
         "explanation": "Đặt nhân tử chung là 2."
       },
       {
         "id": "t8_c2_q17",
-        "type": "fill_blank",
+        "type": "mcq",
         "text": "Khai triển lập phương của một tổng: (a + b)^3 = a^3 + 3a^2b + 3ab^2 + ...",
-        "options": [],
+        "options": [
+          "b^3",
+          "b^2",
+          "3b^3",
+          "a^3"
+        ],
         "correct": "b^3",
         "explanation": "Hằng đẳng thức bậc 3."
       },
@@ -2987,9 +3266,14 @@ export const QUIZ_DATA = [
       },
       {
         "id": "t8_c3_q3",
-        "type": "fill_blank",
+        "type": "mcq",
         "text": "Hình bình hành có hai đường chéo bằng nhau là hình...",
-        "options": [],
+        "options": [
+          "chữ nhật",
+          "thoi",
+          "vuông",
+          "thang cân"
+        ],
         "correct": "chữ nhật",
         "explanation": "Dấu hiệu nhận biết hình chữ nhật."
       },
@@ -3032,9 +3316,14 @@ export const QUIZ_DATA = [
       },
       {
         "id": "t8_c3_q7",
-        "type": "fill_blank",
+        "type": "mcq",
         "text": "Tứ giác có 4 góc vuông được gọi là hình...",
-        "options": [],
+        "options": [
+          "chữ nhật",
+          "thoi",
+          "vuông",
+          "thang"
+        ],
         "correct": "chữ nhật",
         "explanation": "Định nghĩa hình chữ nhật."
       },
@@ -3125,17 +3414,27 @@ export const QUIZ_DATA = [
       },
       {
         "id": "t8_c3_q16",
-        "type": "fill_blank",
+        "type": "mcq",
         "text": "Tứ giác có các cạnh đối song song gọi là hình...",
-        "options": [],
+        "options": [
+          "bình hành",
+          "thoi",
+          "chữ nhật",
+          "thang"
+        ],
         "correct": "bình hành",
         "explanation": "Định nghĩa hình bình hành."
       },
       {
         "id": "t8_c3_q17",
-        "type": "fill_blank",
+        "type": "mcq",
         "text": "Chu vi của hình vuông có cạnh a là ... x a.",
-        "options": [],
+        "options": [
+          "4",
+          "2",
+          "a",
+          "a^2"
+        ],
         "correct": "4",
         "explanation": "Chu vi = 4a."
       },
@@ -3198,9 +3497,14 @@ export const QUIZ_DATA = [
       },
       {
         "id": "v8_c1_q3",
-        "type": "fill_blank",
+        "type": "mcq",
         "text": "Trần Quốc Toản vì tức giận không được dự bàn việc nước đã bóp nát quả... trong tay.",
-        "options": [],
+        "options": [
+          "cam",
+          "quýt",
+          "bưởi",
+          "chanh"
+        ],
         "correct": "cam",
         "explanation": "Chi tiết bóp nát quả cam thể hiện lòng căm thù giặc và chí khí của Trần Quốc Toản."
       },
@@ -3243,9 +3547,14 @@ export const QUIZ_DATA = [
       },
       {
         "id": "v8_c1_q7",
-        "type": "fill_blank",
+        "type": "mcq",
         "text": "Tác giả của áng thiên cổ hùng văn 'Hịch tướng sĩ' là Tiết chế Quốc công ...",
-        "options": [],
+        "options": [
+          "Trần Quốc Tuấn",
+          "Trần Hưng Đạo",
+          "Lý Thường Kiệt",
+          "Nguyễn Trãi"
+        ],
         "correct": "Trần Quốc Tuấn",
         "explanation": "Hưng Đạo Đại Vương Trần Quốc Tuấn."
       },
@@ -3336,17 +3645,27 @@ export const QUIZ_DATA = [
       },
       {
         "id": "v8_c1_q16",
-        "type": "fill_blank",
+        "type": "mcq",
         "text": "Thành Đại La được Lý Thái Tổ đánh giá là nơi 'rồng cuộn hổ ...', trung tâm của trời đất.",
-        "options": [],
+        "options": [
+          "ngồi",
+          "quỳ",
+          "bay",
+          "chầu"
+        ],
         "correct": "ngồi",
         "explanation": "Địa thế rồng cuộn hổ ngồi đắc địa."
       },
       {
         "id": "v8_c1_q17",
-        "type": "fill_blank",
+        "type": "mcq",
         "text": "Vị anh hùng thiếu niên bóp nát quả cam vì không được dự bàn việc quân là ...",
-        "options": [],
+        "options": [
+          "Trần Quốc Toản",
+          "Trần Bình Trọng",
+          "Lý Thường Kiệt",
+          "Quang Trung"
+        ],
         "correct": "Trần Quốc Toản",
         "explanation": "Hoài Văn Hầu Trần Quốc Toản."
       },
@@ -3409,9 +3728,14 @@ export const QUIZ_DATA = [
       },
       {
         "id": "v8_c2_q3",
-        "type": "fill_blank",
+        "type": "mcq",
         "text": "Ao thu lạnh lẽo nước trong veo / Một chiếc thuyền câu bé ...",
-        "options": [],
+        "options": [
+          "tẻo teo",
+          "nhỏ nhoi",
+          "lững lờ",
+          "trôi nhanh"
+        ],
         "correct": "tẻo teo",
         "explanation": "Câu thơ trong bài Thu điếu."
       },
@@ -3454,9 +3778,14 @@ export const QUIZ_DATA = [
       },
       {
         "id": "v8_c2_q7",
-        "type": "fill_blank",
+        "type": "mcq",
         "text": "Đại thi hào dân tộc, Danh nhân văn hóa thế giới tác giả Truyện Kiều là ...",
-        "options": [],
+        "options": [
+          "Nguyễn Du",
+          "Nguyễn Trãi",
+          "Hồ Xuân Hương",
+          "Đoàn Thị Điểm"
+        ],
         "correct": "Nguyễn Du",
         "explanation": "Nguyễn Du."
       },
@@ -3547,17 +3876,27 @@ export const QUIZ_DATA = [
       },
       {
         "id": "v8_c2_q16",
-        "type": "fill_blank",
+        "type": "mcq",
         "text": "Câu thơ: 'Đầu lòng hai ả tố nga / Thúy Kiều là chị em là ...'",
-        "options": [],
+        "options": [
+          "Thúy Vân",
+          "Thúy Liễu",
+          "Kim Trọng",
+          "Vương Quan"
+        ],
         "correct": "Thúy Vân",
         "explanation": "Mở đầu đoạn trích Chị em Thúy Kiều."
       },
       {
         "id": "v8_c2_q17",
-        "type": "fill_blank",
+        "type": "mcq",
         "text": "Bản lĩnh tài hoa và nhân cách cao đẹp của người anh hùng Từ Hải được ví như cánh chim ... giữa trời lộng gió.",
-        "options": [],
+        "options": [
+          "bằng",
+          "ưng",
+          "hạc",
+          "phượng"
+        ],
         "correct": "bằng",
         "explanation": "Cánh chim bằng tung hoành bốn bể."
       },
@@ -3620,9 +3959,14 @@ export const QUIZ_DATA = [
       },
       {
         "id": "v8_c3_q3",
-        "type": "fill_blank",
+        "type": "mcq",
         "text": "Thể văn \"hịch\" thường được vua chúa, tướng lĩnh dùng để... quân sĩ.",
-        "options": [],
+        "options": [
+          "kêu gọi",
+          "răn đe",
+          "chúc mừng",
+          "phê phán"
+        ],
         "correct": "kêu gọi",
         "explanation": "Hịch dùng để khích lệ, kêu gọi, thuyết phục."
       },
@@ -3665,9 +4009,14 @@ export const QUIZ_DATA = [
       },
       {
         "id": "v8_c3_q7",
-        "type": "fill_blank",
+        "type": "mcq",
         "text": "Bài thơ 'Nam quốc sơn hà' tương truyền do danh tướng ... đọc trên phòng tuyến sông Như Nguyệt.",
-        "options": [],
+        "options": [
+          "Lý Thường Kiệt",
+          "Trần Hưng Đạo",
+          "Nguyễn Trãi",
+          "Quang Trung"
+        ],
         "correct": "Lý Thường Kiệt",
         "explanation": "Danh tướng Lý Thường Kiệt."
       },
@@ -3758,17 +4107,27 @@ export const QUIZ_DATA = [
       },
       {
         "id": "v8_c3_q16",
-        "type": "fill_blank",
+        "type": "mcq",
         "text": "Tác phẩm 'Bình Ngô đại cáo' được tôn vinh là bản ... thứ hai của dân tộc Việt Nam.",
-        "options": [],
+        "options": [
+          "Tuyên ngôn Độc lập",
+          "Bản hùng ca",
+          "Chiếu dời đô",
+          "Bản cáo trạng"
+        ],
         "correct": "Tuyên ngôn Độc lập",
         "explanation": "Bản Tuyên ngôn Độc lập thứ hai sau Nam quốc sơn hà."
       },
       {
         "id": "v8_c3_q17",
-        "type": "fill_blank",
+        "type": "mcq",
         "text": "Thần khí của bài cáo thể hiện sức mạnh: 'Lấy đại nghĩa để thắng hung tàn / Lấy chí ... để thay cường bạo.'",
-        "options": [],
+        "options": [
+          "nhân",
+          "nghĩa",
+          "dũng",
+          "trí"
+        ],
         "correct": "nhân",
         "explanation": "Lấy chí nhân để thay cường bạo."
       },
@@ -3831,9 +4190,14 @@ export const QUIZ_DATA = [
       },
       {
         "id": "t9_c1_q3",
-        "type": "fill_blank",
+        "type": "mcq",
         "text": "Cặp số (1; 2) là một nghiệm của phương trình 2x + y = ...",
-        "options": [],
+        "options": [
+          "4",
+          "2",
+          "3",
+          "5"
+        ],
         "correct": "4",
         "explanation": "Thay x=1, y=2 vào: 2(1) + 2 = 4."
       },
@@ -3876,9 +4240,14 @@ export const QUIZ_DATA = [
       },
       {
         "id": "t9_c1_q7",
-        "type": "fill_blank",
+        "type": "mcq",
         "text": "Hai phương pháp đại số cơ bản nhất để giải hệ phương trình bậc nhất hai ẩn là phương pháp thế và phương pháp cộng...",
-        "options": [],
+        "options": [
+          "đại số",
+          "hình học",
+          "ma trận",
+          "đồ thị"
+        ],
         "correct": "đại số",
         "explanation": "Phương pháp cộng đại số."
       },
@@ -3969,17 +4338,27 @@ export const QUIZ_DATA = [
       },
       {
         "id": "t9_c1_q16",
-        "type": "fill_blank",
+        "type": "mcq",
         "text": "Đồ thị của hàm số bậc nhất y = ax + b (a khác 0) là một đường...",
-        "options": [],
+        "options": [
+          "thẳng",
+          "cong",
+          "parabol",
+          "tròn"
+        ],
         "correct": "thẳng",
         "explanation": "Đồ thị là đường thẳng."
       },
       {
         "id": "t9_c1_q17",
-        "type": "fill_blank",
+        "type": "mcq",
         "text": "Hệ số góc của đường thẳng y = 3x - 5 là...",
-        "options": [],
+        "options": [
+          "3",
+          "-5",
+          "5",
+          "-3"
+        ],
         "correct": "3",
         "explanation": "Hệ số góc là a = 3."
       },
@@ -4042,9 +4421,14 @@ export const QUIZ_DATA = [
       },
       {
         "id": "t9_c2_q3",
-        "type": "fill_blank",
+        "type": "mcq",
         "text": "Nghiệm của bất phương trình 2x > 6 là x > ...",
-        "options": [],
+        "options": [
+          "3",
+          "2",
+          "6",
+          "4"
+        ],
         "correct": "3",
         "explanation": "Chia 2 vế cho 2 (số dương), ta được x > 3."
       },
@@ -4087,9 +4471,14 @@ export const QUIZ_DATA = [
       },
       {
         "id": "t9_c2_q7",
-        "type": "fill_blank",
+        "type": "mcq",
         "text": "Nghiệm của bất phương trình 2x > 6 là x > ...",
-        "options": [],
+        "options": [
+          "3",
+          "2",
+          "6",
+          "4"
+        ],
         "correct": "3",
         "explanation": "Chia cả hai vế cho 2: x > 3."
       },
@@ -4180,17 +4569,27 @@ export const QUIZ_DATA = [
       },
       {
         "id": "t9_c2_q16",
-        "type": "fill_blank",
+        "type": "mcq",
         "text": "Nếu Delta = 0 thì phương trình bậc hai có nghiệm...",
-        "options": [],
+        "options": [
+          "kép",
+          "phân biệt",
+          "vô nghiệm",
+          "dương"
+        ],
         "correct": "kép",
         "explanation": "Nghiệm kép x1 = x2 = -b/(2a)."
       },
       {
         "id": "t9_c2_q17",
-        "type": "fill_blank",
+        "type": "mcq",
         "text": "Tích hai nghiệm theo định lí Vi-ét là x1 * x2 = .../a",
-        "options": [],
+        "options": [
+          "c",
+          "-b",
+          "b",
+          "-c"
+        ],
         "correct": "c",
         "explanation": "x1 * x2 = c/a."
       },
@@ -4253,9 +4652,14 @@ export const QUIZ_DATA = [
       },
       {
         "id": "t9_c3_q3",
-        "type": "fill_blank",
+        "type": "mcq",
         "text": "Căn bậc ba của -8 là...",
-        "options": [],
+        "options": [
+          "-2",
+          "2",
+          "-4",
+          "4"
+        ],
         "correct": "-2",
         "explanation": "(-2)^3 = -8."
       },
@@ -4298,9 +4702,14 @@ export const QUIZ_DATA = [
       },
       {
         "id": "t9_c3_q7",
-        "type": "fill_blank",
+        "type": "mcq",
         "text": "Căn bậc ba của số -27 bằng...",
-        "options": [],
+        "options": [
+          "-3",
+          "3",
+          "-9",
+          "9"
+        ],
         "correct": "-3",
         "explanation": "(-3)^3 = -27."
       },
@@ -4391,17 +4800,27 @@ export const QUIZ_DATA = [
       },
       {
         "id": "t9_c3_q16",
-        "type": "fill_blank",
+        "type": "mcq",
         "text": "Biểu thức sqrt(2x - 4) xác định khi và chỉ khi x >= ...",
-        "options": [],
+        "options": [
+          "2",
+          "4",
+          "-2",
+          "0"
+        ],
         "correct": "2",
         "explanation": "2x - 4 >= 0 => x >= 2."
       },
       {
         "id": "t9_c3_q17",
-        "type": "fill_blank",
+        "type": "mcq",
         "text": "Khai phương một tích: sqrt(a * b) = sqrt(a) * sqrt(...) với a, b không âm.",
-        "options": [],
+        "options": [
+          "b",
+          "a",
+          "ab",
+          "b^2"
+        ],
         "correct": "b",
         "explanation": "Quy tắc khai phương một tích."
       },
@@ -4464,9 +4883,14 @@ export const QUIZ_DATA = [
       },
       {
         "id": "v9_c1_q3",
-        "type": "fill_blank",
+        "type": "mcq",
         "text": "Đầu súng trăng ...",
-        "options": [],
+        "options": [
+          "treo",
+          "soi",
+          "chiếu",
+          "lặn"
+        ],
         "correct": "treo",
         "explanation": "Hình ảnh thơ tuyệt đẹp ở cuối bài thơ Đồng chí."
       },
@@ -4509,9 +4933,14 @@ export const QUIZ_DATA = [
       },
       {
         "id": "v9_c1_q7",
-        "type": "fill_blank",
+        "type": "mcq",
         "text": "Bài thơ 'Bài thơ về tiểu đội xe không kính' là sáng tác tiêu biểu của nhà thơ ...",
-        "options": [],
+        "options": [
+          "Phạm Tiến Duật",
+          "Chính Hữu",
+          "Huy Cận",
+          "Quang Dũng"
+        ],
         "correct": "Phạm Tiến Duật",
         "explanation": "Nhà thơ Phạm Tiến Duật."
       },
@@ -4602,17 +5031,27 @@ export const QUIZ_DATA = [
       },
       {
         "id": "v9_c1_q16",
-        "type": "fill_blank",
+        "type": "mcq",
         "text": "Câu thơ thứ 7 đặc biệt chỉ có đúng hai chữ kết thúc khổ 1 bài thơ Đồng chí là: '...!'",
-        "options": [],
+        "options": [
+          "Đồng chí",
+          "Chiến sĩ",
+          "Người lính",
+          "Anh em"
+        ],
         "correct": "Đồng chí",
         "explanation": "Khép lại khổ 1 như một sự đúc kết thiêng liêng."
       },
       {
         "id": "v9_c1_q17",
-        "type": "fill_blank",
+        "type": "mcq",
         "text": "Khổ cuối bài thơ Đồng chí khép lại bằng một hình ảnh thơ lãng mạn tuyệt đẹp: 'Đầu súng trăng ...'",
-        "options": [],
+        "options": [
+          "treo",
+          "soi",
+          "chiếu",
+          "lặn"
+        ],
         "correct": "treo",
         "explanation": "Đầu súng trăng treo."
       },
@@ -4675,9 +5114,14 @@ export const QUIZ_DATA = [
       },
       {
         "id": "v9_c2_q3",
-        "type": "fill_blank",
+        "type": "mcq",
         "text": "Mặt trời xuống biển như hòn ...",
-        "options": [],
+        "options": [
+          "lửa",
+          "than",
+          "ngọc",
+          "vàng"
+        ],
         "correct": "lửa",
         "explanation": "Câu thơ mở đầu bài Đoàn thuyền đánh cá."
       },
@@ -4720,9 +5164,14 @@ export const QUIZ_DATA = [
       },
       {
         "id": "v9_c2_q7",
-        "type": "fill_blank",
+        "type": "mcq",
         "text": "Nhân vật chính trong truyện ngắn 'Làng' của nhà văn Kim Lân là ông ...",
-        "options": [],
+        "options": [
+          "Hai",
+          "Ba",
+          "Tư",
+          "Cần"
+        ],
         "correct": "Hai",
         "explanation": "Nhân vật ông Hai."
       },
@@ -4813,17 +5262,27 @@ export const QUIZ_DATA = [
       },
       {
         "id": "v9_c2_q16",
-        "type": "fill_blank",
+        "type": "mcq",
         "text": "Ước nguyện hòa nhập cống hiến âm thầm của nhà thơ Thanh Hải: 'Một mùa xuân nho nhỏ / Lặng lẽ dâng cho ...'",
-        "options": [],
+        "options": [
+          "đời",
+          "nước",
+          "người",
+          "quê"
+        ],
         "correct": "đời",
         "explanation": "Lặng lẽ dâng cho đời / Dù là tuổi hai mươi / Dù là khi tóc bạc."
       },
       {
         "id": "v9_c2_q17",
-        "type": "fill_blank",
+        "type": "mcq",
         "text": "Bài thơ 'Nói với con' của nhà thơ ... nhắn nhủ con giữ gìn cội nguồn văn hóa 'người đồng mình'.",
-        "options": [],
+        "options": [
+          "Y Phương",
+          "Hữu Thỉnh",
+          "Thanh Hải",
+          "Viễn Phương"
+        ],
         "correct": "Y Phương",
         "explanation": "Nhà thơ dân tộc Tày Y Phương."
       },
@@ -4886,9 +5345,14 @@ export const QUIZ_DATA = [
       },
       {
         "id": "v9_c3_q3",
-        "type": "fill_blank",
+        "type": "mcq",
         "text": "Mọc giữa dòng sông xanh / Một bông hoa ... biếc",
-        "options": [],
+        "options": [
+          "tím",
+          "đỏ",
+          "hồng",
+          "xanh"
+        ],
         "correct": "tím",
         "explanation": "Màu tím đặc trưng của xứ Huế."
       },
@@ -4931,9 +5395,14 @@ export const QUIZ_DATA = [
       },
       {
         "id": "v9_c3_q7",
-        "type": "fill_blank",
+        "type": "mcq",
         "text": "Nhân vật anh thanh niên trong 'Lặng lẽ Sa Pa' làm công tác khí tượng kiêm vật lí địa cầu trên đỉnh núi ... cao 2600m.",
-        "options": [],
+        "options": [
+          "Yên Sơn",
+          "Phan-xi-păng",
+          "Mẫu Sơn",
+          "Tam Đảo"
+        ],
         "correct": "Yên Sơn",
         "explanation": "Đỉnh Yên Sơn."
       },
@@ -5024,17 +5493,27 @@ export const QUIZ_DATA = [
       },
       {
         "id": "v9_c3_q16",
-        "type": "fill_blank",
+        "type": "mcq",
         "text": "Hình ảnh người vợ trong chiếc áo vá khâu tần tảo đại diện cho tình nghĩa vợ chồng son sắt và bến đỗ bình yên của cuộc đời mỗi con ...",
-        "options": [],
+        "options": [
+          "người",
+          "đời",
+          "nhà",
+          "dân"
+        ],
         "correct": "người",
         "explanation": "Gia đình và người vợ là bến đỗ bình yên nhất."
       },
       {
         "id": "v9_c3_q17",
-        "type": "fill_blank",
+        "type": "mcq",
         "text": "Hành động cuối cùng của Nhĩ giơ cánh tay gầy guộc vẫy ra hiệu như muốn hối thúc đứa con đừng bỏ lỡ chuyến ... cuối cùng qua sông.",
-        "options": [],
+        "options": [
+          "đò",
+          "tàu",
+          "xe",
+          "thuyền"
+        ],
         "correct": "đò",
         "explanation": "Chuyến đò duy nhất trong ngày nối đôi bờ."
       },
@@ -5086,9 +5565,14 @@ export const QUIZ_DATA = [
       },
       {
         "id": "q2",
-        "type": "fill_blank",
+        "type": "mcq",
         "text": "Students in my school often ______ football in the afternoon.",
-        "options": [],
+        "options": [
+          "play",
+          "plays",
+          "playing",
+          "played"
+        ],
         "correct": "play",
         "explanation": "We use 'play' with sports like football."
       },
@@ -5118,9 +5602,14 @@ export const QUIZ_DATA = [
       },
       {
         "id": "q5",
-        "type": "fill_blank",
+        "type": "mcq",
         "text": "A __________ is a place where we go to borrow books.",
-        "options": [],
+        "options": [
+          "library",
+          "canteen",
+          "gym",
+          "laboratory"
+        ],
         "correct": "library",
         "explanation": "Library is the place for borrowing books."
       },
@@ -5137,9 +5626,14 @@ export const QUIZ_DATA = [
       },
       {
         "id": "a6_c1_q7",
-        "type": "fill_blank",
+        "type": "mcq",
         "text": "Students usually wear a school ... when they go to school in Vietnam.",
-        "options": [],
+        "options": [
+          "uniform",
+          "jacket",
+          "hat",
+          "shoes"
+        ],
         "correct": "uniform",
         "explanation": "school uniform: đồng phục học sinh."
       },
@@ -5230,17 +5724,27 @@ export const QUIZ_DATA = [
       },
       {
         "id": "a6_c1_q16",
-        "type": "fill_blank",
+        "type": "mcq",
         "text": "Students eat lunch in the school ... during lunchtime.",
-        "options": [],
+        "options": [
+          "canteen",
+          "library",
+          "hall",
+          "garden"
+        ],
         "correct": "canteen",
         "explanation": "canteen / cafeteria: căn tin trường học."
       },
       {
         "id": "a6_c1_q17",
-        "type": "fill_blank",
+        "type": "mcq",
         "text": "Opposite of 'new' is ...",
-        "options": [],
+        "options": [
+          "old",
+          "young",
+          "modern",
+          "clean"
+        ],
         "correct": "old",
         "explanation": "old (cũ) trái nghĩa với new (mới)."
       },
@@ -5303,9 +5807,14 @@ export const QUIZ_DATA = [
       },
       {
         "id": "q3",
-        "type": "fill_blank",
+        "type": "mcq",
         "text": "Kính ______ quang học được dùng để quan sát các vật rất nhỏ.",
-        "options": [],
+        "options": [
+          "hiển vi",
+          "viễn vọng",
+          "lúp",
+          "râm"
+        ],
         "correct": "hiển vi",
         "explanation": "Kính hiển vi quang học giúp phóng to hình ảnh các vật thể nhỏ."
       },
@@ -5324,9 +5833,14 @@ export const QUIZ_DATA = [
       },
       {
         "id": "q5",
-        "type": "fill_blank",
+        "type": "mcq",
         "text": "Đơn vị đo độ dài hợp pháp của nước ta là ______.",
-        "options": [],
+        "options": [
+          "mét",
+          "gam",
+          "lít",
+          "giây"
+        ],
         "correct": "mét",
         "explanation": "Mét (m) là đơn vị đo độ dài tiêu chuẩn."
       },
@@ -5343,9 +5857,14 @@ export const QUIZ_DATA = [
       },
       {
         "id": "k6_c1_q7",
-        "type": "fill_blank",
+        "type": "mcq",
         "text": "Đơn vị đo khối lượng chính thức trong hệ đo lường quốc tế (SI) là ...",
-        "options": [],
+        "options": [
+          "kilôgam",
+          "gam",
+          "tấn",
+          "tạ"
+        ],
         "correct": "kilôgam",
         "explanation": "Kí hiệu kg (kilôgam)."
       },
@@ -5436,17 +5955,27 @@ export const QUIZ_DATA = [
       },
       {
         "id": "k6_c1_q16",
-        "type": "fill_blank",
+        "type": "mcq",
         "text": "Đơn vị đo độ dài cơ bản trong hệ SI là mét, kí hiệu là chữ cái ...",
-        "options": [],
+        "options": [
+          "m",
+          "km",
+          "cm",
+          "mm"
+        ],
         "correct": "m",
         "explanation": "Kí hiệu m."
       },
       {
         "id": "k6_c1_q17",
-        "type": "fill_blank",
+        "type": "mcq",
         "text": "Dụng cụ dùng để kẹp ống nghiệm khi đun nóng trên ngọn lửa đèn cồn là ... gỗ.",
-        "options": [],
+        "options": [
+          "kẹp",
+          "giá",
+          "bếp",
+          "đế"
+        ],
         "correct": "kẹp",
         "explanation": "Kẹp gỗ ống nghiệm."
       },
@@ -5509,9 +6038,14 @@ export const QUIZ_DATA = [
       },
       {
         "id": "q3",
-        "type": "fill_blank",
+        "type": "mcq",
         "text": "I think playing board games is ______ because I can play it with my friends.",
-        "options": [],
+        "options": [
+          "interesting",
+          "bored",
+          "expensive",
+          "difficult"
+        ],
         "correct": "interesting",
         "explanation": "Interesting fits the context of enjoying a game with friends."
       },
@@ -5530,9 +6064,14 @@ export const QUIZ_DATA = [
       },
       {
         "id": "q5",
-        "type": "fill_blank",
+        "type": "mcq",
         "text": "He usually ______ judo every weekend.",
-        "options": [],
+        "options": [
+          "does",
+          "plays",
+          "goes",
+          "takes"
+        ],
         "correct": "does",
         "explanation": "We use 'do' with judo, so third person singular is 'does'."
       },
@@ -5549,9 +6088,14 @@ export const QUIZ_DATA = [
       },
       {
         "id": "a7_c1_q7",
-        "type": "fill_blank",
+        "type": "mcq",
         "text": "He loves taking photos, so his hobby is ...",
-        "options": [],
+        "options": [
+          "photography",
+          "swimming",
+          "cooking",
+          "painting"
+        ],
         "correct": "photography",
         "explanation": "photography: nhiếp ảnh."
       },
@@ -5642,17 +6186,27 @@ export const QUIZ_DATA = [
       },
       {
         "id": "a7_c1_q16",
-        "type": "fill_blank",
+        "type": "mcq",
         "text": "She loves flowers, so her hobby is arranging ...",
-        "options": [],
+        "options": [
+          "flowers",
+          "books",
+          "stamps",
+          "coins"
+        ],
         "correct": "flowers",
         "explanation": "flower arranging: cắm hoa nghệ thuật."
       },
       {
         "id": "a7_c1_q17",
-        "type": "fill_blank",
+        "type": "mcq",
         "text": "I am fond ... listening to pop music in my free time.",
-        "options": [],
+        "options": [
+          "of",
+          "in",
+          "at",
+          "on"
+        ],
         "correct": "of",
         "explanation": "Cụm tính từ: be fond of."
       },
@@ -5715,9 +6269,14 @@ export const QUIZ_DATA = [
       },
       {
         "id": "q3",
-        "type": "fill_blank",
+        "type": "mcq",
         "text": "Trong nguyên tử, số lượng hạt proton luôn bằng số lượng hạt ______.",
-        "options": [],
+        "options": [
+          "electron",
+          "nơtron",
+          "ion",
+          "hạt nhân"
+        ],
         "correct": "electron",
         "explanation": "Nguyên tử trung hòa về điện nên số p bằng số e."
       },
@@ -5736,9 +6295,14 @@ export const QUIZ_DATA = [
       },
       {
         "id": "q5",
-        "type": "fill_blank",
+        "type": "mcq",
         "text": "Nguyên tố hóa học là tập hợp các nguyên tử cùng loại, có cùng số hạt ______ trong hạt nhân.",
-        "options": [],
+        "options": [
+          "proton",
+          "electron",
+          "nơtron",
+          "quang tử"
+        ],
         "correct": "proton",
         "explanation": "Nguyên tố hóa học được đặc trưng bởi số proton."
       },
@@ -5755,9 +6319,14 @@ export const QUIZ_DATA = [
       },
       {
         "id": "k7_c1_q7",
-        "type": "fill_blank",
+        "type": "mcq",
         "text": "Hạt mang điện tích âm quay xung quanh hạt nhân nguyên tử là hạt ...",
-        "options": [],
+        "options": [
+          "electron",
+          "proton",
+          "nơtron",
+          "hạt nhân"
+        ],
         "correct": "electron",
         "explanation": "Hạt electron (kí hiệu e)."
       },
@@ -5848,17 +6417,27 @@ export const QUIZ_DATA = [
       },
       {
         "id": "k7_c1_q16",
-        "type": "fill_blank",
+        "type": "mcq",
         "text": "Kí hiệu hóa học của nguyên tố Nhôm gồm hai chữ cái là ...",
-        "options": [],
+        "options": [
+          "Al",
+          "Fe",
+          "Cu",
+          "Ag"
+        ],
         "correct": "Al",
         "explanation": "Nhôm là Al (Aluminium)."
       },
       {
         "id": "k7_c1_q17",
-        "type": "fill_blank",
+        "type": "mcq",
         "text": "Số hạt mang điện trong nguyên tử gồm proton và ...",
-        "options": [],
+        "options": [
+          "electron",
+          "nơtron",
+          "ion",
+          "hạt nhân"
+        ],
         "correct": "electron",
         "explanation": "Proton (+) và Electron (-)."
       },
@@ -5921,9 +6500,14 @@ export const QUIZ_DATA = [
       },
       {
         "id": "q3",
-        "type": "fill_blank",
+        "type": "mcq",
         "text": "Many teenagers are addicted ______ social media.",
-        "options": [],
+        "options": [
+          "to",
+          "with",
+          "at",
+          "in"
+        ],
         "correct": "to",
         "explanation": "The adjective 'addicted' is followed by the preposition 'to'."
       },
@@ -5942,9 +6526,14 @@ export const QUIZ_DATA = [
       },
       {
         "id": "q5",
-        "type": "fill_blank",
+        "type": "mcq",
         "text": "Playing sports helps you keep ______ and healthy.",
-        "options": [],
+        "options": [
+          "fit",
+          "fat",
+          "sick",
+          "weak"
+        ],
         "correct": "fit",
         "explanation": "'Keep fit' is a common collocation."
       },
@@ -5961,9 +6550,14 @@ export const QUIZ_DATA = [
       },
       {
         "id": "a8_c1_q7",
-        "type": "fill_blank",
+        "type": "mcq",
         "text": "DIY stands for 'Do It ...'",
-        "options": [],
+        "options": [
+          "Yourself",
+          "You",
+          "Yours",
+          "Yourselves"
+        ],
         "correct": "Yourself",
         "explanation": "Do It Yourself (tự tay làm lấy)."
       },
@@ -6054,17 +6648,27 @@ export const QUIZ_DATA = [
       },
       {
         "id": "a8_c1_q16",
-        "type": "fill_blank",
+        "type": "mcq",
         "text": "She is keen ... learning how to play chess with her grandfather.",
-        "options": [],
+        "options": [
+          "on",
+          "in",
+          "at",
+          "of"
+        ],
         "correct": "on",
         "explanation": "be keen on + V-ing."
       },
       {
         "id": "a8_c1_q17",
-        "type": "fill_blank",
+        "type": "mcq",
         "text": "Origami is the traditional Japanese art of paper ...",
-        "options": [],
+        "options": [
+          "folding",
+          "making",
+          "cutting",
+          "drawing"
+        ],
         "correct": "folding",
         "explanation": "gấp giấy nghệ thuật origami."
       },
@@ -6127,9 +6731,14 @@ export const QUIZ_DATA = [
       },
       {
         "id": "q3",
-        "type": "fill_blank",
+        "type": "mcq",
         "text": "Chất biến đổi trong phản ứng gọi là chất ______.",
-        "options": [],
+        "options": [
+          "tham gia",
+          "sản phẩm",
+          "xúc tác",
+          "chỉ thị"
+        ],
         "correct": "tham gia",
         "explanation": "Chất ban đầu bị biến đổi được gọi là chất tham gia phản ứng (hoặc chất phản ứng)."
       },
@@ -6148,9 +6757,14 @@ export const QUIZ_DATA = [
       },
       {
         "id": "q5",
-        "type": "fill_blank",
+        "type": "mcq",
         "text": "Phản ứng tỏa ______ là phản ứng giải phóng năng lượng ra môi trường.",
-        "options": [],
+        "options": [
+          "nhiệt",
+          "sáng",
+          "khí",
+          "điện"
+        ],
         "correct": "nhiệt",
         "explanation": "Phản ứng tỏa nhiệt là phản ứng sinh ra nhiệt lượng."
       },
@@ -6167,9 +6781,14 @@ export const QUIZ_DATA = [
       },
       {
         "id": "k8_c1_q7",
-        "type": "fill_blank",
+        "type": "mcq",
         "text": "Hiện tượng chất biến đổi mà vẫn giữ nguyên là chất ban đầu được gọi là hiện tượng ...",
-        "options": [],
+        "options": [
+          "vật lí",
+          "hóa học",
+          "sinh học",
+          "tự nhiên"
+        ],
         "correct": "vật lí",
         "explanation": "Hiện tượng vật lí (không sinh chất mới)."
       },
@@ -6260,17 +6879,27 @@ export const QUIZ_DATA = [
       },
       {
         "id": "k8_c1_q16",
-        "type": "fill_blank",
+        "type": "mcq",
         "text": "Khối lượng mol của khí Oxi (O2) là ... g/mol.",
-        "options": [],
+        "options": [
+          "32",
+          "16",
+          "28",
+          "44"
+        ],
         "correct": "32",
         "explanation": "16 x 2 = 32 g/mol."
       },
       {
         "id": "k8_c1_q17",
-        "type": "fill_blank",
+        "type": "mcq",
         "text": "1 mol chất khí bất kì ở điều kiện chuẩn (25°C, 1 bar) đều chiếm thể tích là ... lít.",
-        "options": [],
+        "options": [
+          "24.79",
+          "22.4",
+          "24.5",
+          "25.0"
+        ],
         "correct": "24.79",
         "explanation": "Thể tích mol chuẩn theo chương trình GDPT mới là 24.79 lít."
       },
@@ -6333,9 +6962,14 @@ export const QUIZ_DATA = [
       },
       {
         "id": "q3",
-        "type": "fill_blank",
+        "type": "mcq",
         "text": "We look ______ to seeing you again next week.",
-        "options": [],
+        "options": [
+          "forward",
+          "after",
+          "for",
+          "up"
+        ],
         "correct": "forward",
         "explanation": "'Look forward to' means expecting something eagerly."
       },
@@ -6354,9 +6988,14 @@ export const QUIZ_DATA = [
       },
       {
         "id": "q5",
-        "type": "fill_blank",
+        "type": "mcq",
         "text": "Bat Trang is one of the most famous ______ villages in Vietnam.",
-        "options": [],
+        "options": [
+          "craft",
+          "painting",
+          "silk",
+          "fishing"
+        ],
         "correct": "craft",
         "explanation": "Bat Trang is a traditional craft village."
       },
@@ -6373,9 +7012,14 @@ export const QUIZ_DATA = [
       },
       {
         "id": "a9_c1_q7",
-        "type": "fill_blank",
+        "type": "mcq",
         "text": "A person who makes goods skillfully by hand is called an ...",
-        "options": [],
+        "options": [
+          "artisan",
+          "doctor",
+          "teacher",
+          "engineer"
+        ],
         "correct": "artisan",
         "explanation": "artisan: nghệ nhân thủ công."
       },
@@ -6466,17 +7110,27 @@ export const QUIZ_DATA = [
       },
       {
         "id": "a9_c1_q16",
-        "type": "fill_blank",
+        "type": "mcq",
         "text": "Tourists like to buy souvenirs to remind them ... their wonderful trips.",
-        "options": [],
+        "options": [
+          "of",
+          "about",
+          "to",
+          "for"
+        ],
         "correct": "of",
         "explanation": "remind somebody of something."
       },
       {
         "id": "a9_c1_q17",
-        "type": "fill_blank",
+        "type": "mcq",
         "text": "Dong Ho is famous for its folk woodblock ...",
-        "options": [],
+        "options": [
+          "paintings",
+          "statues",
+          "pots",
+          "carpets"
+        ],
         "correct": "paintings",
         "explanation": "Tranh khắc gỗ dân gian Đông Hồ."
       },
@@ -6539,9 +7193,14 @@ export const QUIZ_DATA = [
       },
       {
         "id": "q3",
-        "type": "fill_blank",
+        "type": "mcq",
         "text": "Cơ năng của vật bằng tổng ______ và thế năng của vật.",
-        "options": [],
+        "options": [
+          "động năng",
+          "nhiệt năng",
+          "quang năng",
+          "hóa năng"
+        ],
         "correct": "động năng",
         "explanation": "Cơ năng = động năng + thế năng."
       },
@@ -6560,9 +7219,14 @@ export const QUIZ_DATA = [
       },
       {
         "id": "q5",
-        "type": "fill_blank",
+        "type": "mcq",
         "text": "Đơn vị đo cơ năng là ______.",
-        "options": [],
+        "options": [
+          "Jun",
+          "Oát",
+          "Niutơn",
+          "Pascan"
+        ],
         "correct": "Jun",
         "explanation": "Đơn vị đo năng lượng và công trong hệ SI là Jun (Joule)."
       },
@@ -6579,9 +7243,14 @@ export const QUIZ_DATA = [
       },
       {
         "id": "k9_c1_q7",
-        "type": "fill_blank",
+        "type": "mcq",
         "text": "Dạng năng lượng mà một vật có được do chuyển động gọi là ... năng.",
-        "options": [],
+        "options": [
+          "động",
+          "thế",
+          "nhiệt",
+          "hóa"
+        ],
         "correct": "động",
         "explanation": "Động năng: Wd = 1/2 m v^2."
       },
@@ -6672,17 +7341,27 @@ export const QUIZ_DATA = [
       },
       {
         "id": "k9_c1_q16",
-        "type": "fill_blank",
+        "type": "mcq",
         "text": "Tổng của động năng và thế năng của vật được gọi là ... năng.",
-        "options": [],
+        "options": [
+          "cơ",
+          "nhiệt",
+          "quang",
+          "hóa"
+        ],
         "correct": "cơ",
         "explanation": "Cơ năng: W = Wd + Wt."
       },
       {
         "id": "k9_c1_q17",
-        "type": "fill_blank",
+        "type": "mcq",
         "text": "Thế năng đàn hồi xuất hiện khi một chiếc lò xo bị kéo dãn hoặc bị ...",
-        "options": [],
+        "options": [
+          "nén",
+          "xoắn",
+          "đốt",
+          "uốn"
+        ],
         "correct": "nén",
         "explanation": "Lò xo biến dạng nén hoặc dãn."
       },
@@ -6758,9 +7437,14 @@ export const QUIZ_DATA = [
       },
       {
         "id": "q4",
-        "type": "fill_blank",
+        "type": "mcq",
         "text": "Kinh tuyến gốc có số độ là ... độ.",
-        "options": [],
+        "options": [
+          "0",
+          "90",
+          "180",
+          "360"
+        ],
         "correct": "0",
         "explanation": "Kinh tuyến đi qua đài thiên văn Greenwich được chọn là kinh tuyến gốc (0 độ)."
       },
@@ -6788,9 +7472,14 @@ export const QUIZ_DATA = [
       },
       {
         "id": "lsdl6_c1_q7",
-        "type": "fill_blank",
+        "type": "mcq",
         "text": "Đường vĩ tuyến dài nhất trên quả Địa Cầu là đường ... (vĩ tuyến 0 độ).",
-        "options": [],
+        "options": [
+          "Xích đạo",
+          "Chí tuyến Bắc",
+          "Chí tuyến Nam",
+          "Vòng cực Bắc"
+        ],
         "correct": "Xích đạo",
         "explanation": "Đường Xích đạo chia Trái Đất thành Bán cầu Bắc và Nam."
       },
@@ -6881,17 +7570,27 @@ export const QUIZ_DATA = [
       },
       {
         "id": "ls6_c1_q16",
-        "type": "fill_blank",
+        "type": "mcq",
         "text": "Đường kinh tuyến 180 độ đi qua giữa Thái Bình Dương được chọn làm đường đổi ... quốc tế.",
-        "options": [],
+        "options": [
+          "ngày",
+          "giờ",
+          "mùa",
+          "năm"
+        ],
         "correct": "ngày",
         "explanation": "Đường đổi ngày quốc tế (International Date Line)."
       },
       {
         "id": "ls6_c1_q17",
-        "type": "fill_blank",
+        "type": "mcq",
         "text": "Vĩ tuyến 23°27'B được gọi là đường Chí tuyến ...",
-        "options": [],
+        "options": [
+          "Bắc",
+          "Nam",
+          "Đông",
+          "Tây"
+        ],
         "correct": "Bắc",
         "explanation": "Chí tuyến Bắc (Tropic of Cancer)."
       },
@@ -6954,9 +7653,14 @@ export const QUIZ_DATA = [
       },
       {
         "id": "q3",
-        "type": "fill_blank",
+        "type": "mcq",
         "text": "Chúng ta cần biết ơn, trân trọng và tự ... về các truyền thống tốt đẹp của gia đình.",
-        "options": [],
+        "options": [
+          "hào",
+          "ti",
+          "tin",
+          "trọng"
+        ],
         "correct": "hào",
         "explanation": "Tự hào về truyền thống gia đình là thái độ trân trọng các giá trị tốt đẹp."
       },
@@ -6997,9 +7701,14 @@ export const QUIZ_DATA = [
       },
       {
         "id": "g6_c1_q7",
-        "type": "fill_blank",
+        "type": "mcq",
         "text": "Những truyền thống tốt đẹp của gia đình, dòng họ Việt Nam gồm có: hiếu học, cần cù lao động, yêu nước và nhân ...",
-        "options": [],
+        "options": [
+          "ái",
+          "nghĩa",
+          "đức",
+          "từ"
+        ],
         "correct": "ái",
         "explanation": "Lòng nhân ái thương người."
       },
@@ -7090,17 +7799,27 @@ export const QUIZ_DATA = [
       },
       {
         "id": "g6_c1_q16",
-        "type": "fill_blank",
+        "type": "mcq",
         "text": "Truyền thống 'Uống nước nhớ ...' dạy con cháu đời sau phải luôn biết ơn công lao sinh thành của cha mẹ tổ tiên.",
-        "options": [],
+        "options": [
+          "nguồn",
+          "suối",
+          "sông",
+          "biển"
+        ],
         "correct": "nguồn",
         "explanation": "Uống nước nhớ nguồn."
       },
       {
         "id": "g6_c1_q17",
-        "type": "fill_blank",
+        "type": "mcq",
         "text": "Nét đẹp truyền thống về tinh thần chịu thương chịu khó trong lao động sản xuất gọi là tính cần ...",
-        "options": [],
+        "options": [
+          "cù",
+          "kiệm",
+          "mẫn",
+          "thân"
+        ],
         "correct": "cù",
         "explanation": "Cần cù lao động."
       },
@@ -7163,9 +7882,14 @@ export const QUIZ_DATA = [
       },
       {
         "id": "q3",
-        "type": "fill_blank",
+        "type": "mcq",
         "text": "Dãy núi ngăn cách châu Á và châu Âu là dãy núi ...",
-        "options": [],
+        "options": [
+          "U-ran",
+          "Hi-ma-lay-a",
+          "An-pơ",
+          "Cáp-ca"
+        ],
         "correct": "U-ran",
         "explanation": "Dãy U-ran (Ural) được coi là ranh giới tự nhiên giữa châu Âu và châu Á."
       },
@@ -7206,9 +7930,14 @@ export const QUIZ_DATA = [
       },
       {
         "id": "ls7_c1_q7",
-        "type": "fill_blank",
+        "type": "mcq",
         "text": "Đại bộ phận diện tích châu Âu có khí hậu ... do nằm trong khu vực nội chí tuyến đến cận cực.",
-        "options": [],
+        "options": [
+          "ôn đới",
+          "nhiệt đới",
+          "hàn đới",
+          "hoang mạc"
+        ],
         "correct": "ôn đới",
         "explanation": "Khí hậu ôn đới hải dương và ôn đới lục địa chiếm phần lớn."
       },
@@ -7299,17 +8028,27 @@ export const QUIZ_DATA = [
       },
       {
         "id": "ls7_c1_q16",
-        "type": "fill_blank",
+        "type": "mcq",
         "text": "Dãy núi trẻ cao và đồ sộ nhất châu Âu có đỉnh Mông Băng quanh năm tuyết phủ là dãy ...",
-        "options": [],
+        "options": [
+          "An-pơ",
+          "U-ran",
+          "Hi-ma-lay-a",
+          "Cáp-ca"
+        ],
         "correct": "An-pơ",
         "explanation": "Dãy Alps (An-pơ)."
       },
       {
         "id": "ls7_c1_q17",
-        "type": "fill_blank",
+        "type": "mcq",
         "text": "Quá trình di cư từ châu Á và châu Phi vào châu Âu tạo ra nguồn lao động dồi dào nhưng cũng gây sức ép về vấn đề việc làm và an ninh xã ...",
-        "options": [],
+        "options": [
+          "hội",
+          "trật",
+          "trị",
+          "dân"
+        ],
         "correct": "hội",
         "explanation": "An ninh xã hội và hòa nhập văn hóa."
       },
@@ -7372,9 +8111,14 @@ export const QUIZ_DATA = [
       },
       {
         "id": "q3",
-        "type": "fill_blank",
+        "type": "mcq",
         "text": "Giữ gìn và phát huy truyền thống quê hương là trách nhiệm của ...",
-        "options": [],
+        "options": [
+          "mọi người",
+          "chính quyền",
+          "người lớn",
+          "thanh niên"
+        ],
         "correct": "mọi người",
         "explanation": "Đó không chỉ là việc của người lớn mà của tất cả công dân, kể cả học sinh."
       },
@@ -7415,9 +8159,14 @@ export const QUIZ_DATA = [
       },
       {
         "id": "g7_c1_q7",
-        "type": "fill_blank",
+        "type": "mcq",
         "text": "Để quảng bá truyền thống quê hương, chúng ta có thể giới thiệu các danh lam thắng cảnh và làng ... truyền thống cho bạn bè quốc tế.",
-        "options": [],
+        "options": [
+          "nghề",
+          "bích",
+          "họa",
+          "tranh"
+        ],
         "correct": "nghề",
         "explanation": "Làng nghề truyền thống."
       },
@@ -7508,17 +8257,27 @@ export const QUIZ_DATA = [
       },
       {
         "id": "g7_c1_q16",
-        "type": "fill_blank",
+        "type": "mcq",
         "text": "Di tích Cố đô Huế nằm tại tỉnh Thừa Thiên ... của nước ta.",
-        "options": [],
+        "options": [
+          "Huế",
+          "Quảng Trị",
+          "Đà Nẵng",
+          "Quảng Bình"
+        ],
         "correct": "Huế",
         "explanation": "Thừa Thiên Huế."
       },
       {
         "id": "g7_c1_q17",
-        "type": "fill_blank",
+        "type": "mcq",
         "text": "Việc tiếp thu các làn sóng văn hóa quốc tế cần tuân theo phương châm: Tiếp thu có chọn lọc và giữ gìn bản ... dân tộc.",
-        "options": [],
+        "options": [
+          "sắc",
+          "chất",
+          "nguồn",
+          "tính"
+        ],
         "correct": "sắc",
         "explanation": "Bản sắc văn hóa dân tộc."
       },
@@ -7581,9 +8340,14 @@ export const QUIZ_DATA = [
       },
       {
         "id": "q3",
-        "type": "fill_blank",
+        "type": "mcq",
         "text": "Đỉnh núi cao nhất thế giới nằm ở châu Á là đỉnh ...",
-        "options": [],
+        "options": [
+          "E-vơ-rét",
+          "K2",
+          "Phan-xi-păng",
+          "Phú Sĩ"
+        ],
         "correct": "E-vơ-rét",
         "explanation": "Đỉnh E-vơ-rét (Everest) trên dãy Hi-ma-lay-a là đỉnh núi cao nhất thế giới."
       },
@@ -7624,9 +8388,14 @@ export const QUIZ_DATA = [
       },
       {
         "id": "ls7_c1_q7",
-        "type": "fill_blank",
+        "type": "mcq",
         "text": "Đỉnh núi cao nhất thế giới nằm trên dãy Himalaya thuộc châu Á là đỉnh ...",
-        "options": [],
+        "options": [
+          "Everest",
+          "K2",
+          "Kangchenjunga",
+          "Lhotse"
+        ],
         "correct": "Everest",
         "explanation": "Đỉnh Everest (Chomolungma) cao 8848.86m."
       },
@@ -7717,17 +8486,27 @@ export const QUIZ_DATA = [
       },
       {
         "id": "ls8_c1_q16",
-        "type": "fill_blank",
+        "type": "mcq",
         "text": "Khu vực Đông Nam Á là nơi bắt nguồn của cây lúa ... nuôi sống hàng trăm triệu người.",
-        "options": [],
+        "options": [
+          "nước",
+          "mì",
+          "mạch",
+          "ngô"
+        ],
         "correct": "nước",
         "explanation": "Văn minh lúa nước Đông Nam Á."
       },
       {
         "id": "ls8_c1_q17",
-        "type": "fill_blank",
+        "type": "mcq",
         "text": "Dầu mỏ và khí đốt tự nhiên của châu Á tập trung với trữ lượng khổng lồ tại khu vực Vịnh Ba ... (Tây Á).",
-        "options": [],
+        "options": [
+          "Tư",
+          "Bắc",
+          "Đen",
+          "Đỏ"
+        ],
         "correct": "Tư",
         "explanation": "Vịnh Ba Tư (Persian Gulf)."
       },
@@ -7790,9 +8569,14 @@ export const QUIZ_DATA = [
       },
       {
         "id": "q3",
-        "type": "fill_blank",
+        "type": "mcq",
         "text": "Truyền thống dân tộc là những giá trị tốt đẹp được hình thành trong quá trình lịch sử lâu dài của ...",
-        "options": [],
+        "options": [
+          "dân tộc",
+          "gia đình",
+          "dòng họ",
+          "cá nhân"
+        ],
         "correct": "dân tộc",
         "explanation": "Truyền thống là những gì kết tinh, lưu truyền qua nhiều thế hệ của cả một quốc gia, dân tộc."
       },
@@ -7833,9 +8617,14 @@ export const QUIZ_DATA = [
       },
       {
         "id": "g8_c1_q7",
-        "type": "fill_blank",
+        "type": "mcq",
         "text": "Câu ca dao: 'Bầu ơi thương lấy bí cùng / Tuy rằng khác giống nhưng chung một ...' ca ngợi truyền thống đoàn kết tương thân tương ái.",
-        "options": [],
+        "options": [
+          "giàn",
+          "nhà",
+          "vườn",
+          "nồi"
+        ],
         "correct": "giàn",
         "explanation": "Chung một giàn."
       },
@@ -7926,17 +8715,27 @@ export const QUIZ_DATA = [
       },
       {
         "id": "g8_c1_q16",
-        "type": "fill_blank",
+        "type": "mcq",
         "text": "Sống có đạo đức và tuân theo ... luật là điều kiện cần thiết để trở thành công dân có ích cho xã hội.",
-        "options": [],
+        "options": [
+          "pháp",
+          "kỷ",
+          "quy",
+          "đạo"
+        ],
         "correct": "pháp",
         "explanation": "Đạo đức và pháp luật."
       },
       {
         "id": "g8_c1_q17",
-        "type": "fill_blank",
+        "type": "mcq",
         "text": "Khi tham gia giao thông bằng xe máy điện, học sinh bắt buộc phải đội mũ bảo ... và cài quai đúng cách.",
-        "options": [],
+        "options": [
+          "hiểm",
+          "hộ",
+          "nắng",
+          "quân"
+        ],
         "correct": "hiểm",
         "explanation": "Mũ bảo hiểm an toàn."
       },
@@ -7999,9 +8798,14 @@ export const QUIZ_DATA = [
       },
       {
         "id": "q3",
-        "type": "fill_blank",
+        "type": "mcq",
         "text": "Người lãnh đạo Cách mạng tháng Mười Nga vĩ đại là V.I. ...",
-        "options": [],
+        "options": [
+          "Lê-nin",
+          "Xta-lin",
+          "Mác",
+          "Ăng-ghen"
+        ],
         "correct": "Lê-nin",
         "explanation": "Lê-nin và Đảng Bôn-sê-vích đã lãnh đạo cuộc cách mạng xã hội chủ nghĩa thành công ở Nga."
       },
@@ -8042,9 +8846,14 @@ export const QUIZ_DATA = [
       },
       {
         "id": "ls9_c1_q7",
-        "type": "fill_blank",
+        "type": "mcq",
         "text": "Năm 1922, Liên bang Cộng hòa xã hội chủ nghĩa Xô viết (viết tắt là ...) chính thức được thành lập.",
-        "options": [],
+        "options": [
+          "Liên Xô",
+          "NATO",
+          "EU",
+          "ASEAN"
+        ],
         "correct": "Liên Xô",
         "explanation": "Liên bang Xô viết (Liên Xô / USSR)."
       },
@@ -8135,17 +8944,27 @@ export const QUIZ_DATA = [
       },
       {
         "id": "ls9_c1_q16",
-        "type": "fill_blank",
+        "type": "mcq",
         "text": "Ngày 9 tháng 5 hàng năm được nước Nga và thế giới tôn vinh là Ngày Chiến ... chống phát xít.",
-        "options": [],
+        "options": [
+          "thắng",
+          "tranh",
+          "tế",
+          "lợi"
+        ],
         "correct": "thắng",
         "explanation": "Ngày Chiến thắng (Victory Day - 9/5)."
       },
       {
         "id": "ls9_c1_q17",
-        "type": "fill_blank",
+        "type": "mcq",
         "text": "Trước khi thành lập Liên Xô năm 1922, nước Nga có tên là Cộng hòa Xã hội chủ nghĩa Xô viết Liên ...",
-        "options": [],
+        "options": [
+          "bang",
+          "hiệp",
+          "đoàn",
+          "hợp"
+        ],
         "correct": "bang",
         "explanation": "Cộng hòa Xã hội chủ nghĩa Xô viết Liên bang Nga (RSFSR)."
       },
@@ -8208,9 +9027,14 @@ export const QUIZ_DATA = [
       },
       {
         "id": "q3",
-        "type": "fill_blank",
+        "type": "mcq",
         "text": "Chủ tịch Hồ Chí Minh đã căn dặn cán bộ, đảng viên phải 'Cần, kiệm, liêm, chính, chí công vô ...'.",
-        "options": [],
+        "options": [
+          "tư",
+          "ích",
+          "lợi",
+          "hại"
+        ],
         "correct": "tư",
         "explanation": "Đây là tư tưởng đạo đức cốt lõi mà Bác Hồ luôn nhấn mạnh."
       },
@@ -8251,9 +9075,14 @@ export const QUIZ_DATA = [
       },
       {
         "id": "g9_c1_q7",
-        "type": "fill_blank",
+        "type": "mcq",
         "text": "Trái ngược với chí công vô tư là thói ích kỉ, tư lợi, kéo bè kéo cánh và thiên ...",
-        "options": [],
+        "options": [
+          "vị",
+          "tư",
+          "lệch",
+          "hướng"
+        ],
         "correct": "vị",
         "explanation": "Thiên vị, vụ lợi cá nhân."
       },
@@ -8344,17 +9173,27 @@ export const QUIZ_DATA = [
       },
       {
         "id": "g9_c1_q16",
-        "type": "fill_blank",
+        "type": "mcq",
         "text": "Việt Nam chính thức gia nhập Tổ chức Thương mại Thế giới (WTO) vào năm 20...",
-        "options": [],
+        "options": [
+          "07",
+          "05",
+          "08",
+          "10"
+        ],
         "correct": "07",
         "explanation": "Gia nhập năm 2007."
       },
       {
         "id": "g9_c1_q17",
-        "type": "fill_blank",
+        "type": "mcq",
         "text": "Thành phố Hà Nội được tổ chức UNESCO vinh danh trao tặng danh hiệu 'Thành phố vì hòa ...'",
-        "options": [],
+        "options": [
+          "bình",
+          "hợp",
+          "thuận",
+          "cường"
+        ],
         "correct": "bình",
         "explanation": "Thành phố vì hòa bình (năm 1999)."
       },
@@ -8417,9 +9256,14 @@ export const QUIZ_DATA = [
       },
       {
         "id": "t6_q3",
-        "type": "fill_blank",
+        "type": "mcq",
         "text": "Bộ não con người là một bộ phận có chức năng thu nhận và xử lý ___.",
-        "options": [],
+        "options": [
+          "thông tin",
+          "năng lượng",
+          "vật chất",
+          "dòng điện"
+        ],
         "correct": "thông tin",
         "explanation": "Não bộ đóng vai trò trung tâm xử lý thông tin của con người."
       },
@@ -8460,9 +9304,14 @@ export const QUIZ_DATA = [
       },
       {
         "id": "tin6_c1_q7",
-        "type": "fill_blank",
+        "type": "mcq",
         "text": "Thiết bị dùng để nhập dữ liệu chữ và số vào máy tính là bàn ...",
-        "options": [],
+        "options": [
+          "phím",
+          "chuột",
+          "màn hình",
+          "loa"
+        ],
         "correct": "phím",
         "explanation": "Bàn phím máy tính (Keyboard)."
       },
@@ -8553,17 +9402,27 @@ export const QUIZ_DATA = [
       },
       {
         "id": "tin6_c1_q16",
-        "type": "fill_blank",
+        "type": "mcq",
         "text": "Phím tắt dùng để dán (paste) dữ liệu vừa sao chép trong máy tính là Ctrl + ...",
-        "options": [],
+        "options": [
+          "V",
+          "C",
+          "X",
+          "Z"
+        ],
         "correct": "V",
         "explanation": "Ctrl + V là dán."
       },
       {
         "id": "tin6_c1_q17",
-        "type": "fill_blank",
+        "type": "mcq",
         "text": "Đơn vị đo dung lượng thông tin lớn hơn Kilobyte (KB) là ... (MB).",
-        "options": [],
+        "options": [
+          "Megabyte",
+          "Gigabyte",
+          "Terabyte",
+          "Byte"
+        ],
         "correct": "Megabyte",
         "explanation": "Megabyte (MB) = 1024 KB."
       },
@@ -8626,9 +9485,14 @@ export const QUIZ_DATA = [
       },
       {
         "id": "cn6_q3",
-        "type": "fill_blank",
+        "type": "mcq",
         "text": "Gạch, ngói, xi măng, thép là các vật liệu ___ dùng trong xây dựng nhà ở.",
-        "options": [],
+        "options": [
+          "nhân tạo",
+          "tự nhiên",
+          "kim loại quý",
+          "sinh học"
+        ],
         "correct": "nhân tạo",
         "explanation": "Đây là các vật liệu do con người chế tạo ra, khác với vật liệu tự nhiên như gỗ, tre."
       },
@@ -8669,9 +9533,14 @@ export const QUIZ_DATA = [
       },
       {
         "id": "cn6_c1_q7",
-        "type": "fill_blank",
+        "type": "mcq",
         "text": "Kiểu nhà đặc trưng của đồng bào các dân tộc thiểu số vùng núi cao thường làm bằng gỗ, sàn cao hơn mặt đất là nhà ...",
-        "options": [],
+        "options": [
+          "sàn",
+          "rông",
+          "ngói",
+          "tranh"
+        ],
         "correct": "sàn",
         "explanation": "Nhà sàn truyền thống tránh thú dữ và ẩm ướt."
       },
@@ -8762,17 +9631,27 @@ export const QUIZ_DATA = [
       },
       {
         "id": "cn6_c1_q16",
-        "type": "fill_blank",
+        "type": "mcq",
         "text": "Chất liệu truyền thống làm mái nhà tranh ở vùng nông thôn xưa là rơm rạ hoặc lá ...",
-        "options": [],
+        "options": [
+          "cọ",
+          "dừa",
+          "chuối",
+          "mía"
+        ],
         "correct": "cọ",
         "explanation": "Lá cọ, lá dừa hoặc rơm rạ."
       },
       {
         "id": "cn6_c1_q17",
-        "type": "fill_blank",
+        "type": "mcq",
         "text": "Hệ thống nhà thông minh kết nối các thiết bị điện trong nhà thông qua mạng không dây ...",
-        "options": [],
+        "options": [
+          "Wifi",
+          "Bluetooth",
+          "4G",
+          "Hồng ngoại"
+        ],
         "correct": "Wifi",
         "explanation": "Mạng Wifi / Internet vạn vật (IoT)."
       },
@@ -8835,9 +9714,14 @@ export const QUIZ_DATA = [
       },
       {
         "id": "t7_q3",
-        "type": "fill_blank",
+        "type": "mcq",
         "text": "Màn hình cảm ứng trên điện thoại thông minh thực hiện chức năng của cả thiết bị vào và thiết bị ___.",
-        "options": [],
+        "options": [
+          "ra",
+          "vào",
+          "xử lý",
+          "lưu trữ"
+        ],
         "correct": "ra",
         "explanation": "Nó vừa hiển thị thông tin (ra) vừa nhận thao tác chạm của người dùng (vào)."
       },
@@ -8878,9 +9762,14 @@ export const QUIZ_DATA = [
       },
       {
         "id": "tin7_c1_q7",
-        "type": "fill_blank",
+        "type": "mcq",
         "text": "Trong phần mềm bảng tính, công thức luôn luôn phải bắt đầu bằng dấu ...",
-        "options": [],
+        "options": [
+          "=",
+          "+",
+          "-",
+          "*"
+        ],
         "correct": "=",
         "explanation": "Bắt đầu bằng dấu bằng (=)."
       },
@@ -8971,17 +9860,27 @@ export const QUIZ_DATA = [
       },
       {
         "id": "tin7_c1_q16",
-        "type": "fill_blank",
+        "type": "mcq",
         "text": "Hàm tìm giá trị nhỏ nhất trong phần mềm bảng tính có tên là ...",
-        "options": [],
+        "options": [
+          "MIN",
+          "MAX",
+          "SUM",
+          "AVERAGE"
+        ],
         "correct": "MIN",
         "explanation": "Hàm MIN."
       },
       {
         "id": "tin7_c1_q17",
-        "type": "fill_blank",
+        "type": "mcq",
         "text": "Để sao chép công thức sang các ô liền kề, ta nhấp giữ chuột và kéo nút điền ở góc dưới bên ... của ô tính.",
-        "options": [],
+        "options": [
+          "phải",
+          "trái",
+          "trên",
+          "giữa"
+        ],
         "correct": "phải",
         "explanation": "Nút điền Fill Handle ở góc dưới bên phải ô tính."
       },
@@ -9044,9 +9943,14 @@ export const QUIZ_DATA = [
       },
       {
         "id": "cn7_q3",
-        "type": "fill_blank",
+        "type": "mcq",
         "text": "Lúa, ngô, khoai, sắn là các loại cây trồng thuộc nhóm cây cung cấp ___.",
-        "options": [],
+        "options": [
+          "lương thực",
+          "thực phẩm",
+          "công nghiệp",
+          "dược liệu"
+        ],
         "correct": "lương thực",
         "explanation": "Đây là nhóm cây trồng chính cung cấp tinh bột và năng lượng cho con người."
       },
@@ -9087,9 +9991,14 @@ export const QUIZ_DATA = [
       },
       {
         "id": "cn7_c1_q7",
-        "type": "fill_blank",
+        "type": "mcq",
         "text": "Phương pháp tưới nước hiện đại đưa từng giọt nước trực tiếp vào gốc cây giúp tiết kiệm nước tối đa là phương pháp tưới ... giọt.",
-        "options": [],
+        "options": [
+          "nhỏ",
+          "phun",
+          "ngập",
+          "thấm"
+        ],
         "correct": "nhỏ",
         "explanation": "Tưới nhỏ giọt công nghệ cao."
       },
@@ -9180,17 +10089,27 @@ export const QUIZ_DATA = [
       },
       {
         "id": "cn7_c1_q16",
-        "type": "fill_blank",
+        "type": "mcq",
         "text": "Phương pháp trồng cây trong dung dịch dinh dưỡng không dùng đất gọi là phương pháp thủy ...",
-        "options": [],
+        "options": [
+          "canh",
+          "lực",
+          "phương",
+          "sinh"
+        ],
         "correct": "canh",
         "explanation": "Trồng rau thủy canh công nghệ cao."
       },
       {
         "id": "cn7_c1_q17",
-        "type": "fill_blank",
+        "type": "mcq",
         "text": "Thời vụ gieo trồng chính ở miền Bắc gồm vụ xuân, vụ hè thu và vụ ...",
-        "options": [],
+        "options": [
+          "đông",
+          "thu",
+          "hè",
+          "mưa"
+        ],
         "correct": "đông",
         "explanation": "Vụ đông miền Bắc."
       },
@@ -9253,9 +10172,14 @@ export const QUIZ_DATA = [
       },
       {
         "id": "t8_q3",
-        "type": "fill_blank",
+        "type": "mcq",
         "text": "Máy vi tính cá nhân (PC) bắt đầu trở nên phổ biến từ thế hệ máy tính thứ ___.",
-        "options": [],
+        "options": [
+          "tư",
+          "ba",
+          "hai",
+          "nhất"
+        ],
         "correct": "tư",
         "explanation": "Sự ra đời của bộ vi xử lý ở thế hệ thứ 4 đã thu nhỏ máy tính để bàn cho người dùng cá nhân."
       },
@@ -9296,9 +10220,14 @@ export const QUIZ_DATA = [
       },
       {
         "id": "tin8_c1_q7",
-        "type": "fill_blank",
+        "type": "mcq",
         "text": "Máy tính thế hệ thứ nhất sử dụng linh kiện điện tử là các bóng đèn ... chân không.",
-        "options": [],
+        "options": [
+          "điện tử",
+          "bán dẫn",
+          "vi mạch",
+          "laser"
+        ],
         "correct": "điện tử",
         "explanation": "Bóng đèn điện tử chân không (Vacuum tube)."
       },
@@ -9389,17 +10318,27 @@ export const QUIZ_DATA = [
       },
       {
         "id": "tin8_c1_q16",
-        "type": "fill_blank",
+        "type": "mcq",
         "text": "Trang web đầu tiên trên thế giới chạy trên hệ thống mạng toàn cầu WWW do Tim Berners-Lee sáng tạo viết tắt là World Wide ...",
-        "options": [],
+        "options": [
+          "Web",
+          "Word",
+          "World",
+          "Wide"
+        ],
         "correct": "Web",
         "explanation": "World Wide Web (WWW)."
       },
       {
         "id": "tin8_c1_q17",
-        "type": "fill_blank",
+        "type": "mcq",
         "text": "Người đồng sáng lập tập đoàn phần mềm Microsoft cùng với Paul Allen là tỷ phú Bill ...",
-        "options": [],
+        "options": [
+          "Gates",
+          "Jobs",
+          "Zuckerberg",
+          "Musk"
+        ],
         "correct": "Gates",
         "explanation": "Bill Gates."
       },
@@ -9462,9 +10401,14 @@ export const QUIZ_DATA = [
       },
       {
         "id": "cn8_q3",
-        "type": "fill_blank",
+        "type": "mcq",
         "text": "Hình chiếu đứng có hướng chiếu từ ___ tới.",
-        "options": [],
+        "options": [
+          "trước",
+          "sau",
+          "trên",
+          "trái"
+        ],
         "correct": "trước",
         "explanation": "Theo quy ước vẽ kĩ thuật, hướng chiếu từ trước tới mặt phẳng chiếu đứng sẽ tạo ra hình chiếu đứng."
       },
@@ -9505,9 +10449,14 @@ export const QUIZ_DATA = [
       },
       {
         "id": "cn8_c1_q7",
-        "type": "fill_blank",
+        "type": "mcq",
         "text": "Trong phương pháp chiếu vuông góc, hình chiếu thu được từ hướng nhìn từ trên xuống gọi là hình chiếu ...",
-        "options": [],
+        "options": [
+          "bằng",
+          "đứng",
+          "cạnh",
+          "trục đo"
+        ],
         "correct": "bằng",
         "explanation": "Hình chiếu đứng (trước), hình chiếu bằng (trên), hình chiếu cạnh (trái)."
       },
@@ -9598,17 +10547,27 @@ export const QUIZ_DATA = [
       },
       {
         "id": "cn8_c1_q16",
-        "type": "fill_blank",
+        "type": "mcq",
         "text": "Hình chiếu cạnh có hướng chiếu nhìn từ phía ... sang phía phải của vật thể.",
-        "options": [],
+        "options": [
+          "trái",
+          "phải",
+          "trên",
+          "sau"
+        ],
         "correct": "trái",
         "explanation": "Chiếu từ trái sang phải."
       },
       {
         "id": "cn8_c1_q17",
-        "type": "fill_blank",
+        "type": "mcq",
         "text": "Tỉ lệ 1 : 2 trên bản vẽ là tỉ lệ thu ... so với vật thật.",
-        "options": [],
+        "options": [
+          "nhỏ",
+          "lớn",
+          "nguyên",
+          "đôi"
+        ],
         "correct": "nhỏ",
         "explanation": "Tỉ lệ thu nhỏ 1 nửa."
       },
@@ -9671,9 +10630,14 @@ export const QUIZ_DATA = [
       },
       {
         "id": "t9_q3",
-        "type": "fill_blank",
+        "type": "mcq",
         "text": "Một trong những mặt trái của Internet là có thể gây ra tình trạng nghiện ___ nếu sử dụng không hợp lý.",
-        "options": [],
+        "options": [
+          "mạng",
+          "game",
+          "thuốc lá",
+          "mua sắm"
+        ],
         "correct": "mạng",
         "explanation": "Nghiện mạng hoặc nghiện game, internet là vấn đề nhức nhối trong xã hội hiện đại."
       },
@@ -9714,9 +10678,14 @@ export const QUIZ_DATA = [
       },
       {
         "id": "tin9_c1_q7",
-        "type": "fill_blank",
+        "type": "mcq",
         "text": "Việc lan truyền tin tức giả mạo, chưa kiểm chứng trên mạng xã hội là hành vi vi phạm ... mạng.",
-        "options": [],
+        "options": [
+          "Luật an ninh",
+          "Hiến pháp",
+          "Bộ luật Dân sự",
+          "Luật Giáo dục"
+        ],
         "correct": "Luật an ninh",
         "explanation": "Luật an ninh mạng."
       },
@@ -9807,17 +10776,27 @@ export const QUIZ_DATA = [
       },
       {
         "id": "tin9_c1_q16",
-        "type": "fill_blank",
+        "type": "mcq",
         "text": "Trong ngôn ngữ lập trình Python, lệnh xuất dữ liệu ra màn hình có tên là ...()",
-        "options": [],
+        "options": [
+          "print",
+          "input",
+          "echo",
+          "display"
+        ],
         "correct": "print",
         "explanation": "Hàm print()."
       },
       {
         "id": "tin9_c1_q17",
-        "type": "fill_blank",
+        "type": "mcq",
         "text": "Công nghệ chuỗi khối lưu trữ dữ liệu phân tán phi tập trung nổi tiếng gọi là Block...",
-        "options": [],
+        "options": [
+          "chain",
+          "box",
+          "data",
+          "net"
+        ],
         "correct": "chain",
         "explanation": "Công nghệ Blockchain."
       },
@@ -9880,9 +10859,14 @@ export const QUIZ_DATA = [
       },
       {
         "id": "cn9_q3",
-        "type": "fill_blank",
+        "type": "mcq",
         "text": "Thị trường lao động thường xuyên thay đổi nên học sinh cần quan tâm đến xu hướng nghề ___ trong tương lai.",
-        "options": [],
+        "options": [
+          "nghiệp",
+          "vụ",
+          "nông",
+          "lâm"
+        ],
         "correct": "nghiệp",
         "explanation": "Xu hướng nghề nghiệp phản ánh nhu cầu nhân lực của xã hội, là yếu tố cần cân nhắc khi chọn nghề."
       },
@@ -9923,9 +10907,14 @@ export const QUIZ_DATA = [
       },
       {
         "id": "cn9_c1_q7",
-        "type": "fill_blank",
+        "type": "mcq",
         "text": "Ba yếu tố cốt lõi trong việc chọn nghề là: Năng lực bản thân, Sở thích và Nhu cầu của ...",
-        "options": [],
+        "options": [
+          "xã hội",
+          "gia đình",
+          "nhà trường",
+          "bạn bè"
+        ],
         "correct": "xã hội",
         "explanation": "Mô hình chọn nghề (Sở thích - Năng lực - Thị trường)."
       },
@@ -10016,17 +11005,27 @@ export const QUIZ_DATA = [
       },
       {
         "id": "cn9_c1_q16",
-        "type": "fill_blank",
+        "type": "mcq",
         "text": "Dụng cụ dùng để cắt và tuốt lớp vỏ bọc cách điện của dây dẫn điện là ... tuốt dây.",
-        "options": [],
+        "options": [
+          "kìm",
+          "kéo",
+          "dao",
+          "búa"
+        ],
         "correct": "kìm",
         "explanation": "Kìm tuốt dây điện chuyên dụng."
       },
       {
         "id": "cn9_c1_q17",
-        "type": "fill_blank",
+        "type": "mcq",
         "text": "Mối nối dây dẫn điện phải đảm bảo dẫn điện tốt, có độ bền cơ học cao và an toàn cách ...",
-        "options": [],
+        "options": [
+          "điện",
+          "nhiệt",
+          "từ",
+          "ẩm"
+        ],
         "correct": "điện",
         "explanation": "Bọc băng dính cách điện an toàn."
       },

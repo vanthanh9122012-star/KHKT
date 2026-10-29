@@ -12,32 +12,33 @@ const BOT_NAMES = [
   "Nguyệt Minh", "Thu Trà", "Trúc Đào", "Hương Ly"
 ];
 
-// Combine all questions from quizData and generate options for fill_blank
+// Chuẩn hóa và làm sạch tiền tố 'A. ', 'B. ' nếu có trong nội dung phương án
+const cleanOptionText = (opt) => {
+  if (typeof opt !== 'string') return String(opt || '');
+  return opt.replace(/^[A-D]\.\s*/i, '').trim();
+};
+
+// Lọc toàn bộ câu hỏi chuẩn hóa cho cuộc thi (chỉ chọn trắc nghiệm & đúng/sai có phương án thực tế, phù hợp nội dung)
 const RAW_QUESTIONS = QUIZ_DATA.reduce((acc, qz) => [...acc, ...qz.questions.map(q => ({...q, subject: qz.subject}))], []);
 
-const ALL_QUESTIONS = RAW_QUESTIONS.map(q => {
-  if (!q.options || q.options.length < 2) {
-    let subjectPool = RAW_QUESTIONS
-      .filter(other => other.subject === q.subject && other.correct && other.correct !== q.correct)
-      .map(other => other.correct);
-    
-    // Deduplicate
-    subjectPool = [...new Set(subjectPool)];
-    
-    let options = [q.correct];
-    for (let i = 0; i < 3; i++) {
-      if (subjectPool.length > 0) {
-         const randIdx = Math.floor(Math.random() * subjectPool.length);
-         options.push(subjectPool[randIdx]);
-         subjectPool.splice(randIdx, 1);
-      } else {
-         options.push('Phương án nhiễu ' + (i+1));
-      }
-    }
-    options.sort(() => 0.5 - Math.random());
-    return { ...q, options };
+const ALL_QUESTIONS = RAW_QUESTIONS.filter(q => {
+  if (q.type === 'essay') return false;
+  if (!q.options || q.options.length < 2) return false;
+  if (!q.correct || q.correct.length > 120) return false;
+  const cleanOpts = q.options.map(cleanOptionText);
+  const cleanCorrect = cleanOptionText(q.correct);
+  return cleanOpts.includes(cleanCorrect);
+}).map(q => {
+  const cleanCorrect = cleanOptionText(q.correct);
+  const cleanOpts = [...new Set(q.options.map(cleanOptionText))];
+  if (!cleanOpts.includes(cleanCorrect)) {
+    cleanOpts[0] = cleanCorrect;
   }
-  return q;
+  return {
+    ...q,
+    correct: cleanCorrect,
+    options: cleanOpts
+  };
 });
 
 // Support Card Definitions
@@ -291,9 +292,13 @@ const TournamentManager = ({ addReward, currentUser }) => {
     setActiveBuffs({ doubleScore: false, freezeBots: false, shield: false });
     setEliminatedOptions([]);
 
-    // Pick 3 random questions for the round
+    // Pick 3 random questions for the round with randomized options
     const shuffled = [...ALL_QUESTIONS].sort(() => 0.5 - Math.random());
-    setCurrentQuestions(shuffled.slice(0, 3));
+    const roundQuestions = shuffled.slice(0, 3).map(q => ({
+      ...q,
+      options: [...q.options].sort(() => 0.5 - Math.random())
+    }));
+    setCurrentQuestions(roundQuestions);
   };
 
   // Card Activation Handlers
@@ -789,7 +794,7 @@ const TournamentManager = ({ addReward, currentUser }) => {
                   <span className="inline-block w-6 text-indigo-500 font-black">
                     {String.fromCharCode(65 + i)}.
                   </span>
-                  {opt}
+                  {cleanOptionText(opt)}
                 </button>
               );
             })}
