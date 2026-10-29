@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef, useCallback, useMemo } from 'react';
 import { 
   Sparkles, Gem, HelpCircle, Trophy, RefreshCw, X, Award, ChevronRight, 
-  Layers, Info, ShieldCheck, Flame, Atom, Star, CheckCircle2, Volume2, VolumeX, Eye, Zap, Timer
+  Layers, Info, ShieldCheck, Flame, Atom, Star, CheckCircle2, Volume2, VolumeX, Eye, Zap, Timer, Lock
 } from 'lucide-react';
 import { GACHA_ELEMENTS, pullRandomElement } from './data/elementsGachaData';
 
@@ -134,6 +134,7 @@ export default function ElementGacha({ addReward, gamification, onElementUnlocke
   const [showOddsModal, setShowOddsModal] = useState(false);
   const [showCodexModal, setShowCodexModal] = useState(false);
   const [selectedCodexElement, setSelectedCodexElement] = useState(null);
+  const [codexTab, setCodexTab] = useState('owned'); // 'owned' | 'all'
   const [collection, setCollection] = useState({});
   const [soundEnabled, setSoundEnabled] = useState(true);
   const [crankDegree, setCrankDegree] = useState(0);
@@ -492,6 +493,14 @@ export default function ElementGacha({ addReward, gamification, onElementUnlocke
   const totalElementsCount = GACHA_ELEMENTS.length;
   const collectedCount = useMemo(() => Object.keys(collection).length, [collection]);
   const completionPercentage = Math.round((collectedCount / totalElementsCount) * 100);
+
+  // Danh sách nguyên tố hiển thị (Mặc định chỉ hiện những nguyên tố đã xoay ra được)
+  const displayedElements = useMemo(() => {
+    if (codexTab === 'owned') {
+      return GACHA_ELEMENTS.filter(el => !!collection[el.id]);
+    }
+    return GACHA_ELEMENTS;
+  }, [codexTab, collection]);
 
   return (
     <div className="space-y-6 animate-fade-in text-white">
@@ -964,7 +973,7 @@ export default function ElementGacha({ addReward, gamification, onElementUnlocke
           <div className="bg-slate-900 border border-slate-700 max-w-4xl w-full max-h-[88vh] rounded-[2rem] p-5 sm:p-7 shadow-2xl flex flex-col relative text-white">
             
             {/* Header */}
-            <div className="flex items-center justify-between pb-3.5 border-b border-slate-800">
+            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 pb-3.5 border-b border-slate-800">
               <div>
                 <h3 className="text-xl sm:text-2xl font-black text-white flex items-center gap-2">
                   <Layers className="text-indigo-400" size={22} /> SỔ TAY NGUYÊN TỐ BẢNG TUẦN HOÀN
@@ -973,16 +982,46 @@ export default function ElementGacha({ addReward, gamification, onElementUnlocke
                   Đã thu thập: <span className="text-cyan-400 font-bold">{collectedCount}</span> / {totalElementsCount} nguyên tố ({completionPercentage}%)
                 </p>
               </div>
-              <button 
-                onClick={() => { setShowCodexModal(false); setSelectedCodexElement(null); }}
-                className="text-slate-400 hover:text-white p-1.5 rounded-xl hover:bg-slate-800 cursor-pointer"
-              >
-                <X size={18} />
-              </button>
+
+              <div className="flex items-center gap-2 w-full sm:w-auto justify-between sm:justify-end">
+                {/* Bộ lọc chế độ xem: Mặc định Chỉ hiện nguyên tố đã xoay ra */}
+                <div className="flex items-center bg-slate-950 p-1 rounded-xl border border-slate-800 text-xs font-bold shadow-inner">
+                  <button
+                    onClick={() => { setCodexTab('owned'); setSelectedCodexElement(null); }}
+                    className={`px-3 py-1.5 rounded-lg transition-all flex items-center gap-1.5 cursor-pointer ${
+                      codexTab === 'owned'
+                        ? 'bg-gradient-to-r from-indigo-600 to-cyan-600 text-white shadow-md'
+                        : 'text-slate-400 hover:text-white'
+                    }`}
+                  >
+                    <Sparkles size={12} className={codexTab === 'owned' ? 'text-yellow-300' : ''} />
+                    <span>Đã xoay ra ({collectedCount})</span>
+                  </button>
+                  <button
+                    onClick={() => { setCodexTab('all'); setSelectedCodexElement(null); }}
+                    className={`px-3 py-1.5 rounded-lg transition-all flex items-center gap-1.5 cursor-pointer ${
+                      codexTab === 'all'
+                        ? 'bg-gradient-to-r from-indigo-600 to-cyan-600 text-white shadow-md'
+                        : 'text-slate-400 hover:text-white'
+                    }`}
+                  >
+                    <Layers size={12} />
+                    <span>Tất cả ({totalElementsCount})</span>
+                  </button>
+                </div>
+
+                <button 
+                  onClick={() => { setShowCodexModal(false); setSelectedCodexElement(null); }}
+                  className="text-slate-400 hover:text-white p-2 rounded-xl hover:bg-slate-800 cursor-pointer transition shrink-0"
+                  title="Đóng sổ tay"
+                >
+                  <X size={20} />
+                </button>
+              </div>
             </div>
 
             {/* Progress Bar */}
-            <div className="w-full bg-slate-950 h-2.5 rounded-full mt-3 overflow-hidden border border-slate-800">
+            <div className="w-full bg-slate-950 h-2 rounded-full mt-3 overflow-hidden border border-slate-800">
               <div 
                 className="h-full bg-gradient-to-r from-cyan-400 via-indigo-500 to-pink-500 transition-all duration-500"
                 style={{ width: `${completionPercentage}%` }}
@@ -990,66 +1029,130 @@ export default function ElementGacha({ addReward, gamification, onElementUnlocke
             </div>
 
             {/* Elements Grid */}
-            <div className="flex-1 overflow-y-auto hide-scrollbar py-4 grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-2.5">
-              {GACHA_ELEMENTS.map(el => {
-                const isOwned = !!collection[el.id];
-                const count = collection[el.id]?.count || 0;
-
-                return (
+            <div className="flex-1 overflow-y-auto hide-scrollbar py-4 min-h-[300px]">
+              {displayedElements.length === 0 ? (
+                <div className="py-16 flex flex-col items-center justify-center text-center">
+                  <div className="w-16 h-16 rounded-2xl bg-indigo-500/10 border border-indigo-500/30 flex items-center justify-center text-indigo-400 mb-3 shadow-inner">
+                    <Atom size={32} className="animate-spin-slow" />
+                  </div>
+                  <h4 className="text-base font-bold text-white mb-1">Chưa có nguyên tố nào được xoay ra!</h4>
+                  <p className="text-slate-400 text-xs max-w-sm leading-relaxed mb-4">
+                    Toàn bộ nguyên tố chưa quay ra đều đã được ẩn. Hãy gạt cần hoặc nhấn nút quay Gacha để bắt đầu thu thập các nguyên tố hóa học nhé!
+                  </p>
                   <button
-                    key={el.id}
-                    onClick={() => setSelectedCodexElement(el)}
-                    className={`p-2.5 rounded-2xl border-2 flex flex-col items-center justify-between transition-all transform active:scale-95 cursor-pointer ${
-                      isOwned
-                        ? `${el.theme.border} bg-slate-800/90 shadow-md hover:scale-105`
-                        : 'border-slate-800 bg-slate-950/60 opacity-40 grayscale hover:grayscale-0 hover:opacity-80'
-                    }`}
+                    onClick={() => { setShowCodexModal(false); }}
+                    className="px-5 py-2.5 bg-gradient-to-r from-indigo-600 to-cyan-600 hover:from-indigo-500 hover:to-cyan-500 text-white font-bold text-xs rounded-xl shadow-lg transition active:scale-95 cursor-pointer"
                   >
-                    <div className="w-full flex justify-between items-center text-[10px] text-slate-400 font-mono">
-                      <span>{el.atomicNumber}</span>
-                      {count > 1 && <span className="text-cyan-400 font-bold">x{count}</span>}
-                    </div>
-
-                    <div className={`text-2xl font-black my-0.5 ${isOwned ? el.theme.textColor : 'text-slate-500'}`}>
-                      {el.symbol}
-                    </div>
-
-                    <div className="text-[10px] font-bold text-slate-300 truncate w-full text-center">
-                      {isOwned ? el.name : '???'}
-                    </div>
-
-                    <div className="mt-0.5 flex items-center gap-0.5">
-                      {[...Array(el.stars)].map((_, i) => (
-                        <Star key={i} size={8} className={isOwned ? `fill-current ${el.theme.textColor}` : 'fill-slate-600 text-slate-600'} />
-                      ))}
-                    </div>
+                    Quay Gacha Ngay
                   </button>
-                );
-              })}
+                </div>
+              ) : (
+                <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-2.5">
+                  {displayedElements.map(el => {
+                    const isOwned = !!collection[el.id];
+                    const count = collection[el.id]?.count || 0;
+
+                    return (
+                      <button
+                        key={el.id}
+                        onClick={() => {
+                          if (isOwned) {
+                            setSelectedCodexElement(el);
+                          }
+                        }}
+                        disabled={!isOwned}
+                        className={`p-2.5 rounded-2xl border-2 flex flex-col items-center justify-between transition-all transform ${
+                          isOwned
+                            ? `${el.theme.border} bg-slate-800/90 shadow-md hover:scale-105 active:scale-95 cursor-pointer hover:shadow-cyan-500/20`
+                            : 'border-slate-800/80 bg-slate-950/40 opacity-40 cursor-not-allowed'
+                        }`}
+                      >
+                        <div className="w-full flex justify-between items-center text-[10px] text-slate-400 font-mono">
+                          <span>{el.atomicNumber}</span>
+                          {count > 1 && (
+                            <span className="text-cyan-400 font-bold bg-cyan-950/80 border border-cyan-800 px-1.5 py-0.2 rounded-md">
+                              x{count}
+                            </span>
+                          )}
+                        </div>
+
+                        <div className={`text-2xl font-black my-0.5 ${isOwned ? el.theme.textColor : 'text-slate-600'}`}>
+                          {isOwned ? (
+                            el.symbol
+                          ) : (
+                            <span className="flex items-center justify-center my-0.5">
+                              <Lock size={18} className="text-slate-600" />
+                            </span>
+                          )}
+                        </div>
+
+                        <div className="text-[10px] font-bold text-slate-300 truncate w-full text-center">
+                          {isOwned ? el.name : '???'}
+                        </div>
+
+                        <div className="mt-0.5 flex items-center gap-0.5">
+                          {[...Array(el.stars)].map((_, i) => (
+                            <Star 
+                              key={i} 
+                              size={8} 
+                              className={isOwned ? `fill-current ${el.theme.textColor}` : 'fill-slate-700 text-slate-700'} 
+                            />
+                          ))}
+                        </div>
+                      </button>
+                    );
+                  })}
+                </div>
+              )}
             </div>
 
             {/* Detailed Inspector Modal for Selected Element */}
             {selectedCodexElement && (
-              <div className="mt-3 p-3.5 bg-slate-950 rounded-2xl border border-slate-800 flex flex-col sm:flex-row items-center justify-between gap-3 animate-fade-in">
-                <div className="flex items-center gap-3">
-                  <div className={`w-12 h-12 rounded-xl border-2 ${selectedCodexElement.theme.border} bg-slate-900 flex flex-col items-center justify-center flex-shrink-0`}>
+              <div className="mt-3 p-3.5 bg-slate-950 rounded-2xl border border-slate-800 flex flex-col sm:flex-row items-center justify-between gap-3 animate-fade-in relative shadow-xl">
+                <button 
+                  onClick={() => setSelectedCodexElement(null)}
+                  className="absolute top-2 right-2 text-slate-400 hover:text-white p-1 rounded-lg hover:bg-slate-800 cursor-pointer sm:hidden"
+                >
+                  <X size={15} />
+                </button>
+
+                <div className="flex items-center gap-3 w-full sm:w-auto">
+                  <div className={`w-14 h-14 rounded-2xl border-2 ${selectedCodexElement.theme.border} bg-slate-900 flex flex-col items-center justify-center flex-shrink-0 shadow-lg ${selectedCodexElement.theme.glow}`}>
                     <span className="text-[10px] text-slate-400 font-mono">{selectedCodexElement.atomicNumber}</span>
-                    <span className={`text-lg font-black ${selectedCodexElement.theme.textColor}`}>{selectedCodexElement.symbol}</span>
+                    <span className={`text-xl font-black ${selectedCodexElement.theme.textColor}`}>{selectedCodexElement.symbol}</span>
                   </div>
                   <div>
-                    <h4 className="font-bold text-sm text-white">
-                      {selectedCodexElement.name} ({selectedCodexElement.enName})
-                    </h4>
+                    <div className="flex items-center gap-2">
+                      <h4 className="font-bold text-sm text-white">
+                        {selectedCodexElement.name} ({selectedCodexElement.enName})
+                      </h4>
+                      {collection[selectedCodexElement.id]?.count > 1 && (
+                        <span className="text-[10px] font-black bg-cyan-500/20 text-cyan-300 border border-cyan-400/30 px-2 py-0.5 rounded-full">
+                          Đã quay x{collection[selectedCodexElement.id].count} lần
+                        </span>
+                      )}
+                    </div>
                     <p className="text-xs text-slate-400 max-w-lg mt-0.5 leading-relaxed">
                       {selectedCodexElement.description}
                     </p>
+                    {selectedCodexElement.funFact && (
+                      <p className="text-[11px] text-amber-300/90 mt-1 italic">
+                        💡 {selectedCodexElement.funFact}
+                      </p>
+                    )}
                   </div>
                 </div>
 
-                <div className="text-right flex-shrink-0">
+                <div className="text-right flex-shrink-0 flex sm:flex-col items-center sm:items-end justify-between w-full sm:w-auto gap-2">
                   <span className={`text-xs font-bold px-3 py-1 rounded-full border ${selectedCodexElement.theme.badgeBg}`}>
                     {selectedCodexElement.rarityLabel}
                   </span>
+                  <button
+                    onClick={() => setSelectedCodexElement(null)}
+                    className="hidden sm:inline-flex text-[11px] text-slate-400 hover:text-slate-200 mt-1 cursor-pointer font-medium"
+                  >
+                    Đóng chi tiết ✕
+                  </button>
                 </div>
               </div>
             )}
