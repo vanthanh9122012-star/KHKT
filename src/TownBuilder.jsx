@@ -35,7 +35,7 @@ const SUBJECT_COLORS = {
 
 
 
-export default function TownBuilder({ setActiveTab }) {
+export default function TownBuilder({ setActiveTab, addReward, gamification }) {
   const [houses, setHouses] = useState(INITIAL_TOWN);
   const [activeHouseIndex, setActiveHouseIndex] = useState(0);
   const [isPlanetDetailView, setIsPlanetDetailView] = useState(false);
@@ -48,6 +48,7 @@ export default function TownBuilder({ setActiveTab }) {
   const [submittedQuestions, setSubmittedQuestions] = useState({});
   const [score, setScore] = useState(0);
   const [isGenerating, setIsGenerating] = useState(false);
+  const [showUniverseGrandModal, setShowUniverseGrandModal] = useState(false);
 
   useEffect(() => {
     if (!auth.currentUser) return;
@@ -69,6 +70,15 @@ export default function TownBuilder({ setActiveTab }) {
             };
           });
           setHouses(merged);
+          
+          // Kiểm tra nếu đã hoàn thành tất cả phòng trên trang Universe
+          const totalAll = merged.reduce((sum, h) => sum + h.rooms.length, 0);
+          const completedAll = merged.reduce((sum, h) => sum + h.rooms.filter(r => r.completed).length, 0);
+          if (completedAll >= totalAll && totalAll > 0 && addReward) {
+            if (!gamification?.badges?.some(b => b.includes('Bá khí trên từng hạt bí'))) {
+              addReward(1000, 50, '🎃 Bá khí trên từng hạt bí');
+            }
+          }
         }
       } catch (err) {
         console.error("Lỗi tải tiến độ thị trấn:", err);
@@ -206,6 +216,10 @@ export default function TownBuilder({ setActiveTab }) {
     if (completed < total) return 'Tạo khí quyển';
     return 'Tiến hóa hoàn tất';
   };
+
+  const totalUniverseRooms = houses.reduce((sum, h) => sum + h.rooms.length, 0);
+  const completedUniverseRooms = houses.reduce((sum, h) => sum + h.rooms.filter(r => r.completed).length, 0);
+  const isAllUniverseDone = totalUniverseRooms > 0 && completedUniverseRooms >= totalUniverseRooms;
 
   return (
     <div className="animate-fade-in w-full h-full min-h-screen">
@@ -345,6 +359,61 @@ export default function TownBuilder({ setActiveTab }) {
           Giải các bài tập <span className="font-bold text-sky-600">Nâng Cao</span> theo chuyên đề để xây dựng các công trình. Kiến trúc sẽ ngày càng sang trọng!
         </p>
       </header>
+
+      {/* SPECIAL BADGE UNIVERSE PROGRESS BANNER */}
+      {isAllUniverseDone || gamification?.badges?.some(b => b.includes('Bá khí trên từng hạt bí')) ? (
+        <div className="bg-gradient-to-r from-amber-500 via-orange-500 to-yellow-400 p-6 rounded-3xl shadow-xl text-white mb-8 border-4 border-yellow-200 flex flex-col md:flex-row items-center justify-between gap-4 animate-fade-in">
+          <div className="flex items-center gap-4">
+            <div className="w-16 h-16 rounded-2xl bg-white/20 backdrop-blur-md flex items-center justify-center text-4xl shadow-inner shrink-0">
+              🎃
+            </div>
+            <div>
+              <div className="flex items-center gap-2 mb-1">
+                <span className="bg-black/30 text-yellow-200 text-xs font-black px-3 py-1 rounded-full uppercase tracking-wider">
+                  DANH HIỆU ĐẶC BIỆT ĐÃ MỞ KHÓA
+                </span>
+              </div>
+              <h3 className="text-2xl font-black tracking-wide text-white">
+                Bá khí trên từng hạt bí
+              </h3>
+              <p className="text-sm text-yellow-100 font-medium">
+                Bạn đã hoàn thành xuất sắc toàn bộ bài tập nâng cao trên toàn cõi My Universe!
+              </p>
+            </div>
+          </div>
+          <div className="bg-white/25 backdrop-blur-md px-5 py-2.5 rounded-2xl font-black text-sm border border-white/40 shadow-sm shrink-0 flex items-center gap-2">
+            <Award size={18} className="text-yellow-200" /> Đang Trang Bị
+          </div>
+        </div>
+      ) : (
+        <div className="bg-gradient-to-r from-slate-900 via-indigo-950 to-slate-900 p-5 rounded-3xl shadow-md text-white mb-8 border border-indigo-800/40 flex flex-col md:flex-row items-center justify-between gap-4">
+          <div className="flex items-center gap-3">
+            <div className="w-12 h-12 rounded-2xl bg-indigo-500/20 border border-indigo-400/30 flex items-center justify-center text-2xl shrink-0">
+              🎃
+            </div>
+            <div>
+              <span className="text-[11px] font-black uppercase text-amber-400 tracking-wider block">
+                Thử Thách Vũ Trụ Đặc Biệt
+              </span>
+              <h4 className="font-bold text-white text-sm md:text-base">
+                Hoàn thành toàn bộ bài tập ở trang Universe để nhận danh hiệu đặc biệt: <span className="text-amber-300 font-black">"Bá khí trên từng hạt bí"</span>
+              </h4>
+            </div>
+          </div>
+          <div className="flex items-center gap-4 shrink-0">
+            <div className="text-left md:text-right">
+              <span className="text-xs text-slate-400 block font-bold">Tiến độ Universe</span>
+              <span className="text-base font-black text-sky-400">{completedUniverseRooms}/{totalUniverseRooms} phòng</span>
+            </div>
+            <div className="w-28 bg-slate-800 h-3 rounded-full overflow-hidden border border-slate-700">
+              <div 
+                className="bg-gradient-to-r from-sky-400 to-amber-400 h-full transition-all duration-500"
+                style={{ width: `${(completedUniverseRooms / (totalUniverseRooms || 1)) * 100}%` }}
+              ></div>
+            </div>
+          </div>
+        </div>
+      )}
 
       
           {/* Mindmap Town View */}
@@ -521,5 +590,55 @@ export default function TownBuilder({ setActiveTab }) {
       
         </div>
       )}
+
+      {/* UNIVERSE SPECIAL BADGE CELEBRATION MODAL */}
+      {showUniverseGrandModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-md p-4 animate-fade-in">
+          <div className="bg-gradient-to-b from-slate-900 via-indigo-950 to-slate-900 border-4 border-amber-400 rounded-3xl p-8 max-w-lg w-full text-center text-white shadow-2xl relative overflow-hidden">
+            <div className="absolute top-0 left-0 w-full h-3 bg-gradient-to-r from-amber-400 via-rose-500 to-yellow-300"></div>
+            
+            <div className="w-24 h-24 mx-auto mb-4 rounded-3xl bg-gradient-to-tr from-amber-400 to-yellow-500 flex items-center justify-center text-5xl shadow-xl shadow-yellow-500/30 animate-bounce">
+              🎃
+            </div>
+
+            <div className="inline-block bg-amber-400/20 text-amber-300 border border-amber-400/40 text-xs font-black px-4 py-1.5 rounded-full mb-3 uppercase tracking-wider">
+              🌟 DANH HIỆU ĐẶC BIỆT MỚI
+            </div>
+
+            <h2 className="text-3xl font-black text-amber-300 mb-2 tracking-wide">
+              Bá khí trên từng hạt bí
+            </h2>
+
+            <p className="text-slate-300 text-sm leading-relaxed mb-6">
+              Tuyệt đỉnh trí tuệ! Bạn đã hoàn thành toàn bộ tất cả bài tập nâng cao trên toàn cõi <strong>My Universe</strong>! Danh hiệu đặc biệt đã được mở khóa và tự động trang bị cho bạn!
+            </p>
+
+            <div className="bg-white/10 rounded-2xl p-4 border border-white/10 mb-6 flex justify-around text-center">
+              <div>
+                <span className="text-xs text-slate-400 block font-bold">Kinh nghiệm</span>
+                <span className="text-xl font-black text-amber-400">+1000 XP</span>
+              </div>
+              <div className="w-px bg-white/10"></div>
+              <div>
+                <span className="text-xs text-slate-400 block font-bold">Đá quý</span>
+                <span className="text-xl font-black text-rose-400">+50 Ruby</span>
+              </div>
+              <div className="w-px bg-white/10"></div>
+              <div>
+                <span className="text-xs text-slate-400 block font-bold">Tiến độ</span>
+                <span className="text-xl font-black text-emerald-400">32/32 Xong</span>
+              </div>
+            </div>
+
+            <button
+              onClick={() => setShowUniverseGrandModal(false)}
+              className="w-full py-4 bg-gradient-to-r from-amber-500 to-yellow-500 hover:from-amber-400 hover:to-yellow-400 text-slate-950 font-black rounded-2xl shadow-lg shadow-yellow-500/40 text-lg transition-all active:scale-95"
+            >
+              Trang Bị & Khoe Danh Hiệu Ngay 🚀
+            </button>
+          </div>
+        </div>
+      )}
     </div>
-  );}
+  );
+}

@@ -9,6 +9,7 @@ import PomodoroFocus from './PomodoroFocus';
 import Dashboard from './Dashboard';
 import AssessmentManager from './AssessmentManager';
 import TownBuilder from './TownBuilder';
+import FlashcardManager from './FlashcardManager';
 import LoginPage from './LoginPage';
 import { onAuthStateChanged, signOut } from 'firebase/auth';
 import { doc, getDoc, setDoc } from 'firebase/firestore';
@@ -108,7 +109,7 @@ const Sidebar = ({ activeTab, setActiveTab, gamification, currentUser, setShowAu
               <div className="flex items-center justify-between mt-1">
                 <div className="text-[11px] text-gray-500 truncate font-medium flex items-center gap-1">
                   <Award size={12} className="text-yellow-500" />
-                  {getBadgeForLevel(gamification?.level || 1)}
+                  {gamification?.activeTitle || (gamification?.badges?.find(b => b.includes('Bá khí trên từng hạt bí')) || getBadgeForLevel(gamification?.level || 1))}
                 </div>
                 <div className="text-[11px] font-bold text-red-500 flex items-center gap-1 bg-red-50 px-1.5 py-0.5 rounded">
                   <Gem size={12} />
@@ -129,503 +130,6 @@ const Sidebar = ({ activeTab, setActiveTab, gamification, currentUser, setShowAu
             Đăng nhập
           </button>
         )}
-      </div>
-    </div>
-  );
-};
-
-const FlashcardManager = ({ addReward }) => {
-  const [progress, setProgress] = useState([]);
-  const [selectedSubject, setSelectedSubject] = useState(null);
-  const [selectedGrade, setSelectedGrade] = useState(null);
-  const [showFilters, setShowFilters] = useState(false);
-  
-  // Trạng thái chơi Flashcard
-  const [dueList, setDueList] = useState([]);
-  const [currentCardIndex, setCurrentCardIndex] = useState(0);
-  const [isFlipped, setIsFlipped] = useState(false);
-  const [isStudying, setIsStudying] = useState(false);
-
-  // Trạng thái tạo mới thẻ
-  const [isCreating, setIsCreating] = useState(false);
-  const [newCard, setNewCard] = useState({
-    subject: 'Anh',
-    grade: 'Lớp 9',
-    question: '',
-    answer: ''
-  });
-
-  // Trạng thái tạo bằng AI
-  const [isAIGeneratorOpen, setIsAIGeneratorOpen] = useState(false);
-  const [aiMaterial, setAiMaterial] = useState('');
-  const [isGenerating, setIsGenerating] = useState(false);
-
-  // Khởi tạo tiến độ từ Firebase và localStorage
-  useEffect(() => {
-    const loadFlashcards = async () => {
-      let loadedProgress = [];
-      const uid = auth.currentUser?.uid;
-      
-      try {
-        if (uid) {
-          const userDoc = await getDoc(doc(db, 'users', uid));
-          if (userDoc.exists() && userDoc.data().flashcards) {
-            loadedProgress = userDoc.data().flashcards;
-          } else {
-             const saved = localStorage.getItem('studyflow_vocab');
-             if (saved) loadedProgress = JSON.parse(saved);
-          }
-        } else {
-           const saved = localStorage.getItem('studyflow_vocab');
-           if (saved) loadedProgress = JSON.parse(saved);
-        }
-      } catch (e) {
-        console.error("Lỗi khi tải flashcards:", e);
-        const saved = localStorage.getItem('studyflow_vocab');
-        if (saved) loadedProgress = JSON.parse(saved);
-      }
-
-      // Xóa các thẻ lỗi
-      const originalLength = loadedProgress.length;
-      loadedProgress = loadedProgress.filter(c => c.question && c.question.trim() !== '' && c.question !== 'undefined');
-      
-      // Gộp các card mặc định
-      const newCards = INITIAL_FLASHCARDS.filter(c => !loadedProgress.find(lp => lp.id === c.id));
-      if (newCards.length > 0) {
-        const formattedNew = newCards.map(c => ({
-          ...c,
-          interval: 0,
-          eFactor: 2.5,
-          nextReviewTime: Date.now(),
-          mistakes: 0
-        }));
-        loadedProgress = [...loadedProgress, ...formattedNew];
-      }
-
-      setProgress(loadedProgress);
-      syncProgress(loadedProgress);
-    };
-
-    loadFlashcards();
-  }, []);
-
-  const syncProgress = (newProgress) => {
-    localStorage.setItem('studyflow_vocab', JSON.stringify(newProgress));
-    if (auth.currentUser) {
-      setDoc(doc(db, 'users', auth.currentUser.uid), { flashcards: newProgress }, { merge: true })
-        .catch(err => console.error("Lỗi đồng bộ flashcards:", err));
-    }
-  };
-
-  const getFilteredCards = () => {
-    return progress.filter(p => 
-      (!selectedSubject || p.subject === selectedSubject) &&
-      (!selectedGrade || p.grade === selectedGrade)
-    );
-  };
-
-  const getDueCardsCount = () => {
-    const now = Date.now();
-    return getFilteredCards().filter(p => p.nextReviewTime <= now).length;
-  };
-
-  const startStudy = () => {
-    const now = Date.now();
-    const due = getFilteredCards().filter(p => p.nextReviewTime <= now);
-    setDueList(due.sort(() => Math.random() - 0.5));
-    setCurrentCardIndex(0);
-    setIsFlipped(false);
-    setIsStudying(true);
-  };
-
-  const handleAnswer = (isRemembered) => {
-    const currentCard = dueList[currentCardIndex];
-    
-    // Cập nhật thuật toán SuperMemo-2 siêu cơ bản
-    const updatedProgress = progress.map(item => {
-      if (item.id === currentCard.id) {
-        let newInterval, newEFactor;
-        if (isRemembered) {
-          // Nhớ -> Tăng interval và tặng XP, Ruby
-          newInterval = item.interval === 0 ? 1 : (item.interval === 1 ? 2 : Math.ceil(item.interval * item.eFactor));
-          newEFactor = item.eFactor + 0.1;
-        } else {
-          // Quên -> Reset interval về 1 phút
-          newInterval = 1;
-          newEFactor = Math.max(1.3, item.eFactor - 0.2);
-        }
-        
-        return {
-          ...item,
-          interval: newInterval,
-          eFactor: newEFactor,
-          nextReviewTime: Date.now() + newInterval * 60 * 1000, 
-          mistakes: !isRemembered ? (item.mistakes || 0) + 1 : (item.mistakes || 0),
-        };
-      }
-      return item;
-    });
-
-    syncProgress(updatedProgress);
-    setProgress(updatedProgress);
-    
-    if (currentCardIndex + 1 < dueList.length) {
-      setCurrentCardIndex(prev => prev + 1);
-      setIsFlipped(false);
-    } else {
-      // Hết bài
-      setIsStudying(false);
-    }
-  };
-
-  const handleCreateCard = (e) => {
-    e.preventDefault();
-    if (!newCard.question.trim() || !newCard.answer.trim()) return;
-
-    const newId = Math.max(...progress.map(c => c.id), 0) + 1;
-    const cardToAdd = {
-      ...newCard,
-      id: newId,
-      interval: 0,
-      eFactor: 2.5,
-      nextReviewTime: Date.now(),
-      mistakes: 0
-    };
-
-    const updatedProgress = [...progress, cardToAdd];
-    setProgress(updatedProgress);
-    syncProgress(updatedProgress);
-    
-    // Reset form but keep subject/grade
-    setNewCard(prev => ({ ...prev, question: '', answer: '' }));
-    setIsCreating(false);
-  };
-
-  const handleAIGenerate = async (e) => {
-    e.preventDefault();
-    if (!aiMaterial.trim()) return;
-    
-    setIsGenerating(true);
-    try {
-      await new Promise(resolve => setTimeout(resolve, 2000));
-      
-      const sentences = aiMaterial.split(/[.?!]+/).filter(s => s.trim().length > 10);
-      const parsedCards = [];
-      sentences.slice(0, 5).forEach(sentence => {
-        const words = sentence.trim().split(' ');
-        if (words.length > 3) {
-          const randIdx = Math.floor(Math.random() * (words.length - 2)) + 1;
-          const answer = words.slice(randIdx, randIdx + 2).join(' ');
-          const question = sentence.replace(answer, '___').trim();
-          parsedCards.push({ question, answer });
-        }
-      });
-      
-      if (parsedCards.length === 0) {
-        parsedCards.push({ question: "Nội dung chính của tài liệu?", answer: "Bạn cần xem lại tài liệu." });
-      }
-
-      const baseId = Math.max(...(progress.length > 0 ? progress.map(c => c.id) : [0])) + 1;
-      
-      const newAiCards = parsedCards.map((card, idx) => ({
-        id: baseId + idx,
-        subject: selectedSubject || 'Khác',
-        grade: selectedGrade || 'Tự do',
-        question: card.question,
-        answer: card.answer,
-        interval: 0,
-        eFactor: 2.5,
-        nextReviewTime: Date.now(),
-        mistakes: 0
-      }));
-
-      const newProgress = [...progress, ...newAiCards];
-      setProgress(newProgress);
-      syncProgress(newProgress);
-      
-      setAiMaterial('');
-      setIsAIGeneratorOpen(false);
-      alert(`Đã tạo thành công ${newAiCards.length} flashcard từ tài liệu của bạn!`);
-      
-    } catch (error) {
-      console.error("Lỗi khi tạo flashcard bằng AI:", error);
-      alert("Đã có lỗi xảy ra. Vui lòng kiểm tra lại tài liệu.");
-    } finally {
-      setIsGenerating(false);
-    }
-  };
-
-  if (isStudying) {
-    if (dueList.length === 0) return null;
-    const currentCard = dueList[currentCardIndex];
-
-    return (
-      <div className="max-w-2xl mx-auto py-8 animate-fade-in flex flex-col h-full">
-        <header className="mb-8 text-center flex justify-between items-center">
-            <button onClick={() => setIsStudying(false)} className="text-gray-400 hover:text-gray-700">
-                &larr; Quay lại
-            </button>
-            <div>
-                <h1 className="text-2xl font-bold text-gray-800">Ôn tập thẻ ghi nhớ</h1>
-                <p className="text-gray-500 text-sm">Tiến độ: {currentCardIndex + 1} / {dueList.length}</p>
-            </div>
-            <div className="w-16"></div>
-        </header>
-
-        <div className="flex-1 flex flex-col items-center justify-center w-full perspective-1000">
-            {/* Flashcard */}
-            <div className={`relative w-full h-80 rounded-3xl transition-all duration-500 preserve-3d cursor-pointer ${isFlipped ? 'rotate-y-180' : ''}`} onClick={() => !isFlipped && setIsFlipped(true)}>
-                
-                {/* Mặt trước (Câu hỏi) */}
-                <div className="absolute inset-0 backface-hidden bg-white rounded-3xl shadow-lg border-2 border-sky-100 flex flex-col items-center justify-center p-8 text-center">
-                    <div className="absolute top-4 left-4 flex gap-2">
-                        <span className={`text-xs font-bold border px-2 py-1 rounded ${getSubjectStyle(currentCard.subject)}`}>{currentCard.subject}</span>
-                        <span className="text-xs font-bold text-gray-600 bg-gray-100 border border-gray-200 px-2 py-1 rounded">{currentCard.grade}</span>
-                    </div>
-                    <p className="text-gray-400 text-sm font-medium mb-4 uppercase tracking-wider">Câu hỏi</p>
-                    <h2 className="text-3xl font-bold text-gray-800 leading-tight">
-                        {currentCard.question}
-                    </h2>
-                    {!isFlipped && (
-                        <div className="absolute bottom-6 text-gray-400 text-sm animate-pulse">
-                            Bấm vào thẻ để lật xem đáp án
-                        </div>
-                    )}
-                </div>
-
-                {/* Mặt sau (Đáp án) */}
-                <div className="absolute inset-0 backface-hidden bg-sky-50 rounded-3xl shadow-lg border-2 border-sky-200 flex flex-col items-center justify-center p-8 text-center rotate-y-180">
-                    <p className="text-sky-400 text-sm font-medium mb-4 uppercase tracking-wider">Đáp án</p>
-                    <h2 className="text-3xl font-bold text-sky-900 leading-tight">
-                        {currentCard.answer}
-                    </h2>
-                </div>
-            </div>
-
-            {/* Nút đánh giá sau khi lật */}
-            <div className={`mt-10 flex gap-4 transition-all duration-300 ${isFlipped ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4 pointer-events-none'}`}>
-                <button 
-                    onClick={() => handleAnswer(false)}
-                    className="px-8 py-4 bg-white border-2 border-red-200 text-red-600 rounded-2xl font-bold hover:bg-red-50 hover:border-red-300 transition-all flex items-center gap-2 shadow-sm"
-                >
-                    <X size={20} /> Quên (Lặp lại ngay)
-                </button>
-                <button 
-                    onClick={() => handleAnswer(true)}
-                    className="px-8 py-4 bg-primary text-white rounded-2xl font-bold hover:bg-sky-700 transition-all flex items-center gap-2 shadow-lg shadow-sky-200"
-                >
-                    <Check size={20} /> Nhớ tốt (Giãn cách)
-                </button>
-            </div>
-        </div>
-      </div>
-    );
-  }
-
-  // Màn hình chọn bộ lọc
-  const totalDue = getDueCardsCount();
-
-  return (
-    <div className="space-y-6 animate-fade-in pb-10">
-      <header className="mb-8 flex justify-between items-start">
-        <div>
-          <h1 className="text-3xl font-bold text-gray-800 mb-2">Flashcard Ôn Tập</h1>
-          <p className="text-gray-500">Kiểm tra kiến thức sau mỗi bài học SGK từ lớp 6 - 9.</p>
-        </div>
-        <div className="flex gap-2">
-          <button 
-            onClick={() => { setIsAIGeneratorOpen(!isAIGeneratorOpen); setIsCreating(false); }}
-            className={`p-3 rounded-xl shadow-sm border transition-all text-sm font-medium flex items-center gap-2 ${isAIGeneratorOpen ? 'bg-indigo-50 text-indigo-600 border-indigo-200' : 'bg-white text-indigo-600 border-indigo-200 hover:bg-indigo-50'}`}
-          >
-            {isAIGeneratorOpen ? <X size={20} /> : <Bot size={20} />}
-            <span className="hidden md:block">{isAIGeneratorOpen ? 'Hủy' : 'Tạo bằng AI'}</span>
-          </button>
-          <button 
-            onClick={() => { setIsCreating(!isCreating); setIsAIGeneratorOpen(false); }}
-            className={`p-3 rounded-xl shadow-sm border transition-all text-sm font-medium flex items-center gap-2 ${isCreating ? 'bg-rose-50 text-rose-600 border-rose-200' : 'bg-primary text-white border-primary hover:bg-sky-600'}`}
-          >
-            {isCreating ? <X size={20} /> : <BookOpen size={20} />}
-            <span className="hidden md:block">{isCreating ? 'Hủy' : 'Tạo thẻ mới'}</span>
-          </button>
-          <button 
-            onClick={() => setShowFilters(!showFilters)}
-            className="p-3 bg-surface rounded-xl shadow-sm border border-gray-100 hover:bg-gray-50 transition-all text-gray-600 flex items-center gap-2"
-          >
-            <Menu size={20} />
-            <span className="text-sm font-medium hidden md:block">Bộ lọc</span>
-          </button>
-        </div>
-      </header>
-
-      {isAIGeneratorOpen && (
-        <form onSubmit={handleAIGenerate} className="bg-gradient-to-br from-indigo-50 to-purple-50 rounded-3xl p-6 shadow-sm border border-indigo-100 mb-8 animate-fade-in">
-          <h2 className="text-xl font-bold text-indigo-900 mb-2 flex items-center gap-2">
-            <Bot className="text-indigo-600" size={24} /> Trợ lý AI tạo Flashcard
-          </h2>
-          <p className="text-indigo-700/70 text-sm mb-6">Dán nội dung bài học, tài liệu của bạn vào đây. AI sẽ tự động phân tích và trích xuất thành các thẻ ghi nhớ (Flashcard) dạng hỏi - đáp ngắn gọn.</p>
-          
-          <div className="space-y-6">
-            <div>
-                <label className="block text-sm font-bold text-indigo-900 mb-2">Nội dung tài liệu học tập:</label>
-              <textarea 
-                value={aiMaterial}
-                onChange={(e) => setAiMaterial(e.target.value)}
-                placeholder="Ví dụ: Chiến tranh thế giới thứ hai diễn ra từ năm 1939 đến năm 1945..."
-                className="w-full p-4 bg-white/80 backdrop-blur-sm border border-indigo-200 rounded-xl h-48 resize-none focus:ring-2 focus:ring-indigo-400 outline-none placeholder:text-gray-400"
-                required
-              />
-            </div>
-            
-            <div className="flex justify-end">
-              <button 
-                type="submit"
-                disabled={isGenerating || !aiMaterial.trim()}
-                className="px-6 py-3 bg-gradient-to-r from-indigo-500 to-purple-500 text-white font-bold rounded-xl hover:from-indigo-600 hover:to-purple-600 transition flex items-center gap-2 shadow-md shadow-indigo-200 disabled:opacity-50"
-              >
-                {isGenerating ? <Loader2 className="animate-spin" size={20} /> : <Sparkles size={20} />}
-                {isGenerating ? 'AI đang phân tích & tạo thẻ...' : 'Bắt đầu tạo Flashcard tự động'}
-              </button>
-            </div>
-          </div>
-        </form>
-      )}
-
-      {isCreating && (
-        <form onSubmit={handleCreateCard} className="bg-surface rounded-3xl p-6 shadow-sm border border-gray-100 mb-8 animate-fade-in">
-          <h2 className="text-xl font-bold text-gray-800 mb-6 flex items-center gap-2">
-            <BookOpen className="text-primary" size={24} /> Tạo bộ thẻ từ vựng / kiến thức mới
-          </h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-            <div>
-              <label className="block text-sm font-bold text-gray-700 mb-2">Phân Môn</label>
-              <select 
-                value={newCard.subject}
-                onChange={(e) => setNewCard({...newCard, subject: e.target.value})}
-                className="w-full p-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary outline-none"
-              >
-                {SUBJECTS.map(s => <option key={s} value={s}>{s}</option>)}
-              </select>
-            </div>
-            <div>
-              <label className="block text-sm font-bold text-gray-700 mb-2">Khối Lớp</label>
-              <select 
-                value={newCard.grade}
-                onChange={(e) => setNewCard({...newCard, grade: e.target.value})}
-                className="w-full p-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary outline-none"
-              >
-                {GRADES.map(g => <option key={g} value={g}>{g}</option>)}
-              </select>
-            </div>
-          </div>
-          <div className="space-y-6">
-            <div>
-              <label className="block text-sm font-bold text-gray-700 mb-2">Mặt trước (Từ vựng / Câu hỏi)</label>
-              <textarea 
-                value={newCard.question}
-                onChange={(e) => setNewCard({...newCard, question: e.target.value})}
-                placeholder="Ví dụ: Serendipity"
-                className="w-full p-4 bg-gray-50 border border-gray-200 rounded-xl h-24 resize-none focus:ring-2 focus:ring-primary outline-none"
-                required
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-bold text-gray-700 mb-2">Mặt sau (Định nghĩa / Câu trả lời)</label>
-              <textarea 
-                value={newCard.answer}
-                onChange={(e) => setNewCard({...newCard, answer: e.target.value})}
-                placeholder="Ví dụ: Sự tình cờ may mắn"
-                className="w-full p-4 bg-gray-50 border border-gray-200 rounded-xl h-24 resize-none focus:ring-2 focus:ring-primary outline-none"
-                required
-              />
-            </div>
-          </div>
-          <div className="mt-6 flex justify-end">
-            <button 
-              type="submit"
-              className="px-6 py-3 bg-primary text-white font-bold rounded-xl shadow-md shadow-sky-200 hover:bg-sky-600 transition flex items-center gap-2"
-            >
-              <Check size={20} /> Lưu Thẻ
-            </button>
-          </div>
-        </form>
-      )}
-
-      {/* Filters Dropdown / Expandable */}
-      <div className={`transition-all duration-300 overflow-hidden ${showFilters ? 'max-h-[1000px] opacity-100 mb-6' : 'max-h-0 opacity-0 mb-0'}`}>
-        <div className="bg-surface rounded-3xl p-6 shadow-sm border border-gray-100 space-y-6">
-          <div>
-            <div className="flex items-center gap-2 mb-3 text-gray-700 font-semibold">
-              <Hash size={18} className="text-pink-500" />
-              <span>Khối học (Lớp 6 - 9)</span>
-            </div>
-            <div className="flex flex-wrap gap-2">
-              <button 
-                onClick={() => setSelectedGrade(null)}
-                className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${!selectedGrade ? 'bg-pink-500 text-white shadow-md shadow-pink-200' : 'bg-pink-50 text-pink-600 hover:bg-pink-100'}`}
-              >
-                Tất cả các lớp
-              </button>
-              {GRADES.map(grade => (
-                <button 
-                  key={grade}
-                  onClick={() => setSelectedGrade(grade)}
-                  className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${selectedGrade === grade ? 'bg-pink-500 text-white shadow-md shadow-pink-200' : 'bg-pink-50 text-pink-600 hover:bg-pink-100'}`}
-                >
-                  {grade}
-                </button>
-              ))}
-            </div>
-          </div>
-
-          <div>
-            <div className="flex items-center gap-2 mb-3 text-gray-700 font-semibold">
-              <Book size={18} className="text-primary" />
-              <span>Phân Môn (8 Môn)</span>
-            </div>
-            <div className="flex flex-wrap gap-2">
-              <button 
-                onClick={() => setSelectedSubject(null)}
-                className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${!selectedSubject ? 'bg-primary text-white shadow-md shadow-sky-200' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'}`}
-              >
-                Tất cả các môn
-              </button>
-              {SUBJECTS.map(sub => (
-                <button 
-                  key={sub}
-                  onClick={() => setSelectedSubject(sub)}
-                  className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${selectedSubject === sub ? 'bg-primary text-white shadow-md shadow-sky-200' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'}`}
-                >
-                  {sub}
-                </button>
-              ))}
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Bảng điều khiển ôn tập */}
-      <div className="bg-gradient-to-br from-sky-50 to-cyan-50 rounded-3xl p-8 shadow-sm border border-sky-100 text-center">
-          <Layers size={48} className="mx-auto text-sky-400 mb-4" />
-          <h2 className="text-2xl font-bold text-gray-800 mb-2">
-              {selectedSubject ? `${selectedSubject} - ` : 'Tất cả môn - '}
-              {selectedGrade ? selectedGrade : 'Tất cả lớp'}
-          </h2>
-          <p className="text-gray-600 mb-6 max-w-md mx-auto">
-              Bạn đang có <strong className="text-primary text-lg">{totalDue}</strong> thẻ ghi nhớ cần ôn tập lúc này dựa theo thuật toán Spaced Repetition.
-          </p>
-          
-          {totalDue > 0 ? (
-              <button 
-                  onClick={startStudy}
-                  className="px-8 py-4 bg-primary text-white rounded-full font-bold text-lg shadow-lg shadow-sky-300 hover:bg-sky-700 transition-all hover:-translate-y-1 flex items-center gap-2 mx-auto"
-              >
-                  <Play size={20} /> Bắt đầu ôn tập ngay
-              </button>
-          ) : (
-              <div className="px-8 py-4 bg-green-100 text-green-700 rounded-full font-bold text-lg inline-flex items-center gap-2 mx-auto">
-                  <CheckCircle2 size={24} /> Tuyệt vời! Không còn thẻ nào đến hạn.
-              </div>
-          )}
       </div>
     </div>
   );
@@ -696,7 +200,7 @@ const MOCK_USERS = [
 
 const LeaderboardManager = ({ gamification }) => {
   const currentTotalXp = 175 * (gamification?.level || 1) * ((gamification?.level || 1) - 1) + (gamification?.xp || 0);
-  const currentBadge = getBadgeForLevel(gamification?.level || 1);
+  const currentBadge = gamification?.activeTitle || (gamification?.badges?.find(b => b.includes('Bá khí trên từng hạt bí')) || getBadgeForLevel(gamification?.level || 1));
   
   const allUsers = [
     ...MOCK_USERS,
@@ -1307,14 +811,6 @@ export default function App() {
       let newBadges = [...prev.badges];
       let didLevelUp = false;
 
-      const badgeMap = {
-        2: '📖 Học giả',
-        3: '🧠 Tri thức',
-        4: '⚡ Tinh anh',
-        5: '👑 Bậc thầy',
-        10: '💎 Huyền thoại'
-      };
-
       const getXpReq = (lvl) => lvl * 350;
       let xpReq = getXpReq(newLevel);
 
@@ -1323,12 +819,25 @@ export default function App() {
         newLevel += 1;
         didLevelUp = true;
         xpReq = getXpReq(newLevel);
-        if (badgeMap[newLevel] && !newBadges.includes(badgeMap[newLevel])) {
-          newBadges.push(badgeMap[newLevel]);
+        const levelBadge = getBadgeForLevel(newLevel);
+        if (levelBadge && !newBadges.includes(levelBadge)) {
+          newBadges.push(levelBadge);
         }
       }
 
-      const newState = { xp: newXp, level: newLevel, badges: newBadges, rubies: newRubies };
+      if (newBadge && !newBadges.includes(newBadge)) {
+        newBadges.push(newBadge);
+      }
+
+      const newActiveTitle = newBadge || prev.activeTitle || (newBadges.find(b => b.includes('Bá khí trên từng hạt bí')) || getBadgeForLevel(newLevel));
+
+      const newState = { 
+        xp: newXp, 
+        level: newLevel, 
+        badges: newBadges, 
+        rubies: newRubies,
+        activeTitle: newActiveTitle
+      };
       
       if (didLevelUp) {
         setLevelUpInfo({ level: newLevel, badge: getBadgeForLevel(newLevel) });
@@ -1373,12 +882,12 @@ export default function App() {
         <div className="max-w-5xl mx-auto h-full">
           {activeTab === 'dashboard' && <Dashboard setActiveTab={setActiveTab} />}
           {activeTab === 'timetable' && <TimetableManager />}
-          {activeTab === 'flashcard' && <FlashcardManager addReward={addReward} />}
+          {activeTab === 'flashcard' && <FlashcardManager addReward={addReward} currentUser={currentUser} />}
           {activeTab === 'quiz' && <QuizManager addReward={addReward} />}
           {activeTab === 'assessment' && <AssessmentManager addReward={addReward} />}
           {activeTab === 'games' && <GamesManager addReward={addReward} gamification={gamification} />}
             {activeTab === 'competition' && <TournamentManager addReward={addReward} currentUser={currentUser} />}
-          {activeTab === 'tasks' && <TownBuilder setActiveTab={setActiveTab} />}
+          {activeTab === 'tasks' && <TownBuilder setActiveTab={setActiveTab} addReward={addReward} gamification={gamification} />}
           {activeTab === 'review' && <ReviewManager addReward={addReward} />}
           {activeTab === 'focus' && <PomodoroFocus />}
           {activeTab === 'stats' && <StatsDashboard />}
