@@ -1,7 +1,8 @@
 // Bộ máy sinh câu hỏi tương tự cùng dạng (Isomorphic Problem Generator)
 // và Hướng dẫn giải chi tiết từng bước (Step-by-Step Worked Solution)
+// Bám sát chương trình THCS Kết nối tri thức với cuộc sống
 
-export const generateSimilarQuestionData = (question, subject = 'Toán', quizTitle = '') => {
+export const generateSimilarQuestionData = (question, subject = 'Toán', quizTitle = '', isVariant = false) => {
   if (!question) return null;
 
   const text = (question.text || question.question || '').toLowerCase();
@@ -16,6 +17,33 @@ export const generateSimilarQuestionData = (question, subject = 'Toán', quizTit
     
     // Dạng: Lũy thừa (2^3, 3^2, a^m * a^n,...)
     if (text.includes('^') || text.includes('lũy thừa') || text.includes('luỹ thừa') || text.includes('mũ')) {
+      if (isVariant) {
+        return {
+          topic: "Lũy thừa với số mũ tự nhiên (Biến thể 2)",
+          originalText: rawText,
+          similarQuestion: "Tính giá trị của biểu thức lũy thừa: 4^3",
+          similarOptions: ["12", "16", "64", "256"],
+          similarCorrect: "64",
+          steps: [
+            {
+              stepNumber: 1,
+              title: "Nhớ lại định nghĩa lũy thừa",
+              detail: "Lũy thừa bậc 3 của 4 nghĩa là tích của 3 thừa số 4 nhân với nhau: 4^3 = 4 × 4 × 4."
+            },
+            {
+              stepNumber: 2,
+              title: "Thực hiện phép nhân từng bước",
+              detail: "• Lấy 4 × 4 = 16\n• Lấy tiếp 16 × 4 = 64 (chú ý: tuyệt đối không lấy 4 nhân 3 = 12)."
+            },
+            {
+              stepNumber: 3,
+              title: "Kết luận",
+              detail: "Vậy giá trị của 4^3 là 64."
+            }
+          ],
+          tipForOriginal: `💡 Mẹo áp dụng cho câu của bạn: Trong câu hỏi gốc "${rawText}", hãy phân biệt rõ cơ số (viết to bên dưới) và số mũ (viết nhỏ bên trên) để nhân đúng số lượng thừa số!`
+        };
+      }
       return {
         topic: "Lũy thừa với số mũ tự nhiên",
         originalText: rawText,
@@ -50,6 +78,33 @@ export const generateSimilarQuestionData = (question, subject = 'Toán', quizTit
 
     // Dạng: Tập hợp N và N*
     if (text.includes('n*') || text.includes('tập hợp số tự nhiên') || text.includes('thuộc tập hợp') || text.includes('∈') || text.includes('∉')) {
+      if (isVariant) {
+        return {
+          topic: "Tập hợp số tự nhiên N và N* (Biến thể 2)",
+          originalText: rawText,
+          similarQuestion: "Khẳng định nào sau đây là ĐÚNG khi nói về số 0?",
+          similarOptions: ["0 ∈ N*", "0 ∉ N", "0 ∈ N và 0 ∉ N*", "0 không phải số tự nhiên"],
+          similarCorrect: "0 ∈ N và 0 ∉ N*",
+          steps: [
+            {
+              stepNumber: 1,
+              title: "Nhớ lại thành phần của hai tập hợp",
+              detail: "• N = {0, 1, 2, 3, ...} gồm tất cả các số tự nhiên, BẮT ĐẦU từ số 0.\n• N* = {1, 2, 3, ...} gồm các số tự nhiên KHÁC 0, bắt đầu từ số 1."
+            },
+            {
+              stepNumber: 2,
+              title: "Kiểm tra vị trí của số 0",
+              detail: "Số 0 nằm trong N nên 0 ∈ N. Số 0 không nằm trong N* nên 0 ∉ N*."
+            },
+            {
+              stepNumber: 3,
+              title: "Kết luận",
+              detail: "Khẳng định đúng là: 0 ∈ N và 0 ∉ N*."
+            }
+          ],
+          tipForOriginal: `💡 Mẹo áp dụng cho câu của bạn: Chú ý dấu sao (*) trong kí hiệu N*. Dấu sao biểu thị 'khác 0'. Vì vậy số 0 là phần tử duy nhất thuộc N nhưng không thuộc N*!`
+        };
+      }
       return {
         topic: "Tập hợp số tự nhiên N và N*",
         originalText: rawText,
@@ -77,8 +132,35 @@ export const generateSimilarQuestionData = (question, subject = 'Toán', quizTit
       };
     }
 
-    // Dạng: Tính chia hết, dấu hiệu chia hết cho 2, 3, 5, 9
-    if (text.includes('chia hết') || text.includes('dấu hiệu') || text.includes('ước') || text.includes('bội')) {
+    // Dạng: Tính chia hết, dấu hiệu chia hết cho 2, 3, 5, 9, số nguyên tố
+    if (text.includes('chia hết') || text.includes('dấu hiệu') || text.includes('ước') || text.includes('bội') || text.includes('nguyên tố')) {
+      if (isVariant) {
+        return {
+          topic: "Dấu hiệu chia hết cho 3 và 9 (Biến thể 2)",
+          originalText: rawText,
+          similarQuestion: "Trong các số: 124, 252, 341, 517; số nào chia hết cho 9?",
+          similarOptions: ["124", "252", "341", "517"],
+          similarCorrect: "252",
+          steps: [
+            {
+              stepNumber: 1,
+              title: "Nhớ lại dấu hiệu chia hết cho 9",
+              detail: "Các số có tổng các chữ số chia hết cho 9 thì chia hết cho 9 và chỉ những số đó mới chia hết cho 9."
+            },
+            {
+              stepNumber: 2,
+              title: "Tính tổng các chữ số từng phương án",
+              detail: "• 124: 1 + 2 + 4 = 7 (không chia hết cho 9).\n• 252: 2 + 5 + 2 = 9 (chia hết cho 9).\n• 341: 3 + 4 + 1 = 8 (không chia hết cho 9).\n• 517: 5 + 1 + 7 = 13 (không chia hết cho 9)."
+            },
+            {
+              stepNumber: 3,
+              title: "Kết luận",
+              detail: "Số chia hết cho 9 là 252."
+            }
+          ],
+          tipForOriginal: `💡 Mẹo áp dụng cho câu của bạn: Để kiểm tra chia hết cho 3 hoặc 9, đừng nhìn chữ số tận cùng! Hãy cộng tất cả các chữ số lại rồi lấy tổng đó chia thử cho 3 hoặc 9!`
+        };
+      }
       return {
         topic: "Dấu hiệu chia hết trong tập hợp số tự nhiên",
         originalText: rawText,
@@ -108,6 +190,33 @@ export const generateSimilarQuestionData = (question, subject = 'Toán', quizTit
 
     // Dạng: Số nguyên & Quy tắc dấu (Cộng trừ nhân chia số nguyên)
     if (text.includes('số nguyên') || text.includes('dấu ngoặc') || text.includes('âm') || text.includes('dương') || text.includes('-')) {
+      if (isVariant) {
+        return {
+          topic: "Cộng hai số nguyên khác dấu (Biến thể 2)",
+          originalText: rawText,
+          similarQuestion: "Tính giá trị của biểu thức: (-25) + 40",
+          similarOptions: ["-15", "15", "-65", "65"],
+          similarCorrect: "15",
+          steps: [
+            {
+              stepNumber: 1,
+              title: "Nhận diện dạng toán",
+              detail: "Đây là phép cộng hai số nguyên KHÁC DẤU: một số âm (-25) và một số dương (+40)."
+            },
+            {
+              stepNumber: 2,
+              title: "Quy tắc cộng hai số nguyên khác dấu",
+              detail: "Bỏ dấu trừ để lấy phần tự nhiên: 25 và 40. Lấy số lớn hơn trừ số nhỏ hơn: 40 - 25 = 15. Đặt trước kết quả dấu của số có phần tự nhiên lớn hơn (số 40 mang dấu dương)."
+            },
+            {
+              stepNumber: 3,
+              title: "Kết luận",
+              detail: "Kết quả là +15."
+            }
+          ],
+          tipForOriginal: `💡 Mẹo áp dụng cho câu của bạn: Nghĩ như tiền nợ và tiền có: Em đang nợ 25 nghìn, nhưng có trong tay 40 nghìn. Sau khi trả nợ, em vẫn còn dư 15 nghìn (+15)!`
+        };
+      }
       return {
         topic: "Quy tắc cộng trừ và dấu trong tập số nguyên Z",
         originalText: rawText,
@@ -141,7 +250,34 @@ export const generateSimilarQuestionData = (question, subject = 'Toán', quizTit
     }
 
     // Dạng: Tìm x, giải phương trình
-    if (text.includes('tìm x') || text.includes('thỏa mãn') || text.includes('giá trị của x')) {
+    if (text.includes('tìm x') || text.includes('thỏa mãn') || text.includes('giá trị của x') || text.includes('x =')) {
+      if (isVariant) {
+        return {
+          topic: "Quy tắc chuyển vế tìm x (Biến thể 2)",
+          originalText: rawText,
+          similarQuestion: "Tìm số nguyên x biết: 2x + 10 = -6",
+          similarOptions: ["-8", "8", "-2", "2"],
+          similarCorrect: "-8",
+          steps: [
+            {
+              stepNumber: 1,
+              title: "Chuyển vế số hạng tự do",
+              detail: "Chuyển +10 từ vế trái sang vế phải thành -10:\n2x = -6 - 10\n2x = -16."
+            },
+            {
+              stepNumber: 2,
+              title: "Thực hiện phép chia tìm x",
+              detail: "x = (-16) : 2 = -8 (chia số âm cho số dương ra số âm)."
+            },
+            {
+              stepNumber: 3,
+              title: "Kết luận",
+              detail: "Vậy x = -8."
+            }
+          ],
+          tipForOriginal: `💡 Mẹo áp dụng cho câu của bạn: Quy tắc vàng: Chuyển vế phải ĐỔI DẤU (+ chuyển thành -, - chuyển thành +). Giữ bình tĩnh tính từng bước!`
+        };
+      }
       return {
         topic: "Quy tắc chuyển vế tìm x",
         originalText: rawText,
@@ -171,6 +307,64 @@ export const generateSimilarQuestionData = (question, subject = 'Toán', quizTit
           }
         ],
         tipForOriginal: `💡 Mẹo áp dụng cho câu của bạn: Hãy làm theo thứ tự ngược lại của các phép toán: chuyển vế số hạng tự do trước (+ thành -, - thành +), sau đó mới chia cho hệ số đi kèm với x!`
+      };
+    }
+
+    // Dạng: Phân số & Số thập phân
+    if (text.includes('phân số') || text.includes('tử số') || text.includes('mẫu số') || text.includes('rút gọn')) {
+      return {
+        topic: "Rút gọn phân số & Phân số tối giản",
+        originalText: rawText,
+        similarQuestion: "Rút gọn phân số 18/24 về phân số tối giản:",
+        similarOptions: ["3/4", "9/12", "6/8", "2/3"],
+        similarCorrect: "3/4",
+        steps: [
+          {
+            stepNumber: 1,
+            title: "Tìm Ước chung lớn nhất (ƯCLN) của cả tử và mẫu",
+            detail: "Tử số là 18, mẫu số là 24. Các ước chung của 18 và 24 là 1, 2, 3, 6. Do đó ƯCLN(18, 24) = 6."
+          },
+          {
+            stepNumber: 2,
+            title: "Chia cả tử số và mẫu số cho ƯCLN",
+            detail: "• Tử số: 18 : 6 = 3.\n• Mẫu số: 24 : 6 = 4."
+          },
+          {
+            stepNumber: 3,
+            title: "Kết luận",
+            detail: "Phân số tối giản là 3/4."
+          }
+        ],
+        tipForOriginal: `💡 Mẹo áp dụng cho câu của bạn: Chia cả tử và mẫu cho cùng một số tự nhiên lớn hơn 1 cho đến khi không chia được nữa thì ta được phân số tối giản!`
+      };
+    }
+
+    // Dạng: Hình học trực quan (Chu vi, diện tích, góc)
+    if (text.includes('chu vi') || text.includes('diện tích') || text.includes('hình vuông') || text.includes('tam giác') || text.includes('hình chữ nhật')) {
+      return {
+        topic: "Chu vi và Diện tích các hình phẳng",
+        originalText: rawText,
+        similarQuestion: "Một mảnh vườn hình chữ nhật có chiều dài 12m, chiều rộng 8m. Diện tích của mảnh vườn là bao nhiêu?",
+        similarOptions: ["96 m²", "40 m²", "48 m²", "20 m²"],
+        similarCorrect: "96 m²",
+        steps: [
+          {
+            stepNumber: 1,
+            title: "Nhớ lại công thức diện tích hình chữ nhật",
+            detail: "Diện tích hình chữ nhật = Chiều dài × Chiều rộng (S = a × b, cùng đơn vị đo)."
+          },
+          {
+            stepNumber: 2,
+            title: "Thay số và tính toán",
+            detail: "Chiều dài a = 12m, Chiều rộng b = 8m.\nS = 12 × 8 = 96 (m²)."
+          },
+          {
+            stepNumber: 3,
+            title: "Kết luận",
+            detail: "Diện tích là 96 m² (chú ý: 40m là chu vi, đừng nhầm giữa chu vi và diện tích)."
+          }
+        ],
+        tipForOriginal: `💡 Mẹo áp dụng cho câu của bạn: Chú ý đơn vị đo của các cạnh! Nếu khác đơn vị đo phải đổi về cùng đơn vị trước khi tính diện tích hoặc chu vi!`
       };
     }
   }
@@ -244,6 +438,34 @@ export const generateSimilarQuestionData = (question, subject = 'Toán', quizTit
   // 3. NHÓM TIẾNG ANH (ENGLISH)
   // =========================================================================
   if (subject === 'Tiếng Anh' || subject === 'Anh' || quizTitle.includes('Anh')) {
+    if (text.includes('yesterday') || text.includes('ago') || text.includes('last') || text.includes('past')) {
+      return {
+        topic: "Past Simple Tense (Thì Quá khứ đơn)",
+        originalText: rawText,
+        similarQuestion: "Choose the correct verb: 'Yesterday, my family (visit) ________ Ha Long Bay.'",
+        similarOptions: ["visited", "visits", "is visiting", "visiting"],
+        similarCorrect: "visited",
+        steps: [
+          {
+            stepNumber: 1,
+            title: "Nhận diện dấu hiệu thời gian trong quá khứ",
+            detail: "Từ 'Yesterday' (hôm qua) là dấu hiệu rõ ràng nhất của thì Quá khứ đơn (Past Simple)."
+          },
+          {
+            stepNumber: 2,
+            title: "Quy tắc chia động từ có quy tắc",
+            detail: "Động từ 'visit' là động từ có quy tắc, ở thể quá khứ ta chỉ cần thêm đuôi '-ed' → 'visited'."
+          },
+          {
+            stepNumber: 3,
+            title: "Kết luận",
+            detail: "Đáp án đúng là 'visited'."
+          }
+        ],
+        tipForOriginal: `💡 Mẹo áp dụng cho câu của bạn: Hãy tìm các từ chỉ quá khứ như: yesterday, ago, last week/year, in + năm quá khứ để chia động từ ở dạng V2/V-ed!`
+      };
+    }
+
     return {
       topic: "Present Simple Tense & Subject-Verb Agreement",
       originalText: rawText,
@@ -313,29 +535,29 @@ export const generateSimilarQuestionData = (question, subject = 'Toán', quizTit
   return {
     topic: `Phương pháp tư duy & Giải bài tập môn ${subject}`,
     originalText: rawText,
-    similarQuestion: `Một tình huống/câu hỏi tương tự trong chuyên đề ${subject}: "Nếu gặp câu hỏi yêu cầu phân biệt các khái niệm hoặc lựa chọn nhận định đúng, ta nên làm theo các bước nào?"`,
+    similarQuestion: `Một câu hỏi cùng dạng trong chuyên đề ${subject}: "Khi đối chiếu và giải quyết vấn đề trong tình huống trên, nguyên tắc nào là quan trọng nhất?"`,
     similarOptions: [
-      "Đọc lướt và chọn ngẫu nhiên phương án đầu tiên",
-      "Gạch chân từ khóa, đối chiếu định nghĩa cốt lõi và loại trừ phương án sai",
-      "Chỉ ghi nhớ đáp án mẫu mà không cần đọc câu hỏi",
+      "Gạch chân từ khóa chính, đối chiếu định nghĩa sách giáo khoa và loại trừ phương án sai",
+      "Chọn ngay phương án dài nhất mà không cần đọc kỹ câu hỏi",
+      "Đoán ngẫu nhiên vì các phương án đều tương tự nhau",
       "Bỏ qua câu hỏi này"
     ],
-    similarCorrect: "Gạch chân từ khóa, đối chiếu định nghĩa cốt lõi và loại trừ phương án sai",
+    similarCorrect: "Gạch chân từ khóa chính, đối chiếu định nghĩa sách giáo khoa và loại trừ phương án sai",
     steps: [
       {
         stepNumber: 1,
-        title: "Bước 1: Gạch chân từ khóa chính của đề bài",
-        detail: `Xác định rõ đề bài "${rawText}" đang hỏi về điều gì (khái niệm, nguyên nhân, kết quả hay biện pháp).`
+        title: "Bước 1: Xác định từ khóa cốt lõi",
+        detail: `Đọc kỹ đề bài "${rawText}". Tìm xem câu hỏi đang hỏi về 'khái niệm', 'nguyên nhân', 'kết quả' hay 'biện pháp'.`
       },
       {
         stepNumber: 2,
-        title: "Bước 2: Đối chiếu với kiến thức sách giáo khoa",
-        detail: explanation ? `Căn cứ vào kiến thức cốt lõi: ${explanation}` : "Nhớ lại định nghĩa và các nguyên tắc đã học trong chương."
+        title: "Bước 2: Đối chiếu kiến thức chuẩn trong bài học",
+        detail: explanation ? `Căn cứ vào kiến thức cốt lõi: ${explanation}` : "Nhớ lại bài học và các nguyên tắc đã được đóng khung trong sách giáo khoa."
       },
       {
         stepNumber: 3,
-        title: "Bước 3: Sử dụng phương pháp loại trừ",
-        detail: "Loại bỏ ngay các phương án có chứa từ ngữ cực đoan, phi logic hoặc sai lệch so với định nghĩa chuẩn."
+        title: "Bước 3: Phương pháp loại trừ phương án nhiễu",
+        detail: "Loại bỏ các phương án có chứa từ ngữ cực đoan (chỉ luôn luôn, không bao giờ, duy nhất) hoặc trái ngược với thực tế khoa học."
       }
     ],
     tipForOriginal: `💡 Mẹo áp dụng cho câu của bạn: Đọc kỹ lại câu hỏi gốc, xác định thuật ngữ quan trọng nhất và loại bỏ các phương án không liên quan!`

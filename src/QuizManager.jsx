@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useMemo, useRef } from 'react';
+import { createPortal } from 'react-dom';
 import { 
   Book, CheckCircle2, X, AlertCircle, Award, Target, Sparkles, 
   Lightbulb, Lock, Unlock, Trash2, ArrowRight, RotateCcw, 
@@ -231,33 +232,45 @@ Hãy giải thích ngắn gọn, súc tích (dưới 150 từ), trực quan, d�
 
   // Trợ giúp AI khi học sinh gặp câu khó: Sinh câu hỏi tương tự đổi số liệu và hướng dẫn giải chi tiết từng bước
   const handleOpenQuestionHelp = (q, idx) => {
-    const similarData = generateSimilarQuestionData(q, activeQuiz?.subject, activeQuiz?.title);
-    setQuestionHelpModal({
-      questionIndex: idx + 1,
-      question: q,
-      similarData,
-      isAiGenerating: false
-    });
+    try {
+      const similarData = generateSimilarQuestionData(q, activeQuiz?.subject, activeQuiz?.title);
+      const theoryData = getTheoryForQuiz(activeQuiz);
+      setQuestionHelpModal({
+        questionIndex: idx + 1,
+        question: q,
+        similarData,
+        theoryData,
+        selectedOption: null,
+        activeTab: 'similar', // 'similar' | 'theory' | 'ask_ai'
+        isAiGenerating: false,
+        aiQuestion: '',
+        aiChatList: [],
+        isAskingAi: false
+      });
+    } catch (e) {
+      console.error("Error opening question help:", e);
+    }
   };
 
   // Tạo thêm 1 bài tập tương tự khác bằng AI
   const handleGenerateAnotherAiExample = async () => {
     if (!questionHelpModal || questionHelpModal.isAiGenerating) return;
-    setQuestionHelpModal(prev => ({ ...prev, isAiGenerating: true }));
+    setQuestionHelpModal(prev => ({ ...prev, isAiGenerating: true, selectedOption: null }));
 
     try {
       const apiKey = localStorage.getItem('study_app_gemini_key');
       const q = questionHelpModal.question;
+      const qText = q.text || q.question || '';
 
       if (apiKey && apiKey.trim()) {
         const ai = new GoogleGenAI({ apiKey: apiKey.trim(), dangerouslyAllowBrowser: true });
         const prompt = `Bạn là giáo viên dạy giỏi môn ${activeQuiz?.subject || 'Toán'}.
-Học sinh đang gặp khó khăn ở câu hỏi sau: "${q.text}".
+Học sinh đang gặp khó khăn ở câu hỏi sau: "${qText}".
 Hãy tạo:
 1. Một câu hỏi tương tự CÙNG DẠNG nhưng THAY ĐỔI SỐ LIỆU và ngữ cảnh (dạng bài tập mẫu).
 2. Hướng dẫn giải chi tiết từng bước cho câu hỏi tương tự đó (Bước 1, Bước 2, Bước 3, Kết luận).
 3. Mẹo áp dụng để học sinh tự giải được câu hỏi gốc của mình mà không bị lộ đáp án.
-Trả về định dạng JSON hợp lệ dạng:
+Trích xuất JSON thuần túy theo mẫu sau:
 {
   "topic": "Tên dạng bài",
   "similarQuestion": "Câu hỏi tương tự đã đổi số liệu...",
@@ -285,18 +298,86 @@ Chỉ trả về JSON thuần túy, không có chữ thừa, không dùng markdo
           ...prev,
           similarData: {
             ...parsed,
-            originalText: q.text
+            originalText: qText
           },
-          isAiGenerating: false
+          isAiGenerating: false,
+          selectedOption: null
         }));
       } else {
         setTimeout(() => {
-          setQuestionHelpModal(prev => ({ ...prev, isAiGenerating: false }));
-        }, 400);
+          const freshData = generateSimilarQuestionData(q, activeQuiz?.subject, activeQuiz?.title, true);
+          setQuestionHelpModal(prev => ({
+            ...prev,
+            similarData: freshData,
+            isAiGenerating: false,
+            selectedOption: null
+          }));
+        }, 350);
       }
     } catch (e) {
       console.error(e);
       setQuestionHelpModal(prev => ({ ...prev, isAiGenerating: false }));
+    }
+  };
+
+  // Hỏi thêm gia sư AI về câu hỏi này mà không làm lộ đáp án bài thi
+  const handleAskAiAboutQuestion = async (customPrompt) => {
+    if (!questionHelpModal) return;
+    const promptText = (customPrompt || questionHelpModal.aiQuestion || '').trim();
+    if (!promptText || questionHelpModal.isAskingAi) return;
+
+    const currentQ = questionHelpModal.question;
+    const qText = currentQ.text || currentQ.question || '';
+
+    setQuestionHelpModal(prev => ({
+      ...prev,
+      isAskingAi: true,
+      aiChatList: [...(prev.aiChatList || []), { sender: 'user', text: promptText }],
+      aiQuestion: ''
+    }));
+
+    try {
+      const apiKey = localStorage.getItem('study_app_gemini_key');
+      if (apiKey && apiKey.trim()) {
+        const ai = new GoogleGenAI({ apiKey: apiKey.trim(), dangerouslyAllowBrowser: true });
+        const systemPrompt = `Bạn là gia sư AI dạy giỏi môn ${activeQuiz?.subject || 'Toán'}.
+Học sinh đang làm câu hỏi sau: "${qText}".
+Học sinh hỏi: "${promptText}".
+Hãy trả lời ngắn gọn (3-4 câu), thân thiện, sư phạm, giải thích bản chất tư duy hoặc công thức.
+TUYỆT ĐỐI KHÔNG NÓI TRỰC TIẾP ĐÁP ÁN của câu hỏi bài thi để học sinh tự làm.`;
+
+        const response = await ai.models.generateContent({
+          model: 'gemini-2.5-flash',
+          contents: systemPrompt
+        });
+        const reply = response.text || 'Thầy/Cô đã nhận được câu hỏi. Hãy áp dụng đúng công thức và loại trừ phương án sai nhé!';
+        setQuestionHelpModal(prev => ({
+          ...prev,
+          isAskingAi: false,
+          aiChatList: [...(prev.aiChatList || []), { sender: 'ai', text: reply }]
+        }));
+      } else {
+        setTimeout(() => {
+          let reply = `💡 Về câu hỏi "${promptText}": Để giải quyết tốt câu này, mấu chốt là em cần xác định đúng từ khóa chính trong câu hỏi, áp dụng công thức tương ứng và kiểm tra lại phép tính. Hãy đọc các bước giải mẫu ở tab "Bài tập tương tự" nhé!`;
+          if (promptText.toLowerCase().includes('mẹo') || promptText.toLowerCase().includes('nhanh')) {
+            reply = `✨ Mẹo hay: ${questionHelpModal.similarData?.tipForOriginal || 'Hãy dùng phương pháp loại trừ các phương án vô lý trước khi tính toán!'}`;
+          } else if (promptText.toLowerCase().includes('công thức')) {
+            reply = `📐 Công thức cốt lõi: Hãy nhớ lại định nghĩa cơ bản và quy tắc đã đóng khung trong bài học. Em có thể bấm tab "Tóm tắt lý thuyết" ở trên để xem lại đầy đủ nhé!`;
+          }
+          setQuestionHelpModal(prev => ({
+            ...prev,
+            isAskingAi: false,
+            aiChatList: [...(prev.aiChatList || []), { sender: 'ai', text: reply }]
+          }));
+        }, 500);
+      }
+    } catch (e) {
+      console.error(e);
+      setQuestionHelpModal(prev => ({
+        ...prev,
+        isAskingAi: false,
+        aiChatList: [...(prev.aiChatList || []), { sender: 'ai', text: '💡 Để làm câu này, hãy bám sát định nghĩa trong sách và thử áp dụng theo bài tập tương tự nhé!' }]
+      }));
     }
   };
 
@@ -691,9 +772,13 @@ Chỉ trả về JSON thuần túy, không có chữ thừa, không dùng markdo
 
                   {/* NÚT TÍCH HỢP: ÔN LÝ THUYẾT VỚI AI KHI GẶP CÂU KHÓ */}
                   <button
-                    onClick={() => handleOpenQuestionHelp(q, idx)}
-                    className="flex items-center gap-1.5 px-3 py-1.5 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 text-xs font-bold rounded-xl border border-indigo-200 transition cursor-pointer"
-                    title="Gặp câu khó? Nhấn để ôn lại lý thuyết và nhận gợi ý tư duy từ AI!"
+                    type="button"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleOpenQuestionHelp(q, idx);
+                    }}
+                    className="flex items-center gap-1.5 px-3.5 py-1.5 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 text-xs font-bold rounded-xl border border-indigo-200 transition-all cursor-pointer active:scale-95 shadow-sm"
+                    title="Gặp câu khó? Nhấn để ôn lại lý thuyết và xem bài tập tương tự đổi số liệu!"
                   >
                     <Lightbulb size={14} className="text-amber-500 fill-amber-400" />
                     <span>Gặp khó? Ôn lý thuyết với AI</span>
@@ -807,143 +892,388 @@ Chỉ trả về JSON thuần túy, không có chữ thừa, không dùng markdo
 
         </div>
 
-        {/* MODAL GỢI Ý: BÀI TẬP TƯƠNG TỰ ĐỔI SỐ LIỆU & HƯỚNG DẪN GIẢI CHI TIẾT */}
-        {questionHelpModal && (() => {
-          const sim = questionHelpModal.similarData;
-          return (
-            <div className="fixed inset-0 z-[10000] bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-3 sm:p-4 animate-fade-in">
-              <div className="bg-white rounded-3xl max-w-2xl w-full max-h-[90vh] overflow-y-auto p-5 sm:p-7 shadow-2xl border border-slate-200 space-y-4">
+        {/* MODAL GỢI Ý: BÀI TẬP TƯƠNG TỰ ĐỔI SỐ LIỆU & HƯỚNG DẪN GIẢI CHI TIẾT (RENDER VIA PORTAL) */}
+        {questionHelpModal && typeof document !== 'undefined' && createPortal(
+          <div 
+            className="fixed inset-0 z-[999999] bg-slate-950/70 backdrop-blur-md flex items-center justify-center p-3 sm:p-5 overflow-y-auto"
+            onClick={(e) => {
+              if (e.target === e.currentTarget) setQuestionHelpModal(null);
+            }}
+          >
+            <div 
+              className="bg-white rounded-3xl max-w-3xl w-full max-h-[92vh] flex flex-col shadow-2xl border border-slate-200 overflow-hidden my-auto animate-fade-in"
+              onClick={(e) => e.stopPropagation()}
+            >
+              {/* Header Modal */}
+              <div className="bg-gradient-to-r from-indigo-700 via-indigo-600 to-purple-700 text-white p-4 sm:px-7 sm:py-5 flex items-center justify-between">
+                <div className="flex items-center gap-3">
+                  <div className="w-11 h-11 rounded-2xl bg-white/20 text-amber-300 flex items-center justify-center font-black shadow-inner flex-shrink-0">
+                    <Lightbulb size={24} className="fill-amber-300 text-amber-200" />
+                  </div>
+                  <div>
+                    <div className="flex items-center gap-2">
+                      <span className="text-[11px] font-black uppercase tracking-wider bg-white/20 px-2 py-0.5 rounded-full text-indigo-100">
+                        Câu {questionHelpModal.questionIndex}
+                      </span>
+                      <span className="text-xs font-semibold text-indigo-200">
+                        {activeQuiz?.subject} • {questionHelpModal.similarData?.topic || activeQuiz?.title}
+                      </span>
+                    </div>
+                    <h3 className="text-base sm:text-lg font-black text-white mt-0.5">
+                      Ôn Lý Thuyết & Hướng Dẫn Giải Bài Cụ Thể Với AI
+                    </h3>
+                  </div>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => setQuestionHelpModal(null)}
+                  className="p-2 text-white/80 hover:text-white hover:bg-white/20 rounded-2xl transition cursor-pointer"
+                >
+                  <X size={22} />
+                </button>
+              </div>
+
+              {/* NAVIGATION TABS */}
+              <div className="bg-slate-100 p-1.5 flex gap-1 border-b border-slate-200">
+                <button
+                  type="button"
+                  onClick={() => setQuestionHelpModal(prev => ({ ...prev, activeTab: 'similar' }))}
+                  className={`flex-1 py-2 px-3 rounded-xl text-xs sm:text-sm font-black transition flex items-center justify-center gap-1.5 cursor-pointer ${
+                    questionHelpModal.activeTab === 'similar' 
+                      ? 'bg-white text-indigo-700 shadow-sm' 
+                      : 'text-slate-600 hover:text-slate-900 hover:bg-white/50'
+                  }`}
+                >
+                  <Sparkles size={15} className="text-amber-500" />
+                  <span>⭐ Bài Tập Tương Tự & Giải Mẫu</span>
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => setQuestionHelpModal(prev => ({ ...prev, activeTab: 'theory' }))}
+                  className={`flex-1 py-2 px-3 rounded-xl text-xs sm:text-sm font-black transition flex items-center justify-center gap-1.5 cursor-pointer ${
+                    questionHelpModal.activeTab === 'theory' 
+                      ? 'bg-white text-indigo-700 shadow-sm' 
+                      : 'text-slate-600 hover:text-slate-900 hover:bg-white/50'
+                  }`}
+                >
+                  <BookOpenCheck size={15} className="text-indigo-600" />
+                  <span>📖 Lý Thuyết Chương</span>
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => setQuestionHelpModal(prev => ({ ...prev, activeTab: 'ask_ai' }))}
+                  className={`flex-1 py-2 px-3 rounded-xl text-xs sm:text-sm font-black transition flex items-center justify-center gap-1.5 cursor-pointer ${
+                    questionHelpModal.activeTab === 'ask_ai' 
+                      ? 'bg-white text-indigo-700 shadow-sm' 
+                      : 'text-slate-600 hover:text-slate-900 hover:bg-white/50'
+                  }`}
+                >
+                  <MessageSquare size={15} className="text-purple-600" />
+                  <span>💬 Hỏi Trợ Lý AI</span>
+                </button>
+              </div>
+
+              {/* SCROLLABLE BODY */}
+              <div className="p-4 sm:p-6 overflow-y-auto flex-1 space-y-4">
                 
-                {/* Header Modal */}
-                <div className="flex items-center justify-between pb-3 border-b border-slate-100">
-                  <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-2xl bg-amber-100 text-amber-700 flex items-center justify-center font-black text-sm shadow-sm flex-shrink-0">
-                      <Lightbulb size={22} className="text-amber-600 fill-amber-400" />
-                    </div>
-                    <div>
-                      <h3 className="font-black text-slate-800 text-base sm:text-lg">
-                        Bài Tập Tương Tự & Hướng Dẫn Giải Mẫu
-                      </h3>
-                      <p className="text-xs text-slate-400">
-                        Hỗ trợ câu {questionHelpModal.questionIndex} • {sim?.topic || activeQuiz?.subject}
-                      </p>
-                    </div>
-                  </div>
-                  <button
-                    onClick={() => setQuestionHelpModal(null)}
-                    className="p-1.5 text-slate-400 hover:text-slate-600 hover:bg-slate-100 rounded-xl transition cursor-pointer"
-                  >
-                    <X size={20} />
-                  </button>
-                </div>
-
-                {/* KHUNG 1: CÂU HỎI GỐC BẠN ĐANG LÀM */}
-                <div className="bg-slate-50 p-4 rounded-2xl border border-slate-200 space-y-1">
-                  <span className="text-[11px] font-black uppercase tracking-wider text-slate-400 block">
-                    📌 Câu hỏi trong bài thi của bạn:
-                  </span>
-                  <p className="text-xs sm:text-sm font-bold text-slate-800 leading-relaxed">
-                    {questionHelpModal.question.text}
-                  </p>
-                </div>
-
-                {/* KHUNG 2: BÀI TẬP TƯƠNG TỰ CÙNG DẠNG (ĐÃ THAY ĐỔI SỐ LIỆU / NGỮ CẢNH) */}
-                {sim && (
-                  <div className="bg-gradient-to-br from-indigo-50/80 via-purple-50/50 to-sky-50/60 p-4 sm:p-5 rounded-2xl border-2 border-indigo-200 shadow-sm space-y-2">
-                    <div className="flex items-center justify-between flex-wrap gap-2">
-                      <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-black bg-indigo-600 text-white shadow-sm">
-                        <Sparkles size={13} className="text-yellow-300" />
-                        ⭐ BÀI TẬP TƯƠNG TỰ CÙNG DẠNG (ĐÃ ĐỔI SỐ LIỆU)
-                      </span>
-                      <span className="text-[11px] font-bold text-indigo-700 bg-indigo-100/70 px-2.5 py-0.5 rounded-lg">
-                        {sim.topic}
-                      </span>
-                    </div>
-
-                    <h4 className="text-sm sm:text-base font-black text-indigo-950 leading-relaxed pt-1">
-                      {sim.similarQuestion}
-                    </h4>
-
-                    {/* Các phương án mẫu của câu tương tự nếu có */}
-                    {sim.similarOptions && Array.isArray(sim.similarOptions) && sim.similarOptions.length > 0 && (
-                      <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 pt-1">
-                        {sim.similarOptions.map((opt, oIdx) => (
-                          <div 
-                            key={oIdx}
-                            className={`p-2 rounded-xl text-xs font-bold text-center border transition ${
-                              opt === sim.similarCorrect 
-                                ? 'bg-emerald-100 text-emerald-800 border-emerald-300 ring-2 ring-emerald-300' 
-                                : 'bg-white text-slate-600 border-slate-200'
-                            }`}
-                          >
-                            <span className="opacity-60 mr-1">{['A', 'B', 'C', 'D'][oIdx] || ''}.</span>
-                            {opt}
-                          </div>
-                        ))}
-                      </div>
-                    )}
-                  </div>
-                )}
-
-                {/* KHUNG 3: HƯỚNG DẪN GIẢI CHI TIẾT TỪNG BƯỚC CHO BÀI TẬP TƯƠNG TỰ */}
-                {sim?.steps && (
-                  <div className="bg-emerald-50/70 p-4 sm:p-5 rounded-2xl border border-emerald-200/80 space-y-3">
-                    <div className="flex items-center gap-2 text-emerald-900 font-black text-xs sm:text-sm">
-                      <BookOpenCheck size={18} className="text-emerald-600" />
-                      <span>📝 Hướng dẫn cách giải bài cụ thể từng bước (Bài giải mẫu):</span>
-                    </div>
-
-                    <div className="space-y-2.5">
-                      {sim.steps.map((st, sIdx) => (
-                        <div key={sIdx} className="bg-white/90 p-3 rounded-xl border border-emerald-100 shadow-sm flex items-start gap-2.5">
-                          <span className="w-5 h-5 rounded-full bg-emerald-600 text-white font-black text-[11px] flex items-center justify-center flex-shrink-0 mt-0.5">
-                            {st.stepNumber || sIdx + 1}
+                {/* TAB 1: BÀI TẬP TƯƠNG TỰ CÙNG DẠNG & BÀI GIẢI MẪU */}
+                {questionHelpModal.activeTab === 'similar' && (() => {
+                  const sim = questionHelpModal.similarData;
+                  const originalQText = questionHelpModal.question.text || questionHelpModal.question.question || '';
+                  
+                  return (
+                    <div className="space-y-4 animate-fade-in">
+                      {/* KHUNG 1: CÂU HỎI TRONG BÀI THI */}
+                      <div className="bg-slate-50 p-4 rounded-2xl border border-slate-200 space-y-1">
+                        <div className="flex items-center justify-between">
+                          <span className="text-[11px] font-black uppercase tracking-wider text-slate-400 block">
+                            📌 Câu hỏi trong bài thi của bạn:
                           </span>
-                          <div className="text-xs leading-relaxed space-y-0.5">
-                            <strong className="text-emerald-950 font-bold block">{st.title}</strong>
-                            <p className="text-slate-700 font-medium whitespace-pre-line">{st.detail}</p>
+                          <span className="text-xs font-bold text-amber-700 bg-amber-100/70 px-2 py-0.5 rounded-lg">
+                            Đang làm dở
+                          </span>
+                        </div>
+                        <p className="text-xs sm:text-sm font-bold text-slate-800 leading-relaxed pt-1">
+                          {originalQText}
+                        </p>
+                      </div>
+
+                      {/* KHUNG 2: BÀI TẬP TƯƠNG TỰ CÙNG DẠNG (ĐÃ THAY ĐỔI SỐ LIỆU) */}
+                      {sim && (
+                        <div className="bg-gradient-to-br from-indigo-50/80 via-purple-50/50 to-sky-50/60 p-4 sm:p-5 rounded-2xl border-2 border-indigo-200 shadow-sm space-y-3">
+                          <div className="flex items-center justify-between flex-wrap gap-2">
+                            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-black bg-indigo-600 text-white shadow-sm">
+                              <Sparkles size={13} className="text-yellow-300" />
+                              ⭐ BÀI TẬP TƯƠNG TỰ CÙNG DẠNG (ĐÃ ĐỔI SỐ LIỆU)
+                            </span>
+                            <span className="text-[11px] font-bold text-indigo-700 bg-indigo-100 px-2.5 py-0.5 rounded-lg">
+                              {sim.topic}
+                            </span>
+                          </div>
+
+                          <h4 className="text-sm sm:text-base font-black text-indigo-950 leading-relaxed pt-1">
+                            {sim.similarQuestion}
+                          </h4>
+
+                          {/* Chọn thử phương án để luyện tập câu tương tự */}
+                          {sim.similarOptions && Array.isArray(sim.similarOptions) && sim.similarOptions.length > 0 && (
+                            <div className="space-y-2 pt-1">
+                              <div className="text-[11px] font-bold text-indigo-800 flex items-center gap-1">
+                                <span>👇 Hãy bấm chọn thử đáp án để xem bạn đã nắm được phương pháp chưa:</span>
+                              </div>
+                              <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+                                {sim.similarOptions.map((opt, oIdx) => {
+                                  const isSelected = questionHelpModal.selectedOption === opt;
+                                  const isCorrect = opt === sim.similarCorrect;
+                                  let btnStyle = "bg-white text-slate-700 border-slate-200 hover:border-indigo-300 hover:bg-indigo-50/50";
+                                  if (questionHelpModal.selectedOption) {
+                                    if (isCorrect) {
+                                      btnStyle = "bg-emerald-100 text-emerald-900 border-emerald-400 ring-2 ring-emerald-300 font-black";
+                                    } else if (isSelected) {
+                                      btnStyle = "bg-red-50 text-red-800 border-red-300";
+                                    } else {
+                                      btnStyle = "bg-white/70 text-slate-400 border-slate-100 opacity-60";
+                                    }
+                                  }
+
+                                  return (
+                                    <button
+                                      key={oIdx}
+                                      type="button"
+                                      onClick={() => setQuestionHelpModal(prev => ({ ...prev, selectedOption: opt }))}
+                                      className={`p-2.5 rounded-xl text-xs font-bold text-center border-2 transition-all cursor-pointer ${btnStyle}`}
+                                    >
+                                      <span className="opacity-60 mr-1">{['A', 'B', 'C', 'D'][oIdx] || ''}.</span>
+                                      <span>{opt}</span>
+                                    </button>
+                                  );
+                                })}
+                              </div>
+
+                              {/* Thông báo kết quả khi học sinh thử làm câu tương tự */}
+                              {questionHelpModal.selectedOption && (
+                                <div className={`p-3 rounded-xl border text-xs font-bold flex items-center gap-2 animate-fade-in ${
+                                  questionHelpModal.selectedOption === sim.similarCorrect 
+                                    ? 'bg-emerald-50 text-emerald-800 border-emerald-300' 
+                                    : 'bg-amber-50 text-amber-800 border-amber-300'
+                                }`}>
+                                  {questionHelpModal.selectedOption === sim.similarCorrect ? (
+                                    <>
+                                      <CheckCircle2 size={16} className="text-emerald-600 flex-shrink-0" />
+                                      <span>🎉 Chính xác! Bạn đã hiểu đúng phương pháp rồi đấy. Hãy quay lại tự tin làm câu trong bài nhé!</span>
+                                    </>
+                                  ) : (
+                                    <>
+                                      <AlertCircle size={16} className="text-amber-600 flex-shrink-0" />
+                                      <span>⚠️ Chưa chính xác. Đừng lo, hãy đọc kỹ bài giải mẫu từng bước ngay bên dưới nhé!</span>
+                                    </>
+                                  )}
+                                </div>
+                              )}
+                            </div>
+                          )}
+                        </div>
+                      )}
+
+                      {/* KHUNG 3: HƯỚNG DẪN GIẢI CHI TIẾT TỪNG BƯỚC CHO BÀI TẬP TƯƠNG TỰ */}
+                      {sim?.steps && (
+                        <div className="bg-emerald-50/70 p-4 sm:p-5 rounded-2xl border border-emerald-200/80 space-y-3">
+                          <div className="flex items-center gap-2 text-emerald-900 font-black text-xs sm:text-sm">
+                            <BookOpenCheck size={18} className="text-emerald-600" />
+                            <span>📝 Hướng dẫn cách giải bài cụ thể từng bước (Bài giải mẫu):</span>
+                          </div>
+
+                          <div className="space-y-2.5">
+                            {sim.steps.map((st, sIdx) => (
+                              <div key={sIdx} className="bg-white/95 p-3 rounded-xl border border-emerald-100 shadow-sm flex items-start gap-2.5">
+                                <span className="w-5 h-5 rounded-full bg-emerald-600 text-white font-black text-[11px] flex items-center justify-center flex-shrink-0 mt-0.5">
+                                  {st.stepNumber || sIdx + 1}
+                                </span>
+                                <div className="text-xs leading-relaxed space-y-0.5">
+                                  <strong className="text-emerald-950 font-bold block">{st.title}</strong>
+                                  <p className="text-slate-700 font-medium whitespace-pre-line">{st.detail}</p>
+                                </div>
+                              </div>
+                            ))}
                           </div>
                         </div>
-                      ))}
+                      )}
+
+                      {/* KHUNG 4: MẸO ÁP DỤNG NGAY CHO CÂU HỎI TRONG BÀI THI */}
+                      {sim?.tipForOriginal && (
+                        <div className="bg-amber-50 p-4 rounded-2xl border border-amber-200 text-xs leading-relaxed text-amber-950 shadow-sm">
+                          <div className="font-black text-amber-900 flex items-center gap-1.5 mb-1 text-xs sm:text-sm">
+                            <Zap size={16} className="text-amber-600 fill-amber-500" />
+                            <span>Mẹo áp dụng trực tiếp cho câu hỏi của bạn:</span>
+                          </div>
+                          <p className="font-medium pl-5">{sim.tipForOriginal}</p>
+                        </div>
+                      )}
                     </div>
-                  </div>
-                )}
+                  );
+                })()}
 
-                {/* KHUNG 4: MẸO ÁP DỤNG NGAY CHO CÂU HỎI TRONG BÀI THI CỦA BẠN */}
-                {sim?.tipForOriginal && (
-                  <div className="bg-amber-50 p-4 rounded-2xl border border-amber-200 text-xs leading-relaxed text-amber-950 shadow-sm">
-                    <div className="font-black text-amber-900 flex items-center gap-1.5 mb-1 text-xs sm:text-sm">
-                      <Zap size={16} className="text-amber-600 fill-amber-500" />
-                      <span>Mẹo áp dụng trực tiếp cho câu hỏi của bạn:</span>
+                {/* TAB 2: TÓM TẮT LÝ THUYẾT CHƯƠNG */}
+                {questionHelpModal.activeTab === 'theory' && (() => {
+                  const theory = questionHelpModal.theoryData;
+                  return (
+                    <div className="space-y-4 animate-fade-in">
+                      <div className="bg-indigo-50/80 p-4 rounded-2xl border border-indigo-200">
+                        <h4 className="text-sm font-black text-indigo-950 mb-1">{theory?.title || activeQuiz?.title}</h4>
+                        <p className="text-xs text-indigo-800 font-medium leading-relaxed">{theory?.summary}</p>
+                      </div>
+
+                      {theory?.sections && (
+                        <div className="space-y-3">
+                          {theory.sections.map((sec, idx) => (
+                            <div key={idx} className="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm space-y-2">
+                              <h5 className="text-xs sm:text-sm font-bold text-slate-800 flex items-center gap-2">
+                                <span className="w-5 h-5 rounded-lg bg-indigo-100 text-indigo-700 text-xs font-black flex items-center justify-center">
+                                  {idx + 1}
+                                </span>
+                                {sec.heading}
+                              </h5>
+                              <p className="text-xs text-slate-600 leading-relaxed font-medium whitespace-pre-line pl-7">
+                                {sec.content}
+                              </p>
+                            </div>
+                          ))}
+                        </div>
+                      )}
                     </div>
-                    <p className="font-medium pl-5">{sim.tipForOriginal}</p>
-                  </div>
-                )}
+                  );
+                })()}
 
-                {/* ACTION BAR: ĐỔI VÍ DỤ KHÁC HOẶC QUAY LẠI LÀM BÀI */}
-                <div className="pt-2 flex flex-col sm:flex-row items-center justify-between gap-3 border-t border-slate-100">
-                  <button
-                    onClick={handleGenerateAnotherAiExample}
-                    disabled={questionHelpModal.isAiGenerating}
-                    className="text-xs font-bold text-indigo-600 hover:text-indigo-800 flex items-center gap-1.5 py-2 px-3 rounded-xl hover:bg-indigo-50 transition cursor-pointer disabled:opacity-50"
-                  >
-                    <Sparkles size={15} className={questionHelpModal.isAiGenerating ? "animate-spin" : ""} />
-                    <span>{questionHelpModal.isAiGenerating ? 'AI đang tạo ví dụ mới...' : '✨ Nhờ AI sinh thêm 1 ví dụ khác'}</span>
-                  </button>
+                {/* TAB 3: HỎI NHANH TRỢ LÝ AI */}
+                {questionHelpModal.activeTab === 'ask_ai' && (() => {
+                  return (
+                    <div className="space-y-4 animate-fade-in">
+                      <div className="bg-purple-50 p-4 rounded-2xl border border-purple-200 text-xs text-purple-900 space-y-1">
+                        <div className="font-bold flex items-center gap-1.5">
+                          <Brain size={16} className="text-purple-600" />
+                          <span>Gia sư AI luôn đồng hành cùng bạn</span>
+                        </div>
+                        <p className="text-purple-700">
+                          Bạn có thể hỏi bất kỳ thắc mắc nào về phương pháp hoặc công thức. AI sẽ giải thích tư duy từng bước mà không làm lộ đáp án bài thi!
+                        </p>
+                      </div>
 
-                  <button
-                    onClick={() => setQuestionHelpModal(null)}
-                    className="w-full sm:w-auto px-7 py-3 bg-gradient-to-r from-indigo-600 via-indigo-700 to-purple-600 hover:brightness-110 text-white font-black text-xs sm:text-sm rounded-xl shadow-md transition transform active:scale-95 flex items-center justify-center gap-2 cursor-pointer"
-                  >
-                    <span>Em Đã Hiểu Cách Giải! Quay Lại Tự Làm Câu Này</span>
-                    <ArrowRight size={16} />
-                  </button>
-                </div>
+                      {/* Gợi ý các câu hỏi nhanh */}
+                      <div className="space-y-1.5">
+                        <span className="text-[11px] font-bold text-slate-400 uppercase tracking-wider block">Câu hỏi nhanh:</span>
+                        <div className="flex flex-wrap gap-2">
+                          {[
+                            'Giải thích lại cho em công thức cốt lõi',
+                            'Mẹo nhớ nhanh dạng bài này là gì?',
+                            'Làm sao tránh bẫy ở câu hỏi này?'
+                          ].map((suggest, sIdx) => (
+                            <button
+                              key={sIdx}
+                              type="button"
+                              onClick={() => handleAskAiAboutQuestion(suggest)}
+                              className="text-xs px-3 py-1.5 bg-slate-100 hover:bg-purple-50 text-slate-700 hover:text-purple-700 font-bold rounded-xl border border-slate-200 transition cursor-pointer"
+                            >
+                              💡 {suggest}
+                            </button>
+                          ))}
+                        </div>
+                      </div>
+
+                      {/* Danh sách tin nhắn chat trong modal */}
+                      <div className="space-y-3 min-h-[140px] max-h-[260px] overflow-y-auto p-3 bg-slate-50 rounded-2xl border border-slate-200">
+                        {(!questionHelpModal.aiChatList || questionHelpModal.aiChatList.length === 0) ? (
+                          <div className="text-center py-6 text-slate-400 text-xs">
+                            Chưa có câu hỏi nào. Hãy gõ thắc mắc của bạn bên dưới!
+                          </div>
+                        ) : (
+                          questionHelpModal.aiChatList.map((msg, mIdx) => (
+                            <div key={mIdx} className={`flex ${msg.sender === 'user' ? 'justify-end' : 'justify-start'}`}>
+                              <div className={`max-w-[85%] p-3 rounded-2xl text-xs font-medium leading-relaxed ${
+                                msg.sender === 'user' 
+                                  ? 'bg-indigo-600 text-white rounded-br-none shadow-sm' 
+                                  : 'bg-white text-slate-800 border border-slate-200 rounded-bl-none shadow-sm'
+                              }`}>
+                                {msg.sender === 'ai' && <strong className="text-indigo-600 block mb-1">🤖 Gia sư AI:</strong>}
+                                <p className="whitespace-pre-line">{msg.text}</p>
+                              </div>
+                            </div>
+                          ))
+                        )}
+                        {questionHelpModal.isAskingAi && (
+                          <div className="flex justify-start">
+                            <div className="bg-white p-3 rounded-2xl border border-slate-200 text-xs text-indigo-600 font-bold flex items-center gap-2">
+                              <Sparkles size={14} className="animate-spin text-amber-500" />
+                              <span>AI đang suy nghĩ lời giải thích...</span>
+                            </div>
+                          </div>
+                        )}
+                      </div>
+
+                      {/* Ô nhập câu hỏi */}
+                      <form
+                        onSubmit={(e) => {
+                          e.preventDefault();
+                          handleAskAiAboutQuestion();
+                        }}
+                        className="flex gap-2"
+                      >
+                        <input
+                          type="text"
+                          value={questionHelpModal.aiQuestion || ''}
+                          onChange={(e) => setQuestionHelpModal(prev => ({ ...prev, aiQuestion: e.target.value }))}
+                          placeholder="Nhập thắc mắc của bạn về câu hỏi này..."
+                          disabled={questionHelpModal.isAskingAi}
+                          className="flex-1 p-3 text-xs sm:text-sm bg-white border border-slate-200 rounded-xl focus:outline-none focus:border-indigo-500 font-medium"
+                        />
+                        <button
+                          type="submit"
+                          disabled={questionHelpModal.isAskingAi || !(questionHelpModal.aiQuestion || '').trim()}
+                          className="px-4 py-3 bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs rounded-xl transition cursor-pointer disabled:opacity-50 flex items-center gap-1.5"
+                        >
+                          <Send size={14} />
+                          <span>Gửi</span>
+                        </button>
+                      </form>
+                    </div>
+                  );
+                })()}
 
               </div>
+
+              {/* FOOTER ACTION BAR */}
+              <div className="p-3 sm:px-6 sm:py-3.5 bg-slate-50 border-t border-slate-200 flex flex-col sm:flex-row items-center justify-between gap-3">
+                {questionHelpModal.activeTab === 'similar' ? (
+                  <button
+                    type="button"
+                    onClick={handleGenerateAnotherAiExample}
+                    disabled={questionHelpModal.isAiGenerating}
+                    className="text-xs font-bold text-indigo-600 hover:text-indigo-800 flex items-center gap-1.5 py-1.5 px-3 rounded-xl hover:bg-indigo-100/60 transition cursor-pointer disabled:opacity-50"
+                  >
+                    <Sparkles size={15} className={questionHelpModal.isAiGenerating ? "animate-spin text-amber-500" : "text-amber-500"} />
+                    <span>{questionHelpModal.isAiGenerating ? 'AI đang tạo câu mới...' : '✨ Nhờ AI sinh thêm 1 ví dụ tương tự khác'}</span>
+                  </button>
+                ) : (
+                  <div className="text-[11px] text-slate-500">
+                    💡 Nắm chắc phương pháp để tự tin làm chủ câu hỏi trong bài thi!
+                  </div>
+                )}
+
+                <button
+                  type="button"
+                  onClick={() => setQuestionHelpModal(null)}
+                  className="w-full sm:w-auto px-6 py-2.5 bg-gradient-to-r from-emerald-600 via-teal-600 to-indigo-600 hover:brightness-110 text-white font-black text-xs sm:text-sm rounded-xl shadow-md transition transform active:scale-95 flex items-center justify-center gap-2 cursor-pointer"
+                >
+                  <span>Em Đã Hiểu Cách Giải! Quay Lại Làm Câu Này</span>
+                  <ArrowRight size={16} />
+                </button>
+              </div>
+
             </div>
-          );
-        })()}
+          </div>,
+          document.body
+        )}
 
       </div>
     );
