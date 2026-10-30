@@ -884,3 +884,291 @@ export const CONSTRUCTION_STAGES = [
     requiredMaterials: []
   }
 ];
+
+// =========================================================================
+// GIAI ĐOẠN THI CÔNG CẤP 2: BIỆT THỰ TÂN CỔ ĐIỂN 2 TẦNG (MANSION)
+// =========================================================================
+export const MANSION_STAGES = [
+  {
+    stage: 0,
+    name: "Mặt Bằng Quy Hoạch Biệt Thự",
+    statusBadge: "Chưa thi công",
+    desc: "Khu đất rộng 10m x 7.2m đã giải phóng mặt bằng, sẵn sàng cho công trình 2 tầng tân cổ điển bề thế.",
+    nextStepTitle: "Giai đoạn 1: Đổ Móng Băng Bê Tông Chịu Lực",
+    nextStepDesc: "Đan thép móng băng và đổ bê tông tươi mác 350 chịu lực cho toàn bộ khối nhà 2 tầng đồ sộ.",
+    requiredMaterials: [
+      { id: "concrete", name: "Bê Tông Tươi & Cốt Thép", icon: "🏗️", amount: 1 }
+    ]
+  },
+  {
+    stage: 1,
+    name: "Móng Băng Bê Tông Chịu Lực",
+    statusBadge: "Đã xong móng băng",
+    desc: "Móng băng bê tông cốt thép kiên cố đã đông kết hoàn toàn, cốt nền được nâng cao 3 bậc tam cấp đá hoa cương.",
+    nextStepTitle: "Giai đoạn 2: Dựng Khung Cột & Đổ Sàn Tầng 2",
+    nextStepDesc: "Dựng 8 cột trụ chịu lực và đan cốt thép đổ bê tông sàn tầng 2 vững chãi.",
+    requiredMaterials: [
+      { id: "steel", name: "Thép Xây Dựng", icon: "🔩", amount: 1 },
+      { id: "concrete", name: "Bê Tông Tươi & Cốt Thép", icon: "🏗️", amount: 1 }
+    ]
+  },
+  {
+    stage: 2,
+    name: "Khung Cột & Đổ Sàn Tầng 2",
+    statusBadge: "Đã hoàn thành sàn tầng 2",
+    desc: "Cấu trúc 2 tầng đã vươn cao vững chãi trước gió bão, giàn giáo tầng 2 đã được dựng an toàn.",
+    nextStepTitle: "Giai đoạn 3: Xây Tường 2 Tầng & Ô Cửa Vòm",
+    nextStepDesc: "Xây tường gạch dày 220mm cách nhiệt, tạo hình vòm cửa sổ tân cổ điển sang trọng.",
+    requiredMaterials: [
+      { id: "brick", name: "Gạch Đất Nung", icon: "🧱", amount: 1 },
+      { id: "mortar", name: "Xi Măng & Vữa Trát", icon: "🧴", amount: 1 }
+    ]
+  },
+  {
+    stage: 3,
+    name: "Xây Tường 2 Tầng & Vòm Cửa Sổ",
+    statusBadge: "Đã xây xong tường bao 2 tầng",
+    desc: "Tường bao 2 tầng với các ô cửa vòm thanh thoát đã hoàn thành, chuẩn bị cho lắp đặt kính đón sáng.",
+    nextStepTitle: "Giai đoạn 4: Ban Công Kính & Cửa Gỗ Đại Sảnh",
+    nextStepDesc: "Lắp đặt cửa chính gỗ sồi đại sảnh hai cánh và lan can ban công kính cường lực tầng 2.",
+    requiredMaterials: [
+      { id: "glass", name: "Kính Kiến Trúc", icon: "🪟", amount: 1 },
+      { id: "wood", name: "Gỗ Tự Nhiên & Khung Kèo", icon: "🪵", amount: 1 }
+    ]
+  },
+  {
+    stage: 4,
+    name: "Ban Công Kính & Cửa Gỗ Đại Sảnh",
+    statusBadge: "Đã lắp xong hệ cửa & ban công",
+    desc: "Ban công tầng 2 ngắm trọn cảnh quan và cửa đại sảnh uy nghiêm đã lắp đặt hoàn hảo.",
+    nextStepTitle: "Giai đoạn 5: Mái Mansard Cổ Điển & Gara Ô Tô",
+    nextStepDesc: "Thi công mái dốc Mansard phong cách Pháp lợp ngói đá phiến đen than và mái che gara ô tô.",
+    requiredMaterials: [
+      { id: "roof", name: "Ngói Lợp Đất Nung", icon: "🏠", amount: 1 }
+    ]
+  },
+  {
+    stage: 5,
+    name: "Mái Mansard Cổ Điển & Mái Gara",
+    statusBadge: "Đã hoàn thành ngoại thất",
+    desc: "Mái Mansard vương giả và gara ô tô đã hoàn thiện che chở toàn bộ dinh thự 2 tầng.",
+    nextStepTitle: "Giai đoạn 6: Hoàn Thiện Đại Sảnh & Sân Terrazzo",
+    nextStepDesc: "Lát đá hoa cương đại sảnh, bố trí cột La Mã trắng tuyết, đèn chùm pha lê và sân vườn đẳng cấp.",
+    requiredMaterials: [
+      { id: "stone", name: "Đá Thô Tự Nhiên", icon: "🪨", amount: 1 }
+    ]
+  },
+  {
+    stage: 6,
+    name: "Hoàn Thiện Biệt Thự 2 Tầng Lộng Lẫy",
+    statusBadge: "Biệt thự hoàn thành 100%",
+    desc: "Biệt thự tân cổ điển 2 tầng của bạn đã hoàn thành tuyệt mỹ! Hãy khám phá nội thất bên trong và sẵn sàng nâng cấp lên Villa nghỉ dưỡng.",
+    nextStepTitle: "Đại Công Cáo Thành",
+    nextStepDesc: "Biệt thự đã hoàn thiện 100%, có thể tiếp tục nâng cấp lên Villa nghỉ dưỡng.",
+    requiredMaterials: []
+  }
+];
+
+// =========================================================================
+// GIAI ĐOẠN THI CÔNG CẤP 3: VILLA NGHỈ DƯỠNG HỒ BƠI VÔ CỰC (LUXURY VILLA)
+// =========================================================================
+export const VILLA_STAGES = [
+  {
+    stage: 0,
+    name: "Khuôn Viên Villa Nghỉ Dưỡng",
+    statusBadge: "Chưa thi công",
+    desc: "Mảnh đất đắc địa rộng 12m x 8.5m view thoáng đã được đo đạc cắm mốc định vị hồ bơi vô cực.",
+    nextStepTitle: "Giai đoạn 1: Đào Móng & Khối Hồ Bơi Vô Cực",
+    nextStepDesc: "Đào lòng hồ bơi sâu 1.6m và xếp lớp đá hộc tự nhiên gia cố toàn bộ sườn đất chống trượt.",
+    requiredMaterials: [
+      { id: "stone", name: "Đá Thô Tự Nhiên", icon: "🪨", amount: 1 }
+    ]
+  },
+  {
+    stage: 1,
+    name: "Đào Móng & Khối Hồ Bơi Vô Cực",
+    statusBadge: "Đã định hình lòng hồ bơi",
+    desc: "Lòng hồ bơi vô cực và nền móng villa đã được định hình vững chãi trên nền đá tự nhiên.",
+    nextStepTitle: "Giai đoạn 2: Đổ Bê Tông Chống Thấm Hồ Bơi",
+    nextStepDesc: "Đổ bê tông tươi mác cao chống thấm nước biển cho thành hồ bơi và dầm giằng mở rộng.",
+    requiredMaterials: [
+      { id: "concrete", name: "Bê Tông Tươi & Cốt Thép", icon: "🏗️", amount: 1 }
+    ]
+  },
+  {
+    stage: 2,
+    name: "Bê Tông Chống Thấm & Khung Chịu Lực",
+    statusBadge: "Đã xong thành bể bơi & khung",
+    desc: "Khối hồ bơi ngầm đã đúc xong màng chống thấm và hệ cột trụ thanh thoát phong cách mở hiện đại.",
+    nextStepTitle: "Giai đoạn 3: Hệ Vách Kính Panorama Kịch Trần",
+    nextStepDesc: "Lắp đặt các tấm kính cường lực Panorama khổ lớn tạo tầm nhìn 360 độ ngắm trọn hồ bơi.",
+    requiredMaterials: [
+      { id: "glass", name: "Kính Kiến Trúc", icon: "🪟", amount: 2 }
+    ]
+  },
+  {
+    stage: 3,
+    name: "Hệ Vách Kính Panorama Kịch Trần",
+    statusBadge: "Đã hoàn thành bao che kính",
+    desc: "Vách kính Panorama trong suốt kịch trần mang ánh sáng chan hòa và không gian nghỉ dưỡng vô cực.",
+    nextStepTitle: "Giai đoạn 4: Sàn Gỗ Teck Hồ Bơi & Ghế Tắm Nắng",
+    nextStepDesc: "Lát sàn gỗ Teck ngoài trời chịu nước quanh hồ bơi và đặt các ghế dài tắm nắng sang trọng.",
+    requiredMaterials: [
+      { id: "wood", name: "Gỗ Tự Nhiên & Khung Kèo", icon: "🪵", amount: 1 }
+    ]
+  },
+  {
+    stage: 4,
+    name: "Sàn Gỗ Teck & Ghế Tắm Nắng",
+    statusBadge: "Đã hoàn thành cảnh quan hồ bơi",
+    desc: "Khu vực boong gỗ Teck và ghế nghỉ dưỡng bên hồ bơi đã sẵn sàng cho những buổi tiệc trà hoàng hôn.",
+    nextStepTitle: "Giai đoạn 5: Nước Xanh Hồ Bơi & Mái Sky Garden",
+    nextStepDesc: "Bơm đầy làn nước xanh ngọc bích vào hồ bơi vô cực và phủ mái bằng Sky Garden ngắm sao trời.",
+    requiredMaterials: [
+      { id: "roof", name: "Ngói Lợp Đất Nung", icon: "🏠", amount: 1 }
+    ]
+  },
+  {
+    stage: 5,
+    name: "Làn Nước Xanh & Mái Sky Garden",
+    statusBadge: "Hồ bơi đã vận hành hoàn hảo",
+    desc: "Làn nước hồ bơi xanh biếc phản chiếu mây trời và sân thượng Sky Garden tuyệt đẹp đã hoàn thiện.",
+    nextStepTitle: "Giai đoạn 6: Hoàn Thiện Kiệt Tác Villa Nghỉ Dưỡng",
+    nextStepDesc: "Bật đèn LED âm nước hồ bơi, bố trí sofa phòng khách cao cấp và hàng rào cây xanh nhiệt đới.",
+    requiredMaterials: [
+      { id: "concrete", name: "Bê Tông Tươi & Cốt Thép", icon: "🏗️", amount: 1 },
+      { id: "glass", name: "Kính Kiến Trúc", icon: "🪟", amount: 1 }
+    ]
+  },
+  {
+    stage: 6,
+    name: "Kiệt Tác Villa Nghỉ Dưỡng Đỉnh Cao",
+    statusBadge: "Villa hoàn thiện 100%",
+    desc: "Chúc mừng bạn! Căn Villa nghỉ dưỡng hồ bơi vô cực triệu đô của bạn đã trở thành kiệt tác kiến trúc đẹp nhất thị trấn!",
+    nextStepTitle: "Đại Công Cáo Thành",
+    nextStepDesc: "Toàn bộ công trình villa đã hoàn thành mỹ mãn.",
+    requiredMaterials: []
+  }
+];
+
+// =========================================================================
+// HỆ THỐNG CÁC CẤP BẬC CÔNG TRÌNH (PROPERTY TIERS)
+// =========================================================================
+export const PROPERTY_TIERS = [
+  {
+    id: "house",
+    name: "Ngôi Nhà Phố Ấm Cúng",
+    tagline: "Tổ ấm 1 tầng ấm cúng mộc mạc",
+    icon: "🏡",
+    maxStage: 6,
+    dimensions: { length: 8.0, width: 6.0, height: 3.4 },
+    stages: CONSTRUCTION_STAGES,
+    nextTierId: "mansion",
+    nextTierName: "Biệt Thự Tân Cổ Điển 2 Tầng",
+    upgradeRequirements: "Hoàn thành 6/6 giai đoạn xây dựng ngôi nhà"
+  },
+  {
+    id: "mansion",
+    name: "Biệt Thự Tân Cổ Điển 2 Tầng",
+    tagline: "Đẳng cấp kiến trúc 2 tầng bề thế & sang trọng",
+    icon: "🏛️",
+    maxStage: 6,
+    dimensions: { length: 10.0, width: 7.2, height: 6.2 },
+    stages: MANSION_STAGES,
+    nextTierId: "villa",
+    nextTierName: "Villa Nghỉ Dưỡng Hồ Bơi Vô Cực",
+    upgradeRequirements: "Đã hoàn thành Ngôi Nhà Phố và sở hữu 300 🪵 Gỗ"
+  },
+  {
+    id: "villa",
+    name: "Villa Nghỉ Dưỡng Hồ Bơi Vô Cực",
+    tagline: "Kiệt tác nghỉ dưỡng kính Panorama & Sky Garden",
+    icon: "🏖️",
+    maxStage: 6,
+    dimensions: { length: 12.0, width: 8.5, height: 6.8 },
+    stages: VILLA_STAGES,
+    nextTierId: null,
+    nextTierName: null,
+    upgradeRequirements: "Đã hoàn thành Biệt Thự và sở hữu 600 🪵 Gỗ"
+  }
+];
+
+// =========================================================================
+// TÙY CHỌN BỐ CỤC NỘI THẤT BÊN TRONG (INTERIOR CUSTOMIZATION)
+// =========================================================================
+export const DEFAULT_INTERIOR_LAYOUT = {
+  livingSofa: 'luxury_leather', // 'luxury_leather' | 'nordic_fabric' | 'wooden_classic'
+  livingTable: 'marble',        // 'marble' | 'oak_wood' | 'glass'
+  livingRug: 'persian',         // 'persian' | 'modern_white' | 'none'
+  livingLight: 'chandelier',    // 'chandelier' | 'nordic_led' | 'spotlight'
+  livingTv: true,               // boolean
+  livingFireplace: true,        // boolean
+  bedStyle: 'king_oak',         // 'king_oak' | 'leather_modern'
+  kitchenIsland: 'granite_bar', // 'granite_bar' | 'classic_l'
+  diningTable: 'marble_6',      // 'marble_6' | 'wood_4'
+  indoorPlant: true,            // boolean
+  wallArt: true,                // boolean
+};
+
+export const FURNITURE_CATALOG = {
+  livingSofa: {
+    category: "Phòng Khách",
+    label: "Bộ Ghế Sofa",
+    options: [
+      { id: 'luxury_leather', name: 'Sofa Da Bò Ý Hoàng Gia', color: '#854d0e', desc: 'Chất da nâu bò thượng hạng, đệm mút lông vũ êm ái' },
+      { id: 'nordic_fabric', name: 'Sofa Nỉ Bắc Âu Tối Giản', color: '#64748b', desc: 'Vải nỉ xám nhạt cao cấp phong cách Scandinavian' },
+      { id: 'wooden_classic', name: 'Bộ Ghế Gỗ Mun Cổ Điển', color: '#451a03', desc: 'Gỗ quý chạm trổ hoa văn truyền thống uy nghiêm' }
+    ]
+  },
+  livingTable: {
+    category: "Phòng Khách",
+    label: "Bàn Trà Trung Tâm",
+    options: [
+      { id: 'marble', name: 'Bàn Trà Mặt Đá Calacatta', color: '#f8fafc', desc: 'Mặt đá cẩm thạch trắng vân vàng vương giả' },
+      { id: 'oak_wood', name: 'Bàn Trà Gỗ Sồi Tự Nhiên', color: '#b45309', desc: 'Gỗ sồi mộc mạc vân tự nhiên ấm cúng' },
+      { id: 'glass', name: 'Bàn Trà Kính Chân Mạ Vàng', color: '#38bdf8', desc: 'Kính cường lực trong suốt chân kim loại thanh thoát' }
+    ]
+  },
+  livingRug: {
+    category: "Phòng Khách",
+    label: "Thảm Trải Sàn",
+    options: [
+      { id: 'persian', name: 'Thảm Len Ba Tư Dệt Họa Tiết', color: '#991b1b', desc: 'Dệt sợi len tự nhiên màu đỏ đô cổ điển quý tộc' },
+      { id: 'modern_white', name: 'Thảm Lông Cừu Hiện Đại', color: '#f1f5f9', desc: 'Sợi lông cừu trắng tinh khôi êm dịu gót chân' },
+      { id: 'none', name: 'Để Trống (Sàn Đá Granite)', color: '#cbd5e1', desc: 'Khoe trọn vẻ bóng bẩy của nền đá hoa cương' }
+    ]
+  },
+  livingLight: {
+    category: "Hệ Thống Chiếu Sáng",
+    label: "Đèn Trang Trí Trần",
+    options: [
+      { id: 'chandelier', name: 'Đèn Chùm Pha Lê Vàng Ấm', color: '#fbbf24', desc: 'Pha lê Tiệp Khắc tỏa ánh sáng vàng hoàng hôn lung linh' },
+      { id: 'nordic_led', name: 'Đèn Thả Vòng LED Tối Giản', color: '#e2e8f0', desc: 'Ánh sáng trắng tự nhiên dịu mắt công nghệ hiện đại' },
+      { id: 'spotlight', name: 'Hệ Đèn Spotlight Chiếu Điểm', color: '#f59e0b', desc: 'Chiếu điểm nhấn tranh nghệ thuật và góc phòng tinh tế' }
+    ]
+  },
+  bedStyle: {
+    category: "Phòng Ngủ",
+    label: "Giường Ngủ Master",
+    options: [
+      { id: 'king_oak', name: 'Giường King Gỗ Sồi Tân Cổ Điển', color: '#78350f', desc: 'Khung gỗ sồi đồ sộ bọc đệm êm ái đầu giường' },
+      { id: 'leather_modern', name: 'Giường Bọc Da Tối Giản', color: '#334155', desc: 'Khung thép bọc da sang trọng đẳng cấp' }
+    ]
+  },
+  kitchenIsland: {
+    category: "Gian Bếp",
+    label: "Khu Vực Nấu Nướng",
+    options: [
+      { id: 'granite_bar', name: 'Đảo Bếp Granite Kèm Quầy Bar', color: '#1e293b', desc: 'Mặt đá granite đen kim sa có ghế bar cao thưởng rượu' },
+      { id: 'classic_l', name: 'Hệ Tủ Bếp Chữ L Gỗ Tự Nhiên', color: '#d97706', desc: 'Thiết kế chữ L tiện nghi rộng rãi cho người nội trợ' }
+    ]
+  },
+  diningTable: {
+    category: "Gian Bếp",
+    label: "Bàn Ăn Gia Đình",
+    options: [
+      { id: 'marble_6', name: 'Bàn Ăn Mặt Đá 6 Ghế Sang Trọng', color: '#e2e8f0', desc: 'Rộng rãi cho đại gia đình quây quần sum họp' },
+      { id: 'wood_4', name: 'Bàn Ăn Gỗ Sồi 4 Ghế Ấm Cúng', color: '#92400e', desc: 'Nhỏ gọn ấm áp cho những bữa cơm thân mật' }
+    ]
+  }
+};

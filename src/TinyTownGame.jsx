@@ -3,14 +3,21 @@ import {
   Home, Hammer, Compass, BookOpen, Sparkles, CheckCircle2, 
   X, HelpCircle, Layers, ArrowRight, RotateCcw, Volume2, 
   Sun, Moon, Eye, Award, Trophy, Ruler, Plus, Check, Info, Box,
-  Shuffle, Package, CheckCheck, RefreshCw, Zap, ArrowLeft
+  Shuffle, Package, CheckCheck, RefreshCw, Zap, ArrowLeft,
+  Palette, Armchair, Bed, UtensilsCrossed, Lightbulb, ChevronRight,
+  Maximize2, Lock
 } from 'lucide-react';
 import TinyTown3DScene from './TinyTown3DScene';
 import { 
   CONSTRUCTION_QUESTIONS, 
   MATRIX_SORTING_QUESTIONS,
   MATERIAL_HANDBOOK, 
-  CONSTRUCTION_STAGES 
+  CONSTRUCTION_STAGES,
+  MANSION_STAGES,
+  VILLA_STAGES,
+  PROPERTY_TIERS,
+  DEFAULT_INTERIOR_LAYOUT,
+  FURNITURE_CATALOG
 } from './data/constructionQuizData';
 
 // =========================================================================
@@ -192,31 +199,91 @@ export default function TinyTownGame({ addReward, onBack }) {
     return { stone: 0, concrete: 0, brick: 0, wood: 0, glass: 0, roof: 0, steel: 0, mortar: 0 };
   });
 
-  // Giai đoạn xây dựng (0: Bãi đất cát đá -> 6: Hoàn thiện lộng lẫy)
-  const [currentStage, setCurrentStage] = useState(() => {
+  // -------------------------------------------------------------
+  // HỆ THỐNG CẤP BẬC CÔNG TRÌNH: NGÔI NHÀ -> BIỆT THỰ -> VILLA
+  // -------------------------------------------------------------
+  const [currentTierId, setCurrentTierId] = useState(() => {
     const saved = localStorage.getItem(STORAGE_KEY);
     if (saved) {
-      try { return JSON.parse(saved).currentStage ?? 0; } catch (e) {}
+      try { return JSON.parse(saved).currentTierId || 'house'; } catch (e) {}
     }
-    return 0;
+    return 'house';
   });
 
-  // -------------------------------------------------------------
-  // VAI TRÒ KIẾN TRÚC SƯ: KÍCH THƯỚC & TÍNH TOÁN
-  // -------------------------------------------------------------
-  const [dimensions, setDimensions] = useState({
-    length: 8.0, // Chiều dài (m)
-    width: 6.0,  // Chiều rộng (m)
-    height: 3.4  // Chiều cao tầng (m)
+  // Tiến độ từng cấp bậc (0: Bãi đất cát đá -> 6: Hoàn thiện lộng lẫy)
+  const [tierProgress, setTierProgress] = useState(() => {
+    const saved = localStorage.getItem(STORAGE_KEY);
+    if (saved) {
+      try {
+        const parsed = JSON.parse(saved);
+        if (parsed.tierProgress) return parsed.tierProgress;
+        if (typeof parsed.currentStage === 'number') {
+          return { house: parsed.currentStage, mansion: 0, villa: 0 };
+        }
+      } catch (e) {}
+    }
+    return { house: 0, mansion: 0, villa: 0 };
   });
 
-  // Các chế độ hiển thị 3D
+  const currentTier = PROPERTY_TIERS.find(t => t.id === currentTierId) || PROPERTY_TIERS[0];
+  const currentStage = tierProgress[currentTierId] ?? 0;
+  const stagesList = currentTier.stages;
+  const currentStageData = stagesList[currentStage] || stagesList[stagesList.length - 1];
+
+  // -------------------------------------------------------------
+  // VAI TRÒ KIẾN TRÚC SƯ: KÍCH THƯỚC THEO TỪNG CÔNG TRÌNH
+  // -------------------------------------------------------------
+  const [tierDimensions, setTierDimensions] = useState(() => {
+    const saved = localStorage.getItem(STORAGE_KEY);
+    if (saved) {
+      try {
+        if (JSON.parse(saved).tierDimensions) return JSON.parse(saved).tierDimensions;
+      } catch (e) {}
+    }
+    return {
+      house: { length: 8.0, width: 6.0, height: 3.4 },
+      mansion: { length: 10.0, width: 7.2, height: 6.2 },
+      villa: { length: 12.0, width: 8.5, height: 6.8 }
+    };
+  });
+
+  const dimensions = tierDimensions[currentTierId] || currentTier.dimensions;
+
+  const setDimensions = (updater) => {
+    setTierDimensions(prev => {
+      const currentDim = prev[currentTierId] || currentTier.dimensions;
+      const updated = typeof updater === 'function' ? updater(currentDim) : updater;
+      return { ...prev, [currentTierId]: updated };
+    });
+  };
+
+  // -------------------------------------------------------------
+  // CHẾ ĐỘ HIỂN THỊ 3D & XEM TRỰC TIẾP BÊN TRONG (INTERIOR VIEW)
+  // -------------------------------------------------------------
+  // 'orbit' (xoay 360 ngoại thất) | 'interior' (xem trực tiếp bên trong) | 'topdown' (mặt bằng)
+  const [viewMode, setViewMode] = useState('orbit');
   const [isNight, setIsNight] = useState(false);
   const [roofCutaway, setRoofCutaway] = useState(false);
   const [dustActive, setDustActive] = useState(false);
 
+  // -------------------------------------------------------------
+  // TÙY CHỌN BỐ CỤC NỘI THẤT DO NGƯỜI CHƠI THIẾT KẾ
+  // -------------------------------------------------------------
+  const [interiorLayout, setInteriorLayout] = useState(() => {
+    const saved = localStorage.getItem(STORAGE_KEY);
+    if (saved) {
+      try {
+        const parsed = JSON.parse(saved);
+        if (parsed.interiorLayout) return { ...DEFAULT_INTERIOR_LAYOUT, ...parsed.interiorLayout };
+      } catch (e) {}
+    }
+    return DEFAULT_INTERIOR_LAYOUT;
+  });
+
+  const [interiorTab, setInteriorTab] = useState('living'); // 'living' | 'bedroom' | 'kitchen' | 'lighting'
+
   // Modal Điều Khiển
-  const [activeModal, setActiveModal] = useState(null); // 'quiz' | 'handbook' | 'architect' | null
+  const [activeModal, setActiveModal] = useState(null); // 'quiz' | 'handbook' | 'architect' | 'interior' | null
   const [selectedHandbookItem, setSelectedHandbookItem] = useState(MATERIAL_HANDBOOK[0]);
 
   // -------------------------------------------------------------
@@ -252,11 +319,13 @@ export default function TinyTownGame({ addReward, onBack }) {
     const saveData = {
       woodCount,
       inventory,
-      currentStage,
-      dimensions
+      currentTierId,
+      tierProgress,
+      interiorLayout,
+      tierDimensions
     };
     localStorage.setItem(STORAGE_KEY, JSON.stringify(saveData));
-  }, [woodCount, inventory, currentStage, dimensions]);
+  }, [woodCount, inventory, currentTierId, tierProgress, interiorLayout, tierDimensions]);
 
   const showToast = (text, type = 'info') => {
     setToast({ text, type });
@@ -290,12 +359,11 @@ export default function TinyTownGame({ addReward, onBack }) {
   // TIẾN HÀNH THI CÔNG HẠNG MỤC TIẾP THEO
   // -------------------------------------------------------------
   const handleConstructNextStage = () => {
-    if (currentStage >= 6) {
-      showToast('Ngôi nhà của bạn đã hoàn thành tuyệt mỹ!', 'success');
+    if (currentStage >= currentTier.maxStage) {
+      showToast(`${currentTier.name} của bạn đã hoàn thành tuyệt mỹ! Hãy nâng cấp lên công trình tiếp theo.`, 'success');
       return;
     }
 
-    const currentStageData = CONSTRUCTION_STAGES[currentStage];
     if (!currentStageData) return;
 
     // Các vật liệu cần thiết để hoàn thành giai đoạn này (chuyển sang stage tiếp theo)
@@ -323,16 +391,44 @@ export default function TinyTownGame({ addReward, onBack }) {
     setTimeout(() => setDustActive(false), 2400);
 
     const newStage = currentStage + 1;
-    setCurrentStage(newStage);
+    setTierProgress(prev => ({
+      ...prev,
+      [currentTierId]: newStage
+    }));
 
-    if (newStage === 6) {
+    if (newStage === currentTier.maxStage) {
       playConstructionSound('victory');
-      showToast(`🎉 CHÚC MỪNG ĐẠI CÔNG CÁO THÀNH! Ngôi nhà mơ ước của bạn đã hoàn tất 100%! (+150 XP, +30 💎)`, 'success');
-      if (addReward) addReward(150, 30);
+      const xpReward = currentTierId === 'villa' ? 400 : currentTierId === 'mansion' ? 250 : 150;
+      const gemReward = currentTierId === 'villa' ? 80 : currentTierId === 'mansion' ? 50 : 30;
+      showToast(`🎉 CHÚC MỪNG ĐẠI CÔNG CÁO THÀNH! ${currentTier.name} đã hoàn tất 100%! (+${xpReward} XP, +${gemReward} 💎)`, 'success');
+      if (addReward) addReward(xpReward, gemReward);
     } else {
-      const completedInfo = CONSTRUCTION_STAGES[newStage];
+      const completedInfo = stagesList[newStage];
       showToast(`Đã hoàn thành: ${completedInfo?.name || `Giai đoạn ${newStage}`}! Tiếp tục bước tiếp theo.`, 'success');
     }
+  };
+
+  // -------------------------------------------------------------
+  // NÂNG CẤP LÊN CẤP BẬC CÔNG TRÌNH TIẾP THEO (TIER UPGRADE)
+  // -------------------------------------------------------------
+  const handleUpgradeTier = (targetTierId) => {
+    const targetTier = PROPERTY_TIERS.find(t => t.id === targetTierId);
+    if (!targetTier) return;
+
+    if (targetTierId === 'mansion' && (tierProgress.house || 0) < 6) {
+      showToast('Bạn cần hoàn thành 100% (6/6 giai đoạn) Ngôi Nhà Phố trước khi nâng cấp!', 'warning');
+      return;
+    }
+    if (targetTierId === 'villa' && (tierProgress.mansion || 0) < 6) {
+      showToast('Bạn cần hoàn thành 100% (6/6 giai đoạn) Biệt Thự 2 Tầng trước khi nâng cấp!', 'warning');
+      return;
+    }
+
+    setCurrentTierId(targetTierId);
+    playConstructionSound('victory');
+    setDustActive(true);
+    setTimeout(() => setDustActive(false), 2400);
+    showToast(`🎉 Chúc mừng bạn đã mở khóa & chuyển sang ${targetTier.name}! Bắt đầu thi công kiệt tác mới.`, 'success');
   };
 
   // -------------------------------------------------------------
@@ -452,12 +548,15 @@ export default function TinyTownGame({ addReward, onBack }) {
     setActiveModal('quiz');
   };
 
-  // Khởi động lại công trình
+  // Khởi động lại công trình hiện tại
   const handleResetPlot = () => {
-    if (window.confirm("Bạn có chắc chắn muốn giải phóng mặt bằng về bãi đất ban đầu để xây lại từ đầu không?")) {
-      setCurrentStage(0);
+    if (window.confirm(`Bạn có chắc chắn muốn giải phóng mặt bằng công trình [${currentTier.name}] để xây dựng lại từ bãi đất ban đầu không?`)) {
+      setTierProgress(prev => ({
+        ...prev,
+        [currentTierId]: 0
+      }));
       setRoofCutaway(false);
-      showToast("Đã giải phóng mặt bằng về bãi đất nguyên sơ!", "info");
+      showToast(`Đã giải phóng mặt bằng [${currentTier.name}] về bãi đất nguyên sơ!`, "info");
     }
   };
 
@@ -566,6 +665,75 @@ export default function TinyTownGame({ addReward, onBack }) {
       </div>
 
       {/* ========================================================================= */}
+      {/* THANH CHUYỂN CẤP BẬC CÔNG TRÌNH: NGÔI NHÀ -> BIỆT THỰ -> VILLA            */}
+      {/* ========================================================================= */}
+      <div className="mb-5 bg-white p-2.5 sm:p-3 rounded-2xl border border-slate-200 shadow-sm flex flex-col md:flex-row items-stretch md:items-center justify-between gap-3">
+        <div className="flex items-center gap-2 overflow-x-auto pb-1 md:pb-0">
+          <span className="text-xs font-black uppercase text-slate-400 tracking-wider px-2 hidden lg:inline">
+            Công Trình:
+          </span>
+          {PROPERTY_TIERS.map((tier) => {
+            const isCurrent = currentTierId === tier.id;
+            const prog = tierProgress[tier.id] || 0;
+            const isCompleted = prog >= 6;
+            const isLocked = (tier.id === 'mansion' && (tierProgress.house || 0) < 6) ||
+                             (tier.id === 'villa' && (tierProgress.mansion || 0) < 6);
+
+            return (
+              <button
+                key={tier.id}
+                type="button"
+                onClick={() => {
+                  if (isLocked) {
+                    showToast(tier.upgradeRequirements || 'Hãy hoàn thành công trình cấp trước để mở khóa!', 'warning');
+                    return;
+                  }
+                  setCurrentTierId(tier.id);
+                  playConstructionSound('hammer');
+                }}
+                className={`flex items-center gap-2.5 px-3.5 py-2 rounded-xl text-xs sm:text-sm font-black transition cursor-pointer whitespace-nowrap border ${
+                  isCurrent
+                    ? 'bg-gradient-to-r from-amber-500 to-orange-500 text-white border-amber-600 shadow-md shadow-amber-200'
+                    : isLocked
+                    ? 'bg-slate-100 text-slate-400 border-slate-200 cursor-not-allowed opacity-75'
+                    : 'bg-white hover:bg-slate-50 text-slate-700 border-slate-200 hover:border-amber-300'
+                }`}
+              >
+                <span className="text-lg">{tier.icon}</span>
+                <div className="text-left">
+                  <div className="flex items-center gap-1.5">
+                    <span>{tier.name}</span>
+                    {isLocked ? (
+                      <Lock size={12} className="text-slate-400" />
+                    ) : isCompleted ? (
+                      <span className="text-[10px] bg-emerald-500 text-white px-1.5 py-0.2 rounded-full font-bold">✓ 100%</span>
+                    ) : (
+                      <span className="text-[10px] opacity-80">{prog}/6</span>
+                    )}
+                  </div>
+                  <div className={`text-[10px] font-normal ${isCurrent ? 'text-amber-100' : 'text-slate-500'}`}>
+                    {tier.dimensions.length}m × {tier.dimensions.width}m • {tier.tagline}
+                  </div>
+                </div>
+              </button>
+            );
+          })}
+        </div>
+
+        {/* Nút mở Xưởng Thiết Kế Nội Thất */}
+        <div className="flex items-center gap-2 justify-end">
+          <button
+            type="button"
+            onClick={() => setActiveModal('interior')}
+            className="w-full md:w-auto px-4 py-2 bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 text-white rounded-xl text-xs sm:text-sm font-bold shadow-md shadow-indigo-200 transition flex items-center justify-center gap-2 cursor-pointer active:scale-95"
+          >
+            <Palette size={16} />
+            <span>✨ Xưởng Thiết Kế & Bố Cục Nội Thất</span>
+          </button>
+        </div>
+      </div>
+
+      {/* ========================================================================= */}
       {/* KHU VỰC CHÍNH: KHUNG NHÌN 3D VÀ BẢNG THI CÔNG                             */}
       {/* ========================================================================= */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 items-stretch">
@@ -574,35 +742,91 @@ export default function TinyTownGame({ addReward, onBack }) {
         <div className="lg:col-span-8 flex flex-col">
           <div className="relative w-full h-[380px] sm:h-[480px] bg-gradient-to-b from-sky-100 via-sky-50 to-amber-50 rounded-2xl border-2 border-slate-200 overflow-hidden shadow-inner group">
             
-            {/* THÀNH PHẦN 3D SCENE VỚI ORBITCONTROLS */}
+            {/* THÀNH PHẦN 3D SCENE VỚI ORBITCONTROLS & DYNAMIC TIERS */}
             <TinyTown3DScene
+              tier={currentTierId}
               stage={currentStage}
               houseDimensions={dimensions}
-              roofCutaway={roofCutaway}
+              roofCutaway={roofCutaway || viewMode === 'interior'}
               isNight={isNight}
               activeDust={dustActive}
+              viewMode={viewMode}
+              interiorLayout={interiorLayout}
             />
 
-            {/* Hướng dẫn thao tác góc nhìn 3D */}
-            <div className="absolute top-3 left-3 pointer-events-none bg-black/40 backdrop-blur-sm text-white px-3 py-1.5 rounded-xl text-xs font-medium flex items-center gap-1.5 shadow">
-              <Compass size={14} className="text-amber-300" />
-              <span>Giữ chuột/chạm để <strong>xoay 360°</strong> • Lăn chuột để <strong>phóng to/thu nhỏ</strong></span>
+            {/* BỘ CHUYỂN GÓC NHÌN 3D & XEM TRỰC TIẾP BÊN TRONG */}
+            <div className="absolute top-3 left-3 flex flex-wrap items-center gap-1.5 z-10 bg-black/45 backdrop-blur-md p-1 rounded-2xl border border-white/20 shadow-lg text-white">
+              <button
+                type="button"
+                onClick={() => setViewMode('orbit')}
+                className={`px-2.5 sm:px-3 py-1.5 rounded-xl text-xs font-bold transition flex items-center gap-1.5 cursor-pointer ${
+                  viewMode === 'orbit'
+                    ? 'bg-amber-500 text-white shadow-md'
+                    : 'hover:bg-white/10 text-slate-200'
+                }`}
+                title="Xoay 360 độ toàn cảnh ngoại thất"
+              >
+                <Compass size={14} />
+                <span>Toàn Cảnh 360°</span>
+              </button>
+
+              <button
+                type="button"
+                onClick={() => {
+                  setViewMode('interior');
+                  setRoofCutaway(true);
+                  showToast('Đang ở chế độ xem trực tiếp nội thất bên trong!', 'info');
+                }}
+                className={`px-2.5 sm:px-3 py-1.5 rounded-xl text-xs font-bold transition flex items-center gap-1.5 cursor-pointer ${
+                  viewMode === 'interior'
+                    ? 'bg-indigo-600 text-white shadow-md ring-2 ring-indigo-300'
+                    : 'hover:bg-white/10 text-slate-200'
+                }`}
+                title="Bước vào trong chiêm ngưỡng sofa, bàn trà, giường ngủ, bếp"
+              >
+                <Armchair size={14} className="text-amber-300" />
+                <span>🛋️ Xem Bên Trong</span>
+              </button>
+
+              <button
+                type="button"
+                onClick={() => setViewMode('topdown')}
+                className={`px-2.5 sm:px-3 py-1.5 rounded-xl text-xs font-bold transition flex items-center gap-1.5 cursor-pointer ${
+                  viewMode === 'topdown'
+                    ? 'bg-sky-600 text-white shadow-md'
+                    : 'hover:bg-white/10 text-slate-200'
+                }`}
+                title="Góc nhìn kiến trúc từ trên cao xuống"
+              >
+                <Layers size={14} />
+                <span className="hidden sm:inline">Mặt Bằng</span>
+              </button>
             </div>
 
-            {/* Nút điều khiển ngày đêm & mở nóc mái */}
-            <div className="absolute top-3 right-3 flex items-center gap-2">
+            {/* Nút điều khiển ngày đêm, mở nóc mái & Studio nội thất */}
+            <div className="absolute top-3 right-3 flex items-center gap-1.5 sm:gap-2 z-10">
+              <button
+                type="button"
+                onClick={() => setActiveModal('interior')}
+                className="px-2.5 sm:px-3 py-1.5 bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-white rounded-xl text-xs font-bold transition flex items-center gap-1.5 shadow-md active:scale-95 cursor-pointer backdrop-blur-sm"
+                title="Tự do sắp xếp và chọn nội thất bên trong"
+              >
+                <Palette size={14} />
+                <span className="hidden md:inline">Đổi Nội Thất</span>
+              </button>
+
               <button
                 type="button"
                 onClick={() => setRoofCutaway(!roofCutaway)}
-                className={`px-3 py-1.5 rounded-xl text-xs font-bold transition flex items-center gap-1 shadow-sm backdrop-blur-sm ${
-                  roofCutaway
+                className={`px-2.5 sm:px-3 py-1.5 rounded-xl text-xs font-bold transition flex items-center gap-1 shadow-sm backdrop-blur-sm ${
+                  roofCutaway || viewMode === 'interior'
                     ? 'bg-amber-500 text-white shadow-amber-300/50'
                     : 'bg-white/90 text-slate-700 hover:bg-white border border-slate-200'
                 }`}
                 title="Mở nóc mái để quan sát nội thất bên trong"
               >
                 <Eye size={14} />
-                <span>{roofCutaway ? 'Đậy Mái Lại' : 'Mở Nóc Mái (Xem Bên Trong)'}</span>
+                <span className="hidden sm:inline">{roofCutaway || viewMode === 'interior' ? 'Đậy Mái' : 'Mở Nóc Mái'}</span>
               </button>
 
               <button
@@ -621,9 +845,11 @@ export default function TinyTownGame({ addReward, onBack }) {
                 {currentStage}/6
               </div>
               <div>
-                <div className="text-[10px] font-bold uppercase text-slate-400">Tiến độ công trình</div>
+                <div className="text-[10px] font-bold uppercase text-slate-400">
+                  {currentTier.icon} {currentTier.name}
+                </div>
                 <div className="text-xs sm:text-sm font-extrabold text-slate-800">
-                  {CONSTRUCTION_STAGES[currentStage]?.name}
+                  {currentStageData?.name}
                 </div>
               </div>
             </div>
@@ -633,7 +859,7 @@ export default function TinyTownGame({ addReward, onBack }) {
               <button
                 type="button"
                 onClick={handleResetPlot}
-                className="p-2 bg-white/80 hover:bg-white text-slate-500 hover:text-red-600 rounded-xl shadow-sm border border-slate-200 transition text-xs flex items-center gap-1"
+                className="p-2 bg-white/80 hover:bg-white text-slate-500 hover:text-red-600 rounded-xl shadow-sm border border-slate-200 transition text-xs flex items-center gap-1 cursor-pointer"
                 title="Xây lại từ bãi đất ban đầu"
               >
                 <RotateCcw size={14} />
@@ -642,18 +868,9 @@ export default function TinyTownGame({ addReward, onBack }) {
             </div>
           </div>
 
-          {/* Dải thanh tiến độ thi công 7 bước */}
+          {/* Dải thanh tiến độ thi công 7 bước theo cấp bậc hiện tại */}
           <div className="mt-3 grid grid-cols-7 gap-1.5 text-center">
-            {CONSTRUCTION_STAGES.map((st) => {
-              const stepLabels = [
-                'Đất thô',
-                'Móng đá',
-                'Khung cột',
-                'Tường gạch',
-                'Cửa & Kính',
-                'Mái ngói',
-                'Nội thất'
-              ];
+            {stagesList.map((st) => {
               const isCurrent = currentStage === st.stage;
               const isDone = currentStage > st.stage;
 
@@ -674,7 +891,7 @@ export default function TinyTownGame({ addReward, onBack }) {
                     {isDone ? '✓ B.' + st.stage : 'B.' + st.stage}
                   </div>
                   <div className="truncate text-[10px] sm:text-[11px]" title={st.name}>
-                    {stepLabels[st.stage] || st.name}
+                    {st.name}
                   </div>
                 </div>
               );
@@ -700,13 +917,13 @@ export default function TinyTownGame({ addReward, onBack }) {
             <div className="p-3 bg-white/80 rounded-xl border border-amber-200/80">
               <div className="text-[11px] font-bold text-slate-500 uppercase tracking-wide flex items-center gap-1">
                 <CheckCircle2 size={13} className="text-emerald-500" />
-                <span>Trạng thái hiện tại (Đã xong):</span>
+                <span>Trạng thái hiện tại ({currentTier.name}):</span>
               </div>
               <div className="text-sm font-bold text-slate-800 mt-0.5">
-                {CONSTRUCTION_STAGES[currentStage]?.name}
+                {currentStageData?.name}
               </div>
               <div className="text-xs text-slate-600 mt-0.5 leading-relaxed">
-                {CONSTRUCTION_STAGES[currentStage]?.desc}
+                {currentStageData?.desc}
               </div>
             </div>
 
@@ -719,10 +936,10 @@ export default function TinyTownGame({ addReward, onBack }) {
                     <span>Hạng mục tiếp theo cần xây:</span>
                   </div>
                   <div className="text-base font-black text-slate-900 leading-snug">
-                    {CONSTRUCTION_STAGES[currentStage]?.nextStepTitle}
+                    {currentStageData?.nextStepTitle}
                   </div>
                   <p className="text-xs text-slate-600 mt-1 leading-relaxed">
-                    {CONSTRUCTION_STAGES[currentStage]?.nextStepDesc}
+                    {currentStageData?.nextStepDesc}
                   </p>
 
                   {/* Danh sách vật tư cần có */}
@@ -733,7 +950,7 @@ export default function TinyTownGame({ addReward, onBack }) {
                     </div>
 
                     <div className="space-y-1.5">
-                      {CONSTRUCTION_STAGES[currentStage]?.requiredMaterials.map(req => {
+                      {currentStageData?.requiredMaterials?.map(req => {
                         const currentHave = inventory[req.id] || 0;
                         const isSufficient = currentHave >= req.amount;
                         return (
@@ -779,7 +996,7 @@ export default function TinyTownGame({ addReward, onBack }) {
 
                 {/* Nút bấm thi công */}
                 {(() => {
-                  const reqs = CONSTRUCTION_STAGES[currentStage]?.requiredMaterials || [];
+                  const reqs = currentStageData?.requiredMaterials || [];
                   const canBuild = reqs.every(req => (inventory[req.id] || 0) >= req.amount);
 
                   return (
@@ -796,8 +1013,8 @@ export default function TinyTownGame({ addReward, onBack }) {
                       <Hammer size={18} />
                       <span>
                         {canBuild 
-                          ? `Thi Công Ngay: ${CONSTRUCTION_STAGES[currentStage]?.nextStepTitle.split(':')[1] || 'Giai đoạn tiếp theo'}`
-                          : `Còn thiếu vật tư để thi công (${CONSTRUCTION_STAGES[currentStage]?.nextStepTitle.split(':')[1] || ''})`
+                          ? `Thi Công Ngay: ${currentStageData?.nextStepTitle?.split(':')[1] || 'Giai đoạn tiếp theo'}`
+                          : `Còn thiếu vật tư để thi công (${currentStageData?.nextStepTitle?.split(':')[1] || ''})`
                         }
                       </span>
                     </button>
@@ -805,12 +1022,65 @@ export default function TinyTownGame({ addReward, onBack }) {
                 })()}
               </div>
             ) : (
-              <div className="p-4 bg-emerald-50 border border-emerald-200 rounded-xl text-center space-y-2">
-                <div className="text-3xl">🎉🏡✨</div>
-                <div className="text-sm font-black text-emerald-900">Đại Công Cáo Thành - Ngôi Nhà Hoàn Hảo!</div>
-                <p className="text-xs text-emerald-700">
-                  Bạn đã hoàn thành trọn vẹn toàn bộ 6 giai đoạn xây dựng từ bãi đất cát đá hoang sơ thành tổ ấm lung linh. Hãy xoay 360 độ hoặc mở nóc mái để chiêm ngưỡng tác phẩm của mình!
-                </p>
+              <div className="space-y-3">
+                <div className="p-4 bg-emerald-50 border border-emerald-200 rounded-xl text-center space-y-2">
+                  <div className="text-3xl">🎉{currentTier.icon}✨</div>
+                  <div className="text-sm font-black text-emerald-900">
+                    Đại Công Cáo Thành - {currentTier.name} Hoàn Hảo!
+                  </div>
+                  <p className="text-xs text-emerald-700 leading-relaxed">
+                    Bạn đã hoàn thành trọn vẹn toàn bộ 6 giai đoạn thi công kiệt tác này! Giờ đây bạn có thể chiêm ngưỡng bên trong và tùy ý sắp xếp nội thất.
+                  </p>
+                  <div className="pt-2 flex flex-wrap gap-2 justify-center">
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setViewMode('interior');
+                        setRoofCutaway(true);
+                      }}
+                      className="px-3 py-1.5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl text-xs font-bold transition flex items-center gap-1.5 cursor-pointer shadow-sm"
+                    >
+                      <Armchair size={14} />
+                      <span>Xem Bên Trong</span>
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setActiveModal('interior')}
+                      className="px-3 py-1.5 bg-amber-500 hover:bg-amber-600 text-white rounded-xl text-xs font-bold transition flex items-center gap-1.5 cursor-pointer shadow-sm"
+                    >
+                      <Palette size={14} />
+                      <span>Thiết Kế Nội Thất</span>
+                    </button>
+                  </div>
+                </div>
+
+                {/* Khối nâng cấp lên cấp bậc tiếp theo nếu có */}
+                {currentTier.nextTierId && (
+                  <div className="p-4 bg-gradient-to-br from-amber-500 via-orange-500 to-amber-600 rounded-2xl text-white shadow-lg space-y-3 animate-fade-in">
+                    <div className="flex items-center gap-2">
+                      <Trophy size={20} className="text-amber-200" />
+                      <span className="text-xs font-black uppercase tracking-wider text-amber-100">
+                        Cấp Bậc Tiếp Theo Đã Mở Khóa!
+                      </span>
+                    </div>
+                    <div>
+                      <h4 className="text-base font-black">
+                        Nâng Cấp Lên: {currentTier.nextTierName}
+                      </h4>
+                      <p className="text-xs text-amber-100 mt-1">
+                        {PROPERTY_TIERS.find(t => t.id === currentTier.nextTierId)?.tagline}
+                      </p>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() => handleUpgradeTier(currentTier.nextTierId)}
+                      className="w-full py-3 bg-white hover:bg-amber-50 text-amber-900 rounded-xl font-black text-sm shadow-md transition flex items-center justify-center gap-2 cursor-pointer active:scale-98"
+                    >
+                      <Sparkles size={16} className="text-amber-600" />
+                      <span>Tiến Lên {currentTier.nextTierName} ➔</span>
+                    </button>
+                  </div>
+                )}
               </div>
             )}
           </div>
@@ -1530,10 +1800,471 @@ export default function TinyTownGame({ addReward, onBack }) {
                 setActiveModal(null);
                 showToast(`Đã áp dụng kích thước mới (${dimensions.length}m × ${dimensions.width}m × ${dimensions.height}m) vào mô hình 3D!`, 'success');
               }}
-              className="w-full py-3 bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-sm rounded-xl shadow-md transition"
+              className="w-full py-3 bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-sm rounded-xl shadow-md transition cursor-pointer"
             >
               Áp Dụng Bản Vẽ Vào Mô Hình 3D
             </button>
+
+          </div>
+        </div>
+      )}
+
+      {/* ========================================================================= */}
+      {/* MODAL 4: XƯỞNG THIẾT KẾ & BỐ CỤC NỘI THẤT (INTERIOR DESIGN STUDIO)        */}
+      {/* ========================================================================= */}
+      {activeModal === 'interior' && (
+        <div className="fixed inset-0 z-[99999] bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-3 sm:p-5 overflow-y-auto animate-fade-in">
+          <div className="bg-white rounded-3xl max-w-4xl w-full p-5 sm:p-7 shadow-2xl border border-slate-200 space-y-5 max-h-[92vh] overflow-y-auto animate-slide-up">
+            
+            {/* Header Modal */}
+            <div className="flex items-center justify-between pb-3 border-b border-slate-100">
+              <div className="flex items-center gap-3">
+                <div className="w-11 h-11 rounded-2xl bg-gradient-to-br from-indigo-500 to-purple-600 text-white flex items-center justify-center text-2xl shadow-md shadow-indigo-200">
+                  ✨
+                </div>
+                <div>
+                  <h3 className="text-xl font-black text-slate-800 flex items-center gap-2">
+                    <span>Xưởng Thiết Kế & Bố Cục Nội Thất 3D</span>
+                  </h3>
+                  <p className="text-xs text-slate-500">
+                    Tùy chọn phong cách sofa, bàn trà, giường ngủ, gian bếp & ánh sáng — cập nhật trực tiếp vào không gian 3D
+                  </p>
+                </div>
+              </div>
+              <button
+                type="button"
+                onClick={() => setActiveModal(null)}
+                className="p-1.5 text-slate-400 hover:text-slate-600 rounded-lg hover:bg-slate-100 cursor-pointer"
+                title="Đóng cửa sổ"
+              >
+                <X size={20} />
+              </button>
+            </div>
+
+            {/* TAB CHUYỂN ĐỔI KHÔNG GIAN NỘI THẤT */}
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 bg-slate-100 p-1.5 rounded-2xl border border-slate-200">
+              <button
+                type="button"
+                onClick={() => setInteriorTab('living')}
+                className={`py-2 px-3 rounded-xl text-xs sm:text-sm font-black transition flex items-center justify-center gap-1.5 cursor-pointer ${
+                  interiorTab === 'living'
+                    ? 'bg-white text-indigo-900 shadow-sm border border-slate-200'
+                    : 'text-slate-600 hover:text-slate-900'
+                }`}
+              >
+                <Armchair size={15} className="text-indigo-600" />
+                <span>Phòng Khách</span>
+              </button>
+
+              <button
+                type="button"
+                onClick={() => setInteriorTab('bedroom')}
+                className={`py-2 px-3 rounded-xl text-xs sm:text-sm font-black transition flex items-center justify-center gap-1.5 cursor-pointer ${
+                  interiorTab === 'bedroom'
+                    ? 'bg-white text-indigo-900 shadow-sm border border-slate-200'
+                    : 'text-slate-600 hover:text-slate-900'
+                }`}
+              >
+                <Bed size={15} className="text-purple-600" />
+                <span>Phòng Ngủ</span>
+              </button>
+
+              <button
+                type="button"
+                onClick={() => setInteriorTab('kitchen')}
+                className={`py-2 px-3 rounded-xl text-xs sm:text-sm font-black transition flex items-center justify-center gap-1.5 cursor-pointer ${
+                  interiorTab === 'kitchen'
+                    ? 'bg-white text-indigo-900 shadow-sm border border-slate-200'
+                    : 'text-slate-600 hover:text-slate-900'
+                }`}
+              >
+                <UtensilsCrossed size={15} className="text-amber-600" />
+                <span>Gian Bếp & Ăn</span>
+              </button>
+
+              <button
+                type="button"
+                onClick={() => setInteriorTab('lighting')}
+                className={`py-2 px-3 rounded-xl text-xs sm:text-sm font-black transition flex items-center justify-center gap-1.5 cursor-pointer ${
+                  interiorTab === 'lighting'
+                    ? 'bg-white text-indigo-900 shadow-sm border border-slate-200'
+                    : 'text-slate-600 hover:text-slate-900'
+                }`}
+              >
+                <Lightbulb size={15} className="text-yellow-500" />
+                <span>Đèn & Decor</span>
+              </button>
+            </div>
+
+            {/* NỘI DUNG TỪNG TAB */}
+            <div className="space-y-5">
+              
+              {/* TAB 1: PHÒNG KHÁCH */}
+              {interiorTab === 'living' && (
+                <div className="space-y-4">
+                  {/* Ghế Sofa */}
+                  <div>
+                    <label className="text-xs font-black uppercase text-slate-700 tracking-wider flex items-center gap-1.5 mb-2">
+                      <span>🛋️ Bộ Ghế Sofa Tiếp Khách</span>
+                    </label>
+                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
+                      {FURNITURE_CATALOG.livingSofa.options.map(opt => {
+                        const isSelected = interiorLayout.livingSofa === opt.id;
+                        return (
+                          <div
+                            key={opt.id}
+                            onClick={() => {
+                              setInteriorLayout(prev => ({ ...prev, livingSofa: opt.id }));
+                              playConstructionSound('hammer');
+                            }}
+                            className={`p-3 rounded-2xl border-2 transition cursor-pointer flex flex-col justify-between ${
+                              isSelected
+                                ? 'bg-indigo-50/70 border-indigo-500 ring-2 ring-indigo-200 shadow-sm'
+                                : 'bg-slate-50 border-slate-200 hover:border-slate-300'
+                            }`}
+                          >
+                            <div>
+                              <div className="flex items-center justify-between mb-1.5">
+                                <div className="w-5 h-5 rounded-full border border-black/10 shadow-inner" style={{ backgroundColor: opt.color }} />
+                                {isSelected && <Check size={16} className="text-indigo-600" />}
+                              </div>
+                              <div className="text-xs font-bold text-slate-900">{opt.name}</div>
+                              <div className="text-[11px] text-slate-500 mt-1 leading-snug">{opt.desc}</div>
+                            </div>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  </div>
+
+                  {/* Bàn Trà */}
+                  <div>
+                    <label className="text-xs font-black uppercase text-slate-700 tracking-wider flex items-center gap-1.5 mb-2">
+                      <span>☕ Bàn Trà Trung Tâm</span>
+                    </label>
+                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
+                      {FURNITURE_CATALOG.livingTable.options.map(opt => {
+                        const isSelected = interiorLayout.livingTable === opt.id;
+                        return (
+                          <div
+                            key={opt.id}
+                            onClick={() => {
+                              setInteriorLayout(prev => ({ ...prev, livingTable: opt.id }));
+                              playConstructionSound('hammer');
+                            }}
+                            className={`p-3 rounded-2xl border-2 transition cursor-pointer flex flex-col justify-between ${
+                              isSelected
+                                ? 'bg-indigo-50/70 border-indigo-500 ring-2 ring-indigo-200 shadow-sm'
+                                : 'bg-slate-50 border-slate-200 hover:border-slate-300'
+                            }`}
+                          >
+                            <div>
+                              <div className="flex items-center justify-between mb-1.5">
+                                <div className="w-5 h-5 rounded-full border border-black/10 shadow-inner" style={{ backgroundColor: opt.color }} />
+                                {isSelected && <Check size={16} className="text-indigo-600" />}
+                              </div>
+                              <div className="text-xs font-bold text-slate-900">{opt.name}</div>
+                              <div className="text-[11px] text-slate-500 mt-1 leading-snug">{opt.desc}</div>
+                            </div>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  </div>
+
+                  {/* Thảm Trải Sàn */}
+                  <div>
+                    <label className="text-xs font-black uppercase text-slate-700 tracking-wider flex items-center gap-1.5 mb-2">
+                      <span>🧶 Thảm Trải Sàn Phòng Khách</span>
+                    </label>
+                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
+                      {FURNITURE_CATALOG.livingRug.options.map(opt => {
+                        const isSelected = interiorLayout.livingRug === opt.id;
+                        return (
+                          <div
+                            key={opt.id}
+                            onClick={() => {
+                              setInteriorLayout(prev => ({ ...prev, livingRug: opt.id }));
+                              playConstructionSound('hammer');
+                            }}
+                            className={`p-3 rounded-2xl border-2 transition cursor-pointer flex flex-col justify-between ${
+                              isSelected
+                                ? 'bg-indigo-50/70 border-indigo-500 ring-2 ring-indigo-200 shadow-sm'
+                                : 'bg-slate-50 border-slate-200 hover:border-slate-300'
+                            }`}
+                          >
+                            <div>
+                              <div className="flex items-center justify-between mb-1.5">
+                                <div className="w-5 h-5 rounded-full border border-black/10 shadow-inner" style={{ backgroundColor: opt.color }} />
+                                {isSelected && <Check size={16} className="text-indigo-600" />}
+                              </div>
+                              <div className="text-xs font-bold text-slate-900">{opt.name}</div>
+                              <div className="text-[11px] text-slate-500 mt-1 leading-snug">{opt.desc}</div>
+                            </div>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  </div>
+
+                  {/* Tùy chọn Tivi & Lò sưởi */}
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
+                    <label className="p-3 bg-slate-50 border border-slate-200 rounded-2xl flex items-center justify-between cursor-pointer hover:bg-indigo-50/40 transition">
+                      <div className="flex items-center gap-2.5">
+                        <span className="text-xl">📺</span>
+                        <div>
+                          <div className="text-xs font-bold text-slate-800">Tivi Màn Hình Siêu Mỏng 85"</div>
+                          <div className="text-[10px] text-slate-500">Gắn kệ tivi hiện đại trong phòng khách</div>
+                        </div>
+                      </div>
+                      <input
+                        type="checkbox"
+                        checked={!!interiorLayout.livingTv}
+                        onChange={(e) => setInteriorLayout(prev => ({ ...prev, livingTv: e.target.checked }))}
+                        className="w-4 h-4 accent-indigo-600 cursor-pointer"
+                      />
+                    </label>
+
+                    <label className="p-3 bg-slate-50 border border-slate-200 rounded-2xl flex items-center justify-between cursor-pointer hover:bg-indigo-50/40 transition">
+                      <div className="flex items-center gap-2.5">
+                        <span className="text-xl">🔥</span>
+                        <div>
+                          <div className="text-xs font-bold text-slate-800">Lò Sưởi Đá Cẩm Thạch Ấm Áp</div>
+                          <div className="text-[10px] text-slate-500">Tỏa ánh lửa bập bùng ấm cúng ban đêm</div>
+                        </div>
+                      </div>
+                      <input
+                        type="checkbox"
+                        checked={!!interiorLayout.livingFireplace}
+                        onChange={(e) => setInteriorLayout(prev => ({ ...prev, livingFireplace: e.target.checked }))}
+                        className="w-4 h-4 accent-indigo-600 cursor-pointer"
+                      />
+                    </label>
+                  </div>
+                </div>
+              )}
+
+              {/* TAB 2: PHÒNG NGỦ */}
+              {interiorTab === 'bedroom' && (
+                <div className="space-y-4">
+                  <div>
+                    <label className="text-xs font-black uppercase text-slate-700 tracking-wider flex items-center gap-1.5 mb-2">
+                      <span>🛏️ Kiểu Dáng Giường Ngủ Master</span>
+                    </label>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                      {FURNITURE_CATALOG.bedStyle.options.map(opt => {
+                        const isSelected = interiorLayout.bedStyle === opt.id;
+                        return (
+                          <div
+                            key={opt.id}
+                            onClick={() => {
+                              setInteriorLayout(prev => ({ ...prev, bedStyle: opt.id }));
+                              playConstructionSound('hammer');
+                            }}
+                            className={`p-3.5 rounded-2xl border-2 transition cursor-pointer flex flex-col justify-between ${
+                              isSelected
+                                ? 'bg-indigo-50/70 border-indigo-500 ring-2 ring-indigo-200 shadow-sm'
+                                : 'bg-slate-50 border-slate-200 hover:border-slate-300'
+                            }`}
+                          >
+                            <div>
+                              <div className="flex items-center justify-between mb-1.5">
+                                <div className="w-5 h-5 rounded-full border border-black/10 shadow-inner" style={{ backgroundColor: opt.color }} />
+                                {isSelected && <Check size={16} className="text-indigo-600" />}
+                              </div>
+                              <div className="text-xs font-bold text-slate-900">{opt.name}</div>
+                              <div className="text-[11px] text-slate-500 mt-1 leading-snug">{opt.desc}</div>
+                            </div>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  </div>
+
+                  <div className="pt-2">
+                    <label className="p-3.5 bg-slate-50 border border-slate-200 rounded-2xl flex items-center justify-between cursor-pointer hover:bg-indigo-50/40 transition">
+                      <div className="flex items-center gap-2.5">
+                        <span className="text-xl">🪴</span>
+                        <div>
+                          <div className="text-xs font-bold text-slate-800">Cây Cảnh Phong Thủy Trong Nhà</div>
+                          <div className="text-[10px] text-slate-500">Chậu cây kim tiền mang lại sinh khí tươi mát</div>
+                        </div>
+                      </div>
+                      <input
+                        type="checkbox"
+                        checked={!!interiorLayout.indoorPlant}
+                        onChange={(e) => setInteriorLayout(prev => ({ ...prev, indoorPlant: e.target.checked }))}
+                        className="w-4 h-4 accent-indigo-600 cursor-pointer"
+                      />
+                    </label>
+                  </div>
+                </div>
+              )}
+
+              {/* TAB 3: GIAN BẾP & PHÒNG ĂN */}
+              {interiorTab === 'kitchen' && (
+                <div className="space-y-4">
+                  {/* Bếp */}
+                  <div>
+                    <label className="text-xs font-black uppercase text-slate-700 tracking-wider flex items-center gap-1.5 mb-2">
+                      <span>🍳 Khu Vực Nấu Nướng & Đảo Bếp</span>
+                    </label>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                      {FURNITURE_CATALOG.kitchenIsland.options.map(opt => {
+                        const isSelected = interiorLayout.kitchenIsland === opt.id;
+                        return (
+                          <div
+                            key={opt.id}
+                            onClick={() => {
+                              setInteriorLayout(prev => ({ ...prev, kitchenIsland: opt.id }));
+                              playConstructionSound('hammer');
+                            }}
+                            className={`p-3.5 rounded-2xl border-2 transition cursor-pointer flex flex-col justify-between ${
+                              isSelected
+                                ? 'bg-indigo-50/70 border-indigo-500 ring-2 ring-indigo-200 shadow-sm'
+                                : 'bg-slate-50 border-slate-200 hover:border-slate-300'
+                            }`}
+                          >
+                            <div>
+                              <div className="flex items-center justify-between mb-1.5">
+                                <div className="w-5 h-5 rounded-full border border-black/10 shadow-inner" style={{ backgroundColor: opt.color }} />
+                                {isSelected && <Check size={16} className="text-indigo-600" />}
+                              </div>
+                              <div className="text-xs font-bold text-slate-900">{opt.name}</div>
+                              <div className="text-[11px] text-slate-500 mt-1 leading-snug">{opt.desc}</div>
+                            </div>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  </div>
+
+                  {/* Bàn Ăn */}
+                  <div>
+                    <label className="text-xs font-black uppercase text-slate-700 tracking-wider flex items-center gap-1.5 mb-2">
+                      <span>🍽️ Bàn Ăn Gia Đình</span>
+                    </label>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                      {FURNITURE_CATALOG.diningTable.options.map(opt => {
+                        const isSelected = interiorLayout.diningTable === opt.id;
+                        return (
+                          <div
+                            key={opt.id}
+                            onClick={() => {
+                              setInteriorLayout(prev => ({ ...prev, diningTable: opt.id }));
+                              playConstructionSound('hammer');
+                            }}
+                            className={`p-3.5 rounded-2xl border-2 transition cursor-pointer flex flex-col justify-between ${
+                              isSelected
+                                ? 'bg-indigo-50/70 border-indigo-500 ring-2 ring-indigo-200 shadow-sm'
+                                : 'bg-slate-50 border-slate-200 hover:border-slate-300'
+                            }`}
+                          >
+                            <div>
+                              <div className="flex items-center justify-between mb-1.5">
+                                <div className="w-5 h-5 rounded-full border border-black/10 shadow-inner" style={{ backgroundColor: opt.color }} />
+                                {isSelected && <Check size={16} className="text-indigo-600" />}
+                              </div>
+                              <div className="text-xs font-bold text-slate-900">{opt.name}</div>
+                              <div className="text-[11px] text-slate-500 mt-1 leading-snug">{opt.desc}</div>
+                            </div>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* TAB 4: ĐÈN & TRANG TRÍ */}
+              {interiorTab === 'lighting' && (
+                <div className="space-y-4">
+                  <div>
+                    <label className="text-xs font-black uppercase text-slate-700 tracking-wider flex items-center gap-1.5 mb-2">
+                      <span>💡 Đèn Trang Trí Trần & Chiếu Sáng</span>
+                    </label>
+                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
+                      {FURNITURE_CATALOG.livingLight.options.map(opt => {
+                        const isSelected = interiorLayout.livingLight === opt.id;
+                        return (
+                          <div
+                            key={opt.id}
+                            onClick={() => {
+                              setInteriorLayout(prev => ({ ...prev, livingLight: opt.id }));
+                              playConstructionSound('hammer');
+                            }}
+                            className={`p-3 rounded-2xl border-2 transition cursor-pointer flex flex-col justify-between ${
+                              isSelected
+                                ? 'bg-indigo-50/70 border-indigo-500 ring-2 ring-indigo-200 shadow-sm'
+                                : 'bg-slate-50 border-slate-200 hover:border-slate-300'
+                            }`}
+                          >
+                            <div>
+                              <div className="flex items-center justify-between mb-1.5">
+                                <div className="w-5 h-5 rounded-full border border-black/10 shadow-inner" style={{ backgroundColor: opt.color }} />
+                                {isSelected && <Check size={16} className="text-indigo-600" />}
+                              </div>
+                              <div className="text-xs font-bold text-slate-900">{opt.name}</div>
+                              <div className="text-[11px] text-slate-500 mt-1 leading-snug">{opt.desc}</div>
+                            </div>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  </div>
+
+                  <div className="pt-2">
+                    <label className="p-3.5 bg-slate-50 border border-slate-200 rounded-2xl flex items-center justify-between cursor-pointer hover:bg-indigo-50/40 transition">
+                      <div className="flex items-center gap-2.5">
+                        <span className="text-xl">🖼️</span>
+                        <div>
+                          <div className="text-xs font-bold text-slate-800">Tranh Treo Tường Nghệ Thuật Trừu Tượng</div>
+                          <div className="text-[10px] text-slate-500">Tạo điểm nhấn trang nhã cho mảng tường phòng khách</div>
+                        </div>
+                      </div>
+                      <input
+                        type="checkbox"
+                        checked={!!interiorLayout.wallArt}
+                        onChange={(e) => setInteriorLayout(prev => ({ ...prev, wallArt: e.target.checked }))}
+                        className="w-4 h-4 accent-indigo-600 cursor-pointer"
+                      />
+                    </label>
+                  </div>
+                </div>
+              )}
+
+            </div>
+
+            {/* Chân Modal: Nút hành động xem 3D ngay */}
+            <div className="pt-3 border-t border-slate-100 flex flex-col sm:flex-row items-center justify-between gap-3">
+              <div className="text-xs text-slate-500">
+                💡 Thay đổi nội thất được tự động lưu và hiển thị trực tiếp trong khung cảnh 3D!
+              </div>
+
+              <div className="flex items-center gap-2 w-full sm:w-auto">
+                <button
+                  type="button"
+                  onClick={() => {
+                    setActiveModal(null);
+                    setViewMode('interior');
+                    setRoofCutaway(true);
+                    showToast('Đang bước vào không gian 3D chiêm ngưỡng nội thất!', 'success');
+                  }}
+                  className="flex-1 sm:flex-none px-4 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl text-xs sm:text-sm font-bold shadow-md transition flex items-center justify-center gap-2 cursor-pointer active:scale-95"
+                >
+                  <Armchair size={16} />
+                  <span>Bước Vào Xem Bên Trong 3D</span>
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => setActiveModal(null)}
+                  className="px-4 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl text-xs sm:text-sm font-bold transition cursor-pointer"
+                >
+                  Xong
+                </button>
+              </div>
+            </div>
 
           </div>
         </div>
