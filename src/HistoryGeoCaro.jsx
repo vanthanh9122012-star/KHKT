@@ -60,9 +60,9 @@ const QUESTIONS = [
   { type: 'geo', text: 'Điểm cực Bắc trên đất liền của Việt Nam thuộc tỉnh nào?', options: ['Tỉnh Hà Giang (Lũng Cú)', 'Tỉnh Cao Bằng', 'Tỉnh Lào Cai', 'Tỉnh Lạng Sơn'], correct: 'Tỉnh Hà Giang (Lũng Cú)' }
 ];
 
-const BOARD_SIZE = 8; // Bàn cờ 8x8 (64 địa danh tương ứng với 64 tỉnh thành & biển đảo Việt Nam)
-const WIN_CONDITION = 5; // Luật mới: Cần 5 dấu liên tiếp thẳng hàng (Ngang, Dọc, Chéo) để thắng!
-const REQUIRED_WINS_FOR_GRAND_VICTORY = 3; // Thể thức 3 Lượt chơi: Phải thắng 3 hiệp để đoạt ĐẠI THẮNG CHIẾN DỊCH
+const BOARD_SIZE = 8; // Bàn cờ 8x8 tương ứng 64 ô
+const WIN_CONDITION = 5; // Cần 5 dấu liên tiếp thẳng hàng (Ngang, Dọc, Chéo) để thắng!
+const REQUIRED_WINS_FOR_GRAND_VICTORY = 3; // Thắng 3 hiệp để đoạt ĐẠI THẮNG
 
 // Âm thanh kèn chiến thắng (Web Audio API)
 const playVictoryAudio = () => {
@@ -190,29 +190,28 @@ function FireworksEffect({ active }) {
 }
 
 export default function HistoryGeoCaro({ addReward }) {
-  // Bàn cờ 8x8 = 64 ô
+  // Bàn cờ 8x8 với ban đầu toàn bộ 64 ô màu trắng tinh
   const [board, setBoard] = useState(Array(BOARD_SIZE * BOARD_SIZE).fill(null));
   const [isXNext, setIsXNext] = useState(true);
   const [activeCell, setActiveCell] = useState(null);
   const [currentQuestion, setCurrentQuestion] = useState(null);
-  const [msg, setMsg] = useState({ text: 'Lượt của bạn: Hãy chọn 1 địa danh trên bản đồ Việt Nam để nhận thử thách!', type: 'info' });
+  const [msg, setMsg] = useState({ text: 'Lượt của bạn: Vui lòng chọn 1 ô vuông trên bàn cờ để nhận câu hỏi!', type: 'info' });
   const [roundWinner, setRoundWinner] = useState(null); // 'user' | 'bot' | null
   const [winLine, setWinLine] = useState([]);
   
-  // Hệ thống 3 Vòng chơi (3 Lượt Thắng để giành Đại Thắng Chiến Dịch)
+  // Tiến trình 3 Lượt Thắng để giành Đại Thắng
   const [userWinCount, setUserWinCount] = useState(0);
   const [currentRound, setCurrentRound] = useState(1);
   const [isGrandVictory, setIsGrandVictory] = useState(false);
 
-  // Màn hình Hành Trình Ảo
+  // Màn hình Hành Trình Ảo sau khi chiến thắng
   const [showVirtualJourney, setShowVirtualJourney] = useState(false);
   const [activeStationIndex, setActiveStationIndex] = useState(0);
   const [isAutoTourRunning, setIsAutoTourRunning] = useState(false);
-  const [viewMode, setViewMode] = useState('vietnam_map'); // 'vietnam_map' | 'tactical_grid'
 
-  // Kiểm tra 5 ô liên tiếp thẳng hàng (Ngang, Dọc, Chéo chính, Chéo phụ)
+  // Thuật toán kiểm tra 5 ô liên tiếp thẳng hàng (Ngang, Dọc, Chéo)
   const checkWinner = (squares) => {
-    // 1. Kiểm tra hàng ngang (Horizontal)
+    // 1. Kiểm tra hàng ngang
     for (let r = 0; r < BOARD_SIZE; r++) {
       for (let c = 0; c <= BOARD_SIZE - WIN_CONDITION; c++) {
         const player = squares[r * BOARD_SIZE + c]?.player;
@@ -228,7 +227,7 @@ export default function HistoryGeoCaro({ addReward }) {
       }
     }
 
-    // 2. Kiểm tra hàng dọc (Vertical)
+    // 2. Kiểm tra hàng dọc
     for (let r = 0; r <= BOARD_SIZE - WIN_CONDITION; r++) {
       for (let c = 0; c < BOARD_SIZE; c++) {
         const player = squares[r * BOARD_SIZE + c]?.player;
@@ -292,7 +291,7 @@ export default function HistoryGeoCaro({ addReward }) {
     };
     setCurrentQuestion(shuffledQ);
     setMsg({ 
-      text: `Đang chiếm đóng: ${landmark.name} (${landmark.province})! Trả lời đúng để cắm cờ Tổ quốc!`, 
+      text: 'Trả lời đúng để chiếm ô vuông và hiển thị Địa danh này!', 
       type: 'info' 
     });
   };
@@ -303,6 +302,7 @@ export default function HistoryGeoCaro({ addReward }) {
     if (option === currentQuestion.correct) {
       const landmark = VIETNAM_LANDMARKS[activeCell] || VIETNAM_LANDMARKS[0];
       const newBoard = [...board];
+      // CHỈ KHI TRẢ LỜI ĐÚNG MỚI HIỆN LÊN ĐỊA DANH
       newBoard[activeCell] = { 
         player: 'X', 
         landmark: landmark.name, 
@@ -318,7 +318,6 @@ export default function HistoryGeoCaro({ addReward }) {
       
       const winnerData = checkWinner(newBoard);
       if (winnerData && winnerData.player === 'X') {
-        // Thắng hiệp này!
         setRoundWinner('user');
         setWinLine(winnerData.line);
         playVictoryAudio();
@@ -331,44 +330,43 @@ export default function HistoryGeoCaro({ addReward }) {
           setMsg({ text: '🎉 ĐẠI THẮNG TOÀN DIỆN! Bạn đã hoàn thành 3/3 lượt chơi và làm chủ dải đất hình chữ S (+150 XP, +30 💎)', type: 'success' });
           if (addReward) addReward(150, 30);
         } else {
-          setMsg({ text: `🎉 CHIẾN THẮNG HIỆP ${currentRound}! Bạn đã đạt 5 ô thẳng hàng liên tiếp (+60 XP). Chuẩn bị bước vào hành trình tiếp theo!`, type: 'success' });
+          setMsg({ text: `🎉 CHIẾN THẮNG HIỆP ${currentRound}! Bạn đã đạt 5 ô thẳng hàng liên tiếp (+60 XP).`, type: 'success' });
           if (addReward) addReward(60, 10);
         }
 
-        // Tự động mở Hành trình ảo sau 1.5 giây
         setTimeout(() => {
           setShowVirtualJourney(true);
-        }, 1500);
+        }, 1200);
 
       } else {
-        setMsg({ text: 'Lượt của Máy (Đối thủ đang suy nghĩ nước cờ)...', type: 'info' });
+        setMsg({ text: 'Lượt của Máy (Đối thủ đang đi nước cờ)...', type: 'info' });
         setIsXNext(false);
       }
     } else {
-      setMsg({ text: `Rất tiếc! Câu trả lời chưa chính xác. Đáp án đúng là "${currentQuestion.correct}". Bạn mất lượt cờ này!`, type: 'error' });
+      setMsg({ text: `Sai rồi! Đáp án đúng là "${currentQuestion.correct}". Bạn mất lượt cờ này!`, type: 'error' });
       setActiveCell(null);
       setCurrentQuestion(null);
       setTimeout(() => {
-        setMsg({ text: 'Lượt của Máy đang tiến hành chiếm điểm...', type: 'info' });
+        setMsg({ text: 'Lượt của Máy...', type: 'info' });
         setIsXNext(false);
-      }, 1800);
+      }, 1500);
     }
   };
 
-  // Nước đi của máy (Bot AI)
+  // Nước đi của bot
   useEffect(() => {
     if (!isXNext && !roundWinner) {
       const timer = setTimeout(() => {
         const emptyCells = board.map((cell, idx) => cell === null ? idx : null).filter(val => val !== null);
         if (emptyCells.length === 0) {
           setRoundWinner('draw');
-          setMsg({ text: 'Bàn cờ đã kín ô! Hai bên hòa nhau hiệp này.', type: 'info' });
+          setMsg({ text: 'Hòa nhau hiệp này!', type: 'info' });
           return;
         }
 
         let botMove = emptyCells[Math.floor(Math.random() * emptyCells.length)];
         
-        // Bot kiểm tra nếu có thể chặn chuỗi 4 ô của người chơi
+        // Thử chặn chuỗi 4 ô của người chơi
         for (const idx of emptyCells) {
           const testBoard = [...board];
           testBoard[idx] = { player: 'X' };
@@ -396,17 +394,17 @@ export default function HistoryGeoCaro({ addReward }) {
         if (winnerData && winnerData.player === 'O') {
           setRoundWinner('bot');
           setWinLine(winnerData.line);
-          setMsg({ text: 'Rất tiếc! Máy đã hoàn thành chuỗi 5 ô liên tiếp trước. Hãy bấm Chơi lại để phục thù!', type: 'error' });
+          setMsg({ text: 'Rất tiếc! Máy đã thắng hiệp này.', type: 'error' });
         } else {
           setIsXNext(true);
-          setMsg({ text: 'Lượt của bạn: Chọn 1 địa danh chiến lược để nối dài chuỗi 5 ô thẳng hàng!', type: 'info' });
+          setMsg({ text: 'Lượt của Bạn (Chọn 1 ô vuông màu trắng để nhận câu hỏi)', type: 'info' });
         }
       }, 1000);
       return () => clearTimeout(timer);
     }
   }, [isXNext, board, roundWinner]);
 
-  // Sang hiệp đấu mới
+  // Sang hiệp đấu tiếp theo
   const startNextRound = () => {
     setBoard(Array(BOARD_SIZE * BOARD_SIZE).fill(null));
     setIsXNext(true);
@@ -418,10 +416,10 @@ export default function HistoryGeoCaro({ addReward }) {
     setIsAutoTourRunning(false);
     setActiveStationIndex(0);
     setCurrentRound(r => r + 1);
-    setMsg({ text: `Bước vào Hiệp ${currentRound + 1}! Hãy ghi được 5 ô thẳng hàng để tiến gần đến Cúp Đại Thắng!`, type: 'info' });
+    setMsg({ text: `Bước vào Hiệp ${currentRound + 1}! Đạt 5 ô thẳng hàng để tiến tới Cúp Đại Thắng!`, type: 'info' });
   };
 
-  // Khởi động lại toàn bộ ván đấu
+  // Khởi động lại toàn bộ
   const resetEntireGame = () => {
     setBoard(Array(BOARD_SIZE * BOARD_SIZE).fill(null));
     setIsXNext(true);
@@ -435,21 +433,20 @@ export default function HistoryGeoCaro({ addReward }) {
     setShowVirtualJourney(false);
     setIsAutoTourRunning(false);
     setActiveStationIndex(0);
-    setMsg({ text: 'Khởi động trận đấu mới! Đạt 5 ô thẳng hàng trong 3 lượt chơi để giành Đại Thắng!', type: 'info' });
+    setMsg({ text: 'Lượt của Bạn (Chọn 1 ô vuông màu trắng để nhận câu hỏi)', type: 'info' });
   };
 
-  // Lọc danh sách địa danh trong Hành trình ảo (các ô do người chơi 'X' chiếm đóng)
+  // Lọc các địa danh đã được chiếm đóng trong ván chơi
   const journeyStations = board
     .map((cell, idx) => cell && cell.player === 'X' ? { ...cell, cellIndex: idx, isWinningPiece: winLine.includes(idx) } : null)
     .filter(Boolean)
     .sort((a, b) => {
-      // Ưu tiên các ô trong đường thắng 5 ô lên đầu, sau đó sắp xếp theo thứ tự địa lý từ Bắc vào Nam
       if (a.isWinningPiece && !b.isWinningPiece) return -1;
       if (!a.isWinningPiece && b.isWinningPiece) return 1;
       return a.cellIndex - b.cellIndex;
     });
 
-  // Tự động chạy Hành trình ảo (Auto Tour)
+  // Tự động lướt hành trình
   useEffect(() => {
     let timer;
     if (isAutoTourRunning && journeyStations.length > 0) {
@@ -461,147 +458,99 @@ export default function HistoryGeoCaro({ addReward }) {
   }, [isAutoTourRunning, journeyStations.length]);
 
   return (
-    <div className="bg-surface rounded-3xl p-4 sm:p-7 shadow-sm border border-gray-100 max-w-6xl mx-auto animate-fade-in relative overflow-hidden font-sans">
+    <div className="bg-surface rounded-3xl p-6 md:p-8 shadow-sm border border-gray-100 max-w-5xl mx-auto animate-fade-in relative font-sans">
       
-      {/* Hiệu ứng pháo hoa rực rỡ khi chiến thắng */}
+      {/* Hiệu ứng pháo hoa khi chiến thắng */}
       <FireworksEffect active={roundWinner === 'user' || isGrandVictory} />
 
-      {/* Header Game & Tiến trình 3 Lượt Thắng */}
-      <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-6 pb-4 border-b border-gray-100">
+      {/* Header Game sáng sủa như phiên bản đầu */}
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
         <div>
-          <div className="flex items-center gap-2">
-            <h2 className="text-xl sm:text-2xl font-black text-slate-800 flex items-center gap-2">
-              <Compass className="text-red-600 animate-spin-slow" />
-              <span>Cờ Caro Bản Đồ Việt Nam: Khám Phá Lịch Sử & Địa Lý</span>
-            </h2>
-            <span className="px-2.5 py-0.5 rounded-full text-[11px] font-black bg-red-100 text-red-700 border border-red-200">
-              Chữ S Thiêng Liêng
-            </span>
-          </div>
-          <p className="text-xs sm:text-sm text-slate-500 mt-1">
-            Quy tắc: Tạo chuỗi <strong>5 dấu thẳng hàng liên tiếp</strong> (Ngang, Dọc, Chéo) trong <strong>3 lượt chơi</strong> để giành Đại Thắng Non Sông!
+          <h2 className="text-2xl font-bold text-gray-800 flex items-center gap-2">
+            <Target className="text-primary" />
+            <span>Cờ Caro Lịch sử & Địa lý</span>
+          </h2>
+          <p className="text-xs text-gray-500 mt-1">
+            Ghi được <strong>5 dấu thẳng hàng liên tiếp</strong> trong <strong>3 lượt chơi</strong> để giành Đại Thắng!
           </p>
         </div>
 
-        {/* Thanh trạng thái 3 Lượt Thắng */}
-        <div className="flex items-center gap-3 bg-slate-50 p-2.5 rounded-2xl border border-slate-200">
-          <div className="flex items-center gap-1.5">
-            <Trophy size={18} className="text-amber-500" />
-            <span className="text-xs font-bold text-slate-700">Chiến dịch:</span>
-            <span className="text-xs font-black text-indigo-700 bg-indigo-50 px-2 py-0.5 rounded-lg border border-indigo-200">
-              Thắng {userWinCount}/{REQUIRED_WINS_FOR_GRAND_VICTORY} Hiệp
-            </span>
+        {/* Tiến trình 3 Lượt Thắng */}
+        <div className="flex items-center gap-3">
+          <div className="flex items-center gap-1.5 px-3 py-1.5 bg-amber-50 border border-amber-200 rounded-xl text-xs font-bold text-amber-800 shadow-sm">
+            <Trophy size={16} className="text-amber-500" />
+            <span>Chiến dịch: Thắng {userWinCount}/{REQUIRED_WINS_FOR_GRAND_VICTORY} Hiệp</span>
           </div>
 
-          <div className="flex gap-1">
-            {[1, 2, 3].map(step => (
-              <div 
-                key={step} 
-                className={`w-6 h-6 rounded-lg text-xs font-black flex items-center justify-center transition-all ${
-                  userWinCount >= step 
-                    ? 'bg-amber-500 text-white shadow-sm ring-2 ring-amber-300' 
-                    : currentRound === step 
-                      ? 'bg-indigo-600 text-white ring-2 ring-indigo-200 animate-pulse' 
-                      : 'bg-slate-200 text-slate-400'
-                }`}
-                title={`Hiệp ${step}`}
-              >
-                {step}
-              </div>
-            ))}
-          </div>
+          {journeyStations.length > 0 && (
+            <button
+              onClick={() => setShowVirtualJourney(true)}
+              className="px-3 py-1.5 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 text-xs font-bold rounded-xl border border-indigo-200 transition cursor-pointer flex items-center gap-1 shadow-sm"
+            >
+              <Sparkles size={14} className="text-amber-500" />
+              <span>Hành Trình Ảo ({journeyStations.length})</span>
+            </button>
+          )}
 
           <button 
             onClick={resetEntireGame}
-            className="p-2 bg-white text-slate-600 hover:text-slate-900 rounded-xl hover:bg-slate-100 transition border border-slate-200 cursor-pointer"
-            title="Chơi lại từ đầu"
+            className="p-2 bg-gray-100 text-gray-600 rounded-full hover:bg-gray-200 transition cursor-pointer"
+            title="Chơi lại"
           >
-            <RefreshCw size={16} />
+            <RefreshCw size={18} />
           </button>
         </div>
       </div>
 
-      {/* Chuyển đổi góc nhìn Bản Đồ / Lưới Chiến Thuật */}
-      <div className="flex items-center justify-between flex-wrap gap-2 mb-4">
-        <div className="flex items-center gap-2">
-          <button
-            onClick={() => setViewMode('vietnam_map')}
-            className={`px-3 py-1.5 rounded-xl text-xs font-bold flex items-center gap-1.5 transition cursor-pointer ${
-              viewMode === 'vietnam_map' 
-                ? 'bg-gradient-to-r from-red-600 to-amber-600 text-white shadow-md' 
-                : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
-            }`}
-          >
-            <Flag size={14} className="text-yellow-300" />
-            <span>Dáng Hình Chữ S Việt Nam</span>
-          </button>
-
-          <button
-            onClick={() => setViewMode('tactical_grid')}
-            className={`px-3 py-1.5 rounded-xl text-xs font-bold flex items-center gap-1.5 transition cursor-pointer ${
-              viewMode === 'tactical_grid' 
-                ? 'bg-slate-800 text-white shadow-md' 
-                : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
-            }`}
-          >
-            <Target size={14} />
-            <span>Lưới Chiến Thuật 8x8</span>
-          </button>
-        </div>
-
-        {/* Nút xem Hành trình ảo nếu đã có địa danh */}
-        {journeyStations.length > 0 && (
-          <button
-            onClick={() => setShowVirtualJourney(true)}
-            className="px-3.5 py-1.5 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 text-xs font-black rounded-xl border border-indigo-200 transition cursor-pointer flex items-center gap-1.5 shadow-sm"
-          >
-            <Sparkles size={14} className="text-amber-500" />
-            <span>Xem Hành Trình Ảo Xuyên Việt ({journeyStations.length} trạm)</span>
-          </button>
-        )}
-      </div>
-
-      {/* Khung chính: Bàn cờ Bản đồ Việt Nam + Bảng câu hỏi */}
-      <div className="flex flex-col lg:flex-row gap-6 items-start">
+      <div className="flex flex-col md:flex-row gap-8">
         
-        {/* KHUNG BÀN CỜ BẢN ĐỒ VIỆT NAM (8x8) */}
-        <div className="flex-1 w-full relative">
+        {/* ========================================================================= */}
+        {/* BÀN CỜ VỚI HÌNH CHÌM BẢN ĐỒ VIỆT NAM (KHÔNG QUÁ NỔI BẬT NHƯNG ĐỦ THẤY)   */}
+        {/* ========================================================================= */}
+        <div className="flex-1 max-w-lg mx-auto w-full relative">
           
-          {/* Card bao bọc bản đồ */}
-          <div className="relative rounded-3xl p-3 sm:p-5 border-2 border-slate-200 shadow-xl overflow-hidden bg-gradient-to-b from-sky-900 via-indigo-950 to-slate-900 text-white">
+          {/* Khung chứa bàn cờ nền sáng */}
+          <div className="relative p-2.5 sm:p-3 bg-gray-100/90 rounded-2xl border border-gray-200 shadow-inner overflow-hidden aspect-square">
             
-            {/* Đồ họa trang trí Biển Đông & Dải đất hình chữ S */}
-            <div className="absolute inset-0 opacity-15 pointer-events-none flex items-center justify-center">
-              <svg viewBox="0 0 400 600" className="w-full h-full text-amber-400 stroke-current fill-none stroke-[2]">
-                {/* Đường cong chữ S uốn lượn biểu trưng cho dải đất Việt Nam */}
-                <path d="M 160 30 Q 230 40 210 90 T 170 170 T 180 240 T 230 330 T 210 420 T 140 480 T 110 540" />
+            {/* HÌNH CHÌM BẢN ĐỒ VIỆT NAM (SUBTLE WATERMARK ĐỦ THẤY) */}
+            <div className="absolute inset-0 pointer-events-none flex items-center justify-center p-3 select-none">
+              <svg 
+                viewBox="0 0 350 480" 
+                className="w-full h-full text-indigo-900/[0.12] fill-current"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                {/* Dải đất hình chữ S Việt Nam */}
+                <path d="M 120 30 C 145 25, 175 35, 185 55 C 190 70, 170 85, 155 95 C 140 105, 145 125, 150 145 C 155 165, 170 185, 180 205 C 195 235, 205 265, 200 295 C 195 325, 180 345, 160 365 C 140 385, 125 410, 115 435 C 105 455, 85 465, 75 450 C 65 435, 75 415, 85 395 C 95 375, 110 355, 120 335 C 130 315, 140 285, 135 255 C 130 225, 115 205, 105 185 C 95 165, 90 135, 95 115 C 100 85, 95 55, 120 30 Z" />
+                
+                {/* Quần đảo Hoàng Sa */}
+                <g className="text-amber-700/[0.22]">
+                  <circle cx="270" cy="190" r="8" />
+                  <circle cx="283" cy="183" r="5" />
+                  <circle cx="265" cy="202" r="5" />
+                  <text x="235" y="172" fontSize="11" fontWeight="bold" fill="currentColor">Q.Đ Hoàng Sa</text>
+                </g>
+
+                {/* Quần đảo Trường Sa */}
+                <g className="text-amber-700/[0.22]">
+                  <circle cx="250" cy="340" r="7" />
+                  <circle cx="265" cy="355" r="6" />
+                  <circle cx="240" cy="365" r="5" />
+                  <circle cx="275" cy="330" r="6" />
+                  <text x="220" y="322" fontSize="11" fontWeight="bold" fill="currentColor">Q.Đ Trường Sa</text>
+                </g>
+
+                {/* Đảo Phú Quốc & Côn Đảo */}
+                <circle cx="65" cy="425" r="8" className="text-indigo-900/[0.15]" />
+                <circle cx="160" cy="445" r="6" className="text-indigo-900/[0.15]" />
               </svg>
             </div>
 
-            {/* Header nhỏ trên bàn cờ */}
-            <div className="flex items-center justify-between mb-3 text-xs font-bold text-sky-200 px-1">
-              <div className="flex items-center gap-2">
-                <span className="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-ping"></span>
-                <span>Bàn Cờ 64 Tọa Độ Địa Danh</span>
-              </div>
-              <div className="flex items-center gap-3">
-                <span className="text-amber-300 flex items-center gap-1">
-                  ⭐ Bạn: <strong>5 ô cờ đỏ sao vàng</strong>
-                </span>
-                <span className="text-sky-300">
-                  ⚪ Máy: <strong>5 ô tròn xanh</strong>
-                </span>
-              </div>
-            </div>
-
-            {/* LƯỚI BÀN CỜ 8x8 */}
-            <div className="grid grid-cols-8 gap-1 sm:gap-1.5 p-1.5 bg-slate-950/60 backdrop-blur-md rounded-2xl border border-white/10 shadow-inner aspect-square w-full max-w-[540px] mx-auto">
+            {/* LƯỚI 8x8: CÁC Ô VUÔNG MÀU TRẮNG TINH (CHỈ HIỆN ĐỊA DANH KHI TRẢ LỜI ĐÚNG) */}
+            <div className="grid grid-cols-8 gap-1 sm:gap-1.5 h-full w-full relative z-10">
               {board.map((cell, idx) => {
-                const landmark = VIETNAM_LANDMARKS[idx] || VIETNAM_LANDMARKS[0];
                 const isSelected = activeCell === idx;
                 const isWinPiece = winLine.includes(idx);
                 const isUser = cell?.player === 'X';
-                const isBot = cell?.player === 'O';
 
                 return (
                   <button
@@ -610,194 +559,138 @@ export default function HistoryGeoCaro({ addReward }) {
                     onClick={() => handleCellClick(idx)}
                     disabled={cell !== null || roundWinner !== null || !isXNext || activeCell !== null}
                     className={`
-                      relative group flex flex-col items-center justify-between rounded-xl p-1 transition-all duration-200 overflow-hidden cursor-pointer
-                      ${cell ? 'shadow-md' : 'hover:scale-105 hover:z-10'}
-                      ${!cell && !isSelected ? 'bg-white/10 hover:bg-white/20 border border-white/15' : ''}
-                      ${isSelected ? 'bg-amber-400 text-slate-950 ring-4 ring-amber-300 scale-105 z-20 animate-pulse font-black' : ''}
-                      ${isWinPiece ? 'ring-4 ring-yellow-400 z-30 scale-110 shadow-2xl animate-bounce' : ''}
-                      ${isUser ? 'bg-gradient-to-br from-red-600 via-rose-600 to-amber-600 border border-yellow-300' : ''}
-                      ${isBot ? 'bg-gradient-to-br from-sky-600 via-indigo-700 to-slate-800 border border-sky-300' : ''}
+                      relative flex flex-col items-center justify-center rounded-xl font-bold transition-all duration-200 cursor-pointer overflow-hidden
+                      ${!cell ? 'bg-white hover:bg-sky-50 shadow-sm border border-gray-200/90' : 'bg-white shadow-md border border-gray-300'}
+                      ${isSelected ? 'bg-sky-100 ring-2 ring-primary animate-pulse z-20 scale-105' : ''}
+                      ${isWinPiece ? 'bg-green-200 ring-4 ring-green-500 z-30 scale-110 shadow-lg animate-bounce' : ''}
+                      h-full w-full
                     `}
-                    title={`${landmark.name} (${landmark.province}) - ${landmark.region}`}
+                    style={{
+                      backgroundImage: cell ? `url(${cell.image})` : 'none',
+                      backgroundSize: 'cover',
+                      backgroundPosition: 'center'
+                    }}
                   >
-                    {/* Ảnh nền mờ nhẹ nếu ô đã được chiếm */}
+                    {/* CHỈ KHI TRẢ LỜI ĐÚNG MỚI HIỆN LÊN ĐỊA DANH & KÝ HIỆU */}
                     {cell && (
-                      <div 
-                        className="absolute inset-0 bg-cover bg-center opacity-30 group-hover:opacity-40 transition-opacity"
-                        style={{ backgroundImage: `url(${cell.image})` }}
-                      />
+                      <div className="absolute inset-0 flex flex-col items-center justify-center bg-black/45 backdrop-blur-[0.5px] rounded-xl p-0.5 animate-fade-in">
+                        <span className={`font-black text-xs sm:text-base drop-shadow-md ${isUser ? 'text-sky-300' : 'text-red-400'}`}>
+                          {cell.player}
+                        </span>
+                        <span 
+                          className="text-[6.5px] sm:text-[8px] text-white font-bold uppercase px-0.5 w-full text-center truncate leading-tight mt-0.5" 
+                          style={{ textShadow: '1px 1px 2px rgba(0,0,0,0.9)' }}
+                        >
+                          {cell.landmark}
+                        </span>
+                      </div>
                     )}
-
-                    {/* Vùng miền & số thứ tự */}
-                    <div className="w-full flex items-center justify-between text-[7px] sm:text-[9px] font-bold opacity-75 z-10">
-                      <span>{idx + 1}</span>
-                      <span className="truncate max-w-[32px]">{landmark.province.slice(0, 5)}</span>
-                    </div>
-
-                    {/* Biểu tượng trung tâm (X - Cờ đỏ sao vàng / O - Huy hiệu máy) */}
-                    <div className="my-auto z-10 flex flex-col items-center justify-center">
-                      {isUser && (
-                        <div className="text-yellow-300 font-black text-sm sm:text-xl drop-shadow-md flex items-center justify-center">
-                          ⭐
-                        </div>
-                      )}
-                      {isBot && (
-                        <div className="text-sky-300 font-black text-xs sm:text-lg drop-shadow-md">
-                          ⭕
-                        </div>
-                      )}
-                      {!cell && (
-                        <div className="text-white/40 text-[9px] sm:text-xs font-semibold group-hover:text-yellow-300 transition-colors">
-                          <MapPin size={12} className="mx-auto mb-0.5 opacity-60 group-hover:opacity-100" />
-                        </div>
-                      )}
-                    </div>
-
-                    {/* Tên địa danh rút gọn */}
-                    <span className="text-[6px] sm:text-[8px] font-black uppercase tracking-tighter truncate w-full text-center z-10 leading-none">
-                      {landmark.name.length > 8 ? landmark.name.slice(0, 7) + '..' : landmark.name}
-                    </span>
                   </button>
                 );
               })}
             </div>
 
-            {/* Phụ đề 2 Quần đảo Hoàng Sa & Trường Sa thiêng liêng */}
-            <div className="mt-3 pt-2 border-t border-white/10 flex items-center justify-between text-[11px] text-sky-200">
-              <div className="flex items-center gap-1.5 text-amber-300 font-bold">
-                <Flag size={13} className="text-red-500 fill-red-500" />
-                <span>Quần đảo Hoàng Sa & Trường Sa là của Việt Nam!</span>
-              </div>
-              <span className="text-slate-400 text-[10px]">
-                {winLine.length > 0 ? `Đường thắng 5 ô: [${winLine.map(i => i + 1).join(', ')}]` : 'Mục tiêu: 5 ô thẳng hàng'}
-              </span>
-            </div>
+          </div>
 
+          <div className="text-center mt-3 font-bold text-gray-600 text-xs sm:text-sm">
+            Luật: Đạt <strong>5 ô liên tiếp</strong> (Ngang, Dọc, Chéo) trong <strong>3 lượt chơi</strong> để chiến thắng!
           </div>
         </div>
 
-        {/* KHUNG CÂU HỎI THỬ THÁCH & BẢNG TIN TỨC */}
-        <div className="w-full lg:w-[380px] flex flex-col space-y-4">
+        {/* ========================================================================= */}
+        {/* KHUNG CÂU HỎI & THÔNG BÁO (GIỮ NGUYÊN PHONG CÁCH SÁNG SỦA BAN ĐẦU)        */}
+        {/* ========================================================================= */}
+        <div className="flex-1 flex flex-col">
           
-          {/* Thông báo lượt chơi */}
-          <div className={`p-4 rounded-2xl font-bold flex items-center gap-2.5 text-xs sm:text-sm shadow-sm transition-all ${
-            msg.type === 'info' ? 'bg-sky-50 text-sky-800 border border-sky-200' :
-            msg.type === 'success' ? 'bg-emerald-50 text-emerald-800 border-2 border-emerald-300 animate-pulse' :
-            'bg-rose-50 text-rose-800 border border-rose-200'
+          {/* Thanh thông báo lượt chơi */}
+          <div className={`p-4 rounded-xl mb-6 font-bold flex items-center justify-center gap-2 text-center text-sm shadow-sm transition-all ${
+            msg.type === 'info' ? 'bg-sky-50 text-sky-700 border border-sky-100' : 
+            msg.type === 'success' ? 'bg-green-50 text-green-700 border border-green-200' : 
+            'bg-red-50 text-red-600 border border-red-200'
           }`}>
-            {msg.type === 'success' && <Trophy size={20} className="text-emerald-600 flex-shrink-0" />}
-            {msg.type === 'error' && <X size={20} className="text-rose-600 flex-shrink-0" />}
-            {msg.type === 'info' && <Compass size={20} className="text-sky-600 flex-shrink-0" />}
-            <span className="leading-relaxed">{msg.text}</span>
+            {msg.type === 'success' && <Trophy size={20} className="text-green-600" />}
+            {msg.type === 'error' && <X size={20} />}
+            {msg.type === 'info' && <Target size={18} className="text-sky-600" />}
+            <span>{msg.text}</span>
           </div>
 
-          {/* Hộp câu hỏi thử thách khi chọn ô */}
+          {/* Khung câu hỏi thử thách khi bấm vào 1 ô vuông trắng */}
           {currentQuestion ? (
-            <div className="bg-white p-5 sm:p-6 rounded-3xl border-2 border-indigo-400 shadow-xl animate-fade-in flex flex-col space-y-4">
-              
-              {/* Header câu hỏi */}
-              <div className="flex items-center justify-between border-b border-slate-100 pb-3">
+            <div className="bg-white p-6 rounded-2xl border-2 border-primary shadow-lg shadow-sky-100 animate-slide-up flex-1 flex flex-col">
+              <div className="flex items-center justify-between mb-4">
                 <div className="flex items-center gap-2">
-                  <span className={`px-2.5 py-0.5 rounded-full text-xs font-black ${
-                    currentQuestion.type === 'his' 
-                      ? 'bg-amber-100 text-amber-800 border border-amber-300' 
-                      : 'bg-emerald-100 text-emerald-800 border border-emerald-300'
+                  <span className={`px-2 py-1 rounded text-xs font-bold ${
+                    currentQuestion.type === 'his' ? 'bg-orange-100 text-orange-700' : 'bg-emerald-100 text-emerald-700'
                   }`}>
-                    {currentQuestion.type === 'his' ? '🏛️ LỊCH SỬ VIỆT NAM' : '🌏 ĐỊA LÝ VIỆT NAM'}
+                    {currentQuestion.type === 'his' ? 'LỊCH SỬ' : 'ĐỊA LÝ'}
                   </span>
-                  <span className="text-[11px] font-bold text-slate-400">Ô số {activeCell + 1}</span>
+                  <span className="text-gray-400 text-xs font-medium">THCS (Lớp 6-9)</span>
                 </div>
                 <button
+                  type="button"
                   onClick={() => { setActiveCell(null); setCurrentQuestion(null); }}
-                  className="p-1 text-slate-400 hover:text-slate-600 rounded-lg hover:bg-slate-100 transition"
-                  title="Hủy chọn ô này"
+                  className="p-1 text-gray-400 hover:text-gray-600 rounded-lg hover:bg-gray-100"
+                  title="Hủy chọn ô"
                 >
                   <X size={16} />
                 </button>
               </div>
 
-              {/* Thông tin địa danh đang tranh chấp */}
-              {currentQuestion.targetLandmark && (
-                <div className="p-3 bg-indigo-50/70 rounded-2xl border border-indigo-100 flex items-center gap-3">
-                  <img 
-                    src={currentQuestion.targetLandmark.image} 
-                    alt={currentQuestion.targetLandmark.name}
-                    className="w-12 h-12 rounded-xl object-cover shadow-sm flex-shrink-0" 
-                  />
-                  <div className="text-xs">
-                    <span className="text-indigo-600 font-bold block text-[10px] uppercase">Địa danh chiếm đóng:</span>
-                    <strong className="text-slate-800 font-black text-sm">{currentQuestion.targetLandmark.name}</strong>
-                    <span className="text-slate-500 block text-[11px]">{currentQuestion.targetLandmark.province} • {currentQuestion.targetLandmark.region}</span>
-                  </div>
-                </div>
-              )}
-
-              {/* Nội dung câu hỏi */}
-              <h3 className="text-sm sm:text-base font-black text-slate-800 leading-relaxed">
+              <h3 className="text-base sm:text-lg font-bold text-gray-800 mb-6 flex-1 leading-relaxed">
                 {currentQuestion.text}
               </h3>
 
-              {/* 4 Phương án trả lời */}
-              <div className="space-y-2 pt-1">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-auto">
                 {currentQuestion.options.map((opt, idx) => (
                   <button
                     key={idx}
                     type="button"
                     onClick={() => handleAnswer(opt)}
-                    className="w-full text-left p-3 rounded-2xl border-2 border-slate-200 hover:border-indigo-500 hover:bg-indigo-50/50 font-bold text-xs sm:text-sm text-slate-700 transition flex items-center gap-2.5 cursor-pointer group active:scale-98"
+                    className="p-3.5 text-left rounded-xl border border-gray-200 hover:border-primary hover:bg-sky-50 hover:text-primary font-medium text-gray-700 text-xs sm:text-sm transition cursor-pointer active:scale-98"
                   >
-                    <span className="w-6 h-6 rounded-lg bg-slate-100 group-hover:bg-indigo-600 group-hover:text-white text-slate-600 font-black text-xs flex items-center justify-center flex-shrink-0 transition-colors">
-                      {['A', 'B', 'C', 'D'][idx]}
-                    </span>
-                    <span className="leading-snug">{opt}</span>
+                    <span className="font-bold mr-2 text-primary">{['A', 'B', 'C', 'D'][idx]}.</span>
+                    {opt}
                   </button>
                 ))}
               </div>
-
             </div>
           ) : (
-            <div className="bg-slate-50 p-6 rounded-3xl border-2 border-dashed border-slate-200 text-center space-y-3">
-              <div className="w-12 h-12 rounded-2xl bg-indigo-100 text-indigo-600 flex items-center justify-center mx-auto shadow-sm">
-                <Target size={26} />
-              </div>
-              <h4 className="text-sm font-black text-slate-800">Sẵn Sàng Nhận Lệnh Xuất Quân!</h4>
-              <p className="text-xs text-slate-500 leading-relaxed">
-                Hãy click vào 1 ô vuông trên Bản đồ Việt Nam để nhận câu hỏi Lịch sử/Địa lý. 
-                Trả lời đúng sẽ cắm cờ Tổ quốc và kích hoạt địa danh đó!
-              </p>
-              <div className="text-[11px] font-bold text-amber-700 bg-amber-50 p-2.5 rounded-xl border border-amber-200">
-                💡 Mục tiêu: Đạt 5 ô cờ đỏ sao vàng thẳng hàng liên tiếp để chiến thắng!
+            <div className="flex-1 flex items-center justify-center bg-gray-50 rounded-2xl border-2 border-dashed border-gray-200 p-8 text-center">
+              <div className="text-gray-400">
+                <Target size={48} className="mx-auto mb-4 opacity-50 text-primary" />
+                <p className="font-medium text-gray-700">Vui lòng chọn 1 ô vuông trên bàn cờ để nhận câu hỏi.</p>
+                <p className="text-sm mt-2 text-gray-500">Trả lời đúng sẽ chiếm được ô vuông và đặt Địa danh của bạn!</p>
               </div>
             </div>
           )}
 
-          {/* Nút hành động chuyển hiệp khi thắng một hiệp */}
+          {/* Nút hành động chuyển Hiệp khi thắng */}
           {roundWinner === 'user' && !isGrandVictory && (
-            <div className="p-4 bg-emerald-50 rounded-2xl border border-emerald-300 text-center space-y-2 animate-fade-in shadow-md">
-              <h4 className="text-sm font-black text-emerald-900">Chiến Thắng Hiệp {currentRound}!</h4>
-              <p className="text-xs text-emerald-700">Bạn đã hoàn thành 5 ô thẳng hàng. Hãy tiếp tục để giành Cúp Đại Thắng!</p>
+            <div className="mt-4 p-4 bg-green-50 rounded-2xl border border-green-200 text-center space-y-2 animate-fade-in">
+              <p className="text-xs font-bold text-green-800">
+                Bạn đã thắng Hiệp {currentRound}! Hãy tiếp tục để giành Cúp Đại Thắng trong 3 lượt chơi.
+              </p>
               <button
                 type="button"
                 onClick={startNextRound}
-                className="w-full py-3 bg-gradient-to-r from-emerald-600 to-teal-600 text-white font-black text-xs sm:text-sm rounded-xl shadow-md hover:brightness-110 transition flex items-center justify-center gap-2 cursor-pointer"
+                className="w-full py-3 bg-gradient-to-r from-emerald-600 to-teal-600 text-white font-bold text-sm rounded-xl shadow-md hover:brightness-110 transition flex items-center justify-center gap-1.5 cursor-pointer"
               >
-                <span>Tiến Vào Hiệp {currentRound + 1} Tiếp Theo</span>
+                <span>Bước Sang Hiệp {currentRound + 1} Tiếp Theo</span>
                 <ArrowRight size={16} />
               </button>
             </div>
           )}
 
-          {/* Nút hành động khi Đại thắng 3 Hiệp */}
+          {/* Nút khi Đại thắng 3 Hiệp */}
           {isGrandVictory && (
-            <div className="p-4 bg-gradient-to-br from-amber-500 via-orange-500 to-red-600 text-white rounded-2xl shadow-xl text-center space-y-2 animate-bounce">
+            <div className="mt-4 p-4 bg-gradient-to-r from-amber-500 to-orange-500 text-white rounded-2xl shadow-lg text-center space-y-2 animate-bounce">
               <h4 className="text-base font-black">🏆 ĐẠI THẮNG CHIẾN DỊCH XUYÊN VIỆT!</h4>
-              <p className="text-xs text-amber-100">Bạn đã xuất sắc thắng trọn vẹn 3 hiệp chơi!</p>
               <button
                 type="button"
                 onClick={() => setShowVirtualJourney(true)}
-                className="w-full py-3 bg-white text-orange-700 font-black text-xs sm:text-sm rounded-xl shadow-lg hover:bg-amber-50 transition cursor-pointer"
+                className="w-full py-2.5 bg-white text-orange-600 font-bold text-xs sm:text-sm rounded-xl shadow hover:bg-amber-50 transition cursor-pointer"
               >
-                🌟 Khám Phá Toàn Diện Hành Trình Ảo Xuyên Việt
+                Xem Tổng Kết Hành Trình Ảo Xuyên Việt
               </button>
             </div>
           )}
@@ -810,50 +703,50 @@ export default function HistoryGeoCaro({ addReward }) {
       {/* MODAL: HÀNH TRÌNH ẢO XUYÊN VIỆT - TỔNG KẾT ĐỊA DANH & LỊCH SỬ HÀO HÙNG     */}
       {/* ========================================================================= */}
       {showVirtualJourney && (
-        <div className="fixed inset-0 z-[999999] bg-slate-950/80 backdrop-blur-md flex items-center justify-center p-3 sm:p-5 overflow-y-auto animate-fade-in">
+        <div className="fixed inset-0 z-[999999] bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-3 sm:p-5 overflow-y-auto animate-fade-in">
           <div 
-            className="bg-white rounded-3xl max-w-4xl w-full max-h-[92vh] flex flex-col shadow-2xl border border-slate-200 overflow-hidden my-auto"
+            className="bg-white rounded-3xl max-w-3xl w-full max-h-[92vh] flex flex-col shadow-2xl border border-slate-200 overflow-hidden my-auto"
             onClick={(e) => e.stopPropagation()}
           >
             {/* Header Modal */}
-            <div className="bg-gradient-to-r from-red-600 via-rose-600 to-amber-600 text-white p-4 sm:px-7 sm:py-5 flex items-center justify-between">
+            <div className="bg-gradient-to-r from-sky-600 to-indigo-600 text-white p-4 sm:px-7 sm:py-5 flex items-center justify-between">
               <div className="flex items-center gap-3">
-                <div className="w-12 h-12 rounded-2xl bg-white/20 text-yellow-300 flex items-center justify-center font-black text-2xl shadow-inner flex-shrink-0">
+                <div className="w-11 h-11 rounded-2xl bg-white/20 text-yellow-300 flex items-center justify-center font-black text-xl shadow-inner flex-shrink-0">
                   🗺️
                 </div>
                 <div>
                   <div className="flex items-center gap-2">
-                    <span className="text-[11px] font-black uppercase tracking-wider bg-white/20 px-2.5 py-0.5 rounded-full text-yellow-200">
+                    <span className="text-[11px] font-bold uppercase tracking-wider bg-white/20 px-2.5 py-0.5 rounded-full text-white">
                       Tổng Kết Sau Trận Đấu
                     </span>
-                    <span className="text-xs font-semibold text-rose-100">
+                    <span className="text-xs text-sky-100">
                       {journeyStations.length} Trạm Dừng Chân Đã Mở Khóa
                     </span>
                   </div>
-                  <h3 className="text-lg sm:text-xl font-black text-white mt-0.5">
-                    Hành Trình Ảo Xuyên Việt: Dấu Ấn Lịch Sử & Non Sông Gấm Vóc
+                  <h3 className="text-base sm:text-lg font-bold text-white mt-0.5">
+                    Hành Trình Ảo: Khám Phá Địa Danh & Lịch Sử Việt Nam
                   </h3>
                 </div>
               </div>
               <button
                 type="button"
                 onClick={() => setShowVirtualJourney(false)}
-                className="p-2 text-white/80 hover:text-white hover:bg-white/20 rounded-2xl transition cursor-pointer"
+                className="p-1.5 text-white/80 hover:text-white hover:bg-white/20 rounded-xl transition cursor-pointer"
               >
-                <X size={22} />
+                <X size={20} />
               </button>
             </div>
 
             {/* Sub-bar điều khiển Auto Tour */}
-            <div className="bg-slate-100 p-2.5 px-4 sm:px-7 flex items-center justify-between border-b border-slate-200 text-xs">
+            <div className="bg-slate-50 p-2.5 px-4 sm:px-7 flex items-center justify-between border-b border-slate-200 text-xs">
               <div className="flex items-center gap-2">
                 <button
                   type="button"
                   onClick={() => setIsAutoTourRunning(!isAutoTourRunning)}
-                  className={`px-3 py-1.5 rounded-xl font-black flex items-center gap-1.5 transition cursor-pointer ${
+                  className={`px-3 py-1.5 rounded-xl font-bold flex items-center gap-1.5 transition cursor-pointer ${
                     isAutoTourRunning 
-                      ? 'bg-amber-500 text-white shadow-sm ring-2 ring-amber-300' 
-                      : 'bg-white text-slate-700 hover:bg-slate-200 border border-slate-300'
+                      ? 'bg-amber-500 text-white shadow-sm' 
+                      : 'bg-white text-slate-700 hover:bg-slate-100 border border-slate-300'
                   }`}
                 >
                   {isAutoTourRunning ? <Pause size={14} /> : <Play size={14} />}
@@ -870,7 +763,7 @@ export default function HistoryGeoCaro({ addReward }) {
                 <button
                   type="button"
                   onClick={() => setActiveStationIndex(prev => (prev - 1 + journeyStations.length) % journeyStations.length)}
-                  className="p-1.5 bg-white text-slate-700 hover:bg-slate-200 rounded-lg border border-slate-300 transition"
+                  className="p-1.5 bg-white text-slate-700 hover:bg-slate-100 rounded-lg border border-slate-300 transition"
                   title="Trạm trước"
                 >
                   <ChevronLeft size={16} />
@@ -878,7 +771,7 @@ export default function HistoryGeoCaro({ addReward }) {
                 <button
                   type="button"
                   onClick={() => setActiveStationIndex(prev => (prev + 1) % journeyStations.length)}
-                  className="p-1.5 bg-white text-slate-700 hover:bg-slate-200 rounded-lg border border-slate-300 transition"
+                  className="p-1.5 bg-white text-slate-700 hover:bg-slate-100 rounded-lg border border-slate-300 transition"
                   title="Trạm tiếp theo"
                 >
                   <ChevronRight size={16} />
@@ -887,69 +780,69 @@ export default function HistoryGeoCaro({ addReward }) {
             </div>
 
             {/* NỘI DUNG HÀNH TRÌNH ẢO CHI TIẾT */}
-            <div className="p-4 sm:p-7 overflow-y-auto flex-1 space-y-6">
+            <div className="p-4 sm:p-6 overflow-y-auto flex-1 space-y-5">
               
               {journeyStations.length === 0 ? (
-                <div className="text-center py-12 text-slate-400">
-                  Chưa có địa danh nào được cắm cờ. Hãy quay lại chơi và trả lời đúng các câu hỏi để mở khóa hành trình!
+                <div className="text-center py-10 text-slate-400 text-xs">
+                  Chưa có địa danh nào được cắm cờ trong ván này. Hãy trả lời đúng các câu hỏi để mở khóa hành trình!
                 </div>
               ) : (() => {
                 const currentStation = journeyStations[activeStationIndex] || journeyStations[0];
 
                 return (
-                  <div className="space-y-6">
+                  <div className="space-y-5">
                     
-                    {/* KHUNG THẺ CHI TIẾT ĐỊA DANH ĐANG XEM */}
-                    <div className="bg-gradient-to-br from-slate-900 to-indigo-950 text-white rounded-3xl p-5 sm:p-7 shadow-xl border border-white/10 relative overflow-hidden flex flex-col md:flex-row gap-6">
+                    {/* THẺ CHI TIẾT ĐỊA DANH ĐANG XEM */}
+                    <div className="bg-slate-900 text-white rounded-3xl p-5 sm:p-6 shadow-lg border border-slate-800 flex flex-col md:flex-row gap-5">
                       
                       {/* Ảnh minh họa địa danh */}
-                      <div className="w-full md:w-2/5 flex-shrink-0 relative rounded-2xl overflow-hidden aspect-video md:aspect-auto shadow-lg border border-white/20">
+                      <div className="w-full md:w-2/5 flex-shrink-0 relative rounded-2xl overflow-hidden aspect-video md:aspect-auto shadow border border-white/10">
                         <img 
                           src={currentStation.image} 
                           alt={currentStation.landmark}
-                          className="w-full h-full object-cover transition-transform duration-700 hover:scale-105"
+                          className="w-full h-full object-cover transition-transform duration-500 hover:scale-105"
                         />
-                        <div className="absolute top-2 left-2 px-2.5 py-1 rounded-full text-[10px] font-black bg-red-600 text-white shadow-md flex items-center gap-1">
-                          <Flag size={12} className="text-yellow-300" />
+                        <div className="absolute top-2 left-2 px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-primary text-white shadow flex items-center gap-1">
+                          <Flag size={11} className="text-yellow-300" />
                           <span>{currentStation.region}</span>
                         </div>
                         {currentStation.isWinningPiece && (
-                          <div className="absolute bottom-2 left-2 right-2 px-2.5 py-1 rounded-xl text-[11px] font-black bg-amber-500/90 text-slate-950 backdrop-blur-md shadow-md text-center">
-                            ⭐ Thuộc Chuỗi 5 Ô Quyết Định Chiến Thắng!
+                          <div className="absolute bottom-2 left-2 right-2 px-2 py-1 rounded-xl text-[10px] font-black bg-amber-400 text-slate-950 text-center shadow">
+                            ⭐ Nằm trong Chuỗi 5 Ô Thắng Trận!
                           </div>
                         )}
                       </div>
 
-                      {/* Nội dung Tóm Tắt Địa Lý & Kể Về Giai Đoạn Lịch Sử */}
-                      <div className="flex-1 flex flex-col justify-between space-y-4">
+                      {/* Thông tin mô tả địa lý & giai đoạn lịch sử */}
+                      <div className="flex-1 flex flex-col justify-between space-y-3">
                         <div>
-                          <div className="flex items-center gap-2 text-xs text-amber-300 font-bold mb-1">
-                            <MapPin size={15} />
-                            <span>Tỉnh {currentStation.province} • Tọa độ ô cờ: #{currentStation.cellIndex + 1}</span>
+                          <div className="flex items-center gap-1.5 text-xs text-amber-300 font-bold mb-1">
+                            <MapPin size={14} />
+                            <span>Tỉnh {currentStation.province}</span>
                           </div>
-                          <h4 className="text-xl sm:text-2xl font-black text-white">
+                          <h4 className="text-lg sm:text-xl font-bold text-white">
                             {currentStation.landmark}
                           </h4>
                         </div>
 
                         {/* TÓM TẮT ĐỊA LÝ (DESCRIPTION) */}
-                        <div className="bg-white/10 p-3.5 rounded-2xl border border-white/10 space-y-1 backdrop-blur-sm">
-                          <span className="text-[11px] font-black uppercase tracking-wider text-sky-300 flex items-center gap-1.5">
-                            <Compass size={14} />
+                        <div className="bg-white/10 p-3 rounded-xl border border-white/10 space-y-1">
+                          <span className="text-[10px] font-black uppercase tracking-wider text-sky-300 flex items-center gap-1">
+                            <Compass size={13} />
                             <span>Tóm tắt Địa lý & Cảnh quan thiên nhiên:</span>
                           </span>
-                          <p className="text-xs sm:text-sm text-slate-200 leading-relaxed font-medium">
+                          <p className="text-xs text-slate-200 leading-relaxed font-medium">
                             {currentStation.desc}
                           </p>
                         </div>
 
                         {/* KỂ VỀ GIAI ĐOẠN LỊCH SỬ HÀO HÙNG */}
-                        <div className="bg-amber-400/15 p-3.5 rounded-2xl border border-amber-300/30 space-y-1 backdrop-blur-sm">
-                          <span className="text-[11px] font-black uppercase tracking-wider text-amber-300 flex items-center gap-1.5">
-                            <Award size={14} />
+                        <div className="bg-amber-400/10 p-3 rounded-xl border border-amber-300/20 space-y-1">
+                          <span className="text-[10px] font-black uppercase tracking-wider text-amber-300 flex items-center gap-1">
+                            <Award size={13} />
                             <span>Giai đoạn & Dấu ấn Lịch sử hào hùng:</span>
                           </span>
-                          <p className="text-xs sm:text-sm text-amber-100 leading-relaxed font-medium">
+                          <p className="text-xs text-amber-100 leading-relaxed font-medium">
                             {currentStation.history}
                           </p>
                         </div>
@@ -958,14 +851,14 @@ export default function HistoryGeoCaro({ addReward }) {
 
                     </div>
 
-                    {/* DẢI TIẾN TRÌNH TUYẾN HÀNH TRÌNH (TIMELINE STRIP) */}
+                    {/* DẢI TIẾN TRÌNH LỘ TRÌNH DỌC BẮC NAM */}
                     <div className="space-y-2">
-                      <div className="flex items-center justify-between text-xs font-black text-slate-700">
-                        <span>LỘ TRÌNH DỌC DẢI ĐẤT HÌNH CHỮ S ({journeyStations.length} ĐIỂM DỪNG CHÂN):</span>
-                        <span className="text-indigo-600">Nhấn vào từng trạm để khám phá</span>
+                      <div className="flex items-center justify-between text-xs font-bold text-slate-700">
+                        <span>LỘ TRÌNH ĐỊA DANH ĐÃ XUẤT HIỆN TRONG LƯỢT CHƠI ({journeyStations.length} ĐIỂM):</span>
+                        <span className="text-primary text-[11px]">Bấm vào từng trạm để xem</span>
                       </div>
 
-                      <div className="flex gap-2 overflow-x-auto pb-3 pt-1 hide-scrollbar">
+                      <div className="flex gap-2 overflow-x-auto pb-2 pt-1 hide-scrollbar">
                         {journeyStations.map((st, sIdx) => {
                           const isActive = sIdx === activeStationIndex;
                           return (
@@ -976,20 +869,20 @@ export default function HistoryGeoCaro({ addReward }) {
                                 setActiveStationIndex(sIdx);
                                 setIsAutoTourRunning(false);
                               }}
-                              className={`flex-shrink-0 p-2.5 rounded-2xl border-2 transition-all text-left flex items-center gap-2.5 cursor-pointer ${
+                              className={`flex-shrink-0 p-2 rounded-xl border transition-all text-left flex items-center gap-2 cursor-pointer ${
                                 isActive 
-                                  ? 'bg-indigo-600 text-white border-indigo-600 shadow-md scale-105' 
-                                  : 'bg-slate-50 text-slate-700 border-slate-200 hover:border-indigo-300 hover:bg-indigo-50/50'
+                                  ? 'bg-primary text-white border-primary shadow-sm scale-105' 
+                                  : 'bg-slate-50 text-slate-700 border-slate-200 hover:border-primary/50 hover:bg-sky-50/50'
                               }`}
                             >
-                              <div className={`w-7 h-7 rounded-xl font-black text-xs flex items-center justify-center flex-shrink-0 ${
-                                isActive ? 'bg-white text-indigo-700' : 'bg-slate-200 text-slate-600'
+                              <div className={`w-6 h-6 rounded-lg font-bold text-xs flex items-center justify-center flex-shrink-0 ${
+                                isActive ? 'bg-white text-primary' : 'bg-slate-200 text-slate-600'
                               }`}>
                                 {sIdx + 1}
                               </div>
-                              <div className="text-xs pr-2">
-                                <strong className="block truncate max-w-[120px]">{st.landmark}</strong>
-                                <span className={`text-[10px] block ${isActive ? 'text-indigo-200' : 'text-slate-400'}`}>
+                              <div className="text-xs pr-1">
+                                <strong className="block truncate max-w-[110px]">{st.landmark}</strong>
+                                <span className={`text-[9px] block ${isActive ? 'text-sky-100' : 'text-slate-400'}`}>
                                   {st.province}
                                 </span>
                               </div>
@@ -1006,9 +899,9 @@ export default function HistoryGeoCaro({ addReward }) {
             </div>
 
             {/* Footer Modal Action */}
-            <div className="p-4 sm:px-7 sm:py-4 bg-slate-50 border-t border-slate-200 flex flex-col sm:flex-row items-center justify-between gap-3">
+            <div className="p-3 sm:px-6 sm:py-3 bg-slate-50 border-t border-slate-200 flex flex-col sm:flex-row items-center justify-between gap-3">
               <div className="text-xs text-slate-500">
-                ⭐ Chúc mừng bạn đã mở rộng hiểu biết về non sông đất nước Việt Nam!
+                ⭐ Tích lũy kiến thức qua mỗi bước đi trên dải đất non sông Việt Nam!
               </div>
 
               <div className="flex items-center gap-2 w-full sm:w-auto">
@@ -1016,17 +909,17 @@ export default function HistoryGeoCaro({ addReward }) {
                   <button
                     type="button"
                     onClick={startNextRound}
-                    className="flex-1 sm:flex-none px-6 py-2.5 bg-gradient-to-r from-emerald-600 to-teal-600 text-white font-black text-xs sm:text-sm rounded-xl shadow-md hover:brightness-110 transition cursor-pointer flex items-center justify-center gap-1.5"
+                    className="flex-1 sm:flex-none px-5 py-2 bg-gradient-to-r from-emerald-600 to-teal-600 text-white font-bold text-xs sm:text-sm rounded-xl shadow hover:brightness-110 transition cursor-pointer flex items-center justify-center gap-1.5"
                   >
                     <span>Tiếp Tục Hiệp {currentRound + 1}</span>
-                    <ArrowRight size={16} />
+                    <ArrowRight size={15} />
                   </button>
                 )}
 
                 <button
                   type="button"
                   onClick={() => setShowVirtualJourney(false)}
-                  className="flex-1 sm:flex-none px-6 py-2.5 bg-slate-800 hover:bg-slate-900 text-white font-black text-xs sm:text-sm rounded-xl transition cursor-pointer"
+                  className="flex-1 sm:flex-none px-5 py-2 bg-slate-800 hover:bg-slate-900 text-white font-bold text-xs sm:text-sm rounded-xl transition cursor-pointer"
                 >
                   Đóng Hành Trình
                 </button>
