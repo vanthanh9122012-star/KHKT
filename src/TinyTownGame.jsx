@@ -2,11 +2,13 @@ import React, { useState, useEffect } from 'react';
 import { 
   Home, Hammer, Compass, BookOpen, Sparkles, CheckCircle2, 
   X, HelpCircle, Layers, ArrowRight, RotateCcw, Volume2, 
-  Sun, Moon, Eye, Award, Trophy, Ruler, Plus, Check, Info, Box
+  Sun, Moon, Eye, Award, Trophy, Ruler, Plus, Check, Info, Box,
+  Shuffle, Package, CheckCheck, RefreshCw, Zap, ArrowLeft
 } from 'lucide-react';
 import TinyTown3DScene from './TinyTown3DScene';
 import { 
   CONSTRUCTION_QUESTIONS, 
+  MATRIX_SORTING_QUESTIONS,
   MATERIAL_HANDBOOK, 
   CONSTRUCTION_STAGES 
 } from './data/constructionQuizData';
@@ -79,6 +81,49 @@ const playConstructionSound = (type = 'hammer') => {
       osc.start(ctx.currentTime);
       osc.stop(ctx.currentTime + 0.36);
 
+    } else if (type === 'crate_correct') {
+      // Tiếng thẻ rơi trúng Thùng Gỗ ĐÚNG & leng keng nhận thưởng gỗ
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.type = 'triangle';
+      osc.frequency.setValueAtTime(440, ctx.currentTime);
+      osc.frequency.exponentialRampToValueAtTime(880, ctx.currentTime + 0.12);
+      gain.gain.setValueAtTime(0.3, ctx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.18);
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+      osc.start(ctx.currentTime);
+      osc.stop(ctx.currentTime + 0.2);
+
+      setTimeout(() => {
+        try {
+          const osc2 = ctx.createOscillator();
+          const gain2 = ctx.createGain();
+          osc2.type = 'sine';
+          osc2.frequency.setValueAtTime(1174.66, ctx.currentTime);
+          gain2.gain.setValueAtTime(0.25, ctx.currentTime);
+          gain2.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.25);
+          osc2.connect(gain2);
+          gain2.connect(ctx.destination);
+          osc2.start(ctx.currentTime);
+          osc2.stop(ctx.currentTime + 0.26);
+        } catch (e) {}
+      }, 70);
+
+    } else if (type === 'crate_wrong') {
+      // Tiếng phế phẩm rớt bịch vào Thùng Gỗ SAI
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.type = 'sawtooth';
+      osc.frequency.setValueAtTime(180, ctx.currentTime);
+      osc.frequency.exponentialRampToValueAtTime(55, ctx.currentTime + 0.25);
+      gain.gain.setValueAtTime(0.35, ctx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.25);
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+      osc.start(ctx.currentTime);
+      osc.stop(ctx.currentTime + 0.28);
+
     } else if (type === 'victory') {
       // Kèn chúc mừng hoàn thành công trình
       const notes = [523.25, 659.25, 783.99, 1046.50];
@@ -98,6 +143,17 @@ const playConstructionSound = (type = 'hammer') => {
   } catch (e) {
     console.warn("Audio synth error:", e);
   }
+};
+
+// Hàm xáo trộn mảng ngẫu nhiên (Fisher-Yates Shuffle)
+const shuffleArray = (arr) => {
+  if (!arr || !Array.isArray(arr)) return [];
+  const copy = [...arr];
+  for (let i = copy.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [copy[i], copy[j]] = [copy[j], copy[i]];
+  }
+  return copy;
 };
 
 const STORAGE_KEY = 'tinytown_3d_savedata_v1';
@@ -163,9 +219,30 @@ export default function TinyTownGame({ addReward, onBack }) {
   const [activeModal, setActiveModal] = useState(null); // 'quiz' | 'handbook' | 'architect' | null
   const [selectedHandbookItem, setSelectedHandbookItem] = useState(MATERIAL_HANDBOOK[0]);
 
-  // Vấn đáp vật liệu xây dựng (Quiz Engine)
+  // -------------------------------------------------------------
+  // VẤN ĐÁP VẬT LIỆU: MA TRẬN 2 THÙNG GỖ & TRẮC NGHIỆM XÁO TRỘN
+  // -------------------------------------------------------------
+  const [quizMode, setQuizMode] = useState('matrix'); // 'matrix' (Ma trận phân loại 2 thùng gỗ) | 'classic' (Trắc nghiệm rơi thùng)
+
+  // 1. Chế độ Ma Trận Phân Loại 2 Thùng Gỗ
+  const [currentMatrixIndex, setCurrentMatrixIndex] = useState(0);
+  const [matrixCards, setMatrixCards] = useState(() => {
+    return shuffleArray(MATRIX_SORTING_QUESTIONS[0]?.cards || []);
+  });
+  const [matrixSortedStatus, setMatrixSortedStatus] = useState({}); // { [cardId]: { status: 'correct'|'wrong', reward: number } }
+  const [activeDroppingCard, setActiveDroppingCard] = useState(null); // { id, isCorrect }
+  const [crateBounce, setCrateBounce] = useState(false); // Hiệu ứng Thùng ĐÚNG nảy
+  const [crateShake, setCrateShake] = useState(false); // Hiệu ứng Thùng SAI rung lắc
+  const [floatingWood, setFloatingWood] = useState(null); // Biểu tượng thưởng '+60 🪵'
+  const [matrixFeedback, setMatrixFeedback] = useState(null); // { name, isCorrect, explanation, reward }
+
+  // 2. Chế độ Trắc Nghiệm Cổ Điển Rơi Thùng (32 câu xáo trộn ngẫu nhiên)
   const [currentQuizIndex, setCurrentQuizIndex] = useState(0);
+  const [shuffledOptions, setShuffledOptions] = useState(() => {
+    return shuffleArray(CONSTRUCTION_QUESTIONS[0]?.options || []);
+  });
   const [quizAnswerState, setQuizAnswerState] = useState(null); // { selectedOpt, isCorrect, explanation, reward }
+  const [classicDroppingOpt, setClassicDroppingOpt] = useState(null); // { opt, isCorrect }
 
   // Thông báo toast
   const [toast, setToast] = useState(null);
@@ -259,37 +336,120 @@ export default function TinyTownGame({ addReward, onBack }) {
   };
 
   // -------------------------------------------------------------
-  // TRẢ LỜI CÂU HỎI VẬT LIỆU KIẾM GỖ (WOOD EARNER)
+  // TRẢ LỜI CÂU HỎI & MA TRẬN PHÂN LOẠI 2 THÙNG GỖ
   // -------------------------------------------------------------
+  // Chuyển ma trận phân loại
+  const handleLoadMatrix = (index) => {
+    const safeIdx = (index + MATRIX_SORTING_QUESTIONS.length) % MATRIX_SORTING_QUESTIONS.length;
+    setCurrentMatrixIndex(safeIdx);
+    setMatrixCards(shuffleArray(MATRIX_SORTING_QUESTIONS[safeIdx]?.cards || []));
+    setMatrixSortedStatus({});
+    setMatrixFeedback(null);
+    setActiveDroppingCard(null);
+  };
+
+  // Người chơi nhấp vào 1 ô thẻ trong Ma Trận
+  const handleSortMatrixCard = (card) => {
+    if (matrixSortedStatus[card.id] || activeDroppingCard) return;
+
+    const isCorrect = card.isCorrect;
+    const currentMatrix = MATRIX_SORTING_QUESTIONS[currentMatrixIndex];
+    const reward = isCorrect ? (currentMatrix.rewardPerCorrect || 60) : 0;
+
+    setActiveDroppingCard({ id: card.id, isCorrect });
+
+    if (isCorrect) {
+      playConstructionSound('crate_correct');
+      setCrateBounce(true);
+      setTimeout(() => setCrateBounce(false), 900);
+      setWoodCount(prev => prev + reward);
+      setFloatingWood(`+${reward} 🪵`);
+      setTimeout(() => setFloatingWood(null), 1800);
+      showToast(`Chính xác! Thẻ đã rơi vào THÙNG GỖ ĐÚNG (+${reward} 🪵 Gỗ)`, 'success');
+    } else {
+      playConstructionSound('crate_wrong');
+      setCrateShake(true);
+      setTimeout(() => setCrateShake(false), 900);
+      showToast(`Lỗi kỹ thuật! Thẻ đã rơi vào THÙNG GỖ SAI (+0 🪵 Gỗ)`, 'warning');
+    }
+
+    setMatrixSortedStatus(prev => ({
+      ...prev,
+      [card.id]: {
+        status: isCorrect ? 'correct' : 'wrong',
+        reward
+      }
+    }));
+
+    setMatrixFeedback({
+      name: card.name,
+      isCorrect,
+      explanation: card.explanation,
+      reward
+    });
+
+    setTimeout(() => {
+      setActiveDroppingCard(null);
+    }, 550);
+  };
+
+  // Trả lời câu hỏi trắc nghiệm cổ điển rơi thùng
   const handleAnswerQuiz = (selectedOption) => {
-    if (quizAnswerState !== null) return;
+    if (quizAnswerState !== null || classicDroppingOpt !== null) return;
 
     const currentQ = CONSTRUCTION_QUESTIONS[currentQuizIndex];
     const isCorrect = selectedOption === currentQ.correct;
+    const reward = isCorrect ? (currentQ.woodReward || 100) : 0;
+
+    setClassicDroppingOpt({ opt: selectedOption, isCorrect });
 
     if (isCorrect) {
-      playConstructionSound('hammer');
-      const reward = currentQ.woodReward || 100;
+      playConstructionSound('crate_correct');
+      setCrateBounce(true);
+      setTimeout(() => setCrateBounce(false), 900);
       setWoodCount(prev => prev + reward);
-      setQuizAnswerState({
-        selectedOpt: selectedOption,
-        isCorrect: true,
-        explanation: currentQ.explanation,
-        reward
-      });
+      setFloatingWood(`+${reward} 🪵`);
+      setTimeout(() => setFloatingWood(null), 1800);
+      showToast(`Chính xác! Rơi vào THÙNG GỖ ĐÚNG (+${reward} 🪵 Gỗ)`, 'success');
     } else {
-      setQuizAnswerState({
-        selectedOpt: selectedOption,
-        isCorrect: false,
-        explanation: currentQ.explanation,
-        reward: 0
-      });
+      playConstructionSound('crate_wrong');
+      setCrateShake(true);
+      setTimeout(() => setCrateShake(false), 900);
+      showToast(`Chưa đúng! Rơi vào THÙNG GỖ SAI (+0 🪵 Gỗ)`, 'warning');
     }
+
+    setQuizAnswerState({
+      selectedOpt: selectedOption,
+      isCorrect,
+      explanation: currentQ.explanation,
+      reward
+    });
+
+    setTimeout(() => {
+      setClassicDroppingOpt(null);
+    }, 550);
   };
 
   const handleNextQuiz = () => {
     setQuizAnswerState(null);
-    setCurrentQuizIndex(prev => (prev + 1) % CONSTRUCTION_QUESTIONS.length);
+    setClassicDroppingOpt(null);
+    const nextIdx = (currentQuizIndex + 1) % CONSTRUCTION_QUESTIONS.length;
+    setCurrentQuizIndex(nextIdx);
+    setShuffledOptions(shuffleArray(CONSTRUCTION_QUESTIONS[nextIdx]?.options || []));
+  };
+
+  const openQuizModal = (mode = 'matrix') => {
+    setQuizMode(mode);
+    if (mode === 'matrix') {
+      setMatrixCards(shuffleArray(MATRIX_SORTING_QUESTIONS[currentMatrixIndex]?.cards || []));
+      setMatrixSortedStatus({});
+      setMatrixFeedback(null);
+    } else {
+      setShuffledOptions(shuffleArray(CONSTRUCTION_QUESTIONS[currentQuizIndex]?.options || []));
+      setQuizAnswerState(null);
+      setClassicDroppingOpt(null);
+    }
+    setActiveModal('quiz');
   };
 
   // Khởi động lại công trình
@@ -365,7 +525,7 @@ export default function TinyTownGame({ addReward, onBack }) {
           {/* Nút Kiếm Gỗ bằng câu hỏi */}
           <button
             type="button"
-            onClick={() => setActiveModal('quiz')}
+            onClick={() => openQuizModal('matrix')}
             className="px-3.5 py-2 bg-amber-500 hover:bg-amber-600 text-white rounded-xl text-xs sm:text-sm font-bold shadow-md shadow-amber-200 transition flex items-center gap-1.5 cursor-pointer"
           >
             <span>🪵</span>
@@ -710,9 +870,15 @@ export default function TinyTownGame({ addReward, onBack }) {
               })}
             </div>
 
-            <p className="text-[11px] text-slate-400 mt-3 text-center italic">
-              💡 Thiếu gỗ? Nhấn "Kiếm Thêm Gỗ" phía trên để giải đố nhận thêm 🪵!
-            </p>
+            <div className="mt-3 text-center">
+              <button
+                type="button"
+                onClick={() => openQuizModal('matrix')}
+                className="text-[11px] text-amber-700 hover:text-amber-900 font-bold underline cursor-pointer inline-flex items-center gap-1 bg-amber-50/80 px-3 py-1 rounded-full border border-amber-200"
+              >
+                <span>💡 Thiếu gỗ? Nhấn vào đây để vào Ma Trận Phân Loại 2 Thùng Gỗ nhận 🪵 Gỗ!</span>
+              </button>
+            </div>
           </div>
 
         </div>
@@ -720,41 +886,258 @@ export default function TinyTownGame({ addReward, onBack }) {
       </div>
 
       {/* ========================================================================= */}
-      {/* MODAL 1: KIẾM THÊM GỖ BẰNG VẤN ĐÁP VẬT LIỆU (QUIZ OVERLAY)                */}
+      {/* MODAL 1: ĐẤU TRƯỜNG VẬT LIỆU - MA TRẬN 2 THÙNG GỖ & TRẮC NGHIỆM            */}
       {/* ========================================================================= */}
       {activeModal === 'quiz' && (
-        <div className="fixed inset-0 z-[99999] bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-3 sm:p-5 overflow-y-auto animate-fade-in">
-          <div className="bg-white rounded-3xl max-w-2xl w-full p-6 sm:p-7 shadow-2xl border border-slate-200 space-y-5 animate-slide-up">
+        <div className="fixed inset-0 z-[99999] bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-2.5 sm:p-5 overflow-y-auto animate-fade-in">
+          <div className="bg-white rounded-3xl max-w-4xl w-full p-4 sm:p-6 shadow-2xl border border-slate-200 space-y-4 max-h-[94vh] overflow-y-auto animate-slide-up">
             
             {/* Header Modal */}
-            <div className="flex items-center justify-between pb-3 border-b border-slate-100">
-              <div className="flex items-center gap-2.5">
-                <div className="w-10 h-10 rounded-xl bg-amber-100 text-amber-800 flex items-center justify-center text-xl">
-                  🪵
+            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 pb-3 border-b border-slate-100">
+              <div className="flex items-center gap-3">
+                <div className="w-11 h-11 rounded-2xl bg-gradient-to-br from-amber-500 to-orange-600 text-white flex items-center justify-center text-2xl shadow-md shadow-amber-200">
+                  📦
                 </div>
                 <div>
-                  <h3 className="text-lg font-black text-slate-800">Vấn Đáp Vật Liệu - Tích Lũy Gỗ</h3>
-                  <p className="text-xs text-slate-500">Trả lời đúng để nhận từ +100 đến +130 🪵 Gỗ cho công trình</p>
+                  <h3 className="text-lg sm:text-xl font-black text-slate-800 flex items-center gap-2">
+                    <span>Đấu Trường Vật Liệu - Tích Lũy Gỗ</span>
+                  </h3>
+                  <p className="text-xs text-slate-500">
+                    Phân loại thẻ vào 2 Thùng Gỗ: Thùng ĐÚNG nhận 🪵 Gỗ, Thùng SAI không nhận được vật phẩm
+                  </p>
                 </div>
               </div>
+
+              <div className="flex items-center gap-2 w-full sm:w-auto justify-between sm:justify-end">
+                {/* Kho gỗ hiện tại */}
+                <div className="flex items-center gap-1.5 px-3 py-1.5 bg-amber-50 border border-amber-300 rounded-xl text-xs font-black text-amber-950">
+                  <span className="text-sm">🪵</span>
+                  <span>{woodCount.toLocaleString()} Gỗ</span>
+                </div>
+
+                <button
+                  type="button"
+                  onClick={() => { setActiveModal(null); setQuizAnswerState(null); setActiveDroppingCard(null); }}
+                  className="p-1.5 text-slate-400 hover:text-slate-600 rounded-lg hover:bg-slate-100 cursor-pointer"
+                  title="Đóng cửa sổ"
+                >
+                  <X size={20} />
+                </button>
+              </div>
+            </div>
+
+            {/* TAB CHUYỂN ĐỔI CHẾ ĐỘ CHƠI */}
+            <div className="flex items-center gap-2 bg-slate-100 p-1 rounded-2xl border border-slate-200">
               <button
                 type="button"
-                onClick={() => { setActiveModal(null); setQuizAnswerState(null); }}
-                className="p-1.5 text-slate-400 hover:text-slate-600 rounded-lg hover:bg-slate-100"
+                onClick={() => setQuizMode('matrix')}
+                className={`flex-1 py-2 px-3 rounded-xl text-xs sm:text-sm font-black transition flex items-center justify-center gap-2 cursor-pointer ${
+                  quizMode === 'matrix'
+                    ? 'bg-white text-amber-900 shadow-sm border border-slate-200'
+                    : 'text-slate-600 hover:text-slate-900'
+                }`}
               >
-                <X size={20} />
+                <Package size={16} className="text-amber-600" />
+                <span>Ma Trận Phân Loại 2 Thùng Gỗ</span>
+                <span className="text-[10px] bg-amber-500 text-white px-1.5 py-0.2 rounded-full font-bold">Mới</span>
+              </button>
+
+              <button
+                type="button"
+                onClick={() => setQuizMode('classic')}
+                className={`flex-1 py-2 px-3 rounded-xl text-xs sm:text-sm font-black transition flex items-center justify-center gap-2 cursor-pointer ${
+                  quizMode === 'classic'
+                    ? 'bg-white text-amber-900 shadow-sm border border-slate-200'
+                    : 'text-slate-600 hover:text-slate-900'
+                }`}
+              >
+                <Shuffle size={16} className="text-sky-600" />
+                <span>Trắc Nghiệm Rơi Thùng (32 Câu Xáo Trộn)</span>
               </button>
             </div>
 
-            {/* Thẻ câu hỏi hiện tại */}
-            {(() => {
+            {/* ================================================================= */}
+            {/* CHẾ ĐỘ 1: MA TRẬN PHÂN LOẠI 2 THÙNG GỖ (WOOD CRATE SORTING)        */}
+            {/* ================================================================= */}
+            {quizMode === 'matrix' && (() => {
+              const matrix = MATRIX_SORTING_QUESTIONS[currentMatrixIndex];
+              const sortedCount = Object.keys(matrixSortedStatus).length;
+              const totalCards = matrixCards.length;
+              const isFinished = sortedCount === totalCards;
+
+              return (
+                <div className="space-y-4">
+                  
+                  {/* Thanh thông tin chủ đề ma trận */}
+                  <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 bg-amber-50/60 p-3 rounded-2xl border border-amber-200">
+                    <div>
+                      <div className="flex items-center gap-2">
+                        <span className="text-[10px] font-black uppercase tracking-wider bg-amber-200 text-amber-900 px-2 py-0.5 rounded-full">
+                          Ma Trận {currentMatrixIndex + 1}/{MATRIX_SORTING_QUESTIONS.length}
+                        </span>
+                        <h4 className="text-sm font-black text-slate-800">{matrix.topic}</h4>
+                      </div>
+                      <p className="text-xs text-slate-600 mt-1">
+                        {matrix.prompt}
+                      </p>
+                    </div>
+
+                    <div className="flex items-center gap-2 self-end sm:self-auto">
+                      <button
+                        type="button"
+                        onClick={() => setMatrixCards(shuffleArray(matrixCards))}
+                        className="px-2.5 py-1.5 bg-white hover:bg-slate-50 border border-slate-200 rounded-xl text-xs font-bold text-slate-700 flex items-center gap-1 cursor-pointer transition shadow-sm"
+                        title="Xáo trộn lại vị trí các ô thẻ trong ma trận"
+                      >
+                        <Shuffle size={13} className="text-amber-600" />
+                        <span>Xáo Thẻ</span>
+                      </button>
+
+                      <button
+                        type="button"
+                        onClick={() => handleLoadMatrix(currentMatrixIndex + 1)}
+                        className="px-3 py-1.5 bg-amber-500 hover:bg-amber-600 text-white rounded-xl text-xs font-bold flex items-center gap-1 cursor-pointer transition shadow-sm"
+                        title="Đổi sang ma trận kiến thức khác"
+                      >
+                        <span>Đổi Ma Trận</span>
+                        <ArrowRight size={13} />
+                      </button>
+                    </div>
+                  </div>
+
+                  {/* LƯỚI MA TRẬN CÁC Ô THẺ ĐÁP ÁN (MATRIX CARDS) */}
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2.5">
+                    {matrixCards.map((card) => {
+                      const sortedInfo = matrixSortedStatus[card.id];
+                      const isDropping = activeDroppingCard?.id === card.id;
+
+                      let cardStyle = "bg-white border-2 border-slate-200 hover:border-amber-400 hover:bg-amber-50/20 text-slate-800 cursor-pointer shadow-sm hover:shadow-md";
+                      if (sortedInfo) {
+                        if (sortedInfo.status === 'correct') {
+                          cardStyle = "bg-emerald-50/90 border-2 border-emerald-400 text-emerald-950 shadow-inner";
+                        } else {
+                          cardStyle = "bg-rose-50/80 border-2 border-rose-300 text-rose-950 opacity-90 shadow-inner";
+                        }
+                      }
+                      if (isDropping) {
+                        cardStyle += activeDroppingCard.isCorrect 
+                          ? " scale-95 ring-4 ring-emerald-400 animate-pulse" 
+                          : " scale-95 ring-4 ring-rose-400 animate-shake";
+                      }
+
+                      return (
+                        <div
+                          key={card.id}
+                          onClick={() => handleSortMatrixCard(card)}
+                          className={`p-3 rounded-2xl transition-all duration-200 flex flex-col justify-between select-none ${cardStyle}`}
+                        >
+                          <div>
+                            {/* Trạng thái phân loại của thẻ */}
+                            <div className="flex items-center justify-between mb-2">
+                              {sortedInfo ? (
+                                sortedInfo.status === 'correct' ? (
+                                  <span className="text-[10px] font-black uppercase text-emerald-700 bg-emerald-100 px-2 py-0.5 rounded-full flex items-center gap-1">
+                                    <Check size={12} /> ĐÃ RƠI VÀO THÙNG ĐÚNG (+{sortedInfo.reward} 🪵)
+                                  </span>
+                                ) : (
+                                  <span className="text-[10px] font-black uppercase text-rose-700 bg-rose-100 px-2 py-0.5 rounded-full flex items-center gap-1">
+                                    <X size={12} /> ĐÃ RƠI VÀO THÙNG SAI (+0 🪵)
+                                  </span>
+                                )
+                              ) : (
+                                <span className="text-[10px] font-bold text-amber-700 bg-amber-50 px-2 py-0.5 rounded-full border border-amber-200 flex items-center gap-1">
+                                  <span>👉 Nhấp để phân loại</span>
+                                </span>
+                              )}
+                              <span className="text-xl">{card.icon}</span>
+                            </div>
+
+                            <h5 className="font-extrabold text-xs sm:text-sm leading-tight text-slate-800">
+                              {card.name}
+                            </h5>
+                            <p className="text-[11px] sm:text-xs text-slate-600 mt-1 leading-relaxed">
+                              {card.desc}
+                            </p>
+                          </div>
+
+                          <div className="mt-2 pt-2 border-t border-slate-100/80 text-[10px] font-semibold text-slate-400 flex items-center justify-between">
+                            <span>{sortedInfo ? 'Đã phân loại' : 'Chưa phân loại'}</span>
+                            <span className="font-bold text-amber-700">+60 🪵 nếu đúng</span>
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+
+                  {/* BANNER GIẢI THÍCH NGAY SAU KHI PHÂN LOẠI */}
+                  {matrixFeedback && (
+                    <div className={`p-3.5 rounded-2xl border text-xs sm:text-sm leading-relaxed animate-fade-in flex items-start gap-2.5 ${
+                      matrixFeedback.isCorrect
+                        ? 'bg-emerald-50 border-emerald-300 text-emerald-950'
+                        : 'bg-rose-50 border-rose-300 text-rose-950'
+                    }`}>
+                      <div className="mt-0.5">
+                        {matrixFeedback.isCorrect ? <CheckCircle2 size={18} className="text-emerald-600" /> : <X size={18} className="text-rose-600" />}
+                      </div>
+                      <div className="flex-1">
+                        <div className="font-bold mb-0.5">
+                          {matrixFeedback.isCorrect 
+                            ? `🎉 CHÍNH XÁC! Thẻ "${matrixFeedback.name}" đã rơi vào Thùng ĐÚNG (+${matrixFeedback.reward} 🪵 Gỗ)`
+                            : `⚠️ CHƯA CHÍNH XÁC! Thẻ "${matrixFeedback.name}" đã rơi vào Thùng SAI (+0 🪵)`
+                          }
+                        </div>
+                        <p className="text-slate-700 text-xs italic">
+                          💡 <strong>Kiến thức xây dựng:</strong> {matrixFeedback.explanation}
+                        </p>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* KHI HOÀN THÀNH TẤT CẢ CÁC THẺ TRONG MA TRẬN */}
+                  {isFinished && (
+                    <div className="p-4 bg-gradient-to-r from-amber-50 to-orange-50 border-2 border-amber-300 rounded-2xl flex flex-col sm:flex-row items-center justify-between gap-3 animate-slide-up">
+                      <div className="flex items-center gap-3">
+                        <div className="text-3xl">🎉</div>
+                        <div>
+                          <div className="text-sm font-black text-amber-950">
+                            Tuyệt vời! Bạn đã phân loại hoàn tất cả {totalCards} thẻ của ma trận này!
+                          </div>
+                          <div className="text-xs text-amber-800">
+                            Khám phá ma trận tiếp theo để tìm hiểu thêm nhiều siêu vật liệu hiếm khác.
+                          </div>
+                        </div>
+                      </div>
+                      <button
+                        type="button"
+                        onClick={() => handleLoadMatrix(currentMatrixIndex + 1)}
+                        className="px-4 py-2.5 bg-gradient-to-r from-amber-500 to-orange-600 hover:from-amber-600 hover:to-orange-700 text-white font-black text-xs sm:text-sm rounded-xl shadow-md transition flex items-center gap-1.5 cursor-pointer whitespace-nowrap active:scale-95"
+                      >
+                        <span>Ma Trận Tiếp Theo</span>
+                        <ArrowRight size={16} />
+                      </button>
+                    </div>
+                  )}
+
+                </div>
+              );
+            })()}
+
+            {/* ================================================================= */}
+            {/* CHẾ ĐỘ 2: TRẮC NGHIỆM RƠI THÙNG (32 CÂU HỎI XÁO TRỘN ĐÁP ÁN)     */}
+            {/* ================================================================= */}
+            {quizMode === 'classic' && (() => {
               const q = CONSTRUCTION_QUESTIONS[currentQuizIndex];
               return (
                 <div className="space-y-4">
-                  <div className="flex items-center justify-between">
-                    <span className="px-2.5 py-1 rounded-full text-xs font-bold bg-amber-100 text-amber-900 border border-amber-300">
-                      {q.badge}
-                    </span>
+                  <div className="flex items-center justify-between bg-sky-50 p-3 rounded-2xl border border-sky-200">
+                    <div className="flex items-center gap-2">
+                      <span className="px-2.5 py-1 rounded-full text-xs font-bold bg-sky-200 text-sky-900">
+                        {q.badge}
+                      </span>
+                      <span className="text-xs font-bold text-slate-500">
+                        Câu {currentQuizIndex + 1}/{CONSTRUCTION_QUESTIONS.length}
+                      </span>
+                    </div>
                     <span className="text-xs font-extrabold text-amber-700 flex items-center gap-1">
                       <span>Phần thưởng:</span>
                       <span className="text-sm font-black">+{q.woodReward} 🪵</span>
@@ -775,11 +1158,11 @@ export default function TinyTownGame({ addReward, onBack }) {
                       <div className="font-bold flex items-center gap-1.5 mb-1">
                         {quizAnswerState.isCorrect ? (
                           <span className="text-emerald-700 flex items-center gap-1">
-                            <CheckCircle2 size={16} /> Chính xác! Bạn nhận được +{quizAnswerState.reward} 🪵 Gỗ!
+                            <CheckCircle2 size={16} /> Chính xác! Đã rơi vào Thùng ĐÚNG (+{quizAnswerState.reward} 🪵 Gỗ)!
                           </span>
                         ) : (
                           <span className="text-rose-700 flex items-center gap-1">
-                            <X size={16} /> Chưa đúng! Đáp án chính xác là: <strong>{q.correct}</strong>
+                            <X size={16} /> Chưa đúng! Đã rơi vào Thùng SAI (+0 🪵). Đáp án đúng là: <strong>{q.correct}</strong>
                           </span>
                         )}
                       </div>
@@ -789,9 +1172,9 @@ export default function TinyTownGame({ addReward, onBack }) {
                     </div>
                   )}
 
-                  {/* Danh sách 4 phương án */}
+                  {/* Danh sách 4 phương án xáo trộn ngẫu nhiên */}
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 pt-1">
-                    {q.options.map((opt, idx) => {
+                    {shuffledOptions.map((opt, idx) => {
                       let btnStyle = "bg-slate-50 hover:bg-amber-50/50 border-slate-200 hover:border-amber-400 text-slate-800";
                       if (quizAnswerState) {
                         if (opt === q.correct) {
@@ -824,9 +1207,9 @@ export default function TinyTownGame({ addReward, onBack }) {
                       <button
                         type="button"
                         onClick={handleNextQuiz}
-                        className="w-full py-3 bg-amber-500 hover:bg-amber-600 text-white font-bold text-sm rounded-xl shadow-md transition flex items-center justify-center gap-1.5"
+                        className="w-full py-3 bg-amber-500 hover:bg-amber-600 text-white font-bold text-sm rounded-xl shadow-md transition flex items-center justify-center gap-1.5 cursor-pointer"
                       >
-                        <span>Thử Thách Câu Hỏi Tiếp Theo</span>
+                        <span>Thử Thách Câu Hỏi Tiếp Theo (Xáo Trộn)</span>
                         <ArrowRight size={16} />
                       </button>
                     </div>
@@ -834,6 +1217,90 @@ export default function TinyTownGame({ addReward, onBack }) {
                 </div>
               );
             })()}
+
+            {/* ========================================================================= */}
+            {/* 2 CHIẾC THÙNG GỖ TRỰC QUAN: THÙNG ĐÚNG (ĐẠT CHUẨN) & THÙNG SAI (PHẾ LIỆU) */}
+            {/* ========================================================================= */}
+            <div className="pt-3 border-t border-slate-100">
+              <div className="text-[11px] font-black uppercase text-slate-400 tracking-wider mb-2 flex items-center justify-between">
+                <span>Điểm Tiếp Nhận Đáp Án (2 Thùng Gỗ Mô Phỏng):</span>
+                <span className="text-amber-700 font-bold">🪵 Gỗ thưởng dùng để đổi vật liệu thi công</span>
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                
+                {/* 1. THÙNG GỖ ĐÚNG (HÀNG ĐẠT CHUẨN) */}
+                <div className={`relative p-3.5 rounded-2xl border-4 transition-all duration-300 overflow-hidden shadow-md select-none ${
+                  crateBounce
+                    ? 'scale-105 ring-4 ring-emerald-400 border-amber-400 bg-gradient-to-b from-amber-700 via-amber-800 to-amber-950 -translate-y-1'
+                    : 'border-amber-800/90 bg-gradient-to-b from-[#8B5A2B] via-[#654321] to-[#3E2723]'
+                }`}>
+                  <div className="relative z-10 flex items-center justify-between gap-2 mb-2 pb-1.5 border-b border-amber-600/40">
+                    <div className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-black uppercase tracking-wider bg-emerald-500 text-white shadow-sm">
+                      <CheckCircle2 size={13} />
+                      <span>THÙNG ĐÚNG (ĐẠT CHUẨN)</span>
+                    </div>
+                    <span className="text-[10px] font-bold text-amber-200 bg-black/30 px-2 py-0.5 rounded border border-amber-500/30">
+                      Nhận 🪵 Gỗ
+                    </span>
+                  </div>
+
+                  <div className="relative z-10 flex items-center justify-between gap-3 pt-0.5">
+                    <div className="flex items-center gap-2.5">
+                      <div className="w-11 h-11 rounded-xl bg-amber-900/90 border-2 border-amber-500/60 flex items-center justify-center text-xl shadow-inner relative">
+                        <Package className="text-amber-200" size={24} />
+                        <span className="absolute -bottom-1 -right-1 text-xs">🪵</span>
+                      </div>
+                      <div>
+                        <div className="text-xs font-bold text-amber-100">Khoang Gỗ Hảo Hạng</div>
+                        <div className="text-[11px] text-amber-200/80 leading-tight">
+                          Đáp án đúng rơi vào đây để nhận thưởng <strong>🪵 Gỗ</strong>
+                        </div>
+                      </div>
+                    </div>
+
+                    {floatingWood && crateBounce && (
+                      <div className="animate-bounce font-black text-emerald-300 text-xs sm:text-sm bg-black/70 px-2.5 py-1 rounded-xl border border-emerald-400 shadow-md">
+                        {floatingWood}
+                      </div>
+                    )}
+                  </div>
+                </div>
+
+                {/* 2. THÙNG GỖ SAI (PHẾ PHẨM / LỖI) */}
+                <div className={`relative p-3.5 rounded-2xl border-4 transition-all duration-300 overflow-hidden shadow-md select-none ${
+                  crateShake
+                    ? 'ring-4 ring-rose-500 border-rose-500 bg-gradient-to-b from-stone-800 via-stone-900 to-black translate-x-1'
+                    : 'border-stone-700 bg-gradient-to-b from-[#3a3a3a] via-[#262626] to-[#141414]'
+                }`}>
+                  <div className="relative z-10 flex items-center justify-between gap-2 mb-2 pb-1.5 border-b border-stone-600/40">
+                    <div className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-black uppercase tracking-wider bg-rose-600 text-white shadow-sm">
+                      <X size={13} />
+                      <span>THÙNG SAI (PHẾ PHẨM)</span>
+                    </div>
+                    <span className="text-[10px] font-bold text-stone-300 bg-black/40 px-2 py-0.5 rounded border border-stone-600/40">
+                      +0 🪵
+                    </span>
+                  </div>
+
+                  <div className="relative z-10 flex items-center justify-between gap-3 pt-0.5">
+                    <div className="flex items-center gap-2.5">
+                      <div className="w-11 h-11 rounded-xl bg-stone-900/90 border-2 border-stone-600 flex items-center justify-center text-xl shadow-inner relative">
+                        <Box className="text-stone-400" size={24} />
+                        <span className="absolute -bottom-1 -right-1 text-xs">⚠️</span>
+                      </div>
+                      <div>
+                        <div className="text-xs font-bold text-stone-200">Khoang Phế Liệu & Rác Thải</div>
+                        <div className="text-[11px] text-stone-400 leading-tight">
+                          Đáp án sai rơi vào đây, <strong>không nhận được vật phẩm nào</strong>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+            </div>
 
           </div>
         </div>

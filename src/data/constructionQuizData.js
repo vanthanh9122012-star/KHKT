@@ -203,6 +203,446 @@ export const CONSTRUCTION_QUESTIONS = [
     correct: "Tận dụng ánh sáng tự nhiên ban ngày và đối lưu không khí, giảm tiêu thụ điện năng",
     explanation: "Giếng trời tạo hiệu ứng ống khói tự nhiên đẩy khí nóng lên cao và hút gió tươi vào tầng dưới, đồng thời chiếu sáng toàn bộ ngôi nhà mà không cần bật đèn ban ngày.",
     woodReward: 120
+  },
+  {
+    id: "mat_19",
+    category: "Siêu Vật Liệu Hiếm",
+    badge: "Aerogel Siêu Cách Nhiệt",
+    question: "Aerogel (Khói đóng băng) là vật liệu rắn nhẹ nhất hành tinh với 99.8% thể tích là không khí. Trong xây dựng cao cấp, Aerogel có ưu điểm vượt trội nào?",
+    options: [
+      "Khả năng cách nhiệt và cách âm phi thường dù tấm đệm chỉ dày vài milimet",
+      "Khả năng phát sáng trong bóng tối mà không cần pin",
+      "Tự tạo ra nước ngọt khi độ ẩm không khí tăng cao",
+      "Có thể thay thế hoàn toàn xi măng để đổ móng nhà"
+    ],
+    correct: "Khả năng cách nhiệt và cách âm phi thường dù tấm đệm chỉ dày vài milimet",
+    explanation: "Cấu trúc nano rỗng xốp bẫy các phân tử khí khiến Aerogel có hệ số dẫn nhiệt gần như bằng 0, cách nhiệt hiệu quả gấp 5 lần sợi thủy tinh truyền thống.",
+    woodReward: 140
+  },
+  {
+    id: "mat_20",
+    category: "Công Nghệ Sinh Học",
+    badge: "Bê Tông Tự Phục Hồi",
+    question: "Bê tông sinh học thông minh (Bio-Concrete) có khả năng tự vá lành vết nứt nẻ qua thời gian nhờ vào cơ chế bí mật nào?",
+    options: [
+      "Cấy bào tử vi khuẩn và dưỡng chất, khi nứt có nước ngấm vào vi khuẩn sẽ tiết đá vôi (CaCO3) hàn kín",
+      "Chứa rễ cây mini tự mọc bện chặt các vết nứt",
+      "Chứa nam châm siêu nhỏ tự hút các hạt xi măng lại gần nhau",
+      "Chứa dầu bôi trơn tự làm liền mặt bê tông"
+    ],
+    correct: "Cấy bào tử vi khuẩn và dưỡng chất, khi nứt có nước ngấm vào vi khuẩn sẽ tiết đá vôi (CaCO3) hàn kín",
+    explanation: "Các nhà khoa học cấy vi khuẩn Bacillus cùng thức ăn canxi lactat vào bê tông. Khi xuất hiện vết nứt, nước và oxy ngấm vào đánh thức vi khuẩn chuyển hóa canxi thành tinh thể đá vôi CaCO3 bịt kín vết rạn nứt vĩnh viễn.",
+    woodReward: 140
+  },
+  {
+    id: "mat_21",
+    category: "Kính Thông Minh",
+    badge: "Kính Điện Đổi Màu",
+    question: "Kính điện thông minh (Electrochromic Smart Glass) lắp đặt cho các tòa nhà hiện đại hoạt động dựa trên nguyên lý nào?",
+    options: [
+      "Chỉ cần cấp một xung điện nhỏ là bề mặt kính tự chuyển từ trong suốt sang mờ sẫm để cản 98% nhiệt nắng",
+      "Kính tự động mở cánh ra khi nhiệt độ phòng trên 30°C",
+      "Kính chứa chất lỏng phát sáng khi trời tối",
+      "Kính đổi màu nhờ sơn lớp phẩm màu hóa học phản quang"
+    ],
+    correct: "Chỉ cần cấp một xung điện nhỏ là bề mặt kính tự chuyển từ trong suốt sang mờ sẫm để cản 98% nhiệt nắng",
+    explanation: "Khi có dòng điện cực nhỏ vài vôn chạy qua, các ion liti di chuyển giữa các lớp oxit vonfram làm kính chuyển màu sẫm lọc ánh sáng chói chang và cản bức xạ hồng ngoại, giúp tiết kiệm tới 40% chi phí điều hòa.",
+    woodReward: 130
+  },
+  {
+    id: "mat_22",
+    category: "Vật Liệu Composite",
+    badge: "Sợi Carbon CFRP",
+    question: "Tấm sợi Carbon (CFRP) siêu bền được mệnh danh là 'áo giáp' gia cường cho các dầm cột và cây cầu lớn nhờ đặc tính nào?",
+    options: [
+      "Nhẹ hơn thép 4 lần nhưng độ bền chịu kéo gấp từ 5 đến 10 lần thép xây dựng",
+      "Có thể tự uốn cong theo ý muốn của chủ nhà",
+      "Dễ dàng hòa tan trong nước mưa",
+      "Giá thành rẻ hơn cát xây dựng thông thường"
+    ],
+    correct: "Nhẹ hơn thép 4 lần nhưng độ bền chịu kéo gấp từ 5 đến 10 lần thép xây dựng",
+    explanation: "Sợi carbon bện kết hợp keo epoxy tạo ra vật liệu composite siêu nhẹ, không bao giờ bị ăn mòn rỉ sét, chịu lực kéo siêu đẳng và là giải pháp gia cường chống động đất số một thế giới.",
+    woodReward: 130
+  },
+  {
+    id: "mat_23",
+    category: "Vật Liệu Sinh Thái",
+    badge: "Gỗ Trong Suốt",
+    question: "Gỗ trong suốt (Transparent Wood) - vật liệu tương lai thân thiện môi trường thay thế kính - được tạo ra bằng cách nào?",
+    options: [
+      "Tách bỏ hợp chất lignin màu nâu trong thớ gỗ, sau đó ngâm tẩm polymer sinh học quang học",
+      "Mài thân cây gỗ tự nhiên mỏng như tờ giấy",
+      "Lai tạo giống cây gỗ có thân trong suốt như thạch",
+      "Nung gỗ ở nhiệt độ 3000°C để gỗ hóa thành thủy tinh"
+    ],
+    correct: "Tách bỏ hợp chất lignin màu nâu trong thớ gỗ, sau đó ngâm tẩm polymer sinh học quang học",
+    explanation: "Lignin là chất hấp thụ ánh sáng làm gỗ có màu nâu. Khi chiết xuất bỏ lignin và lấp đầy khoảng rỗng bằng nhựa sinh học, các thớ cellulose cho phép hơn 85% ánh sáng truyền qua mà vẫn giữ độ dẻo dai khó vỡ của gỗ.",
+    woodReward: 140
+  },
+  {
+    id: "mat_24",
+    category: "Ánh Sáng Đô Thị",
+    badge: "Bê Tông Phát Quang",
+    question: "Bê tông phát quang trong đêm (Photoluminescent Concrete) dùng làm lối đi sân vườn và vỉa hè hoạt động ra sao?",
+    options: [
+      "Hấp thụ và tích lũy quang năng từ ánh nắng mặt trời ban ngày, sau đó tự phát ra ánh sáng dịu suốt đêm",
+      "Cần lắp bóng đèn LED nhỏ bên dưới lòng đường",
+      "Phát quang nhờ phản ứng cháy chậm của phốt pho nguy hiểm",
+      "Chỉ phát sáng khi có người bước chân dẫm lên"
+    ],
+    correct: "Hấp thụ và tích lũy quang năng từ ánh nắng mặt trời ban ngày, sau đó tự phát ra ánh sáng dịu suốt đêm",
+    explanation: "Hỗn hợp bê tông trộn các hạt khoáng chất phát quang strontium aluminat an toàn. Sau vài giờ phơi nắng, con đường bê tông có thể phát ra ánh sáng xanh ngọc dịu mắt từ 8 đến 10 tiếng mà không tốn một watt điện.",
+    woodReward: 120
+  },
+  {
+    id: "mat_25",
+    category: "Kim Loại Kiến Trúc",
+    badge: "Thép Corten Độc Đáo",
+    question: "Thép Corten (Thép phong hóa - Weathering Steel) tại sao lại được các kiến trúc sư thế giới ưa chuộng cho mặt tiền công trình nghệ thuật?",
+    options: [
+      "Tự hình thành lớp gỉ oxit màu nâu đỏ bảo vệ bề mặt, ngăn chặn quá trình ăn mòn sâu mà không cần sơn",
+      "Vì thép này nhẹ nổi được trên mặt nước",
+      "Thép có hương thơm của gỗ đàn hương",
+      "Thép có thể tự uốn cong khi gặp thời tiết lạnh"
+    ],
+    correct: "Tự hình thành lớp gỉ oxit màu nâu đỏ bảo vệ bề mặt, ngăn chặn quá trình ăn mòn sâu mà không cần sơn",
+    explanation: "Nhờ chứa các nguyên tố hợp kim như đồng, crom, niken; khi tiếp xúc với khí quyển, thép Corten tạo ra một lớp gỉ đặc quánh bảo vệ lõi kim loại bên trong vĩnh cửu và mang vẻ đẹp hoài niệm, cổ kính.",
+    woodReward: 130
+  },
+  {
+    id: "mat_26",
+    category: "Đá Tự Nhiên Quý Hiếm",
+    badge: "Đá Cẩm Thạch Calacatta",
+    question: "Dòng đá cẩm thạch Calacatta và Carrara siêu quý hiếm có nguồn gốc từ mỏ đá vùng nào và đặc điểm nhận diện là gì?",
+    options: [
+      "Khai thác từ rặng núi đá vôi Apuan ở Ý, nền trắng muốt với các đường vân xám vàng vương giả",
+      "Khai thác dưới đáy vực Mariana sâu 11000m",
+      "Đá nhân tạo làm từ xỉ than nhiệt điện",
+      "Đá đen tuyền không có bất kỳ hoa văn nào"
+    ],
+    correct: "Khai thác từ rặng núi đá vôi Apuan ở Ý, nền trắng muốt với các đường vân xám vàng vương giả",
+    explanation: "Đá Calacatta từ vùng núi Carrara nước Ý trải qua hàng triệu năm biến chất địa chất cực hạn, sở hữu nền trắng tinh khôi cùng đường vân vàng xám thanh thoát, là biểu tượng xa hoa trong các cung điện và biệt thự.",
+    woodReward: 140
+  },
+  {
+    id: "mat_27",
+    category: "Chống Thấm Ngầm",
+    badge: "Đất Sét Bentonite",
+    question: "Tại sao màng đất sét Bentonite natri lại là vật liệu chống thấm ngầm tuyệt hảo cho tầng hầm và đáy hồ cảnh quan?",
+    options: [
+      "Khi tiếp xúc với nước, đất sét này trương nở thể tích gấp 15-20 lần tạo thành khối gel bịt kín mọi lỗ rò rỉ",
+      "Nó làm đông cứng nước thành đá ngay lập tức",
+      "Nó đẩy nước bay hơi lên không trung",
+      "Nó hút toàn bộ nước và biến mất không để lại dấu vết"
+    ],
+    correct: "Khi tiếp xúc với nước, đất sét này trương nở thể tích gấp 15-20 lần tạo thành khối gel bịt kín mọi lỗ rò rỉ",
+    explanation: "Bentonite là khoáng sét montmorillonite nguồn gốc tro núi lửa. Khả năng hút nước trương nở mãnh liệt tạo ra một lớp đệm màng nhầy không thấm nước, tự hàn gắn các vết rạn nứt nhỏ ở tầng hầm công trình.",
+    woodReward: 120
+  },
+  {
+    id: "mat_28",
+    category: "Kim Loại Siêu Bền",
+    badge: "Titanium Kiến Trúc",
+    question: "Bảo tàng Guggenheim Bilbao nổi tiếng thế giới được bọc hàng chục ngàn tấm Titanium (Titan). Ưu thế vô song của Titan là gì?",
+    options: [
+      "Khả năng kháng ăn mòn muối biển và mưa axit gần như vĩnh cửu, bền bỉ hàng thế kỷ",
+      "Titan rẻ hơn sắt thép xây dựng rất nhiều",
+      "Titan mềm dẻo như bơ có thể cắt bằng dao ăn",
+      "Titan có thể tan biến trong đất sau 10 năm"
+    ],
+    correct: "Khả năng kháng ăn mòn muối biển và mưa axit gần như vĩnh cửu, bền bỉ hàng thế kỷ",
+    explanation: "Titanium tạo ra lớp màng thụ động titan dioxit (TiO2) siêu mỏng nhưng cực kỳ bền vững, trơ hoàn toàn trước muối biển, mưa axit và các hóa chất ăn mòn, giữ vẻ sáng ánh kim bất biến cùng thời gian.",
+    woodReward: 130
+  },
+  {
+    id: "mat_29",
+    category: "Bê Tông Tương Lai",
+    badge: "Bê Tông UHPC",
+    question: "Bê tông siêu tính năng cao (UHPC - Ultra-High Performance Concrete) khác biệt gì so với bê tông thường?",
+    options: [
+      "Cường độ nén chịu lực vượt trên 150-200 MPa (gấp 5-6 lần bê tông thường) và gần như không có lỗ rỗng",
+      "Bê tông UHPC có thể uống được như nước suối",
+      "Bê tông UHPC làm từ cát đường và thạch cao",
+      "UHPC chỉ cứng được trong vòng 24 giờ rồi tự vỡ vụn"
+    ],
+    correct: "Cường độ nén chịu lực vượt trên 150-200 MPa (gấp 5-6 lần bê tông thường) và gần như không có lỗ rỗng",
+    explanation: "Nhờ phối liệu hạt siêu mịn silica fume kết hợp sợi thép cường độ cao, UHPC có cấu trúc vi mô đặc khít gần như tuyệt đối, giúp xây dựng những cây cầu siêu mỏng thanh thoát và nhịp lớn phi thường.",
+    woodReward: 140
+  },
+  {
+    id: "mat_30",
+    category: "Vật Liệu Nhẹ",
+    badge: "Bê Tông Khí Chưng Áp AAC",
+    question: "Gạch bê tông khí chưng áp (AAC) có đặc tính vật lý kỳ diệu nào giúp giảm đáng kể tải trọng móng ngôi nhà?",
+    options: [
+      "Nhẹ hơn gạch đất nung thông thường từ 2 đến 3 lần và có thể nổi bồng bềnh trên mặt nước",
+      "Trong suốt như mặt hồ nước mùa thu",
+      "Có thể kéo dài ra như dây cao su",
+      "Tự động tan chảy khi mùa đông đến"
+    ],
+    correct: "Nhẹ hơn gạch đất nung thông thường từ 2 đến 3 lần và có thể nổi bồng bềnh trên mặt nước",
+    explanation: "Quá trình phản ứng bột nhôm sinh ra hàng triệu bóng khí hydro li ti được chưng áp ở nhiệt độ 190°C và áp suất 12 atm, tạo ra khối gạch xốp cách âm cách nhiệt siêu nhẹ nổi được trên mặt nước.",
+    woodReward: 120
+  },
+  {
+    id: "mat_31",
+    category: "Xây Dựng Xanh",
+    badge: "Tro Bay & Xỉ Lò Cao",
+    question: "Việc thay thế một phần xi măng bằng Tro bay (Fly Ash) và Xỉ lò cao (GGBS) mang lại lợi ích gì cho môi trường và công trình?",
+    options: [
+      "Giảm phát thải khí nhà kính CO2, đồng thời tăng độ đặc chắc và chống ăn mòn sunfat cho bê tông",
+      "Làm bê tông có mùi thơm hoa hồng",
+      "Làm công trình nhẹ đi 90%",
+      "Giúp bê tông phát ra sóng điện thoại 5G"
+    ],
+    correct: "Giảm phát thải khí nhà kính CO2, đồng thời tăng độ đặc chắc và chống ăn mòn sunfat cho bê tông",
+    explanation: "Sản xuất xi măng truyền thống thải ra lượng CO2 khổng lồ. Tái chế tro bay và xỉ hạt lò cao tạo ra Bê Tông Xanh bền vững, phản ứng puzolan giúp cấu trúc bê tông ngày càng cứng chắc theo năm tháng.",
+    woodReward: 130
+  },
+  {
+    id: "mat_32",
+    category: "Điều Hòa Nhiệt",
+    badge: "Vật Liệu Biến Đổi Pha PCM",
+    question: "Vật liệu chuyển pha (PCM - Phase Change Materials) tích hợp vào tường nhà đóng vai trò như 'máy điều hòa tự nhiên' nhờ cơ chế nào?",
+    options: [
+      "Hấp thu nhiệt lượng nóng vào ban ngày khi tan chảy và giải phóng nhiệt làm ấm phòng ban đêm khi đông đặc",
+      "Chứa quạt gió mini chạy bằng pin mặt trời",
+      "Liên tục phun hơi nước sương mù vào trong phòng",
+      "Tự động thay đổi kích thước căn phòng theo thời tiết"
+    ],
+    correct: "Hấp thu nhiệt lượng nóng vào ban ngày khi tan chảy và giải phóng nhiệt làm ấm phòng ban đêm khi đông đặc",
+    explanation: "PCM lưu trữ nhiệt ẩn qua quá trình biến đổi pha lỏng - rắn. Khi ban ngày trời nóng, PCM tan chảy hấp thu bớt nhiệt thừa; khi đêm xuống trời lạnh, PCM đông kết tỏa nhiệt lại, giữ nhiệt độ phòng luôn ổn định dễ chịu.",
+    woodReward: 140
+  }
+];
+
+// =========================================================================
+// NGÂN HÀNG CÂU HỎI MA TRẬN PHÂN LOẠI 2 THÙNG GỖ (WOOD CRATE SORTING MATRIX)
+// =========================================================================
+export const MATRIX_SORTING_QUESTIONS = [
+  {
+    id: "matrix_01",
+    topic: "Siêu Vật Liệu Tương Lai & Kỹ Thuật Đạt Chuẩn",
+    prompt: "Nhấp vào từng ô thẻ trong ma trận để phân loại: Thẻ ĐÚNG sẽ rơi vào Thùng Gỗ Đạt Chuẩn (+60 🪵), Thẻ SAI sẽ rơi vào Thùng Gỗ Phế Liệu (+0 🪵)!",
+    rewardPerCorrect: 60,
+    cards: [
+      {
+        id: "c1_1",
+        name: "Aerogel Siêu Cách Nhiệt",
+        desc: "Vật liệu rắn nhẹ nhất thế giới (99.8% không khí), cách nhiệt gấp 5 lần sợi thủy tinh.",
+        icon: "💨",
+        isCorrect: true,
+        explanation: "Chính xác! Aerogel có cấu trúc nano xốp rỗng triệt tiêu sự dẫn nhiệt, là vật liệu cách nhiệt đỉnh cao thế giới."
+      },
+      {
+        id: "c1_2",
+        name: "Bê Tông Sinh Học Bacillus",
+        desc: "Cấy vi khuẩn tự sinh tinh thể đá vôi (CaCO3) hàn kín vết nứt khi ngấm nước mưa.",
+        icon: "🦠",
+        isCorrect: true,
+        explanation: "Chính xác! Vi khuẩn Bacillus dạng bào tử ngủ đông, khi bê tông nứt nước ngấm vào sẽ kích hoạt vi khuẩn hàn gắn vết nứt."
+      },
+      {
+        id: "c1_3",
+        name: "Sợi Carbon CFRP",
+        desc: "Nhẹ hơn thép 4 lần nhưng chịu lực kéo gấp 5-10 lần, gia cường chống động đất.",
+        icon: "🧵",
+        isCorrect: true,
+        explanation: "Chính xác! Sợi carbon là vật liệu composite chịu kéo siêu hạng, không rỉ sét và bền bỉ phi thường."
+      },
+      {
+        id: "c1_4",
+        name: "Gỗ Trong Suốt Cellulose",
+        desc: "Tách bỏ lignin màu nâu và ngâm polymer quang học cho 85% ánh sáng đi qua.",
+        icon: "🪵",
+        isCorrect: true,
+        explanation: "Chính xác! Gỗ trong suốt dẫn truyền ánh sáng tự nhiên tốt mà vẫn dẻo dai khó vỡ hơn kính thông thường."
+      },
+      {
+        id: "c1_5",
+        name: "Cát Biển Đổ Bê Tông Móng",
+        desc: "Dùng cát biển chưa qua xử lý rửa mặn để cốt thép nhanh cứng và bóng sáng.",
+        icon: "🌊",
+        isCorrect: false,
+        explanation: "SAI LẦM TAI HẠI! Muối NaCl trong cát biển ăn mòn điện hóa cốt thép cực nhanh, làm nứt vỡ sập đổ công trình!"
+      },
+      {
+        id: "c1_6",
+        name: "Đắp Móng Bằng Bùn Mùn",
+        desc: "Dùng bùn ao và lá mục hữu cơ đắp móng để nền nhà êm ái đàn hồi.",
+        icon: "🍂",
+        isCorrect: false,
+        explanation: "SAI KỸ THUẬT! Đất bùn mùn hữu cơ gây lún sụt nghiêm trọng. Móng nhà bắt buộc phải dùng đá hộc và cát vàng đầm chặt!"
+      }
+    ]
+  },
+  {
+    id: "matrix_02",
+    topic: "Vật Liệu Hiếm & Công Nghệ Bền Vững",
+    prompt: "Phân loại các thẻ kiến thức: Nhấp để chuyển vào Thùng Gỗ ĐÚNG (+60 🪵) hoặc Thùng Gỗ SAI (+0 🪵)!",
+    rewardPerCorrect: 60,
+    cards: [
+      {
+        id: "c2_1",
+        name: "Kính Điện Thông Minh",
+        desc: "Chỉ cần xung điện nhỏ là bề mặt kính tự chuyển màu sẫm cản 98% nhiệt nắng.",
+        icon: "🪟",
+        isCorrect: true,
+        explanation: "Chính xác! Kính điện thông minh đổi màu ngăn bức xạ nhiệt mặt trời, giảm chi phí máy lạnh tối đa."
+      },
+      {
+        id: "c2_2",
+        name: "Thép Corten Phong Hóa",
+        desc: "Tự sinh lớp gỉ oxit bảo vệ màu cam đỏ cổ kính, không cần tốn tiền sơn bảo dưỡng.",
+        icon: "🔩",
+        isCorrect: true,
+        explanation: "Chính xác! Thép Corten tạo lớp màng oxit đồng nhất bảo vệ lõi kim loại vĩnh viễn trước mưa nắng."
+      },
+      {
+        id: "c2_3",
+        name: "Đất Sét Trương Nở Bentonite",
+        desc: "Gặp nước phình to gấp 15 lần tạo màng gel chống thấm đáy tầng hầm tuyệt đối.",
+        icon: "🧱",
+        isCorrect: true,
+        explanation: "Chính xác! Bentonite là vật liệu chống thấm ngầm tự nhiên siêu hạng nhờ khả năng trương nở bịt kín khe nứt."
+      },
+      {
+        id: "c2_4",
+        name: "Bê Tông Phát Quang Trong Đêm",
+        desc: "Hấp thụ ánh sáng mặt trời ban ngày và tự tỏa sáng lung linh suốt đêm.",
+        icon: "✨",
+        isCorrect: true,
+        explanation: "Chính xác! Tích hợp tinh thể phát quang an toàn giúp vỉa hè tự phát sáng mà không cần kéo dây điện."
+      },
+      {
+        id: "c2_5",
+        name: "Nung Gạch Sét Ở 50°C",
+        desc: "Gạch đất sét ướt ngập nước nung ở 50°C là đã hóa đá kiên cố chịu tải 100 tấn.",
+        icon: "🔥",
+        isCorrect: false,
+        explanation: "SAI NẶNG! Ở 50°C đất sét chỉ hơi ấm lên và còn nhão nhoét. Muốn hóa đá gạch phải nung ở nhiệt độ cao 1000°C - 1200°C!"
+      },
+      {
+        id: "c2_6",
+        name: "Dầm Nhà Bằng Dây Chì Dẻo",
+        desc: "Dùng thanh chì dẻo làm cốt chịu lực cho dầm nhà để dầm uốn cong thoải mái.",
+        icon: "⚠️",
+        isCorrect: false,
+        explanation: "NGUY HIỂM CHẾT NGƯỜI! Chì mềm yếu không chịu được lực kéo. Cốt dầm nhà bắt buộc phải dùng thép gân cường độ cao!"
+      }
+    ]
+  },
+  {
+    id: "matrix_03",
+    topic: "Vật Liệu Nhẹ & Kỹ Thuật Bảo Dưỡng Công Trình",
+    prompt: "Chọn lọc các nhận định xây dựng: Nhấp để kiểm tra và nhận 🪵 Gỗ khi rơi trúng Thùng ĐÚNG!",
+    rewardPerCorrect: 60,
+    cards: [
+      {
+        id: "c3_1",
+        name: "Gạch Khí Chưng Áp AAC",
+        desc: "Chứa hàng triệu bọt khí li ti, siêu nhẹ nổi được bồng bềnh trên mặt nước.",
+        icon: "☁️",
+        isCorrect: true,
+        explanation: "Chính xác! Gạch AAC nhẹ hơn gạch thường 3 lần, cách nhiệt gấp 6 lần và nổi được trên nước."
+      },
+      {
+        id: "c3_2",
+        name: "Tro Bay Xỉ Lò Cao (Bê Tông Xanh)",
+        desc: "Tái chế phụ phẩm công nghiệp giúp bê tông đặc chắc và giảm khí thải CO2.",
+        icon: "🌱",
+        isCorrect: true,
+        explanation: "Chính xác! Bê tông xanh dùng tro bay tăng khả năng chống ăn mòn hóa chất và bảo vệ môi trường."
+      },
+      {
+        id: "c3_3",
+        name: "Vật Liệu Chuyển Pha PCM",
+        desc: "Tan chảy ban ngày hấp thu nhiệt nóng, đông đặc ban đêm sưởi ấm phòng ngủ.",
+        icon: "🌡️",
+        isCorrect: true,
+        explanation: "Chính xác! PCM như túi trữ nhiệt thông minh giữ nhiệt độ phòng luôn ổn định quanh mức 24-26°C."
+      },
+      {
+        id: "c3_4",
+        name: "Đá Granite Hoa Cương",
+        desc: "Đá macma xâm nhập độ cứng vượt trội, chống trầy xước và chống thấm nước xuất sắc.",
+        icon: "🪨",
+        isCorrect: true,
+        explanation: "Chính xác! Đá hoa cương hình thành sâu trong lòng đất, độ cứng chỉ thua kim cương, hoàn hảo cho móng và sàn."
+      },
+      {
+        id: "c3_5",
+        name: "Đốt Lửa Nung Bê Tông Vừa Đổ",
+        desc: "Bê tông vừa đổ xong phải dùng lửa khò nung nóng cho nước bốc hơi nhanh.",
+        icon: "🚫",
+        isCorrect: false,
+        explanation: "SAI NGUY HIỂM! Hơ lửa làm mất nước khiến xi măng không thể thủy hóa, bê tông sẽ rạn nứt vỡ vụn. Phải tưới nước dưỡng ẩm!"
+      },
+      {
+        id: "c3_6",
+        name: "Xếp Gạch Tường Không Cần Vữa",
+        desc: "Chỉ cần xếp gạch mộc khít nhau không cần vữa xi măng để dễ tháo dỡ.",
+        icon: "🧱",
+        isCorrect: false,
+        explanation: "SAI KỸ THUẬT! Tường gạch không có mạch vữa xi măng kết dính sẽ đổ sập ngay lập tức khi có rung chấn nhẹ!"
+      }
+    ]
+  },
+  {
+    id: "matrix_04",
+    topic: "Kim Loại Hiếm & Kính Kiến Trúc Hiện Đại",
+    prompt: "Khám phá vật liệu siêu phẩm: Phân loại đúng rơi vào Thùng Gỗ ĐÚNG nhận ngay +60 🪵 Gỗ!",
+    rewardPerCorrect: 60,
+    cards: [
+      {
+        id: "c4_1",
+        name: "Vỏ Titanium (Titan)",
+        desc: "Trơ trước muối biển và mưa axit vĩnh cửu, dùng ốp mái các bảo tàng kiệt tác.",
+        icon: "🛡️",
+        isCorrect: true,
+        explanation: "Chính xác! Titan tạo màng oxit tự nhiên bảo vệ vĩnh cửu, không bị ăn mòn dù phơi nắng mưa hàng trăm năm."
+      },
+      {
+        id: "c4_2",
+        name: "Bê Tông Siêu Tính Năng UHPC",
+        desc: "Cường độ nén trên 150-200 MPa (gấp 5-6 lần bê tông thường), nhịp cầu siêu mỏng.",
+        icon: "🏗️",
+        isCorrect: true,
+        explanation: "Chính xác! Bê tông UHPC hạt nano đặc khít chịu lực nén khủng khiếp, tạo nên những kiệt tác nhịp lớn thanh thoát."
+      },
+      {
+        id: "c4_3",
+        name: "Kính Dán An Toàn PVB",
+        desc: "Kẹp màng phim dẻo ở giữa, khi va đập mạnh mảnh kính dính chặt không văng ra ngoài.",
+        icon: "🪟",
+        isCorrect: true,
+        explanation: "Chính xác! Kính dán nhiều lớp giữ an toàn tuyệt đối cho người bên trong, cản đạn và cản trộm đột nhập."
+      },
+      {
+        id: "c4_4",
+        name: "Đá Cẩm Thạch Calacatta Ý",
+        desc: "Đá biến chất trắng muốt với vân vàng xám quý phái từ dãy núi Apuan nước Ý.",
+        icon: "🏛️",
+        isCorrect: true,
+        explanation: "Chính xác! Calacatta là dòng đá cẩm thạch sang trọng đắt đỏ bậc nhất thế giới trong nghệ thuật kiến trúc."
+      },
+      {
+        id: "c4_5",
+        name: "Kính Cửa Sổ Mỏng 1mm",
+        desc: "Lắp kính siêu mỏng không tôi nhiệt cho nhà cao tầng để cửa nhẹ bớt tải trọng.",
+        icon: "⚡",
+        isCorrect: false,
+        explanation: "CỰC KỲ NGUY HIỂM! Kính mỏng 1mm gặp gió bão sẽ vỡ vụn thành hàng nghìn mảnh sắc nhọn gây sát thương. Phải dùng kính cường lực 8-12mm!"
+      },
+      {
+        id: "c4_6",
+        name: "Gỗ Tươi Rừng Chặt Dùng Ngay",
+        desc: "Cây gỗ vừa đốn ngã đem đóng cửa sổ ngay để giữ màu xanh tươi mát của nhựa cây.",
+        icon: "🌲",
+        isCorrect: false,
+        explanation: "SAI NẶNG! Gỗ tươi chứa đầy nước nhựa mao dẫn sẽ co ngót, nứt toác, cong vênh và bị mọt ăn rỗng. Gỗ phải qua tẩm sấy đạt ẩm 12%!"
+      }
+    ]
   }
 ];
 
