@@ -7,6 +7,7 @@ import {
 } from 'lucide-react';
 import { QUIZ_DATA } from './data/quizData';
 import { getTheoryForQuiz } from './data/chapterTheoryData';
+import { generateSimilarQuestionData } from './utils/similarQuestionGenerator';
 import AIQuizGenerator from './AIQuizGenerator';
 import { GoogleGenAI } from '@google/genai';
 
@@ -228,27 +229,75 @@ Hãy giải thích ngắn gọn, súc tích (dưới 150 từ), trực quan, d�
     }
   };
 
-  // Trợ giúp AI khi học sinh gặp câu khó trong lúc làm bài test
+  // Trợ giúp AI khi học sinh gặp câu khó: Sinh câu hỏi tương tự đổi số liệu và hướng dẫn giải chi tiết từng bước
   const handleOpenQuestionHelp = (q, idx) => {
-    const theory = getTheoryForQuiz(activeQuiz);
-    
-    // Xây dựng hướng dẫn tư duy sư phạm không làm lộ đáp án
-    let thinkingGuide = "Đọc kỹ đề bài, xác định từ khóa và công thức tương ứng trong lý thuyết.";
-    if (q.type === 'true_false') {
-      thinkingGuide = "Đối chiếu câu khẳng định với định nghĩa chuẩn trong sách giáo khoa. Chỉ cần một trường hợp ngoại lệ sai thì câu đó là Sai.";
-    } else if (q.type === 'mcq') {
-      thinkingGuide = "Dùng phương pháp loại trừ: Loại ngay các phương án có dấu hoặc đơn vị vô lý trước, sau đó tính toán hoặc so sánh 2 phương án còn lại.";
-    } else if (q.type === 'fill_blank') {
-      thinkingGuide = "Nhớ lại thuật ngữ khoa học hoặc số tự nhiên thỏa mãn điều kiện đề bài.";
-    }
-
+    const similarData = generateSimilarQuestionData(q, activeQuiz?.subject, activeQuiz?.title);
     setQuestionHelpModal({
       questionIndex: idx + 1,
       question: q,
-      thinkingGuide,
-      theorySummary: theory?.sections?.[0]?.content || "Ôn tập lại các khái niệm cơ bản của bài học.",
-      explanationSnippet: q.explanation || "Nắm vững lý thuyết để tìm ra câu trả lời chính xác."
+      similarData,
+      isAiGenerating: false
     });
+  };
+
+  // Tạo thêm 1 bài tập tương tự khác bằng AI
+  const handleGenerateAnotherAiExample = async () => {
+    if (!questionHelpModal || questionHelpModal.isAiGenerating) return;
+    setQuestionHelpModal(prev => ({ ...prev, isAiGenerating: true }));
+
+    try {
+      const apiKey = localStorage.getItem('study_app_gemini_key');
+      const q = questionHelpModal.question;
+
+      if (apiKey && apiKey.trim()) {
+        const ai = new GoogleGenAI({ apiKey: apiKey.trim(), dangerouslyAllowBrowser: true });
+        const prompt = `Bạn là giáo viên dạy giỏi môn ${activeQuiz?.subject || 'Toán'}.
+Học sinh đang gặp khó khăn ở câu hỏi sau: "${q.text}".
+Hãy tạo:
+1. Một câu hỏi tương tự CÙNG DẠNG nhưng THAY ĐỔI SỐ LIỆU và ngữ cảnh (dạng bài tập mẫu).
+2. Hướng dẫn giải chi tiết từng bước cho câu hỏi tương tự đó (Bước 1, Bước 2, Bước 3, Kết luận).
+3. Mẹo áp dụng để học sinh tự giải được câu hỏi gốc của mình mà không bị lộ đáp án.
+Trả về định dạng JSON hợp lệ dạng:
+{
+  "topic": "Tên dạng bài",
+  "similarQuestion": "Câu hỏi tương tự đã đổi số liệu...",
+  "similarOptions": ["Phương án A", "Phương án B", "Phương án C", "Phương án D"],
+  "similarCorrect": "Phương án đúng của câu tương tự",
+  "steps": [
+    { "stepNumber": 1, "title": "Bước 1: ...", "detail": "..." },
+    { "stepNumber": 2, "title": "Bước 2: ...", "detail": "..." },
+    { "stepNumber": 3, "title": "Bước 3: ...", "detail": "..." },
+    { "stepNumber": 4, "title": "Kết luận", "detail": "..." }
+  ],
+  "tipForOriginal": "Mẹo áp dụng cho câu của bạn..."
+}
+Chỉ trả về JSON thuần túy, không có chữ thừa, không dùng markdown.`;
+
+        const response = await ai.models.generateContent({
+          model: 'gemini-2.5-flash',
+          contents: prompt
+        });
+
+        let jsonStr = response.text || '';
+        jsonStr = jsonStr.replace(/\s*```json/g, '').replace(/```\s*$/g, '').trim();
+        const parsed = JSON.parse(jsonStr);
+        setQuestionHelpModal(prev => ({
+          ...prev,
+          similarData: {
+            ...parsed,
+            originalText: q.text
+          },
+          isAiGenerating: false
+        }));
+      } else {
+        setTimeout(() => {
+          setQuestionHelpModal(prev => ({ ...prev, isAiGenerating: false }));
+        }, 400);
+      }
+    } catch (e) {
+      console.error(e);
+      setQuestionHelpModal(prev => ({ ...prev, isAiGenerating: false }));
+    }
   };
 
   // Xử lý nộp câu hỏi đơn lẻ
@@ -758,65 +807,143 @@ Hãy giải thích ngắn gọn, súc tích (dưới 150 từ), trực quan, d�
 
         </div>
 
-        {/* MODAL GỢI Ý & ÔN LÝ THUYẾT AI KHI GẶP CÂU KHÓ */}
-        {questionHelpModal && (
-          <div className="fixed inset-0 z-[10000] bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4 animate-fade-in">
-            <div className="bg-white rounded-3xl max-w-xl w-full p-6 shadow-2xl border border-slate-200 space-y-4">
-              
-              <div className="flex items-center justify-between pb-3 border-b">
-                <div className="flex items-center gap-2">
-                  <div className="w-8 h-8 rounded-xl bg-amber-100 text-amber-700 flex items-center justify-center font-black text-sm">
-                    {questionHelpModal.questionIndex}
+        {/* MODAL GỢI Ý: BÀI TẬP TƯƠNG TỰ ĐỔI SỐ LIỆU & HƯỚNG DẪN GIẢI CHI TIẾT */}
+        {questionHelpModal && (() => {
+          const sim = questionHelpModal.similarData;
+          return (
+            <div className="fixed inset-0 z-[10000] bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-3 sm:p-4 animate-fade-in">
+              <div className="bg-white rounded-3xl max-w-2xl w-full max-h-[90vh] overflow-y-auto p-5 sm:p-7 shadow-2xl border border-slate-200 space-y-4">
+                
+                {/* Header Modal */}
+                <div className="flex items-center justify-between pb-3 border-b border-slate-100">
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 rounded-2xl bg-amber-100 text-amber-700 flex items-center justify-center font-black text-sm shadow-sm flex-shrink-0">
+                      <Lightbulb size={22} className="text-amber-600 fill-amber-400" />
+                    </div>
+                    <div>
+                      <h3 className="font-black text-slate-800 text-base sm:text-lg">
+                        Bài Tập Tương Tự & Hướng Dẫn Giải Mẫu
+                      </h3>
+                      <p className="text-xs text-slate-400">
+                        Hỗ trợ câu {questionHelpModal.questionIndex} • {sim?.topic || activeQuiz?.subject}
+                      </p>
+                    </div>
                   </div>
-                  <h3 className="font-black text-slate-800 text-base">
-                    Gợi Ý & Ôn Lý Thuyết Câu {questionHelpModal.questionIndex}
-                  </h3>
+                  <button
+                    onClick={() => setQuestionHelpModal(null)}
+                    className="p-1.5 text-slate-400 hover:text-slate-600 hover:bg-slate-100 rounded-xl transition cursor-pointer"
+                  >
+                    <X size={20} />
+                  </button>
                 </div>
-                <button
-                  onClick={() => setQuestionHelpModal(null)}
-                  className="p-1.5 text-slate-400 hover:text-slate-600 hover:bg-slate-100 rounded-xl transition"
-                >
-                  <X size={18} />
-                </button>
-              </div>
 
-              {/* Tóm tắt câu hỏi */}
-              <div className="bg-slate-50 p-3.5 rounded-2xl border border-slate-200 text-xs sm:text-sm font-semibold text-slate-800">
-                {questionHelpModal.question.text}
-              </div>
+                {/* KHUNG 1: CÂU HỎI GỐC BẠN ĐANG LÀM */}
+                <div className="bg-slate-50 p-4 rounded-2xl border border-slate-200 space-y-1">
+                  <span className="text-[11px] font-black uppercase tracking-wider text-slate-400 block">
+                    📌 Câu hỏi trong bài thi của bạn:
+                  </span>
+                  <p className="text-xs sm:text-sm font-bold text-slate-800 leading-relaxed">
+                    {questionHelpModal.question.text}
+                  </p>
+                </div>
 
-              {/* Hướng dẫn tư duy sư phạm */}
-              <div className="bg-indigo-50/70 p-4 rounded-2xl border border-indigo-200 space-y-1.5 text-xs sm:text-sm">
-                <span className="font-black text-indigo-900 flex items-center gap-1.5">
-                  <Brain size={16} className="text-indigo-600" /> Hướng Dẫn Tư Duy Của Thầy/Cô AI:
-                </span>
-                <p className="text-indigo-950 font-medium leading-relaxed">
-                  {questionHelpModal.thinkingGuide}
-                </p>
-              </div>
+                {/* KHUNG 2: BÀI TẬP TƯƠNG TỰ CÙNG DẠNG (ĐÃ THAY ĐỔI SỐ LIỆU / NGỮ CẢNH) */}
+                {sim && (
+                  <div className="bg-gradient-to-br from-indigo-50/80 via-purple-50/50 to-sky-50/60 p-4 sm:p-5 rounded-2xl border-2 border-indigo-200 shadow-sm space-y-2">
+                    <div className="flex items-center justify-between flex-wrap gap-2">
+                      <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-black bg-indigo-600 text-white shadow-sm">
+                        <Sparkles size={13} className="text-yellow-300" />
+                        ⭐ BÀI TẬP TƯƠNG TỰ CÙNG DẠNG (ĐÃ ĐỔI SỐ LIỆU)
+                      </span>
+                      <span className="text-[11px] font-bold text-indigo-700 bg-indigo-100/70 px-2.5 py-0.5 rounded-lg">
+                        {sim.topic}
+                      </span>
+                    </div>
 
-              {/* Kiến thức lý thuyết nền tảng */}
-              <div className="bg-amber-50/70 p-4 rounded-2xl border border-amber-200 space-y-1.5 text-xs sm:text-sm">
-                <span className="font-black text-amber-900 flex items-center gap-1.5">
-                  <Lightbulb size={16} className="text-amber-600 fill-amber-400" /> Kiến Thức Lý Thuyết Liên Quan:
-                </span>
-                <p className="text-amber-950 font-medium leading-relaxed">
-                  {questionHelpModal.explanationSnippet}
-                </p>
-              </div>
+                    <h4 className="text-sm sm:text-base font-black text-indigo-950 leading-relaxed pt-1">
+                      {sim.similarQuestion}
+                    </h4>
 
-              <div className="pt-2 flex justify-end">
-                <button
-                  onClick={() => setQuestionHelpModal(null)}
-                  className="px-6 py-2.5 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white font-bold text-xs sm:text-sm rounded-xl shadow transition active:scale-95 cursor-pointer"
-                >
-                  Em Đã Hiểu! Tiếp Tục Làm Bài ➔
-                </button>
-              </div>
+                    {/* Các phương án mẫu của câu tương tự nếu có */}
+                    {sim.similarOptions && Array.isArray(sim.similarOptions) && sim.similarOptions.length > 0 && (
+                      <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 pt-1">
+                        {sim.similarOptions.map((opt, oIdx) => (
+                          <div 
+                            key={oIdx}
+                            className={`p-2 rounded-xl text-xs font-bold text-center border transition ${
+                              opt === sim.similarCorrect 
+                                ? 'bg-emerald-100 text-emerald-800 border-emerald-300 ring-2 ring-emerald-300' 
+                                : 'bg-white text-slate-600 border-slate-200'
+                            }`}
+                          >
+                            <span className="opacity-60 mr-1">{['A', 'B', 'C', 'D'][oIdx] || ''}.</span>
+                            {opt}
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                )}
 
+                {/* KHUNG 3: HƯỚNG DẪN GIẢI CHI TIẾT TỪNG BƯỚC CHO BÀI TẬP TƯƠNG TỰ */}
+                {sim?.steps && (
+                  <div className="bg-emerald-50/70 p-4 sm:p-5 rounded-2xl border border-emerald-200/80 space-y-3">
+                    <div className="flex items-center gap-2 text-emerald-900 font-black text-xs sm:text-sm">
+                      <BookOpenCheck size={18} className="text-emerald-600" />
+                      <span>📝 Hướng dẫn cách giải bài cụ thể từng bước (Bài giải mẫu):</span>
+                    </div>
+
+                    <div className="space-y-2.5">
+                      {sim.steps.map((st, sIdx) => (
+                        <div key={sIdx} className="bg-white/90 p-3 rounded-xl border border-emerald-100 shadow-sm flex items-start gap-2.5">
+                          <span className="w-5 h-5 rounded-full bg-emerald-600 text-white font-black text-[11px] flex items-center justify-center flex-shrink-0 mt-0.5">
+                            {st.stepNumber || sIdx + 1}
+                          </span>
+                          <div className="text-xs leading-relaxed space-y-0.5">
+                            <strong className="text-emerald-950 font-bold block">{st.title}</strong>
+                            <p className="text-slate-700 font-medium whitespace-pre-line">{st.detail}</p>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {/* KHUNG 4: MẸO ÁP DỤNG NGAY CHO CÂU HỎI TRONG BÀI THI CỦA BẠN */}
+                {sim?.tipForOriginal && (
+                  <div className="bg-amber-50 p-4 rounded-2xl border border-amber-200 text-xs leading-relaxed text-amber-950 shadow-sm">
+                    <div className="font-black text-amber-900 flex items-center gap-1.5 mb-1 text-xs sm:text-sm">
+                      <Zap size={16} className="text-amber-600 fill-amber-500" />
+                      <span>Mẹo áp dụng trực tiếp cho câu hỏi của bạn:</span>
+                    </div>
+                    <p className="font-medium pl-5">{sim.tipForOriginal}</p>
+                  </div>
+                )}
+
+                {/* ACTION BAR: ĐỔI VÍ DỤ KHÁC HOẶC QUAY LẠI LÀM BÀI */}
+                <div className="pt-2 flex flex-col sm:flex-row items-center justify-between gap-3 border-t border-slate-100">
+                  <button
+                    onClick={handleGenerateAnotherAiExample}
+                    disabled={questionHelpModal.isAiGenerating}
+                    className="text-xs font-bold text-indigo-600 hover:text-indigo-800 flex items-center gap-1.5 py-2 px-3 rounded-xl hover:bg-indigo-50 transition cursor-pointer disabled:opacity-50"
+                  >
+                    <Sparkles size={15} className={questionHelpModal.isAiGenerating ? "animate-spin" : ""} />
+                    <span>{questionHelpModal.isAiGenerating ? 'AI đang tạo ví dụ mới...' : '✨ Nhờ AI sinh thêm 1 ví dụ khác'}</span>
+                  </button>
+
+                  <button
+                    onClick={() => setQuestionHelpModal(null)}
+                    className="w-full sm:w-auto px-7 py-3 bg-gradient-to-r from-indigo-600 via-indigo-700 to-purple-600 hover:brightness-110 text-white font-black text-xs sm:text-sm rounded-xl shadow-md transition transform active:scale-95 flex items-center justify-center gap-2 cursor-pointer"
+                  >
+                    <span>Em Đã Hiểu Cách Giải! Quay Lại Tự Làm Câu Này</span>
+                    <ArrowRight size={16} />
+                  </button>
+                </div>
+
+              </div>
             </div>
-          </div>
-        )}
+          );
+        })()}
 
       </div>
     );
