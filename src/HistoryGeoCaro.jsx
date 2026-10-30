@@ -204,6 +204,33 @@ export default function HistoryGeoCaro({ addReward }) {
   const [currentRound, setCurrentRound] = useState(1);
   const [isGrandVictory, setIsGrandVictory] = useState(false);
 
+  // Mức độ rõ của bản đồ Việt Nam: 'subtle' (dịu nhẹ) | 'clear' (rõ nét - mặc định) | 'vivid' (siêu rõ)
+  const [mapClarity, setMapClarity] = useState('clear');
+  const clarityConfig = {
+    subtle: {
+      mapOpacity: 'opacity-55',
+      tileBg: 'bg-white/80 hover:bg-white',
+      tileBorder: 'border-slate-200/90',
+      boardBg: 'bg-gradient-to-br from-sky-50 via-slate-50 to-blue-50/50',
+      label: 'Dịu nhẹ'
+    },
+    clear: {
+      mapOpacity: 'opacity-85',
+      tileBg: 'bg-white/60 hover:bg-white/95',
+      tileBorder: 'border-slate-300/80',
+      boardBg: 'bg-gradient-to-br from-sky-100/70 via-blue-50/80 to-indigo-100/60',
+      label: 'Rõ nét'
+    },
+    vivid: {
+      mapOpacity: 'opacity-100',
+      tileBg: 'bg-white/40 hover:bg-white/85',
+      tileBorder: 'border-slate-400/80',
+      boardBg: 'bg-gradient-to-br from-sky-200/60 via-blue-100/70 to-indigo-200/50',
+      label: 'Siêu rõ'
+    }
+  };
+  const activeClarity = clarityConfig[mapClarity] || clarityConfig.clear;
+
   // Màn hình Hành Trình Ảo sau khi chiến thắng
   const [showVirtualJourney, setShowVirtualJourney] = useState(false);
   const [activeStationIndex, setActiveStationIndex] = useState(0);
@@ -505,43 +532,206 @@ export default function HistoryGeoCaro({ addReward }) {
       <div className="flex flex-col md:flex-row gap-8">
         
         {/* ========================================================================= */}
-        {/* BÀN CỜ VỚI HÌNH CHÌM BẢN ĐỒ VIỆT NAM (KHÔNG QUÁ NỔI BẬT NHƯNG ĐỦ THẤY)   */}
+        {/* BÀN CỜ VỚI HÌNH BẢN ĐỒ VIỆT NAM RÕ NÉT & CÁC Ô VUÔNG TRẮNG TINH          */}
         {/* ========================================================================= */}
         <div className="flex-1 max-w-lg mx-auto w-full relative">
           
-          {/* Khung chứa bàn cờ nền sáng */}
-          <div className="relative p-2.5 sm:p-3 bg-gray-100/90 rounded-2xl border border-gray-200 shadow-inner overflow-hidden aspect-square">
+          {/* Tùy chỉnh độ rõ bản đồ Việt Nam */}
+          <div className="flex items-center justify-between mb-2.5 px-1">
+            <span className="text-xs font-bold text-gray-700 flex items-center gap-1.5">
+              <Eye size={15} className="text-primary" />
+              <span>Bản đồ Việt Nam:</span>
+            </span>
+            <div className="inline-flex rounded-xl bg-gray-100 p-0.5 text-xs font-medium border border-gray-200 shadow-inner">
+              {(['subtle', 'clear', 'vivid']).map(mode => (
+                <button
+                  key={mode}
+                  type="button"
+                  onClick={() => setMapClarity(mode)}
+                  className={`px-2.5 py-1 rounded-lg transition-all cursor-pointer font-bold ${
+                    mapClarity === mode
+                      ? mode === 'vivid' 
+                        ? 'bg-emerald-600 text-white shadow-sm'
+                        : mode === 'clear'
+                          ? 'bg-primary text-white shadow-sm'
+                          : 'bg-white text-gray-800 shadow-sm'
+                      : 'text-gray-500 hover:text-gray-800'
+                  }`}
+                >
+                  {clarityConfig[mode].label}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* Khung chứa bàn cờ nền biển tươi sáng */}
+          <div className={`relative p-2.5 sm:p-3 ${activeClarity.boardBg} rounded-2xl border border-sky-200/80 shadow-inner overflow-hidden aspect-square transition-all duration-300`}>
             
-            {/* HÌNH CHÌM BẢN ĐỒ VIỆT NAM (SUBTLE WATERMARK ĐỦ THẤY) */}
-            <div className="absolute inset-0 pointer-events-none flex items-center justify-center p-3 select-none">
+            {/* HÌNH BẢN ĐỒ VIỆT NAM SẮC NÉT, ĐẦY ĐỦ HẢI ĐẢO & ĐỊA DANH */}
+            <div className={`absolute inset-0 pointer-events-none flex items-center justify-center p-2 select-none transition-opacity duration-300 ${activeClarity.mapOpacity}`}>
               <svg 
-                viewBox="0 0 350 480" 
-                className="w-full h-full text-indigo-900/[0.12] fill-current"
+                viewBox="0 0 420 500" 
+                className="w-full h-full"
                 xmlns="http://www.w3.org/2000/svg"
               >
-                {/* Dải đất hình chữ S Việt Nam */}
-                <path d="M 120 30 C 145 25, 175 35, 185 55 C 190 70, 170 85, 155 95 C 140 105, 145 125, 150 145 C 155 165, 170 185, 180 205 C 195 235, 205 265, 200 295 C 195 325, 180 345, 160 365 C 140 385, 125 410, 115 435 C 105 455, 85 465, 75 450 C 65 435, 75 415, 85 395 C 95 375, 110 355, 120 335 C 130 315, 140 285, 135 255 C 130 225, 115 205, 105 185 C 95 165, 90 135, 95 115 C 100 85, 95 55, 120 30 Z" />
-                
+                <defs>
+                  <linearGradient id="vnLandGradient" x1="0%" y1="0%" x2="60%" y2="100%">
+                    <stop offset="0%" stopColor="#10b981" />
+                    <stop offset="40%" stopColor="#059669" />
+                    <stop offset="70%" stopColor="#047857" />
+                    <stop offset="100%" stopColor="#065f46" />
+                  </linearGradient>
+                  <filter id="mapShadow" x="-10%" y="-10%" width="120%" height="120%">
+                    <feDropShadow dx="0" dy="2" stdDeviation="3" floodColor="#047857" floodOpacity="0.3" />
+                  </filter>
+                </defs>
+
+                {/* Lưới kinh tuyến & vĩ tuyến hải đồ */}
+                <line x1="20" y1="90" x2="400" y2="90" stroke="#0284c7" strokeWidth="0.8" strokeDasharray="3 4" opacity="0.35" />
+                <text x="25" y="86" fontSize="8" fill="#0284c7" opacity="0.65" fontFamily="sans-serif">22°B</text>
+
+                <line x1="20" y1="190" x2="400" y2="190" stroke="#0284c7" strokeWidth="0.8" strokeDasharray="3 4" opacity="0.35" />
+                <text x="25" y="186" fontSize="8" fill="#0284c7" opacity="0.65" fontFamily="sans-serif">18°B</text>
+
+                <line x1="20" y1="290" x2="400" y2="290" stroke="#0284c7" strokeWidth="0.8" strokeDasharray="3 4" opacity="0.35" />
+                <text x="25" y="286" fontSize="8" fill="#0284c7" opacity="0.65" fontFamily="sans-serif">14°B</text>
+
+                <line x1="20" y1="390" x2="400" y2="390" stroke="#0284c7" strokeWidth="0.8" strokeDasharray="3 4" opacity="0.35" />
+                <text x="25" y="386" fontSize="8" fill="#0284c7" opacity="0.65" fontFamily="sans-serif">10°B</text>
+
+                <line x1="110" y1="20" x2="110" y2="480" stroke="#0284c7" strokeWidth="0.8" strokeDasharray="3 4" opacity="0.35" />
+                <text x="113" y="475" fontSize="8" fill="#0284c7" opacity="0.65" fontFamily="sans-serif">104°Đ</text>
+
+                <line x1="240" y1="20" x2="240" y2="480" stroke="#0284c7" strokeWidth="0.8" strokeDasharray="3 4" opacity="0.35" />
+                <text x="243" y="475" fontSize="8" fill="#0284c7" opacity="0.65" fontFamily="sans-serif">108°Đ</text>
+
+                {/* Tên vùng biển chủ quyền */}
+                <text x="340" y="295" textAnchor="middle" fontSize="16" fontWeight="900" letterSpacing="4" fill="#0284c7" opacity="0.75" fontFamily="sans-serif">BIỂN ĐÔNG</text>
+                <text x="255" y="150" textAnchor="middle" fontSize="9" fontWeight="700" letterSpacing="1" fill="#0369a1" opacity="0.65" fontFamily="sans-serif">VỊNH BẮC BỘ</text>
+                <text x="80" y="470" textAnchor="middle" fontSize="9" fontWeight="700" letterSpacing="1" fill="#0369a1" opacity="0.65" fontFamily="sans-serif">VỊNH THÁI LAN</text>
+
+                {/* Hoa tiêu La Bàn Chỉ Hướng Bắc */}
+                <g transform="translate(365, 55)">
+                  <circle cx="0" cy="0" r="16" fill="white" stroke="#0284c7" strokeWidth="1.2" opacity="0.85" />
+                  <path d="M 0 -14 L 3.5 0 L 0 14 L -3.5 0 Z" fill="#0284c7" />
+                  <path d="M -14 0 L 0 3.5 L 14 0 L 0 -3.5 Z" fill="#94a3b8" />
+                  <path d="M 0 -14 L 3.5 0 L 0 0 Z" fill="#ef4444" />
+                  <text x="0" y="-17" textAnchor="middle" fontSize="8" fontWeight="900" fill="#ef4444" fontFamily="sans-serif">B</text>
+                  <text x="0" y="24" textAnchor="middle" fontSize="7" fontWeight="bold" fill="#64748b" fontFamily="sans-serif">N</text>
+                  <text x="22" y="3" textAnchor="middle" fontSize="7" fontWeight="bold" fill="#64748b" fontFamily="sans-serif">Đ</text>
+                  <text x="-22" y="3" textAnchor="middle" fontSize="7" fontWeight="bold" fill="#64748b" fontFamily="sans-serif">T</text>
+                </g>
+
+                {/* Đất liền hình chữ S Việt Nam */}
+                <path
+                  d="M 75 75 
+                     C 95 60, 120 48, 145 35 
+                     C 160 25, 175 18, 185 16 
+                     C 200 16, 215 25, 230 35 
+                     C 245 45, 255 58, 265 70 
+                     C 275 78, 285 85, 290 92 
+                     C 285 102, 275 110, 260 115 
+                     C 245 120, 235 125, 225 130 
+                     C 215 138, 205 145, 198 155 
+                     C 192 168, 195 180, 200 195 
+                     C 208 212, 215 225, 225 240 
+                     C 235 255, 245 268, 255 280 
+                     C 265 292, 275 305, 282 320 
+                     C 290 335, 295 350, 298 365 
+                     C 300 378, 295 390, 285 402 
+                     C 275 415, 260 428, 245 438 
+                     C 230 448, 215 458, 198 468 
+                     C 180 478, 160 488, 142 492 
+                     C 128 494, 118 485, 120 472 
+                     C 122 458, 125 448, 125 438 
+                     C 125 425, 120 415, 118 410 
+                     C 128 402, 138 395, 148 388 
+                     C 158 380, 168 372, 178 362 
+                     C 190 350, 202 338, 212 322 
+                     C 218 310, 216 298, 212 288 
+                     C 205 275, 195 262, 188 250 
+                     C 178 235, 168 220, 158 205 
+                     C 148 188, 138 172, 130 155 
+                     C 120 140, 112 128, 102 118 
+                     C 90 105, 80 92, 75 75 Z"
+                  fill="url(#vnLandGradient)"
+                  stroke="#047857"
+                  strokeWidth="3"
+                  strokeLinejoin="round"
+                  filter="url(#mapShadow)"
+                />
+
+                {/* Các điểm mốc và thành phố chính */}
+                {/* Thủ đô Hà Nội */}
+                <g transform="translate(198, 118)">
+                  <circle cx="0" cy="0" r="5" fill="#ef4444" stroke="#ffffff" strokeWidth="1.5" />
+                  <path d="M 0 -3.5 L 1 -1 L 3.5 -1 L 1.5 0.5 L 2 3 L 0 1.5 L -2 3 L -1.5 0.5 L -3.5 -1 L -1 -1 Z" fill="#facc15" />
+                  <text x="8" y="3" fontSize="8.5" fontWeight="bold" fill="#1e293b" fontFamily="sans-serif">Hà Nội</text>
+                </g>
+
+                {/* Đà Nẵng */}
+                <g transform="translate(255, 278)">
+                  <circle cx="0" cy="0" r="3.5" fill="#dc2626" stroke="#ffffff" strokeWidth="1" />
+                  <text x="6" y="3" fontSize="8" fontWeight="bold" fill="#1e293b" fontFamily="sans-serif">Đà Nẵng</text>
+                </g>
+
+                {/* TP. Hồ Chí Minh */}
+                <g transform="translate(215, 432)">
+                  <circle cx="0" cy="0" r="4" fill="#dc2626" stroke="#ffffff" strokeWidth="1.2" />
+                  <text x="7" y="3" fontSize="8" fontWeight="bold" fill="#1e293b" fontFamily="sans-serif">TP. HCM</text>
+                </g>
+
+                {/* Lũng Cú (Hà Giang) */}
+                <circle cx="185" cy="18" r="2.5" fill="#f59e0b" />
+                <text x="185" y="12" textAnchor="middle" fontSize="7" fontWeight="bold" fill="#047857" fontFamily="sans-serif">Lũng Cú</text>
+
+                {/* Mũi Cà Mau */}
+                <circle cx="135" cy="492" r="2.5" fill="#f59e0b" />
+                <text x="135" y="499" textAnchor="middle" fontSize="7" fontWeight="bold" fill="#047857" fontFamily="sans-serif">Mũi Cà Mau</text>
+
                 {/* Quần đảo Hoàng Sa */}
-                <g className="text-amber-700/[0.22]">
-                  <circle cx="270" cy="190" r="8" />
-                  <circle cx="283" cy="183" r="5" />
-                  <circle cx="265" cy="202" r="5" />
-                  <text x="235" y="172" fontSize="11" fontWeight="bold" fill="currentColor">Q.Đ Hoàng Sa</text>
+                <g>
+                  <rect x="290" y="195" width="105" height="48" rx="8" fill="#fffbeb" fillOpacity="0.9" stroke="#f59e0b" strokeWidth="1.4" strokeDasharray="3 2" />
+                  <circle cx="318" cy="216" r="3.5" fill="#ea580c" />
+                  <circle cx="332" cy="210" r="2.8" fill="#ea580c" />
+                  <circle cx="342" cy="222" r="2.5" fill="#ea580c" />
+                  <circle cx="325" cy="228" r="3" fill="#ea580c" />
+                  <circle cx="355" cy="218" r="3.2" fill="#ea580c" />
+                  <circle cx="368" cy="226" r="2.5" fill="#ea580c" />
+                  <text x="342" y="207" textAnchor="middle" fontSize="9" fontWeight="900" fill="#b45309" fontFamily="sans-serif">Q.Đ HOÀNG SA</text>
+                  <text x="342" y="238" textAnchor="middle" fontSize="8" fontWeight="bold" fill="#d97706" fontFamily="sans-serif">(VIỆT NAM)</text>
                 </g>
 
                 {/* Quần đảo Trường Sa */}
-                <g className="text-amber-700/[0.22]">
-                  <circle cx="250" cy="340" r="7" />
-                  <circle cx="265" cy="355" r="6" />
-                  <circle cx="240" cy="365" r="5" />
-                  <circle cx="275" cy="330" r="6" />
-                  <text x="220" y="322" fontSize="11" fontWeight="bold" fill="currentColor">Q.Đ Trường Sa</text>
+                <g>
+                  <rect x="275" y="325" width="125" height="62" rx="8" fill="#fffbeb" fillOpacity="0.9" stroke="#f59e0b" strokeWidth="1.4" strokeDasharray="3 2" />
+                  <circle cx="298" cy="345" r="3.5" fill="#ea580c" />
+                  <circle cx="312" cy="340" r="3" fill="#ea580c" />
+                  <circle cx="332" cy="348" r="3.5" fill="#ea580c" />
+                  <circle cx="348" cy="338" r="2.8" fill="#ea580c" />
+                  <circle cx="368" cy="350" r="3.2" fill="#ea580c" />
+                  <circle cx="320" cy="365" r="2.8" fill="#ea580c" />
+                  <circle cx="352" cy="368" r="3.5" fill="#ea580c" />
+                  <circle cx="380" cy="362" r="2.5" fill="#ea580c" />
+                  <text x="337" y="337" textAnchor="middle" fontSize="9" fontWeight="900" fill="#b45309" fontFamily="sans-serif">Q.Đ TRƯỜNG SA</text>
+                  <text x="337" y="380" textAnchor="middle" fontSize="8" fontWeight="bold" fill="#d97706" fontFamily="sans-serif">(VIỆT NAM)</text>
                 </g>
 
-                {/* Đảo Phú Quốc & Côn Đảo */}
-                <circle cx="65" cy="425" r="8" className="text-indigo-900/[0.15]" />
-                <circle cx="160" cy="445" r="6" className="text-indigo-900/[0.15]" />
+                {/* Đảo Phú Quốc */}
+                <g transform="translate(98, 435) rotate(-18)">
+                  <ellipse cx="0" cy="0" rx="9" ry="16" fill="#059669" stroke="#047857" strokeWidth="1.5" />
+                  <text x="0" y="2" textAnchor="middle" fontSize="6.5" fontWeight="bold" fill="#ffffff" fontFamily="sans-serif">Phú Quốc</text>
+                </g>
+
+                {/* Côn Đảo */}
+                <g transform="translate(205, 482)">
+                  <circle cx="0" cy="0" r="5" fill="#059669" stroke="#047857" strokeWidth="1" />
+                  <text x="8" y="2" fontSize="7" fontWeight="bold" fill="#0f766e" fontFamily="sans-serif">Côn Đảo</text>
+                </g>
+
+                {/* Đảo Bạch Long Vĩ */}
+                <circle cx="265" cy="135" r="3" fill="#059669" stroke="#047857" strokeWidth="0.8" />
+                <text x="272" y="137" fontSize="6.5" fontWeight="bold" fill="#0369a1" fontFamily="sans-serif">Bạch Long Vĩ</text>
               </svg>
             </div>
 
@@ -560,7 +750,7 @@ export default function HistoryGeoCaro({ addReward }) {
                     disabled={cell !== null || roundWinner !== null || !isXNext || activeCell !== null}
                     className={`
                       relative flex flex-col items-center justify-center rounded-xl font-bold transition-all duration-200 cursor-pointer overflow-hidden
-                      ${!cell ? 'bg-white hover:bg-sky-50 shadow-sm border border-gray-200/90' : 'bg-white shadow-md border border-gray-300'}
+                      ${!cell ? `${activeClarity.tileBg} backdrop-blur-[1px] shadow-sm border ${activeClarity.tileBorder}` : 'bg-white shadow-md border border-gray-300'}
                       ${isSelected ? 'bg-sky-100 ring-2 ring-primary animate-pulse z-20 scale-105' : ''}
                       ${isWinPiece ? 'bg-green-200 ring-4 ring-green-500 z-30 scale-110 shadow-lg animate-bounce' : ''}
                       h-full w-full
