@@ -117,9 +117,23 @@ export default function TinyTownGame({ addReward, onBack }) {
   const [inventory, setInventory] = useState(() => {
     const saved = localStorage.getItem(STORAGE_KEY);
     if (saved) {
-      try { return JSON.parse(saved).inventory ?? { stone: 0, brick: 0, wood: 0, concrete: 0, glass: 0, roof: 0 }; } catch (e) {}
+      try {
+        const parsed = JSON.parse(saved).inventory;
+        if (parsed) {
+          return {
+            stone: parsed.stone || 0,
+            concrete: parsed.concrete || 0,
+            brick: parsed.brick || 0,
+            wood: parsed.wood || 0,
+            glass: parsed.glass || 0,
+            roof: parsed.roof || 0,
+            steel: parsed.steel || 0,
+            mortar: parsed.mortar || 0,
+          };
+        }
+      } catch (e) {}
     }
-    return { stone: 0, brick: 0, wood: 0, concrete: 0, glass: 0, roof: 0 };
+    return { stone: 0, concrete: 0, brick: 0, wood: 0, glass: 0, roof: 0, steel: 0, mortar: 0 };
   });
 
   // Giai đoạn xây dựng (0: Bãi đất cát đá -> 6: Hoàn thiện lộng lẫy)
@@ -182,6 +196,9 @@ export default function TinyTownGame({ addReward, onBack }) {
       return;
     }
 
+    const matInfo = MATERIAL_HANDBOOK.find(m => m.id === materialId);
+    const matName = matInfo ? (matInfo.shortName || matInfo.name) : 'Vật liệu';
+
     setWoodCount(prev => prev - cost);
     setInventory(prev => ({
       ...prev,
@@ -189,7 +206,7 @@ export default function TinyTownGame({ addReward, onBack }) {
     }));
 
     playConstructionSound('hammer');
-    showToast(`Đổi thành công 1 Lô vật liệu (-300 🪵 Gỗ)!`, 'success');
+    showToast(`Đổi thành công 1 Lô ${matName} (-300 🪵 Gỗ)!`, 'success');
   };
 
   // -------------------------------------------------------------
@@ -201,23 +218,24 @@ export default function TinyTownGame({ addReward, onBack }) {
       return;
     }
 
-    const nextStageInfo = CONSTRUCTION_STAGES[currentStage + 1];
-    if (!nextStageInfo) return;
+    const currentStageData = CONSTRUCTION_STAGES[currentStage];
+    if (!currentStageData) return;
 
-    // Kiểm tra xem trong kho có đủ vật liệu yêu cầu chưa
-    const requiredMats = nextStageInfo.requiredMaterials;
-    const missing = requiredMats.filter(matKey => (inventory[matKey] || 0) <= 0);
+    // Các vật liệu cần thiết để hoàn thành giai đoạn này (chuyển sang stage tiếp theo)
+    const requiredMats = currentStageData.requiredMaterials || [];
+    const missing = requiredMats.filter(item => (inventory[item.id] || 0) < item.amount);
 
     if (missing.length > 0) {
-      showToast(`Thiếu vật liệu để thi công! Bạn cần đổi: ${nextStageInfo.requiredName}`, 'warning');
+      const missingNames = missing.map(m => `${m.name} (cần ${m.amount} Lô, hiện có ${inventory[m.id] || 0})`).join(', ');
+      showToast(`Chưa đủ vật liệu! Bạn còn thiếu: ${missingNames}`, 'warning');
       return;
     }
 
-    // Tiêu thụ 1 đơn vị vật liệu cho giai đoạn này
+    // Tiêu thụ vật liệu
     setInventory(prev => {
       const updated = { ...prev };
-      requiredMats.forEach(matKey => {
-        if (updated[matKey] > 0) updated[matKey] -= 1;
+      requiredMats.forEach(item => {
+        updated[item.id] = Math.max(0, (updated[item.id] || 0) - item.amount);
       });
       return updated;
     });
@@ -235,7 +253,8 @@ export default function TinyTownGame({ addReward, onBack }) {
       showToast(`🎉 CHÚC MỪNG ĐẠI CÔNG CÁO THÀNH! Ngôi nhà mơ ước của bạn đã hoàn tất 100%! (+150 XP, +30 💎)`, 'success');
       if (addReward) addReward(150, 30);
     } else {
-      showToast(`Đã hoàn thành: ${nextStageInfo.name}! Tiếp tục phấn đấu giai đoạn tiếp theo.`, 'success');
+      const completedInfo = CONSTRUCTION_STAGES[newStage];
+      showToast(`Đã hoàn thành: ${completedInfo?.name || `Giai đoạn ${newStage}`}! Tiếp tục bước tiếp theo.`, 'success');
     }
   };
 
@@ -463,71 +482,174 @@ export default function TinyTownGame({ addReward, onBack }) {
             </div>
           </div>
 
-          {/* Dải thanh tiến độ thi công 6 bước */}
+          {/* Dải thanh tiến độ thi công 7 bước */}
           <div className="mt-3 grid grid-cols-7 gap-1.5 text-center">
-            {CONSTRUCTION_STAGES.map((st) => (
-              <div 
-                key={st.stage}
-                className={`p-1.5 rounded-xl border text-[11px] font-bold transition ${
-                  currentStage >= st.stage
-                    ? 'bg-amber-100 border-amber-300 text-amber-900'
-                    : 'bg-slate-50 border-slate-200 text-slate-400 opacity-60'
-                }`}
-              >
-                <div className="text-[10px] uppercase font-bold text-amber-700/70">B.{st.stage}</div>
-                <div className="truncate">{st.name.split(' ')[0]}</div>
-              </div>
-            ))}
+            {CONSTRUCTION_STAGES.map((st) => {
+              const stepLabels = [
+                'Đất thô',
+                'Móng đá',
+                'Khung cột',
+                'Tường gạch',
+                'Cửa & Kính',
+                'Mái ngói',
+                'Nội thất'
+              ];
+              const isCurrent = currentStage === st.stage;
+              const isDone = currentStage > st.stage;
+
+              return (
+                <div 
+                  key={st.stage}
+                  className={`p-1.5 rounded-xl border text-[11px] font-bold transition flex flex-col justify-between ${
+                    isCurrent
+                      ? 'bg-amber-100 border-amber-400 text-amber-950 ring-2 ring-amber-300/60 shadow-sm'
+                      : isDone
+                      ? 'bg-emerald-50 border-emerald-300 text-emerald-900'
+                      : 'bg-slate-50 border-slate-200 text-slate-400 opacity-60'
+                  }`}
+                >
+                  <div className={`text-[10px] uppercase font-black ${
+                    isCurrent ? 'text-amber-800' : isDone ? 'text-emerald-700' : 'text-slate-400'
+                  }`}>
+                    {isDone ? '✓ B.' + st.stage : 'B.' + st.stage}
+                  </div>
+                  <div className="truncate text-[10px] sm:text-[11px]" title={st.name}>
+                    {stepLabels[st.stage] || st.name}
+                  </div>
+                </div>
+              );
+            })}
           </div>
         </div>
 
         {/* CỘT PHẢI: TRUNG TÂM THI CÔNG & CỬA HÀNG VẬT LIỆU (4 CỘT) */}
         <div className="lg:col-span-4 flex flex-col gap-4">
           
-          {/* 1. HỘP ĐIỀU KHIỂN THI CÔNG HIỆN TẠI */}
-          <div className="bg-gradient-to-br from-amber-50 to-orange-50 p-4 sm:p-5 rounded-2xl border-2 border-amber-200 shadow-sm">
-            <div className="flex items-center justify-between mb-2">
-              <span className="text-xs font-bold text-amber-800 uppercase tracking-wider flex items-center gap-1">
-                <Hammer size={14} /> Hạng mục thi công
+          {/* 1. HỘP ĐIỀU KHIỂN KẾ HOẠCH THI CÔNG */}
+          <div className="bg-gradient-to-br from-amber-50 to-orange-50 p-4 sm:p-5 rounded-2xl border-2 border-amber-200 shadow-sm flex flex-col gap-3">
+            <div className="flex items-center justify-between">
+              <span className="text-xs font-bold text-amber-800 uppercase tracking-wider flex items-center gap-1.5">
+                <Hammer size={15} /> Kế Hoạch Xây Dựng
               </span>
-              <span className="text-xs font-bold bg-amber-200/80 text-amber-900 px-2 py-0.5 rounded-full">
-                Giai đoạn {currentStage}/6
+              <span className="text-xs font-bold bg-amber-200 text-amber-900 px-2.5 py-0.5 rounded-full">
+                Tiến độ: {currentStage}/6 ({Math.round((currentStage / 6) * 100)}%)
               </span>
             </div>
 
-            <h3 className="text-lg font-black text-slate-800 leading-snug mb-1">
-              {CONSTRUCTION_STAGES[currentStage]?.name}
-            </h3>
-            <p className="text-xs text-slate-600 mb-4 leading-relaxed">
-              {CONSTRUCTION_STAGES[currentStage]?.desc}
-            </p>
+            {/* Trạng thái hiện tại đã xong */}
+            <div className="p-3 bg-white/80 rounded-xl border border-amber-200/80">
+              <div className="text-[11px] font-bold text-slate-500 uppercase tracking-wide flex items-center gap-1">
+                <CheckCircle2 size={13} className="text-emerald-500" />
+                <span>Trạng thái hiện tại (Đã xong):</span>
+              </div>
+              <div className="text-sm font-bold text-slate-800 mt-0.5">
+                {CONSTRUCTION_STAGES[currentStage]?.name}
+              </div>
+              <div className="text-xs text-slate-600 mt-0.5 leading-relaxed">
+                {CONSTRUCTION_STAGES[currentStage]?.desc}
+              </div>
+            </div>
 
+            {/* Hạng mục thi công tiếp theo */}
             {currentStage < 6 ? (
               <div className="space-y-3">
-                <div className="p-3 bg-white/90 rounded-xl border border-amber-200 text-xs text-slate-700">
-                  <div className="font-bold text-amber-900 mb-1 flex items-center gap-1">
-                    <span>Yêu cầu vật tư:</span>
+                <div className="p-3.5 bg-gradient-to-r from-orange-500/10 to-amber-500/10 rounded-xl border-2 border-orange-300">
+                  <div className="text-[11px] font-extrabold text-orange-800 uppercase tracking-wide flex items-center gap-1 mb-1">
+                    <Sparkles size={13} className="text-orange-600" />
+                    <span>Hạng mục tiếp theo cần xây:</span>
                   </div>
-                  <div className="font-semibold text-slate-800">
-                    {CONSTRUCTION_STAGES[currentStage + 1]?.requiredName}
+                  <div className="text-base font-black text-slate-900 leading-snug">
+                    {CONSTRUCTION_STAGES[currentStage]?.nextStepTitle}
+                  </div>
+                  <p className="text-xs text-slate-600 mt-1 leading-relaxed">
+                    {CONSTRUCTION_STAGES[currentStage]?.nextStepDesc}
+                  </p>
+
+                  {/* Danh sách vật tư cần có */}
+                  <div className="mt-3 pt-2.5 border-t border-orange-200/70 space-y-2">
+                    <div className="text-[11px] font-bold text-slate-700 flex items-center justify-between">
+                      <span>Vật tư cần có cho bước này:</span>
+                      <span className="text-slate-500 font-normal">300 🪵 / Lô</span>
+                    </div>
+
+                    <div className="space-y-1.5">
+                      {CONSTRUCTION_STAGES[currentStage]?.requiredMaterials.map(req => {
+                        const currentHave = inventory[req.id] || 0;
+                        const isSufficient = currentHave >= req.amount;
+                        return (
+                          <div 
+                            key={req.id}
+                            className={`p-2 rounded-lg border flex items-center justify-between text-xs transition ${
+                              isSufficient 
+                                ? 'bg-emerald-50/80 border-emerald-300 text-emerald-900' 
+                                : 'bg-rose-50/80 border-rose-300 text-rose-900'
+                            }`}
+                          >
+                            <div className="flex items-center gap-2">
+                              <span className="text-lg">{req.icon}</span>
+                              <div>
+                                <div className="font-bold">{req.name}</div>
+                                <div className="text-[10px] text-slate-600">
+                                  Cần: <span className="font-bold">{req.amount}</span> Lô | Kho có: <span className={`font-bold ${isSufficient ? 'text-emerald-700' : 'text-rose-700'}`}>{currentHave}</span>
+                                </div>
+                              </div>
+                            </div>
+
+                            {isSufficient ? (
+                              <span className="text-xs font-bold text-emerald-600 flex items-center gap-1 bg-white px-2 py-1 rounded-md border border-emerald-200 shadow-sm">
+                                <Check size={14} /> Đã đủ
+                              </span>
+                            ) : (
+                              <button
+                                type="button"
+                                onClick={() => handleExchangeMaterial(req.id)}
+                                className="px-2.5 py-1 bg-amber-500 hover:bg-amber-600 text-white rounded-md text-[11px] font-bold transition flex items-center gap-1 cursor-pointer shadow-sm active:scale-95"
+                                title="Đổi nhanh vật tư này với 300 🪵 Gỗ"
+                              >
+                                <Plus size={12} />
+                                <span>Đổi (300 🪵)</span>
+                              </button>
+                            )}
+                          </div>
+                        );
+                      })}
+                    </div>
                   </div>
                 </div>
 
-                <button
-                  type="button"
-                  onClick={handleConstructNextStage}
-                  className="w-full py-3 bg-gradient-to-r from-amber-500 via-amber-600 to-orange-600 hover:from-amber-600 hover:to-orange-700 text-white font-black text-sm rounded-xl shadow-md shadow-amber-300/50 transition cursor-pointer flex items-center justify-center gap-2 transform active:scale-98"
-                >
-                  <Hammer size={18} />
-                  <span>Xây Dựng Giai Đoạn {currentStage + 1} Ngay</span>
-                </button>
+                {/* Nút bấm thi công */}
+                {(() => {
+                  const reqs = CONSTRUCTION_STAGES[currentStage]?.requiredMaterials || [];
+                  const canBuild = reqs.every(req => (inventory[req.id] || 0) >= req.amount);
+
+                  return (
+                    <button
+                      type="button"
+                      onClick={handleConstructNextStage}
+                      disabled={!canBuild}
+                      className={`w-full py-3.5 rounded-xl font-black text-sm shadow-md transition flex items-center justify-center gap-2 cursor-pointer ${
+                        canBuild
+                          ? 'bg-gradient-to-r from-emerald-500 via-teal-600 to-emerald-600 hover:from-emerald-600 hover:to-teal-700 text-white shadow-emerald-300/50 active:scale-98 animate-pulse'
+                          : 'bg-slate-200 text-slate-500 cursor-not-allowed border border-slate-300'
+                      }`}
+                    >
+                      <Hammer size={18} />
+                      <span>
+                        {canBuild 
+                          ? `Thi Công Ngay: ${CONSTRUCTION_STAGES[currentStage]?.nextStepTitle.split(':')[1] || 'Giai đoạn tiếp theo'}`
+                          : `Còn thiếu vật tư để thi công (${CONSTRUCTION_STAGES[currentStage]?.nextStepTitle.split(':')[1] || ''})`
+                        }
+                      </span>
+                    </button>
+                  );
+                })()}
               </div>
             ) : (
               <div className="p-4 bg-emerald-50 border border-emerald-200 rounded-xl text-center space-y-2">
-                <div className="text-2xl">🎉</div>
-                <div className="text-sm font-black text-emerald-900">Ngôi Nhà Đã Hoàn Thành Rực Rỡ!</div>
+                <div className="text-3xl">🎉🏡✨</div>
+                <div className="text-sm font-black text-emerald-900">Đại Công Cáo Thành - Ngôi Nhà Hoàn Hảo!</div>
                 <p className="text-xs text-emerald-700">
-                  Bạn có thể dùng chuột kéo xoay ngắm toàn cảnh 3D hoặc bật tắt chế độ Mở Nóc Mái để quan sát nội thất.
+                  Bạn đã hoàn thành trọn vẹn toàn bộ 6 giai đoạn xây dựng từ bãi đất cát đá hoang sơ thành tổ ấm lung linh. Hãy xoay 360 độ hoặc mở nóc mái để chiêm ngưỡng tác phẩm của mình!
                 </p>
               </div>
             )}
@@ -536,16 +658,19 @@ export default function TinyTownGame({ addReward, onBack }) {
           {/* 2. CỬA HÀNG ĐỔI VẬT LIỆU (TẤT CẢ ĐỒNG GIÁ 300 🪵 GỖ) */}
           <div className="bg-white p-4 sm:p-5 rounded-2xl border border-slate-200 shadow-sm flex-1 flex flex-col">
             <div className="flex items-center justify-between mb-3 pb-2 border-b border-slate-100">
-              <h4 className="font-bold text-slate-800 text-sm flex items-center gap-1.5">
-                <span>Kho & Cửa Hàng Vật Liệu</span>
-              </h4>
+              <div>
+                <h4 className="font-bold text-slate-800 text-sm flex items-center gap-1.5">
+                  <span>Kho & Cửa Hàng Vật Liệu</span>
+                </h4>
+                <div className="text-[11px] text-slate-500">Đầy đủ bê tông, gạch, đá, gỗ, kính, ngói...</div>
+              </div>
               <span className="text-[11px] font-bold text-amber-700 bg-amber-50 px-2 py-0.5 rounded-full border border-amber-200">
                 Đồng giá 300 🪵 / Lô
               </span>
             </div>
 
-            {/* Danh sách 6 vật liệu xây nhà cơ bản */}
-            <div className="grid grid-cols-2 gap-2 flex-1">
+            {/* Danh sách 8 vật liệu xây nhà tương thích */}
+            <div className="grid grid-cols-2 gap-2 flex-1 max-h-[360px] overflow-y-auto pr-1">
               {MATERIAL_HANDBOOK.map(mat => {
                 const count = inventory[mat.id] || 0;
                 return (
@@ -556,19 +681,26 @@ export default function TinyTownGame({ addReward, onBack }) {
                     <div>
                       <div className="flex items-center justify-between">
                         <span className="text-xl">{mat.icon}</span>
-                        <span className="text-[10px] font-bold bg-white px-1.5 py-0.5 rounded border border-slate-200 text-slate-700">
+                        <span className={`text-[10px] font-bold px-1.5 py-0.5 rounded border ${
+                          count > 0 
+                            ? 'bg-emerald-50 border-emerald-300 text-emerald-800' 
+                            : 'bg-white border-slate-200 text-slate-700'
+                        }`}>
                           Có: {count}
                         </span>
                       </div>
-                      <div className="text-xs font-bold text-slate-800 mt-1 truncate" title={mat.name}>
-                        {mat.name.split(' ')[0]} {mat.name.split(' ')[1] || ''}
+                      <div className="text-xs font-bold text-slate-800 mt-1 leading-tight line-clamp-1" title={mat.name}>
+                        {mat.shortName || mat.name}
+                      </div>
+                      <div className="text-[10px] text-slate-500 truncate" title={mat.tag}>
+                        {mat.tag}
                       </div>
                     </div>
 
                     <button
                       type="button"
                       onClick={() => handleExchangeMaterial(mat.id)}
-                      className="mt-2 w-full py-1.5 bg-amber-500 hover:bg-amber-600 text-white rounded-lg text-[11px] font-bold transition flex items-center justify-center gap-1 cursor-pointer shadow-sm"
+                      className="mt-2 w-full py-1.5 bg-amber-500 hover:bg-amber-600 text-white rounded-lg text-[11px] font-bold transition flex items-center justify-center gap-1 cursor-pointer shadow-sm active:scale-95"
                     >
                       <span>300 🪵</span>
                       <span>Đổi</span>

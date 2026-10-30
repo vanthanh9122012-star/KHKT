@@ -212,26 +212,9 @@ export const CONSTRUCTION_QUESTIONS = [
 
 export const MATERIAL_HANDBOOK = [
   {
-    id: "brick",
-    name: "Gạch Đất Nung",
-    icon: "🧱",
-    tag: "Vật Liệu Cổ Truyền",
-    exchangeCost: 300,
-    unit: "300 🪵 Gỗ / Lô vật liệu",
-    origin: "Đất sét tự nhiên, cát hạt mịn, nước sạch và phụ gia bột samot hoặc sỏi vụn.",
-    description: "Vật liệu xây tường cơ bản và bền vững nhất nhân loại, tồn tại hàng ngàn năm lịch sử từ các nền văn minh cổ đại.",
-    steps: [
-      { step: 1, title: "Khai thác đất sét", desc: "Khai thác lớp đất sét dẻo mịn từ mỏ phù sa, loại bỏ rễ cây và tạp chất hữu cơ." },
-      { step: 2, title: "Nhào trộn với nước", desc: "Đưa đất sét vào máy nghiền, trộn đều với tỉ lệ nước và cát thích hợp để đạt độ dẻo tiêu chuẩn." },
-      { step: 3, title: "Định hình qua khuôn", desc: "Ép đùn chân không qua khuôn gạch ống hoặc gạch đặc, cắt thành từng viên đồng đều kích thước." },
-      { step: 4, title: "Phơi sấy tự nhiên", desc: "Xếp gạch mộc vào nhà sấy hoặc sân phơi có mái che từ 3-5 ngày để thoát ẩm từ từ, tránh nứt nẻ." },
-      { step: 5, title: "Nung nhiệt độ cao (1000–1200°C)", desc: "Xếp vào lò nung chuyên dụng. Ở nhiệt độ trên 1000°C, các hạt silicat nóng chảy liên kết hóa đá vững chãi và chuyển sang màu đỏ gạch rực rỡ." }
-    ],
-    funFact: "Một viên gạch nung chuẩn có thể chịu được tải trọng nén lên đến hơn 100 kg/cm²!"
-  },
-  {
     id: "stone",
     name: "Đá Thô Tự Nhiên",
+    shortName: "Đá Thô Tự Nhiên",
     icon: "🪨",
     tag: "Nền Tảng Vững Chắc",
     exchangeCost: 300,
@@ -248,8 +231,47 @@ export const MATERIAL_HANDBOOK = [
     funFact: "Kim Tự Tháp Giza và các lâu đài cổ châu Âu đứng vững hàng nghìn năm nhờ xây dựng hoàn toàn từ các khối đá tự nhiên."
   },
   {
+    id: "concrete",
+    name: "Bê Tông Tươi & Cốt Thép",
+    shortName: "Bê Tông Cốt Thép",
+    icon: "🏗️",
+    tag: "Khung Xương Chịu Lực",
+    exchangeCost: 300,
+    unit: "300 🪵 Gỗ / Lô vật liệu",
+    origin: "Đá dăm 1x2cm, cát vàng hạt to, xi măng Pooclăng, nước sạch và lồng cốt thép chịu lực.",
+    description: "Vật liệu nhân tạo chịu lực nén siêu hạng, kết hợp cùng lõi thép chịu kéo tạo nên các cột trụ, dầm giằng và sàn nhà kiên cố nhất.",
+    steps: [
+      { step: 1, title: "Lắp dựng cốt thép & ván khuôn", desc: "Đan các thanh thép cường độ cao thành lồng cột, cố định ván khuôn gỗ định hình chính xác." },
+      { step: 2, title: "Phối liệu cấp phối chuẩn", desc: "Định lượng chính xác tỉ lệ: 1 xi măng : 2 cát vàng : 4 đá dăm : nước theo mác thiết kế 250 - 300." },
+      { step: 3, title: "Nhào trộn máy trộn cưỡng bức", desc: "Trộn đều hỗn hợp trong bồn trộn bê tông tươi cho đến khi hỗn hợp đồng nhất, không phân tầng." },
+      { step: 4, title: "Đổ bê tông & Đầm dùi", desc: "Rót bê tông vào khuôn cột móng, dùng máy đầm dùi rung lắc làm thoát bọt khí, tránh rỗ xốp." },
+      { step: 5, title: "Bảo dưỡng ẩm thủy hóa", desc: "Tưới nước giữ ẩm liên tục trong 7-28 ngày để phản ứng thủy hóa diễn ra hoàn toàn, đạt độ cứng tối đa." }
+    ],
+    funFact: "Bê tông cốt thép có hệ số giãn nở nhiệt của bê tông và thép gần như bằng nhau (khoảng 0.000012/°C), nhờ đó chúng không bao giờ bị tách rời khi thời tiết nóng lạnh thất thường!"
+  },
+  {
+    id: "brick",
+    name: "Gạch Đất Nung",
+    shortName: "Gạch Đất Nung",
+    icon: "🧱",
+    tag: "Vật Liệu Cổ Truyền",
+    exchangeCost: 300,
+    unit: "300 🪵 Gỗ / Lô vật liệu",
+    origin: "Đất sét tự nhiên, cát hạt mịn, nước sạch và phụ gia bột samot hoặc sỏi vụn.",
+    description: "Vật liệu xây tường cơ bản và bền vững nhất nhân loại, tồn tại hàng ngàn năm lịch sử từ các nền văn minh cổ đại.",
+    steps: [
+      { step: 1, title: "Khai thác đất sét", desc: "Khai thác lớp đất sét dẻo mịn từ mỏ phù sa, loại bỏ rễ cây và tạp chất hữu cơ." },
+      { step: 2, title: "Nhào trộn với nước", desc: "Đưa đất sét vào máy nghiền, trộn đều với tỉ lệ nước và cát thích hợp để đạt độ dẻo tiêu chuẩn." },
+      { step: 3, title: "Định hình qua khuôn", desc: "Ép đùn chân không qua khuôn gạch ống hoặc gạch đặc, cắt thành từng viên đồng đều kích thước." },
+      { step: 4, title: "Phơi sấy tự nhiên", desc: "Xếp gạch mộc vào nhà sấy hoặc sân phơi có mái che từ 3-5 ngày để thoát ẩm từ từ, tránh nứt nẻ." },
+      { step: 5, title: "Nung nhiệt độ cao (1000–1200°C)", desc: "Xếp vào lò nung chuyên dụng. Ở nhiệt độ trên 1000°C, các hạt silicat nóng chảy liên kết hóa đá vững chãi và chuyển sang màu đỏ gạch rực rỡ." }
+    ],
+    funFact: "Một viên gạch nung chuẩn có thể chịu được tải trọng nén lên đến hơn 100 kg/cm²!"
+  },
+  {
     id: "wood",
     name: "Gỗ Tự Nhiên & Khung Kèo",
+    shortName: "Gỗ Tự Nhiên",
     icon: "🪵",
     tag: "Thân Thiện Môi Trường",
     exchangeCost: 300,
@@ -266,26 +288,9 @@ export const MATERIAL_HANDBOOK = [
     funFact: "Gỗ có tỉ lệ độ bền trên trọng lượng tốt hơn cả bê tông và thép, tạo cảm giác thư thái và giảm căng thẳng cho con người."
   },
   {
-    id: "concrete",
-    name: "Xi Măng & Bê Tông Cốt Thép",
-    icon: "🏗️",
-    tag: "Khung Xương Hiện Đại",
-    exchangeCost: 300,
-    unit: "300 🪵 Gỗ / Lô vật liệu",
-    origin: "Đá vôi (CaCO3), đất sét, quặng sắt, thạch cao và cát sỏi tự nhiên.",
-    description: "Vật liệu nhân tạo được sử dụng nhiều thứ hai trên Trái Đất (chỉ sau nước uống), định hình nên toàn bộ các tòa nhà chọc trời và cầu cống hiện đại.",
-    steps: [
-      { step: 1, title: "Nghiền đá vôi & Đất sét", desc: "Trộn nguyên liệu theo tỉ lệ chính xác và nghiền thành bột mịn như bột mì." },
-      { step: 2, title: "Nung lò quay 1450°C", desc: "Nung ở nhiệt độ nóng chảy tạo thành những viên sỏi xỉ khoáng gọi là Clinker xi măng." },
-      { step: 3, title: "Nghiền mịn với Thạch cao", desc: "Thêm 3-5% thạch cao vào Clinker và nghiền siêu mịn thành bột xi măng xám đóng bao." },
-      { step: 4, title: "Phối trộn Cát + Đá + Nước", desc: "Trộn xi măng với cát vàng, đá dăm 1x2 và nước theo tỉ lệ mác 250 hoặc 300." },
-      { step: 5, title: "Đổ khuôn cốt thép & Đóng rắn", desc: "Đổ hỗn hợp vào ván khuôn có đặt sẵn lồng thép, đầm dùi kỹ càng và bảo dưỡng ẩm 28 ngày để đạt cường độ tối đa." }
-    ],
-    funFact: "Người La Mã cổ đại đã phát minh ra bê tông từ tro núi lửa Pozzolana để xây dựng mái vòm đền Pantheon khổng lồ vẫn nguyên vẹn sau 2000 năm!"
-  },
-  {
     id: "glass",
     name: "Kính Kiến Trúc",
+    shortName: "Kính Kiến Trúc",
     icon: "🪟",
     tag: "Ánh Sáng & Tầm Nhìn",
     exchangeCost: 300,
@@ -303,7 +308,8 @@ export const MATERIAL_HANDBOOK = [
   },
   {
     id: "roof",
-    name: "Ngói Lợp Đất Nung & Tráng Men",
+    name: "Ngói Lợp Đất Nung",
+    shortName: "Ngói Lợp Đỏ",
     icon: "🏠",
     tag: "Chiếc Mũ Che Chở",
     exchangeCost: 300,
@@ -318,58 +324,123 @@ export const MATERIAL_HANDBOOK = [
       { step: 5, title: "Thử tải & Đóng kiện", desc: "Kiểm tra độ chống thấm nước ngâm 24 giờ và đóng kiện rơm chuyển đến chân công trường." }
     ],
     funFact: "Các đường lượn sóng trên viên ngói không chỉ để làm đẹp, mà chính là máng thoát nước mini giúp dòng nước mưa lao xuống với vận tốc cao nhất mà không bị tạt ngang."
+  },
+  {
+    id: "steel",
+    name: "Thép Xây Dựng",
+    shortName: "Thép Xây Dựng",
+    icon: "🔩",
+    tag: "Gân Cốt Công Trình",
+    exchangeCost: 300,
+    unit: "300 🪵 Gỗ / Lô vật liệu",
+    origin: "Quặng sắt nung luyện lò cao, hợp kim với cacbon (< 2%) và mangan.",
+    description: "Cung cấp khả năng chịu lực kéo siêu hạng, uốn nén dẻo dai cho giàn giáo, dầm sàn và đan cốt thép móng nhà.",
+    steps: [
+      { step: 1, title: "Thiêu kết quặng sắt", desc: "Luyện quặng sắt với than cốc và đá vôi trong lò cao ở 1600°C tạo gang lỏng." },
+      { step: 2, title: "Thổi oxy khử cacbon", desc: "Thổi luồng oxy tinh khiết để hạ hàm lượng cacbon xuống dưới 2%, biến gang thành thép dẻo." },
+      { step: 3, title: "Đúc phôi thép liên tục", desc: "Rót thép lỏng vào máy đúc phôi vuông dài hàng chục mét." },
+      { step: 4, title: "Cán nóng tạo gân bám", desc: "Cán qua các trục tạo gân xoắn nổi giúp thanh thép bám chặt vào khối bê tông." },
+      { step: 5, title: "Tôi nhiệt & Cắt đoạn", desc: "Làm nguội nhanh bằng tia nước áp lực cao tạo lớp vỏ thép cứng cáp, cắt theo bó 11.7m." }
+    ],
+    funFact: "Một thanh thép xây dựng đường kính chỉ 16mm có thể chịu được sức treo của 1 chiếc xe tải nặng 8 tấn mà không bị đứt!"
+  },
+  {
+    id: "mortar",
+    name: "Xi Măng & Vữa Trát",
+    shortName: "Xi Măng Vữa",
+    icon: "🧴",
+    tag: "Chất Kết Dính",
+    exchangeCost: 300,
+    unit: "300 🪵 Gỗ / Lô vật liệu",
+    origin: "Clinker xi măng nghiền mịn với thạch cao, cát mịn và nước sạch.",
+    description: "Chất kết dính giữa từng hàng gạch xây tường và lớp vữa trát phẳng mịn bảo vệ tường nhà chống thấm dột.",
+    steps: [
+      { step: 1, title: "Nghiền Clinker xi măng", desc: "Nghiền clinker xi măng đạt độ mịn tiêu chuẩn có diện tích bề mặt cực lớn." },
+      { step: 2, title: "Trộn phụ gia thạch cao", desc: "Điều chỉnh thời gian đóng kết của xi măng từ 45 phút đến vài giờ." },
+      { step: 3, title: "Sàng cát hạt mịn", desc: "Loại bỏ sỏi to và bùn sét để hạt cát mịn kết hợp với xi măng tạo mạch vữa trát phẳng." },
+      { step: 4, title: "Trộn vữa xây mác 75", desc: "Trộn theo tỉ lệ 1 bao xi măng với 8-10 thùng cát và lượng nước vừa đủ độ dẻo." },
+      { step: 5, title: "Trát tường & Xoa phẳng", desc: "Thợ nề dùng bay trát phẳng lớp vữa 1.5cm lên bề mặt gạch, chống thấm nước mưa ngấm vào nhà." }
+    ],
+    funFact: "Mạch vữa xi măng giữa các viên gạch chỉ dày từ 1 - 1.2 cm nhưng có thể liên kết hàng nghìn viên gạch thành một khối tường thống nhất chịu được gió bão cấp 12!"
   }
 ];
 
-// Các giai đoạn xây dựng công trình
+// Các giai đoạn xây dựng công trình tương thích chuẩn xác 100% với vật tư
 export const CONSTRUCTION_STAGES = [
   {
     stage: 0,
     name: "Bãi Đất Hoang Sơ",
+    statusBadge: "Chưa thi công",
     desc: "Mảnh đất ban đầu chỉ có cát sỏi, cỏ dại và các mỏm đá tự nhiên. Cọc tiêu đo đạc công trình đã được cắm sẵn.",
-    requiredMaterials: [],
-    requiredName: "Chưa thi công"
+    nextStepTitle: "Giai đoạn 1: Đắp Móng Đá & Lót Nền",
+    nextStepDesc: "Xếp lớp đá hộc tự nhiên tạo khối móng kiên cố và chống ẩm sụt lún.",
+    requiredMaterials: [
+      { id: "stone", name: "Đá Thô Tự Nhiên", icon: "🪨", amount: 1 }
+    ]
   },
   {
     stage: 1,
     name: "Đắp Móng Đá & Lót Nền",
-    desc: "Sử dụng Đá Thô Tự Nhiên để xếp lớp móng đá hộc kiên cố, nâng cao cốt nền chống ẩm ướt.",
-    requiredMaterials: ["stone"],
-    requiredName: "Đá Thô Tự Nhiên (1 Lô - 300 🪵)"
+    statusBadge: "Đã hoàn thành móng đá",
+    desc: "Đã xếp xong lớp móng đá hộc tự nhiên kiên cố, nâng cao cốt nền sạch sẽ khỏi mặt đất.",
+    nextStepTitle: "Giai đoạn 2: Đổ Bê Tông Cốt Thép & Dựng Cột",
+    nextStepDesc: "Đổ bê tông tươi mác 300 bao bọc lồng thép, dựng 4 cột trụ góc và dầm giằng chịu lực.",
+    requiredMaterials: [
+      { id: "concrete", name: "Bê Tông Tươi & Cốt Thép", icon: "🏗️", amount: 1 }
+    ]
   },
   {
     stage: 2,
-    name: "Dựng Khung Cột & Giằng Chịu Lực",
-    desc: "Đổ bê tông cốt thép và dựng các cột trụ chịu lực vững chãi ở 4 góc công trình, giàn giáo thi công dựng lên.",
-    requiredMaterials: ["stone", "concrete"],
-    requiredName: "Xi Măng & Bê Tông (1 Lô - 300 🪵)"
+    name: "Đổ Bê Tông & Dựng Khung Cột",
+    statusBadge: "Đã dựng xong khung cột",
+    desc: "Khung cột bê tông cốt thép và dầm giằng đã đông kết vững chắc, giàn giáo thi công đã sẵn sàng.",
+    nextStepTitle: "Giai đoạn 3: Xây Tường Bao Gạch Đất Nung",
+    nextStepDesc: "Xây từng hàng gạch đất nung đỏ rực, chừa ô cửa sổ lấy sáng và cửa chính ra vào.",
+    requiredMaterials: [
+      { id: "brick", name: "Gạch Đất Nung", icon: "🧱", amount: 1 }
+    ]
   },
   {
     stage: 3,
     name: "Xây Tường Bao Gạch Đất Nung",
-    desc: "Các viên gạch đất nung đỏ rực được người thợ khéo léo xây từng hàng, chừa sẵn ô cửa sổ và cửa chính đón nắng.",
-    requiredMaterials: ["stone", "concrete", "brick"],
-    requiredName: "Gạch Đất Nung (1 Lô - 300 🪵)"
+    statusBadge: "Đã xây xong tường gạch",
+    desc: "Tường gạch đất nung đỏ ấm áp đã thành hình với đầy đủ các khoang cửa thông thoáng.",
+    nextStepTitle: "Giai đoạn 4: Lắp Cửa Gỗ Tự Nhiên & Cửa Sổ Kính",
+    nextStepDesc: "Lắp đặt cửa chính bằng gỗ sồi tự nhiên và các ô cửa sổ kính trong suốt đón ánh sáng chan hòa.",
+    requiredMaterials: [
+      { id: "glass", name: "Kính Kiến Trúc", icon: "🪟", amount: 1 },
+      { id: "wood", name: "Gỗ Tự Nhiên & Khung Kèo", icon: "🪵", amount: 1 }
+    ]
   },
   {
     stage: 4,
     name: "Lắp Cửa Gỗ & Cửa Sổ Kính",
-    desc: "Lắp đặt hệ thống cửa chính bằng gỗ tự nhiên và các ô cửa sổ kính trong suốt lấy sáng chan hòa khắp các phòng.",
-    requiredMaterials: ["stone", "concrete", "brick", "glass", "wood"],
-    requiredName: "Kính Kiến Trúc & Gỗ Xẻ (300 🪵 mỗi loại)"
+    statusBadge: "Đã lắp xong cửa & cửa sổ",
+    desc: "Hệ thống cửa gỗ tự nhiên và cửa sổ kính trong suốt lấy sáng và thông gió đã hoàn thành.",
+    nextStepTitle: "Giai đoạn 5: Lợp Mái Ngói Đỏ & Xây Ống Khói",
+    nextStepDesc: "Lắp vì kèo mái dốc và lợp từng lớp ngói đỏ rực rỡ thoát nước mưa, hoàn thiện ống khói lò sưởi.",
+    requiredMaterials: [
+      { id: "roof", name: "Ngói Lợp Đất Nung", icon: "🏠", amount: 1 }
+    ]
   },
   {
     stage: 5,
     name: "Lợp Mái Ngói Đỏ & Ống Khói",
-    desc: "Lắp vì kèo mái dốc và lợp từng lớp ngói đỏ rực rỡ, lắp ống khói gạch cổ điển giúp căn nhà hoàn thiện phần thô.",
-    requiredMaterials: ["stone", "concrete", "brick", "glass", "wood", "roof"],
-    requiredName: "Ngói Lợp Đỏ (1 Lô - 300 🪵)"
+    statusBadge: "Đã hoàn thành phần thô",
+    desc: "Mái ngói dốc đỏ tươi và ống khói lò sưởi cổ kính đã hoàn thiện che chở toàn bộ ngôi nhà.",
+    nextStepTitle: "Giai đoạn 6: Hoàn Thiện Nội Thất & Sân Vườn",
+    nextStepDesc: "Bày trí sofa phòng khách, giường ngủ, gian bếp nhỏ xinh, đèn chiếu sáng, hàng rào gỗ và cây xanh.",
+    requiredMaterials: [
+      { id: "wood", name: "Gỗ Tự Nhiên & Khung Kèo", icon: "🪵", amount: 1 }
+    ]
   },
   {
     stage: 6,
-    name: "Hoàn Thiện Nội Thất & Khu Vườn Xanh",
-    desc: "Ngôi nhà đã hoàn thiện lộng lẫy! Bày trí sofa, giường ngủ, gian bếp ấm cúng, hàng rào gỗ, đèn chiếu sáng và sân vườn.",
-    requiredMaterials: ["stone", "concrete", "brick", "glass", "wood", "roof"],
-    requiredName: "Đã hoàn thiện mỹ mãn!"
+    name: "Hoàn Thiện Nội Thất & Sân Vườn Xanh",
+    statusBadge: "Toàn bộ công trình hoàn tất 100%",
+    desc: "Ngôi nhà của bạn đã hoàn thiện mỹ mãn từ ngoại thất đến nội thất tiện nghi ấm cúng!",
+    nextStepTitle: "Đại Công Cáo Thành",
+    nextStepDesc: "Bạn có thể tự do xoay 360 độ hoặc mở nóc mái ngắm kiệt tác kiến trúc của mình.",
+    requiredMaterials: []
   }
 ];
