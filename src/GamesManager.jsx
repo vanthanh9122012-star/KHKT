@@ -28,7 +28,7 @@ export default function GamesManager({ addReward, gamification }) {
     { 
       id: 'sudoku', 
       title: 'Fruit Box', 
-      desc: 'Nối hai chữ số liền nhau để trả lời cho câu hỏi toán học.',
+      desc: 'Nối các quả táo kề nhau để giải mã 75+ câu đố mẹo IQ & thử thách tư duy phản xạ (10 câu/vòng)!',
       icon: <Gamepad2 size={32} className="text-sky-500" />,
       color: 'from-sky-100 to-blue-200',
       border: 'border-sky-200'
