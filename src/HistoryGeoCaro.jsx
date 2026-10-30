@@ -430,26 +430,26 @@ export default function HistoryGeoCaro({ addReward }) {
   }, [isAutoTourRunning, journeyStations.length]);
 
   return (
-    <div className="bg-[#fcf7ec] rounded-3xl p-5 sm:p-7 shadow-lg border-2 border-[#d5be8e] max-w-5xl mx-auto animate-fade-in relative font-serif">
+    <div className="bg-[#fcf7ec] rounded-3xl p-5 sm:p-7 shadow-lg border-2 border-[#d5be8e] max-w-5xl mx-auto animate-fade-in relative font-sans">
       
       {/* Hiệu ứng pháo hoa khi chiến thắng */}
       <FireworksEffect active={roundWinner === 'user' || isGrandVictory} />
 
-      {/* Header phong cách thư tịch & văn bản cổ kính */}
+      {/* Header trò chơi */}
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
         <div>
-          <h2 className="text-2xl sm:text-3xl font-black text-[#451a03] flex items-center gap-2.5 font-serif tracking-tight">
+          <h2 className="text-2xl sm:text-3xl font-black text-[#451a03] flex items-center gap-2.5 font-sans tracking-tight">
             <Scroll className="text-amber-800" size={28} />
             <span>Cờ Caro Lịch Sử - Giang Sơn Cổ Đồ</span>
           </h2>
-          <p className="text-xs sm:text-sm text-[#78350f]/80 mt-1 font-serif italic">
-            Nghiên cứu văn bản địa đồ cổ xưa • Ghi <strong>5 dấu thẳng hàng</strong> trong <strong>3 hiệp</strong> để đoạt Đại Thắng!
+          <p className="text-xs sm:text-sm text-[#78350f]/80 mt-1 font-sans">
+            Nghiên cứu danh thắng lịch sử • Ghi <strong>5 dấu thẳng hàng</strong> trong <strong>3 hiệp</strong> để đoạt Đại Thắng!
           </p>
         </div>
 
         {/* Tiến trình 3 Lượt Thắng */}
         <div className="flex items-center gap-3">
-          <div className="flex items-center gap-1.5 px-3 py-1.5 bg-[#f5e9c9] border border-[#c4a46a] rounded-xl text-xs font-bold text-[#5c351f] shadow-sm font-serif">
+          <div className="flex items-center gap-1.5 px-3 py-1.5 bg-[#f5e9c9] border border-[#c4a46a] rounded-xl text-xs font-bold text-[#5c351f] shadow-sm font-sans">
             <Trophy size={16} className="text-amber-700" />
             <span>Chiến dịch: Thắng {userWinCount}/{REQUIRED_WINS_FOR_GRAND_VICTORY} Hiệp</span>
           </div>
@@ -457,7 +457,7 @@ export default function HistoryGeoCaro({ addReward }) {
           {journeyStations.length > 0 && (
             <button
               onClick={() => setShowVirtualJourney(true)}
-              className="px-3 py-1.5 bg-[#451a03] hover:bg-[#5c2405] text-amber-100 text-xs font-bold rounded-xl border border-[#2b1002] transition cursor-pointer flex items-center gap-1 shadow-sm font-serif"
+              className="px-3 py-1.5 bg-[#451a03] hover:bg-[#5c2405] text-amber-100 text-xs font-bold rounded-xl border border-[#2b1002] transition cursor-pointer flex items-center gap-1 shadow-sm font-sans"
             >
               <Sparkles size={14} className="text-amber-300" />
               <span>Hành Trình Ảo ({journeyStations.length})</span>
@@ -497,228 +497,7 @@ export default function HistoryGeoCaro({ addReward }) {
           {/* Thân cuộn văn bản / chiếu thư cổ (Parchment Paper Body) */}
           <div className="relative p-3 sm:p-4 bg-gradient-to-b from-[#fbf3dc] via-[#f6ebce] to-[#eddcb2] rounded-sm border-2 border-[#b58b4c] shadow-[0_10px_25px_rgba(70,40,15,0.22),inset_0_0_35px_rgba(180,130,60,0.2)] overflow-hidden aspect-square">
             
-            {/* HÌNH BẢN ĐỒ CỔ TRÊN NỀN GIẤY DÓ HOÀI NIỆM */}
-            <div className="absolute inset-0 pointer-events-none flex items-center justify-center p-2.5 select-none opacity-85">
-              <svg 
-                viewBox="0 0 440 520" 
-                className="w-full h-full"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <defs>
-                  <linearGradient id="ancientLandGradient" x1="0%" y1="0%" x2="50%" y2="100%">
-                    <stop offset="0%" stopColor="#d6b885" stopOpacity="0.85" />
-                    <stop offset="50%" stopColor="#c9a76d" stopOpacity="0.9" />
-                    <stop offset="100%" stopColor="#be9757" stopOpacity="0.85" />
-                  </linearGradient>
-                </defs>
-
-                {/* Khung viền chỉ đôi thư tịch cổ */}
-                <rect x="12" y="12" width="416" height="496" rx="6" fill="none" stroke="#8c6239" strokeWidth="1.8" />
-                <rect x="16" y="16" width="408" height="488" rx="4" fill="none" stroke="#b8935c" strokeWidth="0.8" strokeDasharray="6 3" />
-
-                {/* Hoa văn mây cổ ở 4 góc */}
-                <path d="M 22 36 C 22 26 26 22 36 22 M 25 42 C 25 28 28 25 42 25" fill="none" stroke="#8c6239" strokeWidth="1.5" />
-                <circle cx="30" cy="30" r="2.5" fill="#8c6239" />
-                <path d="M 418 36 C 418 26 414 22 404 22 M 415 42 C 415 28 412 25 398 25" fill="none" stroke="#8c6239" strokeWidth="1.5" />
-                <circle cx="410" cy="30" r="2.5" fill="#8c6239" />
-                <path d="M 22 484 C 22 494 26 498 36 498 M 25 478 C 25 492 28 495 42 495" fill="none" stroke="#8c6239" strokeWidth="1.5" />
-                <circle cx="30" cy="490" r="2.5" fill="#8c6239" />
-                <path d="M 418 484 C 418 494 414 498 404 498 M 415 478 C 415 492 412 495 398 495" fill="none" stroke="#8c6239" strokeWidth="1.5" />
-                <circle cx="410" cy="490" r="2.5" fill="#8c6239" />
-
-                {/* Dấu Triện son đỏ cổ phong (ĐẠI NAM NHẤT THỐNG TOÀN ĐỒ) */}
-                <g transform="translate(42, 28)">
-                  <rect x="0" y="0" width="44" height="44" rx="4" fill="#b91c1c" fillOpacity="0.12" stroke="#b91c1c" strokeWidth="1.8" />
-                  <rect x="2.5" y="2.5" width="39" height="39" rx="2" fill="none" stroke="#b91c1c" strokeWidth="0.8" />
-                  <text x="22" y="15" textAnchor="middle" fontSize="8.5" fontWeight="900" fill="#991b1b" fontFamily="'Times New Roman', serif">ĐẠI NAM</text>
-                  <text x="22" y="26" textAnchor="middle" fontSize="7.5" fontWeight="bold" fill="#991b1b" fontFamily="'Times New Roman', serif">NHẤT THỐNG</text>
-                  <text x="22" y="37" textAnchor="middle" fontSize="7" fontWeight="900" fill="#b91c1c" fontFamily="'Times New Roman', serif">TOÀN ĐỒ</text>
-                </g>
-
-                {/* Tiêu đề bản đồ cổ */}
-                <text x="220" y="40" textAnchor="middle" fontSize="13.5" fontWeight="900" letterSpacing="3" fill="#653a15" fontFamily="'Times New Roman', serif">
-                  GIANG SƠN BẢN ĐỒ
-                </text>
-                <text x="220" y="52" textAnchor="middle" fontSize="7.5" fontStyle="italic" fill="#8c6239" fontFamily="'Times New Roman', serif">
-                  Hào khí ngàn năm non sông Đại Việt
-                </text>
-
-                {/* Sóng nước thủy ba cổ trên Biển Đông */}
-                <g opacity="0.45" stroke="#8c6239" strokeWidth="0.8" fill="none">
-                  <path d="M 310 170 Q 320 166 330 170 T 350 170" />
-                  <path d="M 330 220 Q 340 216 350 220 T 370 220" />
-                  <path d="M 300 270 Q 310 266 320 270 T 340 270" />
-                  <path d="M 320 315 Q 330 311 340 315 T 360 315" />
-                  <path d="M 280 430 Q 290 426 300 430 T 320 430" />
-                </g>
-
-                {/* Danh xưng biển cổ */}
-                <text x="345" y="255" textAnchor="middle" fontSize="15" fontWeight="900" letterSpacing="4" fill="#713f12" opacity="0.75" fontFamily="'Times New Roman', serif">
-                  ĐÔNG HẢI
-                </text>
-                <text x="345" y="270" textAnchor="middle" fontSize="9" fontWeight="bold" letterSpacing="2" fill="#854d0e" opacity="0.7" fontFamily="'Times New Roman', serif">
-                  (BIỂN ĐÔNG)
-                </text>
-                <text x="270" y="145" textAnchor="middle" fontSize="9" fontWeight="bold" letterSpacing="1" fill="#78350f" opacity="0.65" fontFamily="'Times New Roman', serif">
-                  BẮC BỘ HẢI VỊNH
-                </text>
-                <text x="80" y="475" textAnchor="middle" fontSize="8.5" fontWeight="bold" letterSpacing="1" fill="#78350f" opacity="0.65" fontFamily="'Times New Roman', serif">
-                  VỊNH THÁI LAN
-                </text>
-
-                {/* Hoa tiêu La Bàn Cổ Hướng Bắc */}
-                <g transform="translate(375, 75)">
-                  <circle cx="0" cy="0" r="17" fill="#fdfaf3" stroke="#8c6239" strokeWidth="1.2" />
-                  <circle cx="0" cy="0" r="14" fill="none" stroke="#b8935c" strokeWidth="0.8" strokeDasharray="2 2" />
-                  <path d="M 0 -14 L 3.5 0 L 0 14 L -3.5 0 Z" fill="#8c6239" />
-                  <path d="M -14 0 L 0 3.5 L 15 0 L 0 -3.5 Z" fill="#b8935c" />
-                  <path d="M 0 -14 L 3.5 0 L 0 0 Z" fill="#b91c1c" />
-                  <text x="0" y="-17" textAnchor="middle" fontSize="7.5" fontWeight="900" fill="#b91c1c" fontFamily="'Times New Roman', serif">BẮC</text>
-                  <text x="0" y="24" textAnchor="middle" fontSize="6.5" fontWeight="bold" fill="#653a15" fontFamily="'Times New Roman', serif">NAM</text>
-                  <text x="22" y="3" textAnchor="middle" fontSize="6.5" fontWeight="bold" fill="#653a15" fontFamily="'Times New Roman', serif">ĐÔNG</text>
-                  <text x="-22" y="3" textAnchor="middle" fontSize="6.5" fontWeight="bold" fill="#653a15" fontFamily="'Times New Roman', serif">TÂY</text>
-                </g>
-
-                {/* Đất liền non sông chữ S - Nét bút lông mực sẫm */}
-                <path
-                  d="M 80 80 
-                     C 100 65, 125 53, 150 40 
-                     C 165 30, 180 23, 190 21 
-                     C 205 21, 220 30, 235 40 
-                     C 250 50, 260 63, 270 75 
-                     C 280 83, 290 90, 295 97 
-                     C 290 107, 280 115, 265 120 
-                     C 250 125, 240 130, 230 135 
-                     C 220 143, 210 150, 203 160 
-                     C 197 173, 200 185, 205 200 
-                     C 213 217, 220 230, 230 245 
-                     C 240 260, 250 273, 260 285 
-                     C 270 297, 280 310, 287 325 
-                     C 295 340, 300 355, 303 370 
-                     C 305 383, 300 395, 290 407 
-                     C 280 420, 265 433, 250 443 
-                     C 235 453, 220 463, 203 473 
-                     C 185 483, 165 493, 147 497 
-                     C 133 499, 123 490, 125 477 
-                     C 127 463, 130 453, 130 443 
-                     C 130 430, 125 420, 123 415 
-                     C 133 407, 143 400, 153 393 
-                     C 163 385, 173 377, 183 367 
-                     C 195 355, 207 343, 217 327 
-                     C 223 315, 221 303, 217 293 
-                     C 210 280, 200 267, 193 255 
-                     C 183 240, 173 225, 163 210 
-                     C 153 193, 143 177, 135 160 
-                     C 125 145, 117 133, 107 123 
-                     C 95 110, 85 97, 80 80 Z"
-                  fill="url(#ancientLandGradient)"
-                  stroke="#653a15"
-                  strokeWidth="2.5"
-                  strokeLinejoin="round"
-                />
-
-                {/* Núi non nét họa đồ mộc bản cổ */}
-                <path d="M 120 70 L 126 58 L 132 70 M 130 70 L 136 60 L 142 70 M 140 70 L 146 62 L 152 70" fill="none" stroke="#78350f" strokeWidth="1.2" />
-                <text x="136" y="55" textAnchor="middle" fontSize="6.5" fontStyle="italic" fill="#78350f" fontFamily="'Times New Roman', serif">Hoàng Liên Sơn</text>
-
-                <path d="M 175 190 L 180 180 L 185 190 M 184 190 L 189 182 L 194 190" fill="none" stroke="#78350f" strokeWidth="1.2" />
-                <path d="M 198 230 L 203 220 L 208 230 M 207 230 L 212 222 L 217 230" fill="none" stroke="#78350f" strokeWidth="1.2" />
-                <text x="180" y="210" textAnchor="middle" fontSize="6.5" fontStyle="italic" fill="#78350f" fontFamily="'Times New Roman', serif">Dãy Trường Sơn</text>
-
-                <path d="M 230 330 L 235 322 L 240 330 M 239 330 L 244 324 L 249 330" fill="none" stroke="#78350f" strokeWidth="1.2" />
-                <text x="240" y="340" textAnchor="middle" fontSize="6.5" fontStyle="italic" fill="#78350f" fontFamily="'Times New Roman', serif">Tây Nguyên</text>
-
-                {/* Dòng sông mạch nguồn (Sông Hồng, Sông Cửu Long) */}
-                <path d="M 160 55 Q 185 85 205 125 Q 220 135 240 128" fill="none" stroke="#78350f" strokeWidth="1" strokeDasharray="1 1" opacity="0.6" />
-                <path d="M 175 420 Q 200 440 215 460 M 165 435 Q 185 455 195 470" fill="none" stroke="#78350f" strokeWidth="1" strokeDasharray="1 1" opacity="0.6" />
-
-                {/* Các kinh đô và địa danh lịch sử */}
-                {/* Thăng Long - Hà Nội */}
-                <g transform="translate(202, 122)">
-                  <circle cx="0" cy="0" r="4.5" fill="#b91c1c" stroke="#fdfaf3" strokeWidth="1.2" />
-                  <circle cx="0" cy="0" r="1.5" fill="#fef08a" />
-                  <text x="7" y="3" fontSize="8.5" fontWeight="bold" fill="#451a03" fontFamily="'Times New Roman', serif">Thăng Long (Hà Nội)</text>
-                </g>
-
-                {/* Cố đô Huế & Đà Nẵng */}
-                <g transform="translate(242, 260)">
-                  <circle cx="0" cy="0" r="3.5" fill="#b91c1c" stroke="#fdfaf3" strokeWidth="1" />
-                  <text x="6" y="2" fontSize="8" fontWeight="bold" fill="#451a03" fontFamily="'Times New Roman', serif">Cố đô Huế</text>
-                </g>
-                <g transform="translate(260, 282)">
-                  <circle cx="0" cy="0" r="3.5" fill="#b91c1c" stroke="#fdfaf3" strokeWidth="1" />
-                  <text x="6" y="3" fontSize="8" fontWeight="bold" fill="#451a03" fontFamily="'Times New Roman', serif">Đà Nẵng</text>
-                </g>
-
-                {/* Gia Định - Sài Gòn (TP. HCM) */}
-                <g transform="translate(220, 436)">
-                  <circle cx="0" cy="0" r="4" fill="#b91c1c" stroke="#fdfaf3" strokeWidth="1" />
-                  <text x="7" y="3" fontSize="8" fontWeight="bold" fill="#451a03" fontFamily="'Times New Roman', serif">Gia Định (TP. HCM)</text>
-                </g>
-
-                {/* Cực Bắc Lũng Cú */}
-                <circle cx="190" cy="22" r="2.5" fill="#b45309" />
-                <text x="190" y="15" textAnchor="middle" fontSize="7" fontWeight="bold" fill="#78350f" fontFamily="'Times New Roman', serif">Lũng Cú</text>
-
-                {/* Cực Nam Mũi Cà Mau */}
-                <circle cx="140" cy="496" r="2.5" fill="#b45309" />
-                <text x="140" y="506" textAnchor="middle" fontSize="7" fontWeight="bold" fill="#78350f" fontFamily="'Times New Roman', serif">Mũi Cà Mau</text>
-
-                {/* VẠN LÝ HOÀNG SA (QUẦN ĐẢO HOÀNG SA) */}
-                <g>
-                  <rect x="290" y="185" width="118" height="52" rx="4" fill="#fdfaf3" fillOpacity="0.9" stroke="#b45309" strokeWidth="1.4" strokeDasharray="4 2" />
-                  <circle cx="320" cy="208" r="3.2" fill="#b91c1c" stroke="#78350f" strokeWidth="0.8" />
-                  <circle cx="334" cy="202" r="2.5" fill="#b91c1c" stroke="#78350f" strokeWidth="0.8" />
-                  <circle cx="344" cy="214" r="2.5" fill="#b91c1c" stroke="#78350f" strokeWidth="0.8" />
-                  <circle cx="327" cy="220" r="2.8" fill="#b91c1c" stroke="#78350f" strokeWidth="0.8" />
-                  <circle cx="358" cy="210" r="3" fill="#b91c1c" stroke="#78350f" strokeWidth="0.8" />
-                  <circle cx="372" cy="218" r="2.5" fill="#b91c1c" stroke="#78350f" strokeWidth="0.8" />
-                  <text x="349" y="198" textAnchor="middle" fontSize="8.5" fontWeight="900" fill="#991b1b" fontFamily="'Times New Roman', serif">
-                    VẠN LÝ HOÀNG SA
-                  </text>
-                  <text x="349" y="230" textAnchor="middle" fontSize="7.5" fontWeight="bold" fill="#78350f" fontFamily="'Times New Roman', serif">
-                    (Quần Đảo Hoàng Sa)
-                  </text>
-                </g>
-
-                {/* VẠN LÝ TRƯỜNG SA (QUẦN ĐẢO TRƯỜNG SA) */}
-                <g>
-                  <rect x="275" y="325" width="135" height="66" rx="4" fill="#fdfaf3" fillOpacity="0.9" stroke="#b45309" strokeWidth="1.4" strokeDasharray="4 2" />
-                  <circle cx="300" cy="346" r="3.2" fill="#b91c1c" stroke="#78350f" strokeWidth="0.8" />
-                  <circle cx="315" cy="341" r="2.8" fill="#b91c1c" stroke="#78350f" strokeWidth="0.8" />
-                  <circle cx="335" cy="349" r="3.2" fill="#b91c1c" stroke="#78350f" strokeWidth="0.8" />
-                  <circle cx="352" cy="339" r="2.5" fill="#b91c1c" stroke="#78350f" strokeWidth="0.8" />
-                  <circle cx="372" cy="351" r="3" fill="#b91c1c" stroke="#78350f" strokeWidth="0.8" />
-                  <circle cx="325" cy="367" r="2.5" fill="#b91c1c" stroke="#78350f" strokeWidth="0.8" />
-                  <circle cx="356" cy="370" r="3.2" fill="#b91c1c" stroke="#78350f" strokeWidth="0.8" />
-                  <circle cx="385" cy="364" r="2.5" fill="#b91c1c" stroke="#78350f" strokeWidth="0.8" />
-                  <text x="342" y="338" textAnchor="middle" fontSize="8.5" fontWeight="900" fill="#991b1b" fontFamily="'Times New Roman', serif">
-                    VẠN LÝ TRƯỜNG SA
-                  </text>
-                  <text x="342" y="384" textAnchor="middle" fontSize="7.5" fontWeight="bold" fill="#78350f" fontFamily="'Times New Roman', serif">
-                    (Quần Đảo Trường Sa)
-                  </text>
-                </g>
-
-                {/* Đảo Phú Quốc */}
-                <g transform="translate(100, 440) rotate(-18)">
-                  <ellipse cx="0" cy="0" rx="9" ry="16" fill="#c9a76d" stroke="#653a15" strokeWidth="1.4" />
-                  <text x="0" y="2" textAnchor="middle" fontSize="6.5" fontWeight="bold" fill="#451a03" fontFamily="'Times New Roman', serif">Phú Quốc</text>
-                </g>
-
-                {/* Côn Lôn (Côn Đảo) */}
-                <g transform="translate(210, 488)">
-                  <circle cx="0" cy="0" r="5" fill="#c9a76d" stroke="#653a15" strokeWidth="1" />
-                  <text x="8" y="2" fontSize="7" fontWeight="bold" fill="#451a03" fontFamily="'Times New Roman', serif">Côn Lôn</text>
-                </g>
-
-                {/* Bạch Long Vĩ */}
-                <circle cx="270" cy="138" r="3" fill="#c9a76d" stroke="#653a15" strokeWidth="0.8" />
-                <text x="277" y="140" fontSize="6.5" fontWeight="bold" fill="#78350f" fontFamily="'Times New Roman', serif">Bạch Long Vĩ</text>
-              </svg>
-            </div>
-
-            {/* LƯỚI 8x8: CÁC Ô VUÔNG GIẤY DÓ CỔ KÍNH (CHỈ HIỆN ĐỊA DANH KHI TRẢ LỜI ĐÚNG) */}
+            {/* LƯỚI 8x8: CÁC Ô VUÔNG (CHỈ HIỆN ĐỊA DANH KHI TRẢ LỜI ĐÚNG) */}
             <div className="grid grid-cols-8 gap-1 sm:gap-1.5 h-full w-full relative z-10">
               {board.map((cell, idx) => {
                 const isSelected = activeCell === idx;
@@ -732,13 +511,13 @@ export default function HistoryGeoCaro({ addReward }) {
                     onClick={() => handleCellClick(idx)}
                     disabled={cell !== null || roundWinner !== null || !isXNext || activeCell !== null}
                     className={`
-                      relative flex flex-col items-center justify-center rounded font-serif font-bold transition-all duration-200 cursor-pointer overflow-hidden
+                      relative flex flex-col items-center justify-center rounded font-sans font-bold transition-all duration-200 cursor-pointer overflow-hidden
                       ${!cell 
-                        ? 'bg-[#fffdf7]/85 hover:bg-[#fff7e6] hover:border-amber-700/80 shadow-[inset_0_1px_2px_rgba(139,69,19,0.1),0_1px_2px_rgba(0,0,0,0.05)] border border-[#cfaf76]/70 hover:scale-[1.02]' 
-                        : 'bg-[#fffdf7] shadow-md border-2 border-amber-800'
+                        ? 'bg-white hover:bg-amber-50 hover:border-amber-500 shadow-[0_1px_2px_rgba(0,0,0,0.06)] border border-stone-200 hover:scale-[1.02]' 
+                        : 'bg-white shadow-md border-2 border-amber-600'
                       }
-                      ${isSelected ? 'bg-amber-100 ring-2 ring-amber-800 animate-pulse z-20 scale-105 shadow-lg' : ''}
-                      ${isWinPiece ? 'bg-amber-200 ring-4 ring-amber-700 z-30 scale-110 shadow-xl animate-bounce' : ''}
+                      ${isSelected ? 'bg-amber-100 ring-2 ring-amber-600 animate-pulse z-20 scale-105 shadow-lg' : ''}
+                      ${isWinPiece ? 'bg-amber-200 ring-4 ring-amber-500 z-30 scale-110 shadow-xl animate-bounce' : ''}
                       h-full w-full
                     `}
                     style={{
@@ -747,14 +526,14 @@ export default function HistoryGeoCaro({ addReward }) {
                       backgroundPosition: 'center'
                     }}
                   >
-                    {/* CHỈ KHI TRẢ LỜI ĐÚNG MỚI HIỆN LÊN ĐỊA DANH & DẤU TRIỆN CỔ */}
+                    {/* CHỈ KHI TRẢ LỜI ĐÚNG MỚI HIỆN LÊN ĐỊA DANH */}
                     {cell && (
-                      <div className="absolute inset-0 flex flex-col items-center justify-center bg-black/40 backdrop-blur-[0.5px] p-0.5 animate-fade-in border border-amber-600/70">
-                        <span className={`font-serif font-black text-sm sm:text-lg drop-shadow-[0_1px_3px_rgba(0,0,0,0.95)] ${isUser ? 'text-red-400' : 'text-amber-300'}`}>
+                      <div className="absolute inset-0 flex flex-col items-center justify-center bg-black/45 backdrop-blur-[0.5px] p-0.5 animate-fade-in border border-amber-600/70">
+                        <span className={`font-sans font-black text-sm sm:text-lg drop-shadow-[0_1px_3px_rgba(0,0,0,0.95)] ${isUser ? 'text-red-400' : 'text-amber-300'}`}>
                           {cell.player}
                         </span>
                         <span 
-                          className="text-[6px] sm:text-[7.5px] text-amber-100 bg-[#2b170c]/85 font-serif font-bold uppercase px-1 py-0.5 w-full text-center truncate leading-tight rounded-sm mt-0.5 border border-amber-700/50" 
+                          className="text-[6px] sm:text-[7.5px] text-amber-100 bg-[#2b170c]/90 font-sans font-bold uppercase px-1 py-0.5 w-full text-center truncate leading-tight rounded-sm mt-0.5 border border-amber-700/50" 
                         >
                           {cell.landmark}
                         </span>
@@ -780,18 +559,18 @@ export default function HistoryGeoCaro({ addReward }) {
             </div>
           </div>
 
-          <div className="text-center mt-3 font-serif text-[#78350f] text-xs sm:text-sm italic">
+          <div className="text-center mt-3 font-sans text-[#78350f] text-xs sm:text-sm">
             📜 Quy tắc: Đạt <strong>5 ô liên tiếp</strong> (Ngang, Dọc, Chéo) trong <strong>3 hiệp</strong> để đoạt Đại Thắng!
           </div>
         </div>
 
         {/* ========================================================================= */}
-        {/* KHUNG CÂU HỎI & THÔNG BÁO (PHONG CÁCH QUYỂN THI ĐÌNH & THƯ TỊCH CỔ)      */}
+        {/* KHUNG CÂU HỎI & THÔNG BÁO                                                 */}
         {/* ========================================================================= */}
         <div className="flex-1 flex flex-col w-full">
           
           {/* Thanh thông báo lượt chơi phong cách thẻ bài */}
-          <div className={`p-3.5 rounded-xl mb-5 font-serif font-bold flex items-center justify-center gap-2 text-center text-xs sm:text-sm shadow-sm transition-all ${
+          <div className={`p-3.5 rounded-xl mb-5 font-sans font-bold flex items-center justify-center gap-2 text-center text-xs sm:text-sm shadow-sm transition-all ${
             msg.type === 'info' ? 'bg-[#faf2dd] text-[#5c351f] border border-[#c8a66d]' : 
             msg.type === 'success' ? 'bg-amber-100 text-amber-900 border border-amber-400' : 
             'bg-red-50 text-red-700 border border-red-300'
@@ -802,9 +581,9 @@ export default function HistoryGeoCaro({ addReward }) {
             <span>{msg.text}</span>
           </div>
 
-          {/* Khung câu hỏi thử thách khi bấm vào 1 ô vuông giấy dó */}
+          {/* Khung câu hỏi thử thách khi bấm vào 1 ô vuông */}
           {currentQuestion ? (
-            <div className="bg-gradient-to-b from-[#fffef9] to-[#fcf5e3] p-5 sm:p-6 rounded-2xl border-2 border-[#b58b4c] shadow-lg shadow-amber-950/10 flex-1 flex flex-col font-serif animate-slide-up">
+            <div className="bg-gradient-to-b from-[#fffef9] to-[#fcf5e3] p-5 sm:p-6 rounded-2xl border-2 border-[#b58b4c] shadow-lg shadow-amber-950/10 flex-1 flex flex-col font-sans animate-slide-up">
               <div className="flex items-center justify-between mb-4 pb-3 border-b border-[#e2cf9f]">
                 <div className="flex flex-wrap items-center gap-2">
                   <span className={`px-2.5 py-0.5 rounded text-xs font-bold border ${
@@ -844,7 +623,7 @@ export default function HistoryGeoCaro({ addReward }) {
 
               {/* Lời giải thích tri thức lịch sử / địa lí khi đã trả lời */}
               {answeredState && (
-                <div className={`p-3.5 mb-4 rounded-xl text-xs sm:text-sm font-serif leading-relaxed border animate-fade-in ${
+                <div className={`p-3.5 mb-4 rounded-xl text-xs sm:text-sm font-sans leading-relaxed border animate-fade-in ${
                   answeredState.isCorrect 
                     ? 'bg-emerald-50 text-emerald-950 border-emerald-300' 
                     : 'bg-amber-50 text-amber-950 border-amber-300'
@@ -885,9 +664,9 @@ export default function HistoryGeoCaro({ addReward }) {
                       type="button"
                       disabled={answeredState !== null}
                       onClick={() => handleAnswer(opt)}
-                      className={`p-3.5 text-left rounded-xl border font-serif text-xs sm:text-sm transition cursor-pointer shadow-sm active:scale-98 ${btnStyle}`}
+                      className={`p-3.5 text-left rounded-xl border font-sans text-xs sm:text-sm transition cursor-pointer shadow-sm active:scale-98 ${btnStyle}`}
                     >
-                      <span className="font-bold mr-2 text-[#991b1b] font-serif">{['A', 'B', 'C', 'D'][idx]}.</span>
+                      <span className="font-bold mr-2 text-[#991b1b]">{['A', 'B', 'C', 'D'][idx]}.</span>
                       {opt}
                     </button>
                   );
@@ -895,12 +674,12 @@ export default function HistoryGeoCaro({ addReward }) {
               </div>
             </div>
           ) : (
-            <div className="flex-1 flex items-center justify-center bg-[#fcf8ee] rounded-2xl border-2 border-dashed border-[#d6be90] p-8 text-center font-serif min-h-[220px]">
+            <div className="flex-1 flex items-center justify-center bg-[#fcf8ee] rounded-2xl border-2 border-dashed border-[#d6be90] p-8 text-center font-sans min-h-[220px]">
               <div className="text-[#8c6239]">
                 <Scroll size={46} className="mx-auto mb-3 opacity-60 text-amber-800" />
                 <p className="font-bold text-[#451a03] text-sm sm:text-base">Khởi đầu hành trình trên Giang Sơn Cổ Đồ</p>
                 <p className="text-xs sm:text-sm mt-1.5 text-[#78350f]/80 italic">
-                  Vui lòng chọn 1 ô trên bản đồ cổ để nhận câu hỏi điển tích lịch sử - địa lý.
+                  Vui lòng chọn 1 ô trên bản đồ để nhận câu hỏi điển tích lịch sử - địa lý.
                 </p>
               </div>
             </div>
@@ -908,14 +687,14 @@ export default function HistoryGeoCaro({ addReward }) {
 
           {/* Nút hành động chuyển Hiệp khi thắng */}
           {roundWinner === 'user' && !isGrandVictory && (
-            <div className="mt-4 p-4 bg-[#fdf5df] rounded-2xl border-2 border-amber-400 text-center space-y-2 animate-fade-in font-serif shadow-sm">
+            <div className="mt-4 p-4 bg-[#fdf5df] rounded-2xl border-2 border-amber-400 text-center space-y-2 animate-fade-in font-sans shadow-sm">
               <p className="text-xs sm:text-sm font-bold text-[#5c351f]">
                 Khải hoàn Hiệp {currentRound}! Hãy tiếp tục tiến quân để giành trọn vẹn Cúp Đại Thắng trong 3 lượt chơi.
               </p>
               <button
                 type="button"
                 onClick={startNextRound}
-                className="w-full py-3 bg-gradient-to-r from-amber-800 via-amber-700 to-amber-900 text-amber-100 font-bold text-sm rounded-xl shadow-md hover:brightness-110 transition flex items-center justify-center gap-1.5 cursor-pointer font-serif border border-amber-950"
+                className="w-full py-3 bg-gradient-to-r from-amber-800 via-amber-700 to-amber-900 text-amber-100 font-bold text-sm rounded-xl shadow-md hover:brightness-110 transition flex items-center justify-center gap-1.5 cursor-pointer font-sans border border-amber-950"
               >
                 <span>Tiến Sang Hiệp {currentRound + 1} Tiếp Theo</span>
                 <ArrowRight size={16} />
@@ -925,12 +704,12 @@ export default function HistoryGeoCaro({ addReward }) {
 
           {/* Nút khi Đại thắng 3 Hiệp */}
           {isGrandVictory && (
-            <div className="mt-4 p-5 bg-gradient-to-r from-[#854d0e] via-[#b45309] to-[#78350f] text-amber-100 rounded-2xl shadow-xl text-center space-y-2 animate-bounce border-2 border-amber-300 font-serif">
+            <div className="mt-4 p-5 bg-gradient-to-r from-[#854d0e] via-[#b45309] to-[#78350f] text-amber-100 rounded-2xl shadow-xl text-center space-y-2 animate-bounce border-2 border-amber-300 font-sans">
               <h4 className="text-base sm:text-lg font-black text-amber-200">🏆 ĐẠI THẮNG CHIẾN DỊCH GIANG SƠN CỔ ĐỒ!</h4>
               <button
                 type="button"
                 onClick={() => setShowVirtualJourney(true)}
-                className="w-full py-2.5 bg-[#fefbee] text-[#78350f] font-bold text-xs sm:text-sm rounded-xl shadow hover:bg-amber-100 transition cursor-pointer font-serif border border-amber-400"
+                className="w-full py-2.5 bg-[#fefbee] text-[#78350f] font-bold text-xs sm:text-sm rounded-xl shadow hover:bg-amber-100 transition cursor-pointer font-sans border border-amber-400"
               >
                 Khám Phá Hành Trình Ảo Xuyên Suốt Non Sông
               </button>
