@@ -6,60 +6,7 @@ import {
   Scroll, BookOpen, Feather
 } from 'lucide-react';
 import { VIETNAM_LANDMARKS, CAMPAIGN_STAGES } from './data/vietnamLandmarksData';
-
-// Ngân hàng 50+ câu hỏi trắc nghiệm Lịch sử & Địa lý THCS (Lớp 6-9)
-const QUESTIONS = [
-  // Lịch sử 6
-  { type: 'his', text: 'Nhà nước Văn Lang do ai đứng đầu?', options: ['Hùng Vương', 'An Dương Vương', 'Lý Nam Đế', 'Mai Thúc Loan'], correct: 'Hùng Vương' },
-  { type: 'his', text: 'Chiến thắng Bạch Đằng năm 938 do ai lãnh đạo đánh tan quân Nam Hán?', options: ['Ngô Quyền', 'Lê Hoàn', 'Trần Hưng Đạo', 'Lý Thường Kiệt'], correct: 'Ngô Quyền' },
-  { type: 'his', text: 'Cuộc khởi nghĩa Hai Bà Trưng bùng nổ vào năm nào sau Công nguyên?', options: ['Năm 40', 'Năm 248', 'Năm 542', 'Năm 938'], correct: 'Năm 40' },
-  { type: 'his', text: 'Kinh đô của nhà nước Âu Lạc thời An Dương Vương đóng tại đâu?', options: ['Cổ Loa (Đông Anh, Hà Nội)', 'Phong Châu (Phú Thọ)', 'Hoa Lư (Ninh Bình)', 'Mê Linh (Hà Nội)'], correct: 'Cổ Loa (Đông Anh, Hà Nội)' },
-  { type: 'his', text: 'Năm 968, ai là người có công dẹp loạn 12 sứ quân, thống nhất đất nước và lập nên nhà nước Đại Cồ Việt?', options: ['Đinh Bộ Lĩnh', 'Ngô Quyền', 'Lê Hoàn', 'Lý Công Uẩn'], correct: 'Đinh Bộ Lĩnh' },
-
-  // Lịch sử 7
-  { type: 'his', text: 'Năm 1010, vị vua nào đã ban "Chiếu dời đô" chuyển kinh đô từ Hoa Lư về Thăng Long?', options: ['Lý Thái Tổ (Lý Công Uẩn)', 'Lý Thánh Tông', 'Trần Thái Tông', 'Lê Lợi'], correct: 'Lý Thái Tổ (Lý Công Uẩn)' },
-  { type: 'his', text: 'Ai là tác giả của áng thiên cổ hùng văn "Hịch tướng sĩ"?', options: ['Trần Quốc Tuấn (Trần Hưng Đạo)', 'Trần Thủ Độ', 'Nguyễn Trãi', 'Lý Thường Kiệt'], correct: 'Trần Quốc Tuấn (Trần Hưng Đạo)' },
-  { type: 'his', text: 'Cuộc khởi nghĩa Lam Sơn (1418 - 1427) do ai khởi xướng và lãnh đạo?', options: ['Lê Lợi', 'Nguyễn Trãi', 'Quang Trung', 'Lê Hoàn'], correct: 'Lê Lợi' },
-  { type: 'his', text: 'Bộ luật Hồng Đức (Quốc triều hình luật) được ban hành dưới triều vua nào?', options: ['Lê Thánh Tông', 'Lê Thái Tổ', 'Lý Thái Tổ', 'Trần Nhân Tông'], correct: 'Lê Thánh Tông' },
-  { type: 'his', text: 'Chiến thắng Rạch Gầm - Xoài Mút năm 1785 do vị tướng tài ba nào chỉ huy đánh tan 5 vạn quân Xiêm?', options: ['Nguyễn Huệ (Quang Trung)', 'Nguyễn Nhạc', 'Nguyễn Lữ', 'Trần Hưng Đạo'], correct: 'Nguyễn Huệ (Quang Trung)' },
-  { type: 'his', text: 'Mùa xuân năm Kỷ Dậu 1789, vua Quang Trung đại phá 29 vạn quân xâm lược nào?', options: ['Quân Thanh', 'Quân Minh', 'Quân Xiêm', 'Quân Mông - Nguyên'], correct: 'Quân Thanh' },
-
-  // Lịch sử 8
-  { type: 'his', text: 'Thực dân Pháp chính thức nổ súng xâm lược Việt Nam tại bán đảo Sơn Trà (Đà Nẵng) vào năm nào?', options: ['Năm 1858', 'Năm 1884', 'Năm 1867', 'Năm 1873'], correct: 'Năm 1858' },
-  { type: 'his', text: 'Phong trào Cần Vương giúp vua cứu nước bùng nổ sau khi Tôn Thất Thuyết lấy danh nghĩa vị vua nào ban chiếu?', options: ['Vua Hàm Nghi', 'Vua Duy Tân', 'Vua Thành Thái', 'Vua Bảo Đại'], correct: 'Vua Hàm Nghi' },
-  { type: 'his', text: 'Cuộc khởi nghĩa nông dân Yên Thế kiên cường suốt 30 năm do ai lãnh đạo?', options: ['Hoàng Hoa Thám (Đề Thám)', 'Phan Đình Phùng', 'Nguyễn Thái Học', 'Đinh Công Tráng'], correct: 'Hoàng Hoa Thám (Đề Thám)' },
-  { type: 'his', text: 'Người thanh niên yêu nước Nguyễn Tất Thành ra đi tìm đường cứu nước từ Bến Nhà Rồng vào ngày tháng năm nào?', options: ['5/6/1911', '3/2/1930', '19/8/1945', '2/9/1945'], correct: '5/6/1911' },
-
-  // Lịch sử 9
-  { type: 'his', text: 'Đảng Cộng sản Việt Nam được thành lập vào ngày tháng năm nào dưới sự chủ trì của lãnh tụ Nguyễn Ái Quốc?', options: ['3/2/1930', '19/8/1945', '2/9/1945', '22/12/1944'], correct: '3/2/1930' },
-  { type: 'his', text: 'Chủ tịch Hồ Chí Minh đọc bản Tuyên ngôn Độc lập khai sinh ra nước Việt Nam Dân chủ Cộng hòa vào ngày nào?', options: ['2/9/1945', '19/8/1945', '7/5/1954', '30/4/1975'], correct: '2/9/1945' },
-  { type: 'his', text: 'Chiến thắng Điện Biên Phủ "Lừng lẫy năm châu, chấn động địa cầu" diễn ra vào năm nào?', options: ['Năm 1954', 'Năm 1945', 'Năm 1975', 'Năm 1972'], correct: 'Năm 1954' },
-  { type: 'his', text: 'Chiến dịch lịch sử giải phóng hoàn toàn miền Nam thống nhất đất nước mang tên ai?', options: ['Chiến dịch Hồ Chí Minh', 'Chiến dịch Tây Nguyên', 'Chiến dịch Huế - Đà Nẵng', 'Chiến dịch Điện Biên Phủ'], correct: 'Chiến dịch Hồ Chí Minh' },
-  { type: 'his', text: 'Ngày Giải phóng hoàn toàn miền Nam, thống nhất non sông đất nước là ngày nào?', options: ['30/4/1975', '7/5/1954', '2/9/1945', '27/1/1973'], correct: '30/4/1975' },
-
-  // Địa lý 6
-  { type: 'geo', text: 'Đường xích đạo chia Trái Đất thành hai nửa bán cầu nào?', options: ['Bán cầu Bắc và Bán cầu Nam', 'Bán cầu Đông và Bán cầu Tây', 'Bán cầu Lục địa và Đại dương', 'Bán cầu Nóng và Lạnh'], correct: 'Bán cầu Bắc và Bán cầu Nam' },
-  { type: 'geo', text: 'Lục địa nào có diện tích rộng lớn nhất trên Trái Đất?', options: ['Lục địa Á - Âu', 'Lục địa Phi', 'Lục địa Bắc Mỹ', 'Lục địa Nam Cực'], correct: 'Lục địa Á - Âu' },
-  { type: 'geo', text: 'Trái Đất tự quay quanh trục theo hướng nào?', options: ['Từ Tây sang Đông', 'Từ Đông sang Tây', 'Từ Bắc xuống Nam', 'Từ Nam lên Bắc'], correct: 'Từ Tây sang Đông' },
-
-  // Địa lý 7
-  { type: 'geo', text: 'Châu Phi có khí hậu chủ yếu là gì do phần lớn lãnh thổ nằm giữa hai đường chí tuyến?', options: ['Nóng và khô hạn', 'Lạnh giá quanh năm', 'Ôn hòa ẩm ướt', 'Mát mẻ mưa nhiều'], correct: 'Nóng và khô hạn' },
-  { type: 'geo', text: 'Dãy núi nào được coi là ranh giới tự nhiên ngăn cách giữa châu Âu và châu Á?', options: ['Dãy U-ran', 'Dãy An-pơ', 'Dãy Hi-ma-lay-a', 'Dãy An-đét'], correct: 'Dãy U-ran' },
-  { type: 'geo', text: 'Rừng nhiệt đới lớn nhất hành tinh là rừng A-ma-dôn nằm ở châu lục nào?', options: ['Châu Nam Mỹ', 'Châu Phi', 'Châu Á', 'Châu Đại Dương'], correct: 'Châu Nam Mỹ' },
-
-  // Địa lý 8
-  { type: 'geo', text: 'Đỉnh núi cao nhất Việt Nam và toàn Đông Dương là đỉnh núi nào?', options: ['Fansipan (3.143m)', 'Bạch Mã', 'Langbiang', 'Ngọc Linh'], correct: 'Fansipan (3.143m)' },
-  { type: 'geo', text: 'Nước Việt Nam ta nằm trong đới khí hậu nào?', options: ['Nhiệt đới gió mùa', 'Ôn đới lục địa', 'Hàn đới', 'Cận nhiệt đới khô'], correct: 'Nhiệt đới gió mùa' },
-  { type: 'geo', text: 'Vùng biển Việt Nam có diện tích khoảng bao nhiêu km² trên Biển Đông?', options: ['Khoảng 1 triệu km²', 'Khoảng 500 nghìn km²', 'Khoảng 2 triệu km²', 'Khoảng 330 nghìn km²'], correct: 'Khoảng 1 triệu km²' },
-  { type: 'geo', text: 'Hai quần đảo xa bờ thiêng liêng thuộc chủ quyền của nước Cộng hòa Xã hội Chủ nghĩa Việt Nam là gì?', options: ['Quần đảo Hoàng Sa và Trường Sa', 'Quần đảo Phú Quốc và Côn Đảo', 'Quần đảo Cát Bà và Cô Tô', 'Quần đảo Nam Du và Thổ Chu'], correct: 'Quần đảo Hoàng Sa và Trường Sa' },
-
-  // Địa lý 9
-  { type: 'geo', text: 'Vùng kinh tế nào là vựa lúa và vựa thủy sản lớn nhất cả nước ta?', options: ['Đồng bằng sông Cửu Long', 'Đồng bằng sông Hồng', 'Đông Nam Bộ', 'Bắc Trung Bộ'], correct: 'Đồng bằng sông Cửu Long' },
-  { type: 'geo', text: 'Cây công nghiệp lâu năm số một được trồng nhiều nhất ở vùng đất đỏ bazan Tây Nguyên là cây gì?', options: ['Cây Cà phê', 'Cây Chè', 'Cây Bông vải', 'Cây Mía đường'], correct: 'Cây Cà phê' },
-  { type: 'geo', text: 'Vùng kinh tế dẫn đầu cả nước về GDP, công nghiệp và thu hút đầu tư nước ngoài là vùng nào?', options: ['Đông Nam Bộ', 'Đồng bằng sông Hồng', 'Duyên hải Nam Trung Bộ', 'Trung du và miền núi Bắc Bộ'], correct: 'Đông Nam Bộ' },
-  { type: 'geo', text: 'Điểm cực Nam trên đất liền của Tổ quốc ta thuộc tỉnh nào?', options: ['Tỉnh Cà Mau (Mũi Cà Mau)', 'Tỉnh Kiên Giang', 'Tỉnh Bạc Liêu', 'Tỉnh Sóc Trăng'], correct: 'Tỉnh Cà Mau (Mũi Cà Mau)' },
-  { type: 'geo', text: 'Điểm cực Bắc trên đất liền của Việt Nam thuộc tỉnh nào?', options: ['Tỉnh Hà Giang (Lũng Cú)', 'Tỉnh Cao Bằng', 'Tỉnh Lào Cai', 'Tỉnh Lạng Sơn'], correct: 'Tỉnh Hà Giang (Lũng Cú)' }
-];
+import { CARO_QUESTIONS, getSmartCaroQuestion } from './data/caroQuestionsData';
 
 const BOARD_SIZE = 8; // Bàn cờ 8x8 tương ứng 64 ô
 const WIN_CONDITION = 5; // Cần 5 dấu liên tiếp thẳng hàng (Ngang, Dọc, Chéo) để thắng!
@@ -205,6 +152,9 @@ export default function HistoryGeoCaro({ addReward }) {
   const [currentRound, setCurrentRound] = useState(1);
   const [isGrandVictory, setIsGrandVictory] = useState(false);
 
+  // Cơ chế chống trùng lặp câu hỏi & trạng thái giải thích kiến thức
+  const [usedQuestionIds, setUsedQuestionIds] = useState([]);
+  const [answeredState, setAnsweredState] = useState(null); // { selectedOpt, isCorrect, explanation }
 
   // Màn hình Hành Trình Ảo sau khi chiến thắng
   const [showVirtualJourney, setShowVirtualJourney] = useState(false);
@@ -281,14 +231,17 @@ export default function HistoryGeoCaro({ addReward }) {
   };
 
   const handleCellClick = (index) => {
-    if (board[index] || roundWinner || !isXNext || activeCell !== null) return;
+    if (board[index] || roundWinner || !isXNext || activeCell !== null || answeredState !== null) return;
 
     setActiveCell(index);
     const landmark = VIETNAM_LANDMARKS[index] || VIETNAM_LANDMARKS[0];
-    const randomQ = QUESTIONS[Math.floor(Math.random() * QUESTIONS.length)];
+    const { question, updatedUsedIds } = getSmartCaroQuestion(usedQuestionIds, landmark);
+    setUsedQuestionIds(updatedUsedIds);
+    setAnsweredState(null);
+
     const shuffledQ = { 
-      ...randomQ, 
-      options: [...randomQ.options].sort(() => 0.5 - Math.random()),
+      ...question, 
+      options: [...question.options].sort(() => 0.5 - Math.random()),
       targetLandmark: landmark
     };
     setCurrentQuestion(shuffledQ);
@@ -299,9 +252,16 @@ export default function HistoryGeoCaro({ addReward }) {
   };
 
   const handleAnswer = (option) => {
-    if (!currentQuestion) return;
+    if (!currentQuestion || answeredState !== null) return;
 
-    if (option === currentQuestion.correct) {
+    const isCorrect = option === currentQuestion.correct;
+    setAnsweredState({
+      selectedOpt: option,
+      isCorrect,
+      explanation: currentQuestion.explanation || ''
+    });
+
+    if (isCorrect) {
       const landmark = VIETNAM_LANDMARKS[activeCell] || VIETNAM_LANDMARKS[0];
       const newBoard = [...board];
       // CHỈ KHI TRẢ LỜI ĐÚNG MỚI HIỆN LÊN ĐỊA DANH
@@ -315,43 +275,50 @@ export default function HistoryGeoCaro({ addReward }) {
         history: landmark.history
       };
       setBoard(newBoard);
-      setActiveCell(null);
-      setCurrentQuestion(null);
       
       const winnerData = checkWinner(newBoard);
-      if (winnerData && winnerData.player === 'X') {
-        setRoundWinner('user');
-        setWinLine(winnerData.line);
-        playVictoryAudio();
 
-        const newWins = userWinCount + 1;
-        setUserWinCount(newWins);
-
-        if (newWins >= REQUIRED_WINS_FOR_GRAND_VICTORY) {
-          setIsGrandVictory(true);
-          setMsg({ text: '🎉 ĐẠI THẮNG TOÀN DIỆN! Bạn đã hoàn thành 3/3 lượt chơi và làm chủ dải đất hình chữ S (+150 XP, +30 💎)', type: 'success' });
-          if (addReward) addReward(150, 30);
-        } else {
-          setMsg({ text: `🎉 CHIẾN THẮNG HIỆP ${currentRound}! Bạn đã đạt 5 ô thẳng hàng liên tiếp (+60 XP).`, type: 'success' });
-          if (addReward) addReward(60, 10);
-        }
-
-        setTimeout(() => {
-          setShowVirtualJourney(true);
-        }, 1200);
-
-      } else {
-        setMsg({ text: 'Lượt của Máy (Đối thủ đang đi nước cờ)...', type: 'info' });
-        setIsXNext(false);
-      }
-    } else {
-      setMsg({ text: `Sai rồi! Đáp án đúng là "${currentQuestion.correct}". Bạn mất lượt cờ này!`, type: 'error' });
-      setActiveCell(null);
-      setCurrentQuestion(null);
       setTimeout(() => {
+        setActiveCell(null);
+        setCurrentQuestion(null);
+        setAnsweredState(null);
+
+        if (winnerData && winnerData.player === 'X') {
+          setRoundWinner('user');
+          setWinLine(winnerData.line);
+          playVictoryAudio();
+
+          const newWins = userWinCount + 1;
+          setUserWinCount(newWins);
+
+          if (newWins >= REQUIRED_WINS_FOR_GRAND_VICTORY) {
+            setIsGrandVictory(true);
+            setMsg({ text: '🎉 ĐẠI THẮNG TOÀN DIỆN! Bạn đã hoàn thành 3/3 lượt chơi và làm chủ dải đất hình chữ S (+150 XP, +30 💎)', type: 'success' });
+            if (addReward) addReward(150, 30);
+          } else {
+            setMsg({ text: `🎉 CHIẾN THẮNG HIỆP ${currentRound}! Bạn đã đạt 5 ô thẳng hàng liên tiếp (+60 XP).`, type: 'success' });
+            if (addReward) addReward(60, 10);
+          }
+
+          setTimeout(() => {
+            setShowVirtualJourney(true);
+          }, 1200);
+
+        } else {
+          setMsg({ text: 'Lượt của Máy (Đối thủ đang đi nước cờ)...', type: 'info' });
+          setIsXNext(false);
+        }
+      }, 1800);
+
+    } else {
+      setMsg({ text: `Chưa chính xác! Bạn mất lượt cờ này. Hãy đọc giải thích bên dưới nhé!`, type: 'error' });
+      setTimeout(() => {
+        setActiveCell(null);
+        setCurrentQuestion(null);
+        setAnsweredState(null);
         setMsg({ text: 'Lượt của Máy...', type: 'info' });
         setIsXNext(false);
-      }, 1500);
+      }, 2500);
     }
   };
 
@@ -412,6 +379,7 @@ export default function HistoryGeoCaro({ addReward }) {
     setIsXNext(true);
     setActiveCell(null);
     setCurrentQuestion(null);
+    setAnsweredState(null);
     setRoundWinner(null);
     setWinLine([]);
     setShowVirtualJourney(false);
@@ -427,6 +395,8 @@ export default function HistoryGeoCaro({ addReward }) {
     setIsXNext(true);
     setActiveCell(null);
     setCurrentQuestion(null);
+    setAnsweredState(null);
+    setUsedQuestionIds([]);
     setRoundWinner(null);
     setWinLine([]);
     setUserWinCount(0);
@@ -836,42 +806,92 @@ export default function HistoryGeoCaro({ addReward }) {
           {currentQuestion ? (
             <div className="bg-gradient-to-b from-[#fffef9] to-[#fcf5e3] p-5 sm:p-6 rounded-2xl border-2 border-[#b58b4c] shadow-lg shadow-amber-950/10 flex-1 flex flex-col font-serif animate-slide-up">
               <div className="flex items-center justify-between mb-4 pb-3 border-b border-[#e2cf9f]">
-                <div className="flex items-center gap-2">
+                <div className="flex flex-wrap items-center gap-2">
                   <span className={`px-2.5 py-0.5 rounded text-xs font-bold border ${
-                    currentQuestion.type === 'his' 
+                    currentQuestion.subject === 'his' || currentQuestion.type === 'his'
                       ? 'bg-red-50 text-red-800 border-red-300' 
                       : 'bg-amber-50 text-amber-800 border-amber-300'
                   }`}>
-                    {currentQuestion.type === 'his' ? '📜 LỊCH SỬ VIỆT NAM' : '🧭 ĐỊA LÝ NON SÔNG'}
+                    {currentQuestion.subject === 'his' || currentQuestion.type === 'his' ? '📜 LỊCH SỬ' : '🧭 ĐỊA LÍ'}
                   </span>
-                  <span className="text-amber-800/60 text-xs italic font-medium">Khảo khóa THCS</span>
+                  {currentQuestion.grade && (
+                    <span className="px-2 py-0.5 rounded text-xs font-semibold bg-amber-100/90 text-amber-900 border border-amber-300">
+                      {currentQuestion.grade}
+                    </span>
+                  )}
+                  {currentQuestion.targetLandmark && (
+                    <span className="text-amber-900/80 text-xs italic font-medium flex items-center gap-1 bg-[#f7eed4] px-2 py-0.5 rounded border border-[#dac191]">
+                      <MapPin size={12} className="text-amber-700" />
+                      {currentQuestion.targetLandmark.name}
+                    </span>
+                  )}
                 </div>
-                <button
-                  type="button"
-                  onClick={() => { setActiveCell(null); setCurrentQuestion(null); }}
-                  className="p-1 text-amber-800/60 hover:text-amber-950 rounded-lg hover:bg-amber-100/60 transition"
-                  title="Hủy chọn ô"
-                >
-                  <X size={16} />
-                </button>
+                {!answeredState && (
+                  <button
+                    type="button"
+                    onClick={() => { setActiveCell(null); setCurrentQuestion(null); }}
+                    className="p-1 text-amber-800/60 hover:text-amber-950 rounded-lg hover:bg-amber-100/60 transition"
+                    title="Hủy chọn ô"
+                  >
+                    <X size={16} />
+                  </button>
+                )}
               </div>
 
-              <h3 className="text-base sm:text-lg font-bold text-[#3b1d08] mb-6 flex-1 leading-relaxed">
+              <h3 className="text-base sm:text-lg font-bold text-[#3b1d08] mb-4 flex-1 leading-relaxed">
                 {currentQuestion.text}
               </h3>
 
+              {/* Lời giải thích tri thức lịch sử / địa lí khi đã trả lời */}
+              {answeredState && (
+                <div className={`p-3.5 mb-4 rounded-xl text-xs sm:text-sm font-serif leading-relaxed border animate-fade-in ${
+                  answeredState.isCorrect 
+                    ? 'bg-emerald-50 text-emerald-950 border-emerald-300' 
+                    : 'bg-amber-50 text-amber-950 border-amber-300'
+                }`}>
+                  <div className="font-bold flex items-center gap-1.5 mb-1 text-xs">
+                    {answeredState.isCorrect ? (
+                      <span className="text-emerald-700 flex items-center gap-1 font-bold">
+                        <CheckCircle2 size={15} /> Chính xác tuyệt đối!
+                      </span>
+                    ) : (
+                      <span className="text-red-700 flex items-center gap-1 font-bold">
+                        <X size={15} /> Đáp án đúng: {currentQuestion.correct}
+                      </span>
+                    )}
+                  </div>
+                  <p className="text-stone-800 italic mt-1">
+                    💡 <strong>Tri thức lịch sử - địa lí:</strong> {answeredState.explanation}
+                  </p>
+                </div>
+              )}
+
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-auto">
-                {currentQuestion.options.map((opt, idx) => (
-                  <button
-                    key={idx}
-                    type="button"
-                    onClick={() => handleAnswer(opt)}
-                    className="p-3.5 text-left rounded-xl border border-[#d6be90] hover:border-[#8c6239] hover:bg-[#fbf3db] text-[#451a03] font-serif text-xs sm:text-sm transition cursor-pointer shadow-sm active:scale-98"
-                  >
-                    <span className="font-bold mr-2 text-[#991b1b] font-serif">{['A', 'B', 'C', 'D'][idx]}.</span>
-                    {opt}
-                  </button>
-                ))}
+                {currentQuestion.options.map((opt, idx) => {
+                  let btnStyle = "border-[#d6be90] hover:border-[#8c6239] hover:bg-[#fbf3db] text-[#451a03]";
+                  if (answeredState) {
+                    if (opt === currentQuestion.correct) {
+                      btnStyle = "bg-emerald-100 border-emerald-600 text-emerald-900 font-bold shadow-sm ring-2 ring-emerald-400";
+                    } else if (opt === answeredState.selectedOpt && !answeredState.isCorrect) {
+                      btnStyle = "bg-red-100 border-red-500 text-red-900 font-bold line-through";
+                    } else {
+                      btnStyle = "border-[#e0d3ba] text-stone-400 opacity-60";
+                    }
+                  }
+
+                  return (
+                    <button
+                      key={idx}
+                      type="button"
+                      disabled={answeredState !== null}
+                      onClick={() => handleAnswer(opt)}
+                      className={`p-3.5 text-left rounded-xl border font-serif text-xs sm:text-sm transition cursor-pointer shadow-sm active:scale-98 ${btnStyle}`}
+                    >
+                      <span className="font-bold mr-2 text-[#991b1b] font-serif">{['A', 'B', 'C', 'D'][idx]}.</span>
+                      {opt}
+                    </button>
+                  );
+                })}
               </div>
             </div>
           ) : (
