@@ -139,6 +139,19 @@ export default function ElementGacha({ addReward, gamification, onElementUnlocke
   const [soundEnabled, setSoundEnabled] = useState(true);
   const [crankDegree, setCrankDegree] = useState(0);
 
+  // Kiểm tra người dùng đã từng có lượt quay trước đó chưa (chỉ cho duy nhất 1 lần thử đối với người chưa từng quay)
+  const [hasSpunBefore, setHasSpunBefore] = useState(() => {
+    try {
+      const trialUsed = localStorage.getItem('studyflow_gacha_trial_used') === 'true';
+      const totalSpins = parseInt(localStorage.getItem('studyflow_gacha_total_spins') || '0', 10);
+      const savedColl = localStorage.getItem('studyflow_element_collection');
+      const hasElements = savedColl ? Object.keys(JSON.parse(savedColl)).length > 0 : false;
+      return trialUsed || totalSpins > 0 || hasElements;
+    } catch {
+      return false;
+    }
+  });
+
   const canvasRef = useRef(null);
   const physicsRef = useRef(null);
   const tumbleIntervalRef = useRef(null);
@@ -352,7 +365,11 @@ export default function ElementGacha({ addReward, gamification, onElementUnlocke
     try {
       const saved = localStorage.getItem('studyflow_element_collection');
       if (saved) {
-        setCollection(JSON.parse(saved));
+        const parsed = JSON.parse(saved);
+        setCollection(parsed);
+        if (Object.keys(parsed).length > 0) {
+          setHasSpunBefore(true);
+        }
       }
     } catch (e) {
       console.error('Error loading element collection:', e);
@@ -380,28 +397,33 @@ export default function ElementGacha({ addReward, gamification, onElementUnlocke
     }
   })();
 
-  // Instant test grant
-  const handleGrantTestRubies = useCallback(() => {
-    if (addReward) {
-      addReward(0, 500);
-      if (soundEnabled) playSound('common');
-    }
-  }, [addReward, soundEnabled]);
-
   // 5-SECOND REAL ROTATING GACHA PHYSICS SPIN LOGIC
   const handleSpin = useCallback((count = 1) => {
-    const cost = count * 200;
-    if (currentRubies < cost) {
-      alert(`Bạn cần ít nhất ${cost} Ruby để quay ${count} lượt! Hiện tại bạn có ${currentRubies} Ruby. Hãy chăm chỉ học tập hoặc nhận quà tài trợ bên dưới nhé!`);
+    // Chỉ cho duy nhất 1 lần thử đối với người chưa từng có lượt quay trước đó
+    const isFreeTrial = (count === 1 && !hasSpunBefore);
+    const cost = isFreeTrial ? 0 : count * 200;
+
+    if (!isFreeTrial && currentRubies < cost) {
+      alert(`Bạn cần ít nhất ${cost} Ruby để quay ${count} lượt! Hiện tại bạn có ${currentRubies} Ruby. Hãy chăm chỉ học tập và hoàn thành các thử thách để tích lũy thêm Ruby nhé!`);
       return;
     }
 
     if (isSpinning) return;
 
-    // Deduct Rubies immediately
-    if (addReward) {
+    // Deduct Rubies if not free trial
+    if (cost > 0 && addReward) {
       addReward(0, -cost);
     }
+
+    // Đánh dấu đã sử dụng lượt thử và cập nhật lịch sử lượt quay
+    try {
+      localStorage.setItem('studyflow_gacha_trial_used', 'true');
+      const curSpins = parseInt(localStorage.getItem('studyflow_gacha_total_spins') || '0', 10);
+      localStorage.setItem('studyflow_gacha_total_spins', String(curSpins + count));
+    } catch (e) {
+      console.error('Error saving spin history:', e);
+    }
+    setHasSpunBefore(true);
 
     setIsSpinning(true);
     setPulledResults(null);
@@ -480,7 +502,7 @@ export default function ElementGacha({ addReward, gamification, onElementUnlocke
         }
       }
     }, 100);
-  }, [currentRubies, isSpinning, addReward, soundEnabled, collection, saveCollection, droppedBall]);
+  }, [currentRubies, isSpinning, addReward, soundEnabled, collection, saveCollection, droppedBall, hasSpunBefore]);
 
   // Clean up timer on unmount
   useEffect(() => {
@@ -574,7 +596,7 @@ export default function ElementGacha({ addReward, gamification, onElementUnlocke
             {/* Top Glowing Sign */}
             <div className="w-full text-center mb-3">
               <div className="inline-block px-5 py-1 bg-gradient-to-r from-cyan-500 via-indigo-500 to-purple-600 rounded-full font-black text-[11px] uppercase tracking-widest text-white shadow-[0_0_12px_rgba(99,102,241,0.5)]">
-                ★ 200 RUBY / 1 LƯỢT ★
+                {!hasSpunBefore ? '★ 1 LƯỢT QUAY THỬ MIỄN PHÍ DÀNH CHO BẠN ★' : '★ 200 RUBY / 1 LƯỢT ★'}
               </div>
             </div>
 
@@ -605,8 +627,8 @@ export default function ElementGacha({ addReward, gamification, onElementUnlocke
                   onClick={() => handleSpin(1)}
                   disabled={isSpinning}
                   style={{ 
-                    transform: `rotate(${crankDegree}deg)`,
-                    transition: isSpinning ? 'transform 5s cubic-bezier(0.15, 0.85, 0.25, 1)' : 'transform 0.5s ease-out'
+                     transform: `rotate(${crankDegree}deg)`,
+                     transition: isSpinning ? 'transform 5s cubic-bezier(0.15, 0.85, 0.25, 1)' : 'transform 0.5s ease-out'
                   }}
                   className={`w-14 h-14 rounded-full bg-gradient-to-br from-slate-200 via-slate-400 to-slate-700 border-4 border-slate-300 shadow-xl flex items-center justify-center active:scale-95 hover:brightness-110 cursor-pointer ${
                     isSpinning ? 'cursor-not-allowed' : ''
@@ -656,15 +678,20 @@ export default function ElementGacha({ addReward, gamification, onElementUnlocke
                 className={`py-3 px-3 rounded-2xl font-black text-xs sm:text-sm flex flex-col items-center justify-center gap-0.5 transition-all transform active:scale-95 shadow-lg border-2 cursor-pointer ${
                   isSpinning
                     ? 'bg-slate-800 border-slate-700 text-slate-500 cursor-not-allowed'
+                    : !hasSpunBefore
+                    ? 'bg-gradient-to-r from-amber-500 via-rose-500 to-indigo-600 hover:brightness-110 border-yellow-300/60 text-white shadow-[0_0_20px_rgba(244,63,94,0.4)] animate-pulse'
                     : currentRubies >= 200
                     ? 'bg-gradient-to-r from-indigo-600 to-cyan-600 hover:from-indigo-500 hover:to-cyan-500 border-cyan-400/40 text-white shadow-[0_0_15px_rgba(99,102,241,0.4)]'
                     : 'bg-slate-800 border-rose-500/50 text-rose-300 hover:bg-slate-700'
                 }`}
               >
                 <span className="flex items-center gap-1.5">
-                  <RefreshCw size={15} className={isSpinning ? "animate-spin" : ""} /> Quay 1 Lần (5s)
+                  <RefreshCw size={15} className={isSpinning ? "animate-spin" : ""} /> 
+                  {!hasSpunBefore ? 'Quay Thử (1 Lần Duy Nhất)' : 'Quay 1 Lần (5s)'}
                 </span>
-                <span className="text-[11px] opacity-90 font-mono text-cyan-200">200 💎 Ruby</span>
+                <span className="text-[11px] opacity-90 font-mono text-cyan-200">
+                  {!hasSpunBefore ? '0 💎 Miễn Phí' : '200 💎 Ruby'}
+                </span>
               </button>
 
               <button
@@ -685,20 +712,21 @@ export default function ElementGacha({ addReward, gamification, onElementUnlocke
               </button>
             </div>
 
-            {/* Test Support / Out of Ruby helper */}
-            {currentRubies < 200 && (
-              <div className="mt-3.5 p-2.5 bg-rose-500/10 border border-rose-500/30 rounded-xl text-center w-full animate-fade-in">
-                <p className="text-[11px] text-rose-300 font-medium mb-1.5">
-                  Bạn đang có {currentRubies} Ruby. Nhận thêm Ruby để trải nghiệm ngay:
+            {/* Thông tin hỗ trợ: Chỉ cho duy nhất 1 lần thử đối với người chưa từng có lượt quay trước đó */}
+            {!hasSpunBefore ? (
+              <div className="mt-3.5 p-2.5 bg-indigo-500/15 border border-indigo-400/30 rounded-xl text-center w-full animate-fade-in">
+                <p className="text-[11px] text-indigo-300 font-semibold flex items-center justify-center gap-1.5">
+                  <Sparkles size={14} className="text-yellow-400" />
+                  Bạn có <strong className="text-yellow-300">1 lần thử duy nhất</strong> vì chưa từng có lượt quay trước đó!
                 </p>
-                <button
-                  onClick={handleGrantTestRubies}
-                  className="px-3 py-1 bg-gradient-to-r from-rose-500 to-amber-500 hover:from-rose-400 hover:to-amber-400 text-white font-bold text-xs rounded-lg shadow transition active:scale-95 cursor-pointer"
-                >
-                  🎁 Nhận +500 💎 Thử Nghiệm Ngay
-                </button>
               </div>
-            )}
+            ) : currentRubies < 200 ? (
+              <div className="mt-3.5 p-2.5 bg-slate-900/60 border border-slate-800 rounded-xl text-center w-full animate-fade-in">
+                <p className="text-[11px] text-slate-400 font-medium">
+                  Bạn đang có <span className="font-bold text-rose-400">{currentRubies} 💎 Ruby</span>. Cần tối thiểu <span className="text-cyan-300 font-bold">200 💎</span> để quay. Hãy học tập và vượt thử thách để tích lũy thêm Ruby nhé!
+                </p>
+              </div>
+            ) : null}
           </div>
         </div>
 
