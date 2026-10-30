@@ -1,14 +1,23 @@
 import React, { useState } from 'react';
-import { Gamepad2, Brain, FlaskConical, Trophy, Sparkles, Star, Target, CheckCircle2 } from 'lucide-react';
+import { Gamepad2, Brain, FlaskConical, Trophy, Sparkles, Star, Target, CheckCircle2, Home } from 'lucide-react';
 import HistoryGeoCaro from './HistoryGeoCaro';
 import FruitBox from './FruitBox';
 import CatchWordGame from './CatchWordGame';
 import ScienceLab from './ScienceLab';
+import TinyTownGame from './TinyTownGame';
 
 export default function GamesManager({ addReward, gamification }) {
   const [activeGame, setActiveGame] = useState(null);
 
   const games = [
+    { 
+      id: 'tinytown', 
+      title: 'Thị trấn nhỏ (3D)', 
+      desc: 'Trải nghiệm xây nhà 3D đa chiều từ bãi đất cát nguyên sơ! Tích lũy 🪵 Gỗ, quy đổi vật liệu, làm kiến trúc sư tính toán diện tích & khám phá bách khoa vật liệu.',
+      icon: <Home size={32} className="text-amber-600" />,
+      color: 'from-amber-100 to-orange-200',
+      border: 'border-amber-300'
+    },
     { 
       id: 'science', 
       title: 'Khám phá Lý-Hóa-Sinh', 
@@ -83,6 +92,7 @@ export default function GamesManager({ addReward, gamification }) {
         </div>
       )}
 
+      {activeGame === 'tinytown' && <TinyTownGame addReward={addReward} onBack={() => setActiveGame(null)} />}
       {activeGame === 'science' && <ScienceLab addReward={addReward} gamification={gamification} />}
       {activeGame === 'word' && <CatchWordGame addReward={addReward} onBack={() => setActiveGame(null)} />}
       {activeGame === 'sudoku' && <FruitBox addReward={addReward} />}
